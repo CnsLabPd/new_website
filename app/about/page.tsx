@@ -10,7 +10,7 @@ export default function AboutPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-cyan-400" />
+              <img src="/images/neurogati-logo-new.jpg" alt="Neurogati Logo" className="h-8 w-8 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
