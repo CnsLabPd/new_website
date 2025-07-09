@@ -14,7 +14,7 @@ export default function GetStarted() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <img
-                src="/images/neurogati-logo-new.jpg"
+                src="/images/Neurogati.jpg"
                 alt="Neurogati Logo"
                 className="h-8 w-8 rounded-full object-cover"
               />
