@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Brain, Activity, Dna } from "lucide-react"
+import { ArrowRight, Activity, Dna, Brain } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
 import { NetworkBrain } from "@/components/network-brain"
 import { NetworkAnimation } from "@/components/network-animation"
@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-neon-400" />
+              <img src="/images/Neurogati.jpg" alt="Neurogati Logo" className="h-8 w-8 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
@@ -171,7 +171,7 @@ export default function Home() {
                 <div className="rounded-lg bg-royal-800 p-6">
                   <div className="flex items-start gap-4">
                     <div className="inline-flex rounded-full bg-gradient-to-r from-royal-500/20 to-neon-500/20 p-3">
-                      <Activity className="h-5 w-5 text-neon-400" />
+                      <Brain className="h-5 w-5 text-neon-400" />
                     </div>
                     <div>
                       <h3 className="mb-2 text-lg font-bold text-white">Sweekar School for the deaf, Secunderabad</h3>
