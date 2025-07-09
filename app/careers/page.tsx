@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useRef } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Brain, Briefcase, Upload, CheckCircle, ChevronDown } from "lucide-react"
+import { Briefcase, Upload, CheckCircle } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -57,7 +57,7 @@ export default function CareersPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-cyan-400" />
+              <img src="/images/neurogati-logo-new.jpg" alt="Neurogati Logo" className="h-8 w-8 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
@@ -127,7 +127,11 @@ export default function CareersPage() {
                             </span>
                             <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs text-cyan-400">Remote</span>
                           </div>
-                          <Button variant="outline" size="sm" className="text-cyan-400 border-cyan-500/50">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-cyan-400 border-cyan-500/50 bg-transparent"
+                          >
                             View Details
                           </Button>
                         </div>
@@ -150,7 +154,11 @@ export default function CareersPage() {
                             </span>
                             <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs text-cyan-400">Chennai</span>
                           </div>
-                          <Button variant="outline" size="sm" className="text-cyan-400 border-cyan-500/50">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-cyan-400 border-cyan-500/50 bg-transparent"
+                          >
                             View Details
                           </Button>
                         </div>
@@ -173,7 +181,11 @@ export default function CareersPage() {
                             </span>
                             <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs text-cyan-400">Hybrid</span>
                           </div>
-                          <Button variant="outline" size="sm" className="text-cyan-400 border-cyan-500/50">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-cyan-400 border-cyan-500/50 bg-transparent"
+                          >
                             View Details
                           </Button>
                         </div>
@@ -328,7 +340,7 @@ export default function CareersPage() {
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-cyan-400" />
+                <img src="/images/neurogati-logo-new.jpg" alt="Neurogati Logo" className="h-6 w-6 object-contain" />
                 <span className="text-lg font-bold text-white">Neurogati</span>
               </div>
               <p className="text-gray-400">
