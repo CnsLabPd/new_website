@@ -1,373 +1,227 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Brain, Mail, Phone, MapPin } from "lucide-react"
-import { WaveBackground } from "@/components/wave-background"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ArrowRight, Mail, Phone, MapPin, Clock } from "lucide-react"
 
-export default function GetStartedPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    designation: "",
-    product: "",
-    comments: "",
-  })
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setIsSubmitted(true)
-      setFormData({
-        name: "",
-        email: "",
-        designation: "",
-        product: "",
-        comments: "",
-      })
-    }, 1500)
-  }
-
+export default function GetStarted() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="container z-10 flex h-20 items-center justify-between py-6">
-        <div className="flex items-center gap-2">
-          <Link href="/">
-            <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-cyan-400" />
-              <span className="text-xl font-bold text-white">Neurogati</span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <img
+                src="/images/neurogati-logo-new.jpg"
+                alt="Neurogati Logo"
+                className="h-8 w-8 rounded-full object-cover"
+              />
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                NeuroGati
+              </span>
             </div>
-          </Link>
-        </div>
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link href="/about" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            About
-          </Link>
-          <Link href="/products" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            Products
-          </Link>
-          <Link href="/research" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            Research
-          </Link>
-          <Link href="/team" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            Team
-          </Link>
-          <Link href="/careers" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            Careers
-          </Link>
-        </nav>
-        <div className="flex items-center gap-4">
-          <Link href="/getstarted">
-            <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-              Contact Us
-            </Button>
-          </Link>
+            <nav className="hidden md:flex space-x-8">
+              <a href="/" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Home
+              </a>
+              <a href="/about" className="text-gray-600 hover:text-blue-600 transition-colors">
+                About
+              </a>
+              <a href="/products" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Products
+              </a>
+              <a href="/research" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Research
+              </a>
+              <a href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Contact
+              </a>
+            </nav>
+          </div>
         </div>
       </header>
 
-      <main className="flex-1">
-        <section className="relative overflow-hidden bg-navy-950 py-20">
-          <div className="absolute inset-0 z-0">
-            <WaveBackground />
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          {/* Hero Section */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Get Started with NeuroGati
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Ready to transform your neurological research or clinical practice? Let's discuss how our AI-powered
+              solutions can help you achieve breakthrough results.
+            </p>
           </div>
-          <div className="container relative z-10">
-            <div className="mx-auto max-w-3xl text-center">
-              <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-6xl">Interested?</h1>
-              <p className="mb-10 text-xl text-gray-300">
-                Begin your journey with Neurogati's advanced neurological solutions.
-              </p>
-            </div>
-          </div>
-        </section>
 
-        <section className="bg-navy-900 py-20">
-          <div className="container">
-            <div className="mx-auto max-w-6xl">
-              <div className="grid gap-12 md:grid-cols-3">
-                <div className="md:col-span-1">
-                  <h2 className="mb-6 text-2xl font-bold text-white">Get in Touch</h2>
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="inline-flex rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-3">
-                        <Mail className="h-5 w-5 text-cyan-400" />
-                      </div>
-                      <div>
-                        <h3 className="mb-1 text-lg font-semibold text-white">Email</h3>
-                        <p className="text-gray-300">careers@neurogati.com</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="inline-flex rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-3">
-                        <Phone className="h-5 w-5 text-cyan-400" />
-                      </div>
-                      <div>
-                        <h3 className="mb-1 text-lg font-semibold text-white">Phone</h3>
-                        <p className="text-gray-300">+1 (555) 123-4567</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="inline-flex rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-3">
-                        <MapPin className="h-5 w-5 text-cyan-400" />
-                      </div>
-                      <div>
-                        <h3 className="mb-1 text-lg font-semibold text-white">Address</h3>
-                        <p className="text-gray-300">
-                          IIT Madras Incubation Cell
-                          <br />
-                          IITM Research Park
-                          <br />
-                          Tharamani, Chennai - 600113
-                        </p>
-                      </div>
-                    </div>
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Contact Form */}
+            <Card className="shadow-xl border-0 bg-white/70 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-2xl text-gray-800">Start Your Journey</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Fill out the form below and our team will get back to you within 24 hours.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input id="firstName" placeholder="John" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input id="lastName" placeholder="Doe" />
                   </div>
                 </div>
 
-                <div className="md:col-span-2">
-                  <div className="rounded-lg bg-navy-800 p-8">
-                    <h2 className="mb-6 text-2xl font-bold text-white">Send Us a Message</h2>
-
-                    {isSubmitted ? (
-                      <div className="rounded-md bg-green-500/20 p-6 text-center">
-                        <h3 className="mb-2 text-xl font-bold text-white">Thank You!</h3>
-                        <p className="text-gray-300">
-                          Your message has been sent successfully. We'll get back to you as soon as possible.
-                        </p>
-                        <Button
-                          className="mt-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-                          onClick={() => setIsSubmitted(false)}
-                        >
-                          Send Another Message
-                        </Button>
-                      </div>
-                    ) : (
-                      <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid gap-6 md:grid-cols-2">
-                          <div className="space-y-2">
-                            <Label htmlFor="name" className="text-white">
-                              Name
-                            </Label>
-                            <Input
-                              id="name"
-                              name="name"
-                              value={formData.name}
-                              onChange={handleChange}
-                              placeholder="Your name"
-                              required
-                              className="bg-navy-700 border-navy-600 text-white placeholder:text-gray-500"
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="email" className="text-white">
-                              Contact Email
-                            </Label>
-                            <Input
-                              id="email"
-                              name="email"
-                              type="email"
-                              value={formData.email}
-                              onChange={handleChange}
-                              placeholder="Your email address"
-                              required
-                              className="bg-navy-700 border-navy-600 text-white placeholder:text-gray-500"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid gap-6 md:grid-cols-2">
-                          <div className="space-y-2">
-                            <Label htmlFor="designation" className="text-white">
-                              Designation
-                            </Label>
-                            <Select
-                              value={formData.designation}
-                              onValueChange={(value) => handleSelectChange("designation", value)}
-                              required
-                            >
-                              <SelectTrigger className="bg-navy-700 border-navy-600 text-white">
-                                <SelectValue placeholder="Select your role" />
-                              </SelectTrigger>
-                              <SelectContent className="bg-navy-700 border-navy-600">
-                                <SelectItem value="patient">Patient</SelectItem>
-                                <SelectItem value="caretaker">Caretaker</SelectItem>
-                                <SelectItem value="clinician">Clinician</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="product" className="text-white">
-                              Product
-                            </Label>
-                            <Select
-                              value={formData.product}
-                              onValueChange={(value) => handleSelectChange("product", value)}
-                              required
-                            >
-                              <SelectTrigger className="bg-navy-700 border-navy-600 text-white">
-                                <SelectValue placeholder="Select product" />
-                              </SelectTrigger>
-                              <SelectContent className="bg-navy-700 border-navy-600">
-                                <SelectItem value="quadis-pd">Quadis-PD</SelectItem>
-                                <SelectItem value="neurorehab">NeuroRehab</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="comments" className="text-white">
-                            Comments
-                          </Label>
-                          <Textarea
-                            id="comments"
-                            name="comments"
-                            value={formData.comments}
-                            onChange={handleChange}
-                            placeholder="How can we help you?"
-                            rows={5}
-                            className="bg-navy-700 border-navy-600 text-white placeholder:text-gray-500"
-                          />
-                        </div>
-
-                        <Button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-                        >
-                          {isSubmitting ? "Sending..." : "Send Message"}
-                        </Button>
-                      </form>
-                    )}
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="john@example.com" />
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
 
-      <footer className="bg-navy-900 py-12">
-        <div className="container">
-          <div className="grid gap-8 md:grid-cols-4">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-cyan-400" />
-                <span className="text-lg font-bold text-white">Neurogati</span>
-              </div>
-              <p className="text-gray-400">
-                Revolutionizing neurological care through AI-powered diagnostics and personalized rehabilitation.
-              </p>
-            </div>
-            <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase text-gray-400">Solutions</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/products/diagnostics" className="text-gray-300 hover:text-white transition-colors">
-                    Diagnostics
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/products/therapy" className="text-gray-300 hover:text-white transition-colors">
-                    Therapy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/products/assistive-technology"
-                    className="text-gray-300 hover:text-white transition-colors"
-                  >
-                    Assistive Technology
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/products/bci" className="text-gray-300 hover:text-white transition-colors">
-                    BCI
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase text-gray-400">Resources</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/research" className="text-gray-300 hover:text-white transition-colors">
-                    Research
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                    Clinical Studies
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                    Support
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase text-gray-400">Company</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/team" className="text-gray-300 hover:text-white transition-colors">
-                    Team
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/careers" className="text-gray-300 hover:text-white transition-colors">
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
+                <div className="space-y-2">
+                  <Label htmlFor="organization">Organization</Label>
+                  <Input id="organization" placeholder="Your Hospital/University/Company" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="role">Your Role</Label>
+                  <Input id="role" placeholder="e.g., Neurologist, Researcher, CTO" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="interest">Area of Interest</Label>
+                  <select className="w-full p-2 border border-gray-300 rounded-md">
+                    <option value="">Select an area</option>
+                    <option value="diagnostics">AI Diagnostics</option>
+                    <option value="therapy">Rehabilitation Therapy</option>
+                    <option value="bci">Brain-Computer Interface</option>
+                    <option value="modeling">Computational Modeling</option>
+                    <option value="assistive">Assistive Technology</option>
+                    <option value="research">Research Collaboration</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="message">Tell us about your project</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Describe your current challenges, goals, or how you'd like to use our technology..."
+                    className="min-h-[100px]"
+                  />
+                </div>
+
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                  Send Message
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Contact Information */}
+            <div className="space-y-8">
+              <Card className="shadow-xl border-0 bg-white/70 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-gray-800">Contact Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <Mail className="h-6 w-6 text-blue-600 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-gray-800">Email</h3>
+                      <p className="text-gray-600">contactus@neurogati.com</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <Phone className="h-6 w-6 text-blue-600 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-gray-800">Phone</h3>
+                      <p className="text-gray-600">+1 (555) 123-4567</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <MapPin className="h-6 w-6 text-blue-600 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-gray-800">Address</h3>
+                      <p className="text-gray-600">
+                        123 Innovation Drive
+                        <br />
+                        Tech Park, CA 94025
+                        <br />
+                        United States
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <Clock className="h-6 w-6 text-blue-600 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-gray-800">Business Hours</h3>
+                      <p className="text-gray-600">
+                        Monday - Friday: 9:00 AM - 6:00 PM PST
+                        <br />
+                        Saturday: 10:00 AM - 2:00 PM PST
+                        <br />
+                        Sunday: Closed
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4">Ready for a Demo?</h3>
+                  <p className="mb-4 text-blue-100">
+                    See our technology in action with a personalized demonstration tailored to your specific needs.
+                  </p>
+                  <Button variant="secondary" className="w-full bg-white text-blue-600 hover:bg-gray-100">
+                    Schedule a Demo
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
-          <div className="mt-12 border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>© {new Date().getFullYear()} Neurogati. All rights reserved.</p>
+
+          {/* Additional Information */}
+          <div className="mt-16 grid md:grid-cols-3 gap-8">
+            <Card className="text-center shadow-lg border-0 bg-white/70 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <ArrowRight className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Quick Response</h3>
+                <p className="text-gray-600">We respond to all inquiries within 24 hours during business days.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center shadow-lg border-0 bg-white/70 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Mail className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Expert Consultation</h3>
+                <p className="text-gray-600">Get personalized advice from our team of neuroscience and AI experts.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center shadow-lg border-0 bg-white/70 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Phone className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Ongoing Support</h3>
+                <p className="text-gray-600">Comprehensive support throughout your journey with our technology.</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }
