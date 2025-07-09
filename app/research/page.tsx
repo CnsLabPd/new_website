@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Brain, FileText, Download } from "lucide-react"
+import { FileText, Download } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
 
 export default function ResearchPage() {
@@ -11,7 +11,7 @@ export default function ResearchPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-cyan-400" />
+              <img src="/images/neurogati-logo-new.jpg" alt="Neurogati Logo" className="h-8 w-8 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
@@ -94,7 +94,7 @@ export default function ResearchPage() {
                           works and aids in identifying optimal stimulation parameters, such as frequency and amplitude,
                           to maximize therapeutic benefit.
                         </p>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
                           <Download className="h-4 w-4" /> Download PDF
                         </Button>
                       </div>
@@ -120,7 +120,7 @@ export default function ResearchPage() {
                           treatment. It replicates both therapeutic benefits and side effects, offering a potential tool
                           for optimizing medication dosage based on individual patient profiles.
                         </p>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
                           <Download className="h-4 w-4" /> Download PDF
                         </Button>
                       </div>
@@ -151,7 +151,7 @@ export default function ResearchPage() {
                           together—reflecting how cognitive impairments manifest in real life. It serves as a testbench
                           to simulate therapeutic interventions before applying them in clinical settings.
                         </p>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
                           <Download className="h-4 w-4" /> Download PDF
                         </Button>
                       </div>
@@ -185,7 +185,7 @@ export default function ResearchPage() {
                           rehab influences structural and functional brain plasticity—offering insight into how
                           immersive, task-oriented therapy can reshape recovery after stroke.
                         </p>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
                           <Download className="h-4 w-4" /> Download PDF
                         </Button>
                       </div>
@@ -220,7 +220,7 @@ export default function ResearchPage() {
                           of understanding the role of the basal ganglia to treat neurological and psychiatric
                           disorders.
                         </p>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
                           <Download className="h-4 w-4" /> Check it out
                         </Button>
                       </div>
@@ -253,7 +253,7 @@ export default function ResearchPage() {
                           sensory-motor function, language, emotions, and concluding with the latest theories on
                           consciousness.
                         </p>
-                        <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
                           <Download className="h-4 w-4" /> Download PDF
                         </Button>
                       </div>
@@ -299,7 +299,7 @@ export default function ResearchPage() {
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-cyan-400" />
+                <img src="/images/neurogati-logo-new.jpg" alt="Neurogati Logo" className="h-6 w-6 object-contain" />
                 <span className="text-lg font-bold text-white">Neurogati</span>
               </div>
               <p className="text-gray-400">
