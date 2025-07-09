@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Brain, ArrowUpRight, ChevronDown } from "lucide-react"
+import { ArrowUpRight, ChevronDown } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
+import { Brain } from "lucide-react" // Import the Brain component
 
 export default function PortfolioPage() {
   return (
@@ -10,7 +11,7 @@ export default function PortfolioPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-cyan-400" />
+              <img src="/images/neurogati-logo-new.jpg" alt="Neurogati Logo" className="h-8 w-8 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
@@ -197,7 +198,7 @@ export default function PortfolioPage() {
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-cyan-400" />
+                <Brain className="h-6 w-6 text-cyan-400" /> {/* Use the Brain component */}
                 <span className="text-lg font-bold text-white">Neurogati</span>
               </div>
               <p className="text-gray-400">
