@@ -77,9 +77,6 @@ export default function DiagnosticsPage() {
                         <span className="text-cyan-400">•</span> Multi-modal data analysis (movement, speech, cognitive)
                       </li>
                       <li className="flex items-start gap-2 text-gray-300">
-                        <span className="text-cyan-400">•</span> Early detection algorithms with 94% accuracy
-                      </li>
-                      <li className="flex items-start gap-2 text-gray-300">
                         <span className="text-cyan-400">•</span> Comprehensive clinical reports
                       </li>
                       <li className="flex items-start gap-2 text-gray-300">
