@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <img src="/images/Neurogati.jpg" alt="Neurogati Logo" className="h-50 w-50 object-contain" />
+              <img src="/images/Neurogati.jpg" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
