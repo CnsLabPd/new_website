@@ -13,7 +13,7 @@ export default function Home() {
       <div className="relative flex w-full flex-col overflow-y-auto">
         <StickyBanner className="bg-gradient-to-b from-blue-500 to-blue-600">
           <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-            Announcing Workshop on AI applications in EEG during September 12 - 14.{" "}
+            Announcing Workshop on AI applications in EEG from September 12th to 14th, 2025.{" "}
             <a href="https://www.linkedin.com/posts/srinivasa-chakravarthy-a09b5131_eeg-bci-ai-activity-7353030055700107264-QDbu?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEChymkB-JVMkUb6TVCBctz5XiLRqD9lSsI" className="transition duration-200 hover:underline">
                Read announcement
             </a>
