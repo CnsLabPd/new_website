@@ -111,7 +111,7 @@ export default function Home() {
                 </p>
                 <div className="mt-8">
                   <Link href="/about">
-                    <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400">
+                    <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400 text-white">
                       Learn More <ArrowRight className="ml-2 h-4 w-4 text-white" />
                     </Button>
                   </Link>
