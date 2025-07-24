@@ -140,7 +140,7 @@ export default function GetStarted() {
                     <Phone className="h-6 w-6 text-blue-600 mt-1" />
                     <div>
                       <h3 className="font-semibold text-gray-800">Phone</h3>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
+                      <p className="text-gray-600">+91 9500069322</p>
                     </div>
                   </div>
 
@@ -149,11 +149,11 @@ export default function GetStarted() {
                     <div>
                       <h3 className="font-semibold text-gray-800">Address</h3>
                       <p className="text-gray-600">
-                        123 Innovation Drive
+                        IIT Madras Research Park,
                         <br />
-                        Tech Park, CA 94025
+                        Chennai, Tamil Nadu,
                         <br />
-                        United States
+                        India
                       </p>
                     </div>
                   </div>
