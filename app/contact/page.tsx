@@ -158,7 +158,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <h3 className="mb-1 text-lg font-semibold text-white">Email</h3>
-                        <p className="text-gray-300">cnspdapp@gmail.com</p>
+                        <p className="text-gray-300">contactus@neurogati.com</p>
                       </div>
                     </div>
 
@@ -168,7 +168,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <h3 className="mb-1 text-lg font-semibold text-white">Phone</h3>
-                        <p className="text-gray-300">+1 (555) 123-4567</p>
+                        <p className="text-gray-300">+91 9500069322</p>
                       </div>
                     </div>
 
