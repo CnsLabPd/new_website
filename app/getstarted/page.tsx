@@ -4,10 +4,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ArrowRight, Mail, Phone, MapPin, Clock } from "lucide-react"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function GetStarted() {
   return (
     <div className="min-h-screen">
+      <div className="relative flex w-full flex-col overflow-y-auto">
+        <StickyBanner className="bg-gradient-to-b from-blue-500 to-blue-600">
+          <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
+            Announcing Workshop on AI applications in EEG from September 12th to 14th, 2025.{" "}
+            <a href="https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/home?authuser=0" className="transition duration-200 hover:underline">
+              Visit Website
+            </a>
+          </p>
+        </StickyBanner>
+      </div>
       {/* Header */}
       <header className="backdrop-blur-md border-b sticky top-0 z-50 text-white">
         <div className="container mx-auto px-4 py-4">

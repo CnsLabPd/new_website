@@ -9,6 +9,7 @@ import { WaveBackground } from "@/components/wave-background"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -53,6 +54,16 @@ export default function CareersPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <div className="relative flex w-full flex-col overflow-y-auto">
+        <StickyBanner className="bg-gradient-to-b from-blue-500 to-blue-600">
+          <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
+            Announcing Workshop on AI applications in EEG from September 12th to 14th, 2025.{" "}
+            <a href="https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/home?authuser=0" className="transition duration-200 hover:underline">
+              Visit Website
+            </a>
+          </p>
+        </StickyBanner>
+      </div>
       <header className="container z-10 flex h-20 items-center justify-between py-6">
         <div className="flex items-center gap-2">
           <Link href="/">
