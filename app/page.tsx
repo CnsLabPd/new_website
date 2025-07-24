@@ -4,11 +4,22 @@ import { ArrowRight, Activity, Dna, Brain } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
 import { NetworkBrain } from "@/components/network-brain"
 import { NetworkAnimation } from "@/components/network-animation"
+import { StickyBanner } from "@/components/ui/sticky-banner";
 //import { TestimonialsSliderEnhanced } from "@/components/testimonials-slider-enhanced"
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
+      <div className="relative flex w-full flex-col overflow-y-auto">
+        <StickyBanner className="bg-gradient-to-b from-blue-500 to-blue-600">
+          <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
+            Announcing Workshop on AI applications in EEG during September 12 - 14.{" "}
+            <a href="https://www.linkedin.com/posts/srinivasa-chakravarthy-a09b5131_eeg-bci-ai-activity-7353030055700107264-QDbu?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEChymkB-JVMkUb6TVCBctz5XiLRqD9lSsI" className="transition duration-200 hover:underline">
+               Read announcement
+            </a>
+          </p>
+        </StickyBanner>
+      </div>
       <header className="container z-10 flex h-20 items-center justify-between py-6">
         <div className="flex items-center gap-2">
           <Link href="/">
@@ -48,17 +59,6 @@ export default function Home() {
           <div className="absolute inset-0 z-0">
             <NetworkAnimation />
             <div className="absolute inset-0 z-5 bg-gradient-to-b from-royal-950/50 via-transparent to-royal-950/80"></div>
-          </div>
-          <div className="relative flex h-[60vh] w-full flex-col overflow-y-auto">
-            <StickyBanner className="bg-gradient-to-b from-blue-500 to-blue-600">
-              <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-                Announcing Workshop on AI applications in EEG during September 12 - 14.
-                <a href="https://www.linkedin.com/posts/srinivasa-chakravarthy-a09b5131_eeg-bci-ai-activity-7353030055700107264-QDbu?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEChymkB-JVMkUb6TVCBctz5XiLRqD9lSsI" className="transition duration-200 hover:underline">
-                  Read announcement
-                </a>
-              </p>
-            </StickyBanner>
-            <DummyContent />
           </div>
           <div className="container relative z-20">
             <div className="mx-auto max-w-3xl text-center">
