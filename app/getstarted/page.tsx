@@ -30,7 +30,7 @@ export default function GetStarted() {
                 className="h-8 w-8 object-cover"
               />
               <span className="text-2xl font-bold bg-white bg-clip-text text-transparent">
-                NeuroGati
+                Neurogati
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
@@ -59,7 +59,7 @@ export default function GetStarted() {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Get Started with NeuroGati
+              Get Started with Neurogati
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Ready to transform your neurological research or clinical practice? Let's discuss how our AI-powered
