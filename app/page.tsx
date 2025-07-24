@@ -37,7 +37,7 @@ export default function Home() {
         </nav>
         <div className="flex items-center gap-4">
           <Link href="/getstarted">
-            <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400">
+            <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400 text-white">
               Contact Us
             </Button>
           </Link>
@@ -68,9 +68,9 @@ export default function Home() {
                 <Link href="/products">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400"
+                    className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400 text-white"
                   >
-                    Explore Our Products <ArrowRight className="ml-2 h-4 w-4" />
+                    Explore Our Products <ArrowRight className="ml-2 h-4 w-4 text-white" />
                   </Button>
                 </Link>
                 <Button
@@ -112,7 +112,7 @@ export default function Home() {
                 <div className="mt-8">
                   <Link href="/about">
                     <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                      Learn More <ArrowRight className="ml-2 h-4 w-4 text-white" />
                     </Button>
                   </Link>
                 </div>
@@ -208,9 +208,9 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400"
+                  className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400 text-white"
                 >
-                  Request a Demo <ArrowRight className="ml-2 h-4 w-4" />
+                  Request a Demo <ArrowRight className="ml-2 h-4 w-4 text-white" />
                 </Button>
                 <Link href="/products/diagnostics">
                   <Button size="lg" variant="outline" className="bg-white text-black border-white">
