@@ -68,7 +68,7 @@ export default function CareersPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <img src="/images/Neurogati.jpg" alt="Neurogati Logo" className="h-8 w-8 object-contain" />
+              <img src="/images/bg_just_logo.png" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
