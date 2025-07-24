@@ -206,7 +206,7 @@ export default function TeamPage() {
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-cyan-400" />
+                <img src="/images/bg_just_logo.png" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
                 <span className="text-lg font-bold text-white">Neurogati</span>
               </div>
               <p className="text-gray-400">
