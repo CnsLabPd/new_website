@@ -14,7 +14,7 @@ export default function Home() {
         <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
           <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
             Announcing Workshop on AI applications in EEG from September 12th to 14th, 2025.{" "}
-            <a href="https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/home?authuser=0" className="transition duration-200 hover:underline">
+            <a href="https://tinyurl.com/u6wzdsbe" className="transition duration-200 hover:underline">
                Visit Website
             </a>
           </p>
