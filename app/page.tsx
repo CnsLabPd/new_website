@@ -9,11 +9,22 @@ import { NetworkAnimation } from "@/components/network-animation"
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
+      <div className="relative flex w-full flex-col overflow-y-auto">
+        <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
+          <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
+            Announcing Workshop on AI applications in EEG from October 31st to Novemeber 02nd, 2025.{" "}
+            <a href="https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0" className="transition duration-200 hover:underline">
+              Visit Website
+            </a>
+          </p>
+        </StickyBanner>
+      </div>
       <header className="container z-10 flex h-20 items-center justify-between py-6">
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <img src="/images/neurogati-logo.jpg" alt="Neurogati" className="h-10 w-auto" />
+              <img src="/images/bg_just_logo.png" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
+              <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
         </div>
@@ -30,7 +41,7 @@ export default function Home() {
           <Link href="/research" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
             Research
           </Link>
-          <Link href="/team" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+          <Link href="/team" className="text-sm font-medium text-white transition-colors">
             Team
           </Link>
           <Link href="/careers" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
@@ -38,8 +49,8 @@ export default function Home() {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Link href="/contact">
-            <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400">
+          <Link href="/getstarted">
+            <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
               Contact Us
             </Button>
           </Link>
