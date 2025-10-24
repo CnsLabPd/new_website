@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function WorkshopsPage() {
   const pastWorkshops = [
@@ -16,7 +15,7 @@ export default function WorkshopsPage() {
       duration: "3 days",
       participants: 53,
       location: "Central Library, IIT Madras",
-      link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-sept-2025/home?authuser=0",
+      link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0",
     },
   ]
 
@@ -47,16 +46,6 @@ export default function WorkshopsPage() {
 
   return (
     <div className="min-h-screen bg-royal-950 text-white">
-      <div className="relative flex w-full flex-col overflow-y-auto">
-        <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-          <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-            Announcing Workshop on AI applications in EEG from October 31st to Novemeber 02nd, 2025.{" "}
-            <a href="https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0" className="transition duration-200 hover:underline">
-              Visit Website
-            </a>
-          </p>
-        </StickyBanner>
-      </div>
       {/* Header */}
       <header className="container z-10 flex h-20 items-center justify-between py-6">
         <div className="flex items-center gap-2">
@@ -146,7 +135,8 @@ export default function WorkshopsPage() {
                     </div>
                   </div>
                   <a href={workshop.link} target="_blank" rel="noopener noreferrer">
-                  <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">Learn More</Button>
+                    <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">Learn More</Button>
+                  </a>
                 </CardContent>
               </Card>
             ))}
