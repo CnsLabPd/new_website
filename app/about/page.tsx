@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { WaveBackground } from "@/components/wave-background"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function AboutPage() {
   return (
