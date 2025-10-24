@@ -16,6 +16,7 @@ export default function WorkshopsPage() {
       duration: "3 days",
       participants: 53,
       location: "Central Library, IIT Madras",
+      link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-sept-2025/home?authuser=0",
     },
   ]
 
@@ -29,6 +30,7 @@ export default function WorkshopsPage() {
       duration: "3 days",
       participants: 50,
       location: "Central Library, IIT Madras",
+      link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0",
     },
     {
       id: 3,
@@ -39,6 +41,7 @@ export default function WorkshopsPage() {
       duration: "5 days",
       participants: 50,
       location: "Online (GMeet)",
+      link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
   ]
 
@@ -142,6 +145,7 @@ export default function WorkshopsPage() {
                       <span>{workshop.location}</span>
                     </div>
                   </div>
+                  <a href={workshop.link} target="_blank" rel="noopener noreferrer">
                   <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">Learn More</Button>
                 </CardContent>
               </Card>
