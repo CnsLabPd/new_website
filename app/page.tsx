@@ -5,6 +5,7 @@ import { WaveBackground } from "@/components/wave-background"
 import { NetworkBrain } from "@/components/network-brain"
 import { NetworkAnimation } from "@/components/network-animation"
 //import { TestimonialsSliderEnhanced } from "@/components/testimonials-slider-enhanced"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function Home() {
   return (
