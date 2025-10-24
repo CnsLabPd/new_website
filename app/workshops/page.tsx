@@ -43,6 +43,17 @@ export default function WorkshopsPage() {
       location: "Online (GMeet)",
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
+    {
+      id: 4,
+      title: "AI Applications in EEG",
+      description:
+        "Explore cutting-edge artificial intelligence techniques applied to electroencephalography (EEG) data. Learn how to preprocess, analyze, and interpret EEG signals using machine learning algorithms for clinical applications and research.",
+      date: "January 28 - 30, 2026",
+      duration: "3 days",
+      participants: 50,
+      location: "MIT, Pune",
+      link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0",
+    },
   ]
 
   return (
