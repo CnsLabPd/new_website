@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Brain, Microscope } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
+import { StickyBanner } from "@/components/sticky-banner"
 
 export default function ModelingPage() {
   const [showPatentInfo, setShowPatentInfo] = useState(false)
