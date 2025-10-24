@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Brain, Activity } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
+import { StickyBanner } from "@/components/sticky-banner"
 
 export default function TherapyPage() {
   return (
@@ -31,6 +32,9 @@ export default function TherapyPage() {
           </Link>
           <Link href="/products" className="text-sm font-medium text-white transition-colors">
             Products
+          </Link>
+           <Link href="/workshops" className="text-sm font-medium text-white transition-colors">
+            Workshops
           </Link>
           <Link href="/research" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
             Research
