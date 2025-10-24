@@ -67,50 +67,9 @@ export default function ContactPage() {
           <Link href="/about" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
             About
           </Link>
-          <div className="relative group">
-            <button className="flex items-center gap-1 text-sm font-medium text-gray-300 hover:text-white transition-colors">
-              Products <ChevronDown className="h-4 w-4 opacity-50" />
-            </button>
-            <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-navy-800/95 ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-              <div className="py-1" role="menu" aria-orientation="vertical">
-                <Link
-                  href="/products/diagnostics"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-navy-700 hover:text-white transition-colors"
-                  role="menuitem"
-                >
-                  Diagnostics
-                </Link>
-                <Link
-                  href="/products/therapy"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-navy-700 hover:text-white transition-colors"
-                  role="menuitem"
-                >
-                  Rehab
-                </Link>
-                <Link
-                  href="/products/assistive-technology"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-navy-700 hover:text-white transition-colors"
-                  role="menuitem"
-                >
-                  Assistive Technology
-                </Link>
-                <Link
-                  href="/products/bci"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-navy-700 hover:text-white transition-colors"
-                  role="menuitem"
-                >
-                  BCI
-                </Link>
-                <Link
-                  href="/products/modeling"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-navy-700 hover:text-white transition-colors"
-                  role="menuitem"
-                >
-                  Computational Modeling
-                </Link>
-              </div>
-            </div>
-          </div>
+          <Link href="/products" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Products
+          </Link>
           <Link href="/workshops" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
             Workshops
           </Link>
