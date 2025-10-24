@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Image from "next/image"
 
 export default function WorkshopsPage() {
   const pastWorkshops = [
@@ -15,6 +14,7 @@ export default function WorkshopsPage() {
       date: "September 26 - 28, 2025",
       duration: "3 days",
       participants: 53,
+      location: "Central Library, IIT Madras",
     },
   ]
 
@@ -27,6 +27,7 @@ export default function WorkshopsPage() {
       date: "October 31 - November 2, 2025",
       duration: "3 days",
       participants: 50,
+      location: "Central Library, IIT Madras",
     },
     {
       id: 3,
@@ -36,51 +37,48 @@ export default function WorkshopsPage() {
       date: "December 5 - 9, 2025",
       duration: "5 days",
       participants: 50,
+      location: "Online (GMeet)",
     },
   ]
 
   return (
     <div className="min-h-screen bg-royal-950 text-white">
       {/* Header */}
-      <header className="border-b border-cyan-500/20 bg-royal-950/50 backdrop-blur-sm">
-        <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+      <header className="container z-10 flex h-20 items-center justify-between py-6">
+        <div className="flex items-center gap-2">
+          <Link href="/">
             <div className="flex items-center gap-2">
-              <Link href="/">
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/images/neurogati-logo.jpg"
-                    alt="Neurogati Logo"
-                    width={32}
-                    height={32}
-                    className="h-8 w-8 object-contain"
-                  />
-                  <span className="text-xl font-bold text-white">Neurogati</span>
-                </div>
-              </Link>
+              <img src="/images/neurogati-logo.jpg" alt="Neurogati" className="h-10 w-auto" />
             </div>
-            <div className="hidden gap-8 md:flex">
-              <Link href="/products" className="text-cyan-400 hover:text-cyan-300 transition">
-                Products
-              </Link>
-              <Link href="/workshops" className="text-cyan-400 hover:text-cyan-300 transition font-semibold">
-                Workshops
-              </Link>
-              <Link href="/research" className="text-cyan-400 hover:text-cyan-300 transition">
-                Research
-              </Link>
-              <Link href="/team" className="text-cyan-400 hover:text-cyan-300 transition">
-                Team
-              </Link>
-              <Link href="/about" className="text-cyan-400 hover:text-cyan-300 transition">
-                About
-              </Link>
-              <Link href="/contact" className="text-cyan-400 hover:text-cyan-300 transition">
-                Contact
-              </Link>
-            </div>
-          </div>
+          </Link>
+        </div>
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link href="/about" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            About
+          </Link>
+          <Link href="/products" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Products
+          </Link>
+          <Link href="/workshops" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Workshops
+          </Link>
+          <Link href="/research" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Research
+          </Link>
+          <Link href="/team" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Team
+          </Link>
+          <Link href="/careers" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Careers
+          </Link>
         </nav>
+        <div className="flex items-center gap-4">
+          <Link href="/getstarted">
+            <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400">
+              Contact Us
+            </Button>
+          </Link>
+        </div>
       </header>
 
       {/* Hero Section */}
@@ -93,7 +91,7 @@ export default function WorkshopsPage() {
               </span>
             </h1>
             <p className="mx-auto mb-8 max-w-3xl text-xl text-gray-300">
-              Expand your expertise in using AI and ML for brain signal processing and modeling through our
+              Expand your expertise in neurotechnology, AI diagnostics, and neurorehabilitation through our
               comprehensive workshop programs.
             </p>
           </div>
@@ -127,6 +125,10 @@ export default function WorkshopsPage() {
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">Participants:</span>
                       <span>{workshop.participants} max</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Location:</span>
+                      <span>{workshop.location}</span>
                     </div>
                   </div>
                   <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">Learn More</Button>
@@ -165,6 +167,10 @@ export default function WorkshopsPage() {
                       <span className="font-semibold">Participants:</span>
                       <span>{workshop.participants}</span>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Location:</span>
+                      <span>{workshop.location}</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -192,13 +198,7 @@ export default function WorkshopsPage() {
       <footer className="border-t border-cyan-500/20 bg-royal-950/50 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-center gap-2">
-            <Image
-              src="/images/neurogati-logo.jpg"
-              alt="Neurogati Logo"
-              width={32}
-              height={32}
-              className="h-8 w-8 object-contain"
-            />
+            <img src="/images/neurogati-logo.jpg" alt="Neurogati" className="h-8 w-auto" />
             <span className="text-xl font-bold text-white">Neurogati</span>
           </div>
           <div className="grid gap-8 md:grid-cols-4">
