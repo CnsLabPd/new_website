@@ -10,6 +10,7 @@ import { WaveBackground } from "@/components/wave-background"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
