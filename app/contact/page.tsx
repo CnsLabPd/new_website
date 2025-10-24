@@ -1,19 +1,18 @@
 "use client"
 
 import type React from "react"
-import { ChevronDown } from "lucide-react" // Import ChevronDown
-
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Brain, Mail, Phone, MapPin } from "lucide-react"
+import { Mail, Phone, MapPin } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export default function ContactPage() {
+export default function GetStartedPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -58,7 +57,13 @@ export default function ContactPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <Brain className="h-8 w-8 text-cyan-400" />
+              <Image
+                src="/images/neurogati-logo.jpg"
+                alt="Neurogati Logo"
+                width={32}
+                height={32}
+                className="h-8 w-8 object-contain"
+              />
               <span className="text-xl font-bold text-white">Neurogati</span>
             </div>
           </Link>
@@ -99,9 +104,9 @@ export default function ContactPage() {
           </div>
           <div className="container relative z-10">
             <div className="mx-auto max-w-3xl text-center">
-              <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-6xl">Contact Us</h1>
+              <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-6xl">Interested?</h1>
               <p className="mb-10 text-xl text-gray-300">
-                Have questions about our products or services? We're here to help.
+                Begin your journey with Neurogati's advanced neurological solutions.
               </p>
             </div>
           </div>
@@ -120,7 +125,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <h3 className="mb-1 text-lg font-semibold text-white">Email</h3>
-                        <p className="text-gray-300">cnspdapp@gmail.com</p>
+                        <p className="text-gray-300">careers@neurogati.com</p>
                       </div>
                     </div>
 
@@ -141,11 +146,11 @@ export default function ContactPage() {
                       <div>
                         <h3 className="mb-1 text-lg font-semibold text-white">Address</h3>
                         <p className="text-gray-300">
-                          Department of Biotechnology
+                          IIT Madras Incubation Cell
                           <br />
-                          Indian Institute of Technology Madras
+                          IITM Research Park
                           <br />
-                          Chennai - 600036
+                          Tharamani, Chennai - 600113
                         </p>
                       </div>
                     </div>
@@ -282,7 +287,13 @@ export default function ContactPage() {
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-cyan-400" />
+                <Image
+                  src="/images/neurogati-logo.jpg"
+                  alt="Neurogati Logo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 object-contain"
+                />
                 <span className="text-lg font-bold text-white">Neurogati</span>
               </div>
               <p className="text-gray-400">
