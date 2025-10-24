@@ -47,7 +47,7 @@ export default function ProductsPage() {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Link href="/getstarted">
+          <Link href="/contact">
             <Button className="bg-gradient-to-r from-royal-500 to-neon-500 hover:from-royal-600 hover:to-neon-400">
               Contact Us
             </Button>
