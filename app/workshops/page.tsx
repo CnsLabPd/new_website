@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function WorkshopsPage() {
   const pastWorkshops = [
