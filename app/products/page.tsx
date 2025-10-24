@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Brain, Microscope, Activity, Smartphone, Cpu } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
+import {StickyBanner} from "@/components/ui/sticky-banner";
 
 export default function ProductsPage() {
   return (
