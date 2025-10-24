@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Smartphone } from "lucide-react"
 import { WaveBackground } from "@/components/wave-background"
+import { StickyBanner } from "@/components/sticky-banner"
 
 export default function AssistiveTechnologyPage() {
   const [showMudhraPatentInfo, setShowMudhraPatentInfo] = useState(false)
