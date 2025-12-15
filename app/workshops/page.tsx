@@ -54,6 +54,17 @@ export default function WorkshopsPage() {
       location: "Online (Zoom)",
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
+    {
+      id: 5,
+      title: "Demystifying the Brain",
+      description:
+        "Introduces key ideas from modern computational neuroscience, making the mathematics and principles behind brain function accessible to students from biology, medicine, engineering, and computer science.",
+      date: "January 23 - 25, 2026",
+      duration: "3 days",
+      participants: 50,
+      location: "Online (Zoom)",
+      link: "Upcoming",/*"https://sites.google.com/view/modelingworkshop/home?authuser=4",*/
+    },
   ]
 
   return (
