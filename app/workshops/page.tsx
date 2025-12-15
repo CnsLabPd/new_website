@@ -29,9 +29,6 @@ export default function WorkshopsPage() {
       location: "Central Library, IIT Madras",
       link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0",
     },
-  ]
-
-  const upcomingWorkshops = [
     {
       id: 3,
       title: "Modeling Brain Function Using ML",
@@ -43,16 +40,19 @@ export default function WorkshopsPage() {
       location: "Online (GMeet)",
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
+  ]
+
+  const upcomingWorkshops = [
     {
       id: 4,
-      title: "AI Applications in EEG",
+      title: "Modeling Brain Function Using ML",
       description:
-        "Explore cutting-edge artificial intelligence techniques applied to electroencephalography (EEG) data. Learn how to preprocess, analyze, and interpret EEG signals using machine learning algorithms for clinical applications and research.",
-      date: "January 28 - 30, 2026",
-      duration: "3 days",
+        "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures, computational neuroscience, and practical implementations for understanding complex brain dynamics.",
+      date: "January 09 - 13, 2026",
+      duration: "5 days",
       participants: 50,
-      location: "MIT, Pune",
-      link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0",
+      location: "Online (Zoom)",
+      link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
   ]
 
