@@ -10,7 +10,7 @@ export default function TherapyPage() {
       <div className="relative flex w-full flex-col overflow-y-auto">
         <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
           <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-            Announcing Workshop on AI applications in EEG from October 31st to Novemeber 02nd, 2025.{" "}
+            Announcing Workshop on Brain Modeling [Online] from January 09th to 13th, 2026.{" "}
             <a href="https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0" className="transition duration-200 hover:underline">
               Visit Website
             </a>
