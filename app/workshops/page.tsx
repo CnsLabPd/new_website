@@ -45,6 +45,17 @@ export default function WorkshopsPage() {
   const upcomingWorkshops = [
     {
       id: 4,
+      title: "5-Month Research Training Program in Computational Neuroscience",
+      description: 
+        "A 5-month, mentorship-driven online program that takes students from foundational coursework to a supervised, conference-ready research project in computational neuroscience.",
+      date: "January 01st - May 31st, 2026",
+      duration: "20 weeks; Phase 01 - 10 weeks; Phase 02 - 10 weeks",
+      participants: 30,
+      location: "Online (Zoom)",
+      link: "https://www.neurogati.com/trainingprogram",
+    },
+    {
+      id: 5,
       title: "Modeling Brain Function Using ML",
       description:
         "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures, computational neuroscience, and practical implementations for understanding complex brain dynamics.",
@@ -55,7 +66,7 @@ export default function WorkshopsPage() {
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
     {
-      id: 5,
+      id: 6,
       title: "Demystifying the Brain",
       description:
         "Introduces key ideas from modern computational neuroscience, making the mathematics and principles behind brain function accessible to students from biology, medicine, engineering, and computer science.",
