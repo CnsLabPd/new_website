@@ -52,7 +52,7 @@ export default function WorkshopsPage() {
       duration: "20 weeks; Phase 01 - 10 weeks; Phase 02 - 10 weeks",
       participants: 30,
       location: "Online (Zoom)",
-      link: "https://www.neurogati.com/trainingprogram",
+      link: "https://www.neurogati.com/researchprogram",
     },
     {
       id: 5,
