@@ -17,59 +17,62 @@ import {
 
 export default function ProgramPage() {
   return (
-    <div className="min-h-screen bg-background">
+    /*<div className="min-h-screen bg-background">*/
+    <div className="min-h-screen bg-gradient-to-br from-[#050814] via-[#0a0f2c] to-[#0b163f] text-white">
       {/* Header/Nav */}
-      <header className="border-b border-border bg-card">
+      <header className="sticky top-0 z-50 backdrop-blur bg-black/30 border-b border-white/10">
+
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
             <Brain className="h-8 w-8 text-accent" />
             <span className="text-xl font-bold">NEUROGATI</span>
           </div>
           <nav className="hidden gap-6 md:flex">
-            <a href="#overview" className="text-sm text-muted-foreground transition-colors hover:text-accent">
+            <a href="#overview" className="text-sm text-slate-400 hover:text-cyan-400 transition">
               Overview
             </a>
-            <a href="#curriculum" className="text-sm text-muted-foreground transition-colors hover:text-accent">
+            <a href="#curriculum" className="text-sm text-slate-400 hover:text-cyan-400 transition">
               Curriculum
             </a>
-            <a href="#research" className="text-sm text-muted-foreground transition-colors hover:text-accent">
+            <a href="#research" className="text-sm text-slate-400 hover:text-cyan-400 transition">
               Research
             </a>
-            <a href="#instructor" className="text-sm text-muted-foreground transition-colors hover:text-accent">
+            <a href="#instructor" className="text-sm text-slate-400 hover:text-cyan-400 transition">
               Instructor
             </a>
           </nav>
-          <Button asChild>
+          <Button className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold" asChild>
             <a href="#apply">Apply Now</a>
           </Button>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="border-b border-border bg-gradient-to-br from-background via-accent/5 to-primary/10">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="mx-auto max-w-4xl text-center">
-            <Badge className="mb-4" variant="secondary">
-              <Calendar className="mr-1 h-3 w-3" />
-              Starting January 1st, 2026
-            </Badge>
-            <h1 className="mb-6 text-balance text-4xl font-bold tracking-tight md:text-6xl">
-              5-Month Online Research Training in Computational Neuroscience
-            </h1>
-            <p className="mb-8 text-pretty text-lg text-muted-foreground md:text-xl">
-              A mentorship-driven program introducing modern computational neuroscience, from brain modeling to
-              biologically inspired deep networks and research publication.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button size="lg" asChild>
-                <a href="#apply">
-                  Apply Now <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <a href="#curriculum">View Curriculum</a>
-              </Button>
-            </div>
+      <section className="relative overflow-hidden border-b border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_60%)]" />
+          <div className="container mx-auto px-4 py-16 md:py-24">
+            <div className="mx-auto max-w-4xl text-center">
+              <Badge className="mb-4" variant="secondary">
+                <Calendar className="mr-1 h-3 w-3" />
+                Starting January 1st, 2026
+              </Badge>
+              <h1 className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+                5-Month Online Research Training in Computational Neuroscience
+              </h1>
+              <p className="mb-8 text-pretty text-lg text-muted-foreground md:text-xl">
+                A mentorship-driven program introducing modern computational neuroscience, from brain modeling to
+                biologically inspired deep networks and research publication.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <Button size="lg" asChild>
+                  <a href="#apply">
+                    Apply Now <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <a href="#curriculum">View Curriculum</a>
+                </Button>
+              </div>
             <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-accent" />
@@ -86,6 +89,7 @@ export default function ProgramPage() {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       {/* Program Vision */}
@@ -98,7 +102,7 @@ export default function ProgramPage() {
               neuroscience
             </p>
             <div className="grid gap-6 md:grid-cols-3">
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="pt-6">
                   <Brain className="mb-4 h-10 w-10 text-accent" />
                   <h3 className="mb-2 text-xl font-semibold">Brain Modeling</h3>
@@ -108,7 +112,7 @@ export default function ProgramPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="pt-6">
                   <Code className="mb-4 h-10 w-10 text-accent" />
                   <h3 className="mb-2 text-xl font-semibold">Deep Networks</h3>
@@ -117,7 +121,7 @@ export default function ProgramPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="pt-6">
                   <GraduationCap className="mb-4 h-10 w-10 text-accent" />
                   <h3 className="mb-2 text-xl font-semibold">Research Track</h3>
@@ -140,7 +144,7 @@ export default function ProgramPage() {
               10 weeks of structured video lectures, graded assignments, and weekly mentor calls
             </p>
             <div className="grid gap-6">
-              <Card className="border-border">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-start justify-between">
                     <div>
@@ -167,7 +171,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-start justify-between">
                     <div>
@@ -194,7 +198,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-start justify-between">
                     <div>
@@ -223,7 +227,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-start justify-between">
                     <div>
@@ -250,7 +254,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-start justify-between">
                     <div>
@@ -290,7 +294,7 @@ export default function ProgramPage() {
               Choose one long-term research direction with weekly mentor supervision (Weeks 11-20)
             </p>
             <div className="grid gap-6 md:grid-cols-2">
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <Badge className="mb-3" variant="secondary">
                     Track A
@@ -302,7 +306,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <Badge className="mb-3" variant="secondary">
                     Track B
@@ -314,7 +318,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <Badge className="mb-3" variant="secondary">
                     Track C
@@ -326,7 +330,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <Badge className="mb-3" variant="secondary">
                     Track D
@@ -338,7 +342,7 @@ export default function ProgramPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border transition-all hover:border-accent/50 hover:shadow-lg md:col-span-2">
+              <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="p-6">
                   <Badge className="mb-3" variant="secondary">
                     Track E
@@ -434,7 +438,7 @@ export default function ProgramPage() {
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="mx-auto max-w-4xl">
             <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">Lead Instructor</h2>
-            <Card className="border-border">
+            <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
               <CardContent className="p-8">
                 <div className="grid gap-8 md:grid-cols-3">
                   <div className="md:col-span-1">
@@ -520,7 +524,7 @@ export default function ProgramPage() {
             <div>
               <h2 className="mb-6 text-3xl font-bold">Fee Structure</h2>
               <div className="space-y-4">
-                <Card className="border-border">
+                <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                   <CardContent className="p-6">
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-lg font-semibold">Phase 1 - Coursework</span>
@@ -535,7 +539,7 @@ export default function ProgramPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-border">
+                <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                   <CardContent className="p-6">
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-lg font-semibold">Phase 2 - Research</span>
