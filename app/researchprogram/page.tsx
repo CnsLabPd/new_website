@@ -21,10 +21,14 @@ export default function ProgramPage() {
       {/* Header/Nav */}
       <header className="sticky top-0 z-50 backdrop-blur bg-black/30 border-b border-white/10">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <Link href="/">
+          <a
+            href="https://neurogati.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:opacity-80 transition">
             <Brain className="h-8 w-8 text-cyan-400" />
             <span className="text-xl font-bold">NEUROGATI</span>
-          </Link>
+          </a>
           <nav className="hidden gap-6 md:flex">
             <a href="#overview" className="text-sm text-slate-400 hover:text-cyan-400 transition">
               Overview
