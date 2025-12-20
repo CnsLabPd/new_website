@@ -651,7 +651,6 @@ export default function ProgramPage() {
                       </Badge>
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <DollarSign className="h-5 w-5 text-slate-300" />
                       <span className="text-3xl font-bold text-white">₹25,000</span>
                       <span className="text-sm text-slate-300">INR</span>
                     </div>
@@ -668,7 +667,6 @@ export default function ProgramPage() {
                       </Badge>
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <DollarSign className="h-5 w-5 text-slate-300" />
                       <span className="text-3xl font-bold text-white">₹35,000</span>
                       <span className="text-sm text-slate-300">INR</span>
                     </div>
