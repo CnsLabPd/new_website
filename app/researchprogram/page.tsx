@@ -694,7 +694,7 @@ export default function ProgramPage() {
               className="mb-8 bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-500 hover:to-blue-600"
               asChild
             >
-              <a href="https://forms.gle/neurogati-apply" target="_blank" rel="noopener noreferrer">
+              <a href="https://forms.gle/raU26Zfyb39bdRFd8" target="_blank" rel="noopener noreferrer">
                 Apply Now <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             </Button>
