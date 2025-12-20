@@ -48,47 +48,47 @@ export default function ProgramPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_60%)]" />
-          <div className="container mx-auto px-4 py-16 md:py-24">
-            <div className="mx-auto max-w-4xl text-center">
-              <Badge className="mb-4" variant="secondary">
-                <Calendar className="mr-1 h-3 w-3" />
-                Starting January 1st, 2026
-              </Badge>
-              <h1 className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-                5-Month Online Research Training in Computational Neuroscience
-              </h1>
-              <p className="mb-8 text-pretty text-lg text-muted-foreground md:text-xl">
-                A mentorship-driven program introducing modern computational neuroscience, from brain modeling to
-                biologically inspired deep networks and research publication.
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <Button size="lg" asChild>
-                  <a href="#apply">
-                    Apply Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <a href="#curriculum">View Curriculum</a>
-                </Button>
-              </div>
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm">
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-accent" />
-                <span className="text-muted-foreground">1hr/week with mentor</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-accent" />
-                <span className="text-muted-foreground">10 weeks coursework</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-accent" />
-                <span className="text-muted-foreground">10 weeks research</span>
+        <section className="relative overflow-hidden border-b border-white/10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_60%)]" />
+            <div className="container mx-auto px-4 py-16 md:py-24">
+              <div className="mx-auto max-w-4xl text-center">
+                <Badge className="mb-4" variant="secondary">
+                  <Calendar className="mr-1 h-3 w-3" />
+                  Starting January 1st, 2026
+                </Badge>
+                <h1 className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+                  5-Month Online Research Training in Computational Neuroscience
+                </h1>
+                <p className="mb-8 text-pretty text-lg text-muted-foreground md:text-xl">
+                  A mentorship-driven program introducing modern computational neuroscience, from brain modeling to
+                  biologically inspired deep networks and research publication.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <Button size="lg" asChild>
+                    <a href="#apply">
+                      Apply Now <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button size="lg" variant="outline" asChild>
+                    <a href="#curriculum">View Curriculum</a>
+                  </Button>
+                </div>
+              <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm">
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-accent" />
+                  <span className="text-muted-foreground">1hr/week with mentor</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-accent" />
+                  <span className="text-muted-foreground">10 weeks coursework</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 text-accent" />
+                  <span className="text-muted-foreground">10 weeks research</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
