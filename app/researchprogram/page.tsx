@@ -20,9 +20,17 @@ export default function ProgramPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#050814] via-[#0a0f2c] to-[#0b163f] text-white">
       {/* Header/Nav */}
       <header className="sticky top-0 z-50 backdrop-blur bg-black/30 border-b border-white/10">
+        <div className="flex items-center gap-2">
+          <Link href="/">
+            <div className="flex items-center gap-2">
+              <img src="/images/neurogati-logo.jpg" alt="Neurogati Logo" className="h-8 w-auto" />
+              <span className="text-xl font-bold text-white">Neurogati</span>
+            </div>
+          </Link>
+        </div>
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <a
-            href="https://neurogati.com"
+            href="/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:opacity-80 transition"
