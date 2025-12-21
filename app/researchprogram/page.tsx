@@ -43,12 +43,24 @@ export default function ProgramPage() {
               Instructor
             </a>
           </nav>
-          <Button
-            className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-500 hover:to-blue-600"
-            asChild
-          >
-            <a href="#apply">Apply Now</a>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:text-cyan-300 bg-transparent"
+              asChild
+            >
+              <Link href="/workshops">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Workshops
+              </Link>
+            </Button>
+            <Button
+              className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-500 hover:to-blue-600"
+              asChild
+            >
+              <a href="#apply">Apply Now</a>
+            </Button>
+          </div>
         </div>
       </header>
 
