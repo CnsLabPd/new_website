@@ -25,7 +25,8 @@ export default function ProgramPage() {
             href="https://neurogati.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:opacity-80 transition">
+            className="flex items-center gap-2 hover:opacity-80 transition"
+          >
             <Brain className="h-8 w-8 text-cyan-400" />
             <span className="text-xl font-bold">NEUROGATI</span>
           </a>
@@ -56,7 +57,6 @@ export default function ProgramPage() {
           </div>
         </div>
       </header>
-
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-white/10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_60%)]" />
