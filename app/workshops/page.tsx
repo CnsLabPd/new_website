@@ -143,7 +143,7 @@ export default function WorkshopsPage() {
               </span>
             </h1>
             <p className="mx-auto mb-8 max-w-3xl text-xl text-gray-300">
-              Expand your expertise in neurotechnology, AI diagnostics, and neurorehabilitation through our
+              Expand your expertise in computational neuroscience, neurotechnology, AI diagnostics, and neurorehabilitation through our
               comprehensive workshop programs.
             </p>
           </div>
