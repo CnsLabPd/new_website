@@ -52,6 +52,7 @@ export default function WorkshopsPage() {
       duration: "20 weeks; Phase 01 - 10 weeks; Phase 02 - 10 weeks",
       participants: 30,
       location: "Online (Zoom)",
+      prices: "Phase 01 - 25,000 INR; Phase 02 - 35,000 INR",
       link: "https://www.neurogati.com/researchprogram",
     },
     {
@@ -63,6 +64,7 @@ export default function WorkshopsPage() {
       duration: "5 days",
       participants: 50,
       location: "Online (Zoom)",
+      prices: "UG Students - 2,000 INR; PG Students - 2,500 INR; Professionals - 3,000 INR",
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
     {
@@ -74,6 +76,7 @@ export default function WorkshopsPage() {
       duration: "3 days",
       participants: 50,
       location: "Online (Zoom)",
+      prices: "UG Students - 2,500 INR; PG Students - 3,000 INR; Professionals - 3,500 INR",
       link: "Upcoming",/*"https://sites.google.com/view/modelingworkshop/home?authuser=4",*/
     },
   ]
@@ -176,6 +179,10 @@ export default function WorkshopsPage() {
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">Location:</span>
                       <span>{workshop.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Pricing:</span>
+                      <span>{workshop.prices}</span>
                     </div>
                   </div>
                   <a href={workshop.link} target="_blank" rel="noopener noreferrer">
