@@ -12,7 +12,7 @@ export default function ResearchPage() {
         <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
           <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
             Announcing Workshop on Brain Modeling [Online] from January 09th to 13th, 2026.{" "}
-            <a href="https://sites.google.com/view/modelingworkshop/home?authuser=4">
+            <a href="/modelingworkshop">
               Visit Website
             </a>
           </p>
