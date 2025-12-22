@@ -99,9 +99,15 @@ export default function WorkshopsPage() {
       <header className="container z-10 flex h-20 items-center justify-between py-6">
         <div className="flex items-center gap-2">
           <Link href="/">
-            <div className="flex items-center gap-2">
-              <img src="/images/bg_just_logo.jpg" alt="Neurogati" className="h-10 w-auto" />
-            </div>
+              <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:opacity-80 transition"
+          >
+            <img src="/images/bg_just_logo.png" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
+            <span className="text-xl font-bold">Neurogati</span>
+          </a>
           </Link>
         </div>
         <nav className="hidden md:flex items-center space-x-6">
