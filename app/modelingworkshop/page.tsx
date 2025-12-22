@@ -24,6 +24,7 @@ export default function WorkshopPage() {
       {/* Header/Nav */}
       <header className="sticky top-0 z-50 backdrop-blur bg-black/30 border-b border-white/10">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
+          <img src="/images/bg_just_logo.png" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
           <a
             href="https://neurogati.com"
             target="_blank"
