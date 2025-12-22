@@ -65,7 +65,7 @@ export default function WorkshopsPage() {
       participants: 70,
       location: "Online (Zoom)",
       prices: "UG Students - 2,000 INR; PG Students - 2,500 INR; Professionals - 3,000 INR",
-      link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
+      link: "/modelingworkshop",
     },
     {
       id: 6,
