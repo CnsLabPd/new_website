@@ -30,7 +30,7 @@ export default function ProgramPage() {
           </Link>
         </div>
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <nav className="hidden gap-6 md:flex">
+          <nav className="hidden gap-5 md:flex">
             <a href="#overview" className="text-sm text-slate-400 hover:text-cyan-400 transition">
               Overview
             </a>
