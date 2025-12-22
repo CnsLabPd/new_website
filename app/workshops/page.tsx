@@ -80,7 +80,9 @@ export default function WorkshopsPage() {
       link: "Upcoming",/*"https://sites.google.com/view/modelingworkshop/home?authuser=4",*/
     },
   ]
-
+  
+  const isExternalLink = (link) =>
+  link.startsWith("http://") || link.startsWith("https://")
   return (
     <div className="min-h-screen bg-royal-950 text-white">
       {/* Header */}
@@ -185,9 +187,26 @@ export default function WorkshopsPage() {
                       <span>{workshop.prices}</span>
                     </div>
                   </div>
-                  <a href={workshop.link} target="_blank" rel="noopener noreferrer">
-                    <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">Learn More</Button>
-                  </a>
+                  {workshop.link !== "Upcoming" && (
+                  isExternalLink(workshop.link) ? (
+                    <a
+                      href={workshop.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">
+                        Learn More
+                      </Button>
+                    </a>
+                  ) : (
+                    <Link href={workshop.link} className="block">
+                      <Button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700">
+                        Learn More
+                      </Button>
+                    </Link>
+                  )
+                )}
                 </CardContent>
               </Card>
             ))}
