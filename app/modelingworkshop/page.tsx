@@ -321,14 +321,14 @@ export default function WorkshopPage() {
                 <CardContent className="pt-6 text-center">
                   <Calendar className="mx-auto mb-4 h-10 w-10 text-cyan-400" />
                   <h3 className="mb-2 text-lg font-semibold text-white">SOP Submission</h3>
-                  <p className="text-2xl font-bold text-cyan-400">20 Dec 2025</p>
+                  <p className="text-2xl font-bold text-cyan-400">25 Dec 2025</p>
                 </CardContent>
               </Card>
               <Card className="bg-white/5 backdrop-blur border border-white/10">
                 <CardContent className="pt-6 text-center">
                   <CheckCircle2 className="mx-auto mb-4 h-10 w-10 text-cyan-400" />
                   <h3 className="mb-2 text-lg font-semibold text-white">Selection Results</h3>
-                  <p className="text-2xl font-bold text-cyan-400">22 Dec 2025</p>
+                  <p className="text-2xl font-bold text-cyan-400">26 Dec 2025</p>
                 </CardContent>
               </Card>
               <Card className="bg-white/5 backdrop-blur border border-white/10">
