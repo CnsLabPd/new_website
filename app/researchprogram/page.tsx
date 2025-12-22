@@ -53,7 +53,7 @@ export default function ProgramPage() {
               Instructor
             </a>
             <Link href="/workshops" className="text-sm text-slate-400 hover:text-cyan-400 transition">
-              Workshops
+              View all Workshops
             </Link>
           </nav>
           <div className="flex items-center gap-3">
