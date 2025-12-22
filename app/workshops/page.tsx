@@ -53,7 +53,7 @@ export default function WorkshopsPage() {
       participants: 50,
       location: "Online (Zoom)",
       prices: "Phase 01 - 25,000 INR; Phase 02 - 35,000 INR",
-      link: "https://www.neurogati.com/researchprogram",
+      link: "/researchprogram",
     },
     {
       id: 5,
