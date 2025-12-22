@@ -100,7 +100,7 @@ export default function WorkshopsPage() {
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex items-center gap-2">
-              <img src="/images/neurogati-logo.jpg" alt="Neurogati" className="h-10 w-auto" />
+              <img src="/images/bg_just_logo.jpg" alt="Neurogati" className="h-10 w-auto" />
             </div>
           </Link>
         </div>
