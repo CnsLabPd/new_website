@@ -28,7 +28,8 @@ export default function ProgramPage() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:opacity-80 transition"
           >
-            <span className="text-xl font-bold">NEUROGATI</span>
+            <img src="/images/bg_just_logo.png" alt="Neurogati Logo" className="h-16 w-16 object-contain" />
+            <span className="text-xl font-bold">Neurogati</span>
           </a>
           <nav className="hidden gap-6 md:flex">
             <a href="#overview" className="text-sm text-slate-400 hover:text-cyan-400 transition">
