@@ -104,7 +104,7 @@ export default function DemystifyingTheBrainPage() {
                 className="border-white/20 text-white hover:bg-white/10 bg-transparent"
                 asChild
               >
-                <a href="#curriculum">View Curriculum</a>
+                <a href="#schedule">View Schedule</a>
               </Button>
             </div>
             <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm">
