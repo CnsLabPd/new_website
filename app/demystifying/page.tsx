@@ -133,7 +133,7 @@ export default function DemystifyingTheBrainPage() {
               Key ideas from modern computational neuroscience, accessible to students from biology, medicine,
               engineering, and computer science
             </p>
-            <div className="grid gap-6 md:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-3">
               <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 hover:shadow-xl transition">
                 <CardContent className="pt-6">
                   <History className="mb-4 h-10 w-10 text-cyan-400" />
