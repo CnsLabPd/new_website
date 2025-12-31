@@ -140,7 +140,7 @@ export default function GetStartedPage() {
                       </div>
                       <div>
                         <h3 className="mb-1 text-lg font-semibold text-white">Phone</h3>
-                        <p className="text-gray-300">(+91)-44-22575125</p>
+                        <p className="text-gray-300">(+91)-9003632758</p>
                       </div>
                     </div>
 
