@@ -365,7 +365,7 @@ export default function WorkshopsPage() {
             </div>
           </div>
           <div className="mt-8 border-t border-cyan-500/20 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 NeuroAI. All rights reserved.</p>
+            <p>&copy; 2025 Neurogati. All rights reserved.</p>
           </div>
         </div>
       </footer>
