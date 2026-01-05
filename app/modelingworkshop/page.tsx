@@ -187,15 +187,16 @@ export default function WorkshopPage() {
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Forenoon - Tutorial Sessions</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>Intro to computational neuroscience (45 mins)</li>
-                            <li>Single neuron signaling (45 mins)</li>
-                            <li>Single neuron models: HH, Morris Lecar, FN, Izhikevich 2-var model (45 mins)</li>
+                            <li>10:00 AM - 10:50 AM - Introduction to computational neuroscience</li>
+                            <li>10:50 AM - 11:00 AM - Break</li>
+                            <li>11:00 AM - 12:00 PM - Single neuron signaling</li>
+                            <li>12:00 PM - 12:50 PM - Single neuron models: Izhikevich 1-variable model, Izhikevich 2-variable model, Leaky Integrate and Fire Model</li>
                           </ul>
                         </div>
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Afternoon - Practical Sessions (2.5 hrs)</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>Hands-on implementation of HH, Morris Lecar, FN, Izhikevich models</li>
+                            <li>02:00 PM - 04:30 PM - Practical Session - Coding spiking neuron models using Python</li>
                           </ul>
                         </div>
                       </div>
@@ -219,16 +220,16 @@ export default function WorkshopPage() {
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Forenoon - Tutorial Sessions</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>CNNs in motor function – normal and motor stroke of upper extremities (30 mins)</li>
-                            <li>Nervous System Organization – Deep Network perspective (45 mins)</li>
-                            <li>CNNs in visual and auditory neuroscience (45 mins)</li>
+                            <li>10:00 AM - 10:50 AM - Nervous system Organisation - Deep Networks perspective</li>
+                            <li>10:50 AM - 11:00 AM - Break</li>
+                            <li>11:00 AM - 12:00 PM - CNNs in Visual and Auditory Neuroscience</li>
+                            <li>12:00 PM - 12:50 PM - CNNs in motor function - normal and motor stroke of upper extremities</li>
                           </ul>
                         </div>
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Afternoon - Practical Sessions (2.5 hrs)</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>Deep network applications in neuroscience</li>
-                            <li>Training sessions and project work</li>
+                            <li>02:00 PM–04:30 PM - Practical Session - Coding deep neural networks for understanding brain networks</li>
                           </ul>
                         </div>
                       </div>
@@ -252,21 +253,16 @@ export default function WorkshopPage() {
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Forenoon - Tutorial Sessions</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>Phase plane analysis and limit cycles (45 mins)</li>
-                            <li>
-                              Rhythms in the brain – review of neural oscillations, methods of measurement (45 mins)
-                            </li>
-                            <li>Introduction to Deep Oscillatory Neural Networks (45 mins)</li>
+                            <li>10:00 AM - 10:50 AM - Basics of Phase Plane Analysis. Analysing behaviours of 2-var linear dynamical systems</li>
+                            <li>10:50 AM - 11:00 AM - Break</li>
+                            <li>11:00 AM - 12:00 PM - 2-Variable Neuron Models</li>
+                            <li>12:00 PM - 12:45 PM - Introduction to Deep Oscillatory Neural Networks</li>
                           </ul>
                         </div>
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Afternoon - Practical Sessions</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>xppaut - Phase plane analysis and limit cycles</li>
-                            <li>
-                              Deep Oscillatory neural networks (DONNs): Classification, Signal processing, Video
-                              processing
-                            </li>
+                            <li>02:00 PM - 04:30 PM - xppaut - Phase plane analysis and limit cycles</li>
                           </ul>
                         </div>
                       </div>
@@ -290,16 +286,13 @@ export default function WorkshopPage() {
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Forenoon - Tutorial Sessions</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>Oscillator network model of f-MRI</li>
+                            <li>10:00 AM - 12:30 PM - Basal ganglia model for DBS (Spiking neuron net); Deep neural network model of the spatial cells of Hippocampus</li>
                           </ul>
                         </div>
                         <div>
                           <p className="font-medium text-cyan-400 mb-1">Afternoon - 4 Parallel Project Sessions</p>
                           <ul className="ml-4 list-disc space-y-1 text-slate-300">
-                            <li>Bilateral network for reaching - normal and stroke</li>
-                            <li>Basal ganglia model for DBS (Spiking neuron net)</li>
-                            <li>Deep neural network model of the spatial cells of Hippocampus</li>
-                            <li>Additional specialized topics</li>
+                            <li>02:00 PM - 04:30 PM - Bilateral network for reaching - normal and stroke; Oscillator network model of f-MRI</li>
                           </ul>
                         </div>
                       </div>
