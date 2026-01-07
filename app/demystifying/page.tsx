@@ -79,7 +79,7 @@ export default function DemystifyingTheBrainPage() {
           <div className="mx-auto max-w-4xl text-center">
             <Badge className="mb-4 bg-white/10 text-white border-white/20" variant="secondary">
               <Calendar className="mr-1 h-3 w-3" />
-              3-Day Intensive Workshop
+              Jan 23rd - 25th, 2026
             </Badge>
             <h1 className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               Demystifying the Brain
@@ -435,7 +435,7 @@ export default function DemystifyingTheBrainPage() {
                   href="mailto:contact@neurogati.com"
                   className="text-sm text-slate-400 hover:text-cyan-400 transition"
                 >
-                  contact@neurogati.com
+                  workshops@neurogati.com
                 </a>
               </div>
               <div className="flex flex-wrap justify-center gap-6 text-sm text-slate-400">
