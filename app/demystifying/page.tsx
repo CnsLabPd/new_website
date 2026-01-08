@@ -314,21 +314,21 @@ export default function DemystifyingTheBrainPage() {
                 <CardContent className="pt-6 text-center">
                   <Calendar className="mx-auto mb-4 h-10 w-10 text-cyan-400" />
                   <h3 className="mb-2 text-lg font-semibold text-white">Application Deadline</h3>
-                  <p className="text-2xl font-bold text-cyan-400">07 Jan 2026</p>
+                  <p className="text-2xl font-bold text-cyan-400">12 Jan 2026</p>
                 </CardContent>
               </Card>
               <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 transition">
                 <CardContent className="pt-6 text-center">
                   <CheckCircle2 className="mx-auto mb-4 h-10 w-10 text-cyan-400" />
                   <h3 className="mb-2 text-lg font-semibold text-white">Selection Results</h3>
-                  <p className="text-2xl font-bold text-cyan-400">08 Jan 2026</p>
+                  <p className="text-2xl font-bold text-cyan-400">13 Jan 2026</p>
                 </CardContent>
               </Card>
               <Card className="bg-white/5 backdrop-blur border border-white/10 hover:border-cyan-400/40 transition">
                 <CardContent className="pt-6 text-center">
                   <DollarSign className="mx-auto mb-4 h-10 w-10 text-cyan-400" />
                   <h3 className="mb-2 text-lg font-semibold text-white">Fee Payment Deadline</h3>
-                  <p className="text-2xl font-bold text-cyan-400">15 Jan 2026</p>
+                  <p className="text-2xl font-bold text-cyan-400">20 Jan 2026</p>
                 </CardContent>
               </Card>
             </div>
