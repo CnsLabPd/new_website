@@ -67,18 +67,18 @@ export default function WorkshopsPage() {
       prices: "UG Students - 2,000 INR; PG Students - 2,500 INR; Professionals - 3,000 INR",
       link: "/modelingworkshop",
     },
-    {
-      id: 6,
-      title: "Demystifying the Brain",
-      description:
-        "Introduces key ideas from modern computational neuroscience, making the mathematics and principles behind brain function accessible to students from biology, medicine, engineering, and computer science.",
-      date: "January 23 - 25, 2026",
-      duration: "3 days",
-      participants: 70,
-      location: "Online (Zoom)",
-      prices: "UG Students - 2,500 INR; PG Students - 3,000 INR; Professionals - 3,500 INR",
-      link: "/demystifying",/*"https://sites.google.com/view/modelingworkshop/home?authuser=4",*/
-    },
+    // {
+    //   id: 6,
+    //   title: "Demystifying the Brain",
+    //   description:
+    //     "Introduces key ideas from modern computational neuroscience, making the mathematics and principles behind brain function accessible to students from biology, medicine, engineering, and computer science.",
+    //   date: "January 23 - 25, 2026",
+    //   duration: "3 days",
+    //   participants: 70,
+    //   location: "Online (Zoom)",
+    //   prices: "UG Students - 2,500 INR; PG Students - 3,000 INR; Professionals - 3,500 INR",
+    //   link: "/demystifying",/*"https://sites.google.com/view/modelingworkshop/home?authuser=4",*/
+    // },
   ]
   
   const isExternalLink = (link) =>
