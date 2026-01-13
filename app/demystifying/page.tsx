@@ -79,7 +79,7 @@ export default function DemystifyingTheBrainPage() {
           <div className="mx-auto max-w-4xl text-center">
             <Badge className="mb-4 bg-white/10 text-white border-white/20" variant="secondary">
               <Calendar className="mr-1 h-3 w-3" />
-              Jan 23rd - 25th, 2026
+              To be Announced
             </Badge>
             <h1 className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               Demystifying the Brain
