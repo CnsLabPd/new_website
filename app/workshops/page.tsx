@@ -76,7 +76,7 @@ export default function WorkshopsPage() {
       duration: "3 days",
       participants: 47,
       location: "Online",
-      link: "/modelingworkshop",
+      link: "/eegworkshop",
     },
     // {
     //   id: 6,
