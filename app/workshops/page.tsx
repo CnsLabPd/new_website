@@ -40,11 +40,23 @@ export default function WorkshopsPage() {
       location: "Online (GMeet)",
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
+    {
+      id: 4,
+      title: "Modeling Brain Function Using ML",
+      description:
+        "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures, computational neuroscience, and practical implementations for understanding complex brain dynamics.",
+      date: "January 09 - 13, 2026",
+      duration: "5 days",
+      participants: 70,
+      location: "Online (Zoom)",
+      prices: "UG Students - 2,000 INR; PG Students - 2,500 INR; Professionals - 3,000 INR",
+      link: "/modelingworkshop",
+    }
   ]
 
   const upcomingWorkshops = [
     {
-      id: 4,
+      id: 5,
       title: "5-Month Research Training Program in Computational Neuroscience",
       description: 
         "A 5-month, mentorship-driven online program that takes students from foundational coursework to a supervised, conference-ready research project in computational neuroscience.",
@@ -56,15 +68,14 @@ export default function WorkshopsPage() {
       link: "/researchprogram",
     },
     {
-      id: 5,
-      title: "Modeling Brain Function Using ML",
+      id: 6,
+      title: "AI Applications in EEG",
       description:
-        "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures, computational neuroscience, and practical implementations for understanding complex brain dynamics.",
-      date: "January 09 - 13, 2026",
-      duration: "5 days",
-      participants: 70,
-      location: "Online (Zoom)",
-      prices: "UG Students - 2,000 INR; PG Students - 2,500 INR; Professionals - 3,000 INR",
+        "Explore cutting-edge artificial intelligence techniques applied to electroencephalography (EEG) data. Learn how to preprocess, analyze, and interpret EEG signals using machine learning algorithms for clinical applications and research.",
+      date: "February 20 - 22, 2026",
+      duration: "3 days",
+      participants: 47,
+      location: "Online",
       link: "/modelingworkshop",
     },
     // {
