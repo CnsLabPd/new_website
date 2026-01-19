@@ -31,7 +31,7 @@ export default function EEGAIWorkshopPage() {
             className="flex items-center gap-3 hover:opacity-80 transition"
           >
             <Image
-              src="/neurogati-logo.jpg"
+              src="\/images/bg_just_logo.png"
               alt="Neurogati Logo"
               width={32}
               height={32}
