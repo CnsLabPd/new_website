@@ -408,11 +408,10 @@ export default function EEGAIWorkshopPage() {
                     Location
                   </h3>
                   <div className="space-y-2 text-slate-300">
-                    <p>Laboratory for Computational Neuroscience</p>
-                    <p>Parkinson's Therapeutics Lab</p>
-                    <p>Department of Biotechnology</p>
-                    <p>Indian Institute of Technology, Madras</p>
-                    <p className="font-semibold">Chennai 600036</p>
+                    <p>Neurogati Pvt Ltd</p>
+                    <p>Research Park, Indian Institute of Technology, Madras</p>
+                    <p>Tharamani</p>
+                    <p className="font-semibold">Chennai 600113</p>
                   </div>
                 </CardContent>
               </Card>
