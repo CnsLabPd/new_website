@@ -57,8 +57,8 @@ export default function GetStartedPage() {
       <div className="relative flex w-full flex-col overflow-y-auto">
         <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
           <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-            Announcing Workshop on Brain Modeling [Online] from January 09th to 13th, 2026.{" "}
-            <a href="/modelingworkshop">
+            Announcing AI Applications in EEG Workshop [Online] from February 20th to 22nd, 2026.{" "}
+            <a href="/eegworkshop">
               Visit Website
             </a>
           </p>
