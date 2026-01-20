@@ -8,7 +8,7 @@ import {StickyBanner} from "@/components/ui/sticky-banner";
 export default function WorkshopsPage() {
   const pastWorkshops = [
     {
-      id: 1,
+      id: 4,
       title: "AI Applications in EEG",
       description:
         "Explored cutting-edge artificial intelligence techniques applied to electroencephalography (EEG) data. Learned how to preprocess, analyze, and interpret EEG signals using machine learning algorithms for clinical applications and research.",
@@ -19,7 +19,7 @@ export default function WorkshopsPage() {
       link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-sept-2025/home?authuser=0",
     },
     {
-      id: 2,
+      id: 3,
       title: "AI Applications in EEG",
       description:
         "Explore cutting-edge artificial intelligence techniques applied to electroencephalography (EEG) data. Learn how to preprocess, analyze, and interpret EEG signals using machine learning algorithms for clinical applications and research.",
@@ -30,7 +30,7 @@ export default function WorkshopsPage() {
       link: "https://sites.google.com/smail.iitm.ac.in/eegaiworkshop/workshop-oct-2025/home?authuser=0",
     },
     {
-      id: 3,
+      id: 2,
       title: "Modeling Brain Function Using ML",
       description:
         "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures, computational neuroscience, and practical implementations for understanding complex brain dynamics.",
@@ -41,7 +41,7 @@ export default function WorkshopsPage() {
       link: "https://sites.google.com/view/modelingworkshop/home?authuser=4",
     },
     {
-      id: 4,
+      id: 1,
       title: "Modeling Brain Function Using ML",
       description:
         "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures, computational neuroscience, and practical implementations for understanding complex brain dynamics.",
@@ -100,8 +100,8 @@ export default function WorkshopsPage() {
       <div className="relative flex w-full flex-col overflow-y-auto">
         <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
           <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-            Announcing Workshop on Brain Modeling [Online] from January 09th to 13th, 2026.{" "}
-            <a href="/modelingworkshop">
+            Announcing AI Applications in EEG Workshop [Online] from February 20th to 22nd, 2026.{" "}
+            <a href="/eegworkshop">
               Visit Website
             </a>
           </p>
