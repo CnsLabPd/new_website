@@ -335,7 +335,7 @@ export default function EEGAIWorkshopPage() {
       <section id="fees" className="border-b border-white/10 bg-white/5">
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="mx-auto max-w-5xl">
-            <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">Fee Details</h2>
+            <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">Fee Details [exclusive of taxes]</h2>
             <p className="mb-12 text-balance text-center text-lg text-slate-300">
               Flexible pricing for students and professionals
             </p>
