@@ -55,7 +55,7 @@ export default function WorkshopPage() {
               className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-500 hover:to-blue-600"
               asChild
             >
-              <a href="https://forms.gle/3KwdkrdpSVUxHsWQ6" target="_blank" rel="noopener noreferrer">
+              <a href="https://forms.gle/wnXBKfNa4RbCNyFk8" target="_blank" rel="noopener noreferrer">
                 Apply Now
               </a>
             </Button>
@@ -69,7 +69,7 @@ export default function WorkshopPage() {
         <div className="container mx-auto px-4 py-16 md:py-24 relative">
           <div className="mx-auto max-w-4xl text-center">
             <Badge className="mb-4 bg-white/10 text-white border-white/20" variant="secondary">
-              <Calendar className="mr-1 h-3 w-3" />9 - 13 January 2026
+              <Calendar className="mr-1 h-3 w-3" />21 - 25 March 2026
             </Badge>
             <h1 className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               Workshop on Brain Modeling
@@ -485,7 +485,7 @@ export default function WorkshopPage() {
                 className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-500 hover:to-blue-600"
                 asChild
               >
-                <a href="https://forms.gle/3KwdkrdpSVUxHsWQ6" target="_blank" rel="noopener noreferrer">
+                <a href="https://forms.gle/wnXBKfNa4RbCNyFk8" target="_blank" rel="noopener noreferrer">
                   Apply Now <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>
