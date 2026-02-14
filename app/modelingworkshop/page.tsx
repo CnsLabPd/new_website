@@ -351,7 +351,7 @@ export default function WorkshopPage() {
                   <Badge className="mb-4 bg-cyan-400/10 text-cyan-400 border-cyan-400/20" variant="secondary">
                     Undergraduate
                   </Badge>
-                  <p className="mb-2 text-4xl font-bold text-white">₹2,000</p>
+                  <p className="mb-2 text-4xl font-bold text-white">₹3,000</p>
                   <p className="text-sm text-slate-400">INR</p>
                 </CardContent>
               </Card>
@@ -363,7 +363,7 @@ export default function WorkshopPage() {
                   <Badge className="mb-4 bg-cyan-400/10 text-cyan-400 border-cyan-400/20" variant="secondary">
                     PG / PhD
                   </Badge>
-                  <p className="mb-2 text-4xl font-bold text-white">₹2,500</p>
+                  <p className="mb-2 text-4xl font-bold text-white">₹3,500</p>
                   <p className="text-sm text-slate-400">INR</p>
                 </CardContent>
               </Card>
@@ -372,7 +372,7 @@ export default function WorkshopPage() {
                   <Badge className="mb-4 bg-cyan-400/10 text-cyan-400 border-cyan-400/20" variant="secondary">
                     Professionals
                   </Badge>
-                  <p className="mb-2 text-4xl font-bold text-white">₹3,000</p>
+                  <p className="mb-2 text-4xl font-bold text-white">₹4,000</p>
                   <p className="text-sm text-slate-400">INR</p>
                 </CardContent>
               </Card>
