@@ -13,8 +13,9 @@ export const WavyBackground = ({
   waveWidth,
   backgroundFill,
   blur = 10,
-  speed = "fast",
+  speed = "slow",
   waveOpacity = 0.5,
+  waveCount = 5 ,
   ...props
 }: {
   children?: any
@@ -40,7 +41,7 @@ export const WavyBackground = ({
     if (theme === "light") {
       return "#fdf8f2"
     } else if (theme === "dark") {
-      return "rgb(15, 23, 42)" // Dark slate
+      return "#0f172aff" // Dark slate
     } else {
       // System theme - check actual applied theme
       const isDark = document.documentElement.classList.contains("dark")
@@ -53,7 +54,7 @@ export const WavyBackground = ({
       case "slow":
         return 0.001
       case "fast":
-        return 0.002
+        return 0.003
       default:
         return 0.001
     }
@@ -111,7 +112,7 @@ export const WavyBackground = ({
       ctx.fillStyle = getBackgroundFill()
       ctx.globalAlpha = waveOpacity || 0.5
       ctx.fillRect(0, 0, w, h)
-      drawWave(5)
+      drawWave(waveCount)
       animationId = requestAnimationFrame(render)
     } catch (error) {
       console.warn("Canvas rendering error:", error)

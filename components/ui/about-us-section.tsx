@@ -24,18 +24,19 @@ import {
 import { motion, useScroll, useTransform, useInView, useSpring } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Image from "next/image";
 import Link from "next/link";
 
 const timeline = [
   {
-    year: "Feb 2024",
+    year: "Feb 2025",
     title: "Neurogati Founded",
     description:
       "Company established by neuroscientists and AI researchers with a vision to transform neurological care.",
     color: "blue",
   },
   {
-    year: "Aug 2024",
+    year: "Aug 2025",
     title: "First Product Launch",
     description: "Quadis-PD™ diagnostic platform to diagnose, monitor and provide rehabilitation to Parkinson's Patients",
     color: "violet",
@@ -103,39 +104,39 @@ export default function AboutUsSection() {
     {
       icon: <BrainCircuit className="w-6 h-6" />,
       secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-blue-400" />,
-      title: "AI Diagnostics",
+      title: "Neuro Diagnostics",
       description:
-        "Revolutionary AI-powered diagnostic tools in detecting neurological disorders, transforming early intervention and patient outcomes.",
+        "Standardized, data-driven motor and cognitive assessments create a clear baseline for every user",
       position: "left",
     },
-    {
-      icon: <Cpu className="w-6 h-6" />,
-      secondaryIcon: <CheckCircle className="w-4 h-4 absolute -top-1 -right-1 text-violet-400" />,
-      title: "Brain-Computer Interface",
-      description:
-        "Cutting-edge BCI technology, enabling direct neural control and opening new possibilities for assistive technologies.",
-      position: "left",
-    },
+    // {
+    //   icon: <Cpu className="w-6 h-6" />,
+    //   secondaryIcon: <CheckCircle className="w-4 h-4 absolute -top-1 -right-1 text-violet-400" />,
+    //   title: "Brain-Computer Interface",
+    //   description:
+    //     "Cutting-edge BCI technology, enabling direct neural control and opening new possibilities for assistive technologies.",
+    //   position: "left",
+    // },
     {
       icon: <TestTube className="w-6 h-6" />,
       secondaryIcon: <Star className="w-4 h-4 absolute -top-1 -right-1 text-green-400" />,
-      title: "Clinical Research",
+      title: "Neuro-Tech Education",
       description:
-        "Rigorous clinical validation through partnerships with leading hospitals, ensuring our innovations meet the highest standards of medical excellence.",
+        "Merging neuroscience and cutting-edge technology to revolutionize how we learn, diagnose, and perform.",
       position: "left",
     },
-    {
-      icon: <Microscope className="w-6 h-6" />,
-      secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-amber-400" />,
-      title: "Computational Modeling",
-      description:
-        "Advanced computational models for neurological conditions, providing personalized treatment strategies and deeper understanding of brain function.",
-      position: "right",
-    },
+    // {
+    //   icon: <Microscope className="w-6 h-6" />,
+    //   secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-amber-400" />,
+    //   title: "Computational Modeling",
+    //   description:
+    //     "Advanced computational models for neurological conditions, providing personalized treatment strategies and deeper understanding of brain function.",
+    //   position: "right",
+    // },
     {
       icon: <Users className="w-6 h-6" />,
       secondaryIcon: <CheckCircle className="w-4 h-4 absolute -top-1 -right-1 text-red-400" />,
-      title: "Rehabilitation Games",
+      title: "Gaming",
       description:
         "Gamified therapy platforms that increase patient engagement and accelerate recovery through motivational, evidence-based rehabilitation programs.",
       position: "right",
@@ -205,7 +206,7 @@ export default function AboutUsSection() {
         variants={containerVariants}
       >
         <div className="max-w-4xl mx-auto mb-12">
-          <div className="bg-gradient-to-r from-blue-900/30 via-violet-900/30 to-amber-500/30 rounded-2xl p-8 border border-border">
+          <div className="bg-gradient-to-r from-blue-700/30 via-blue-300/30 to-blue-500/30 rounded-2xl p-8 border border-border">
             <div className="flex items-center justify-center mb-6">
               <Target className="h-8 w-8 text-amber-400 mr-3" />
               <h2 className="text-2xl font-bold text-black dark:text-white">Our Mission</h2>
@@ -224,12 +225,12 @@ export default function AboutUsSection() {
               <h2 className="text-2xl font-bold text-black dark:text-white">Our Story</h2>
             </div>
             <p className="text-xl text-gray-800 dark:text-gray-200 leading-relaxed font-medium text-justify">
-              Founded in 2024 by a team of neuroscientists, AI researchers, and healthcare technologists, Neurogati was born from a shared vision: to bring deep neuroscience insights into real-world neurological care. Our founders believed that a more precise understanding of the brain—rooted in advanced computational modeling—could unlock earlier diagnoses, smarter therapies, and more intuitive assistive and brain-computer interfaces. While millions live with neurological disorders, existing diagnostic and rehabilitation tools have struggled to keep pace with scientific discovery. At Neurogati, we bridge this gap by translating our models of brain function into intelligent, personalized technologies that help clinicians act earlier, treat more effectively, and improve the lives of patients worldwide.
+              Incubated at IIT Madras, Neurogati was born from a shared vision to integrate multiple dimensions of neurotechnology into a single, comprehensive system. Our founders believed that a more precise understanding of the brain—rooted in the powerful combination of AI, Computational Neuroscience, and Technology—could unlock earlier diagnoses, smarter therapies, and more intuitive support for those facing neurological disorders, neurodiversity, and the challenges of aging.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap -8 relative">
           {/* Left Column */}
           <div className="space-y-16">
             {services
@@ -258,12 +259,14 @@ export default function AboutUsSection() {
                   transition={{duration: 0.8, delay: 0.3}}
                   whileHover={{scale: 1.03, transition: {duration: 0.3}}}
               >
-                <img
-                    src="/Neurogati.png"
+                <Image
+                    src="/images/NeurogatiLogo.svg"
                     alt="Neurogati Research Lab"
+                    width={320} 
+                    height={320}
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-background opacity-30 hover:opacity-10" />
+                {/* <div className="absolute inset-0 bg-background opacity-30 hover:opacity-10" /> */}
 
                 <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent flex items-end justify-center p-4"

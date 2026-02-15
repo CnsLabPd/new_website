@@ -153,7 +153,7 @@ export const Contact2 = ({
             <div className="rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-8 shadow-2xl">
               <div className="mb-8 text-center">
                 <div className="flex items-center justify-center mb-4">
-                  <Users className="h-8 w-8 text-blue-500 mr-3" />
+                  <Users className="h-8 w-8 text-[#104581] mr-3" />
                   <h2 className="text-2xl font-bold text-black dark:text-white">Send us a Message</h2>
                 </div>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -384,7 +384,7 @@ export const Contact2 = ({
 
                 <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-medium transition-colors"
                 >
                   <Mail className="h-5 w-5 mr-2"/>
                   Send Message

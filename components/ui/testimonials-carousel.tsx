@@ -295,7 +295,7 @@ const Section = ({ title, subtitle, children }: SectionProps) => {
     const companies = [
         {
             name: "Google",
-            url: "https://res.cloudinary.com/eldoraui/image/upload/v1734066341/Google_fav2wl.svg",
+            url: "https://res.cloudinary.com/eldoraui/imcage/upload/v1734066341/Google_fav2wl.svg",
         },
         {
             name: "GitHub",
@@ -305,59 +305,32 @@ const Section = ({ title, subtitle, children }: SectionProps) => {
             name: "Amazon",
             url: "https://res.cloudinary.com/eldoraui/image/upload/v1734066178/Amazon_wckqtv.svg",
         },
-        {
-            name: "Netflix",
-            url: "https://res.cloudinary.com/eldoraui/image/upload/v1734066179/Netflix_skrjyn.svg",
-        },
-        {
-            name: "YouTube",
-            url: "https://res.cloudinary.com/eldoraui/image/upload/v1734066180/YouTube_wknngk.svg",
-        },
-        {
-            name: "Instagram",
-            url: "https://res.cloudinary.com/eldoraui/image/upload/v1734066178/Instagram_mo5ttl.svg",
-        },
-        {
-            name: "Spotify",
-            url: "https://res.cloudinary.com/eldoraui/image/upload/v1734066180/Spotify_ocrrnm.svg",
-        },
+
     ];
 
     function getTestimonialQuote(index: number): string {
         const quotes = [
-            "nexus.ai has revolutionized our security testing process. We're now able to identify and address vulnerabilities faster than ever before.",
-            "With nexus.ai, we've significantly improved our security posture. It's like having an AI-powered ethical hacker working around the clock.",
-            "The AI-driven insights from nexus.ai have transformed how we approach cybersecurity. It's a game-changer for our platform's security.",
-            "nexus.ai's automated penetration testing has saved us countless hours and dramatically enhanced our security measures.",
-            "Implementing nexus.ai was seamless, and the results were immediate. We're now proactively addressing potential security issues before they become threats.",
-            "The continuous monitoring capabilities of nexus.ai give us peace of mind. We're always one step ahead in protecting our users' data.",
-            "nexus.ai's compliance mapping feature has streamlined our security audit processes. It's an essential tool for maintaining trust with our users.",
+            "Neurogati has revolutionized parkinsons diagnostics to under 10 mins!",
+            "With  Neurogati, stroke rehabilitation is fun.",
+            "The AI-driven insights from neurogati have transformed how we approach disease management. It's a much needed game-changer for our protocol.",
         ];
         return quotes[index % quotes.length];
     }
 
     function getTestimonialName(index: number): string {
         const names = [
-            "Alex Rivera",
-            "Samantha Lee",
-            "Raj Patel",
-            "Emily Chen",
-            "Michael Brown",
-            "Linda Wu",
-            "Carlos Gomez",
+            "Dr Lakshmi Narasimhan",
+            "Dr Rithvik",
+            "Dr Vijayashankar Paramanandam",
         ];
         return names[index % names.length];
     }
 
     function getTestimonialRole(index: number): string {
         const roles = [
-            "Head of Cybersecurity",
-            "Chief Information Security Officer",
-            "VP of Engineering",
-            "Security Operations Manager",
-            "Director of IT Security",
-            "Lead Security Architect",
-            "Chief Technology Officer",
+            "Head of Neurology, SRMC",
+            "Neurologist, SRMC",
+            "Neurologist, Apollo Hospitals",
         ];
         return roles[index % roles.length];
     }
@@ -371,7 +344,7 @@ const Section = ({ title, subtitle, children }: SectionProps) => {
         <Carousel>
             <div className="relative mx-auto max-w-2xl">
             <CarouselContent>
-                {Array.from({ length: 7 }).map((_, index) => (
+                {Array.from({ length: 3 }).map((_, index) => (
                         <CarouselItem key={index}>
                         <div className="p-2 pb-5">
                         <div className="text-center">

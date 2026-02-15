@@ -1,81 +1,115 @@
 "use client"
-
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, BrainCircuit } from "lucide-react"
+import { usePathname } from "next/navigation" 
+import { Menu, UserCircle, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import Image from "next/image";
+import Image from "next/image"
+import { cn } from "@/lib/utils" 
+import { AuthModal } from "@/components/auth/AuthModal"
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
+  { href: "/products", label: "Apps" },
+    { href: "/gamingcategories", label: "Games" }, 
+  { href: "/workshops", label: "Workshops" },
   { href: "/research", label: "Research" },
   { href: "/team", label: "Team" },
-  { href: "/careers", label: "Careers" },
+  // { href: "/careers", label: "Careers" },
   { href: "/about", label: "About" },
+  { href: "/media", label: "Media" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
 ]
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const pathname = usePathname()
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm shadow-lg border-b border-border">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-6">
+    <div className="w-full bg-transparent">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center space-x-2">
-            {/*<BrainCircuit className="h-8 w-8 text-blue-500" />*/}
-            <Image src="/bg_just_logo.png" alt="Neurogati" width={50} height={50} className="h-10 w-10 mb-1"/>
-            <span className="text-2xl font-bold text-[#1c82c2]">Neurogati</span>
+          
+          <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02]">
+            <div className="relative h-10 w-10 overflow-hidden rounded-lg">
+              <Image src="/bg_just_logo.png" alt="Logo" fill className="object-contain" priority />
+            </div>
+            <span className="text-2xl font-extrabold tracking-tight text-[#1c82c2] dark:text-[#38bdf8]">
+              Neurogati
+            </span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-muted-foreground hover:text-blue-400 transition-colors font-medium"
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "text-sm lg:text-base font-bold transition-colors",
+                    isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground/80 hover:text-[#1c82c2]"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            
+            <div className="flex items-center gap-4 pl-4 border-l border-border/50">
+              <ThemeToggle />
+              {/* LOGIN/SIGNUP CTA */}
+              <Button 
+                onClick={() => setIsAuthModalOpen(true)}
+                className="bg-[#1c82c2] hover:bg-[#16699d] text-white rounded-full px-6 font-bold transition-all hover:shadow-lg hover:shadow-blue-500/20"
               >
-                {link.label}
-              </Link>
-            ))}
-            <ThemeToggle />
+                Sign In
+              </Button>
+            </div>
           </nav>
 
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-              className="text-foreground hover:bg-accent"
-            >
+          <div className="md:hidden flex items-center gap-4">
+             <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
+                <UserCircle className="h-6 w-6" />
+             </Button>
+            <ThemeToggle />
+            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
       </div>
 
+      {/* Auth Modal Component */}
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+
+      {/* MOBILE NAV */}
       {isMenuOpen && (
-        <div className="md:hidden bg-background shadow-lg border-t border-border">
-          <nav className="flex flex-col items-center space-y-4 py-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-muted-foreground hover:text-blue-400 transition-colors font-medium text-lg"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-2">
-              <ThemeToggle />
-            </div>
+        <div className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border animate-in slide-in-from-top-5 duration-300">
+          <nav className="flex flex-col items-center gap-6 py-10">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className={cn(
+                    "text-xl font-bold",
+                    isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       )}
-    </header>
+    </div>
   )
 }
