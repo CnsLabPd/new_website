@@ -34,7 +34,7 @@ const workshops = [
   {
     id: "comp-neuro-training-3",
     status: "Upcoming",
-    title: "Modeling Brain Function Using ",
+    title: "Modeling Brain Function Using ML",
     date: "March 21-25, 2026",
     duration: "5 days",
     participants: "70 Max",
