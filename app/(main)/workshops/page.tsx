@@ -33,6 +33,18 @@ const workshops = [
   },
   {
     id: "comp-neuro-training-3",
+    status: "Upcoming",
+    title: "Modeling Brain Function Using ",
+    date: "March 21-25, 2026",
+    duration: "5 days",
+    participants: "70 Max",
+    type: "Online (Zoom)",
+    pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
+    description: "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures and practical implementations for complex brain dynamics.",
+    registrationLink: "/modellingworkshop"
+  },
+  {
+    id: "demystify-1",
     status: "Past",
     title: "Demystifying the Brain",
     date: "January 23 - 25, 2026",
