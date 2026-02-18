@@ -27,6 +27,26 @@ const rehabProducts = [
     ],
     color: "blue",
     action: { label: "Play Now!", href: "https://apps.microsoft.com/detail/9nzj8mbk1btt?hl=en-US&gl=IN" }
+  },
+    {
+    name: "Dunk-it",
+    tagline: "Gesture-based Basketball Challenge",
+    overview: "Hit the court with Dunk-it!!, an immersive basketball exergaming experience that turns your physical rehabilitation into a high-energy competition. Using advanced motion tracking, the game translates your arm and upper-body movements into precise shots and slam dunks, making repetitive therapeutic exercises feel like a trip to the arena.",
+    tech: null, // No tech highlight for now
+    videoUrl: "/DunkIt.mp4",
+    images: ["/images/crgs.png"],
+    features: [
+      "Real-time skeletal tracking via standard webcam (No wearables required)",
+      "Adaptive difficulty scaling based on range of motion",
+      "Dynamic scoring and visual feedback for motor precision"
+    ],
+    applications: [
+      "Shoulder and elbow extension reinforcement",
+      "Proprioception and spatial awareness development",
+      "Bilateral coordination and reaching-task therapy"
+    ],
+    color: "Red",
+    action: { label: "Play Now!", href: "https://apps.microsoft.com/detail/9n3201tlsnvf?hl=en-GB&gl=IN" }
   }
 ];
 
