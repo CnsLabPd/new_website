@@ -30,7 +30,7 @@ export default function ContactPage() {
         <Contact2
           title="Let's Connect"
           description="Whether you're a clinician interested in our diagnostic tools, a researcher exploring collaboration opportunities, or a healthcare institution looking to implement our solutions, we're here to help transform neurological care together."
-          phone="+91 44 2257 4000"
+          phone="+91 44 2257 5125"
           email="contactus@neurogati.com"
           web={{ label: "neurogati.com", url: "https://neurogati.com" }}
           address="IIT Madras Research Park, Chennai, Tamil Nadu, India"
