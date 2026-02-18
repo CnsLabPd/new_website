@@ -11,7 +11,6 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
     "sonic-drive": "https://sonic-drive-9w4o.vercel.app/", 
     "balloon-pop": "https://balloon-game-nine.vercel.app/",
     "posabets":"https://posabets.vercel.app/",
-  
   };
 
   const gameUrl = gameRegistry[params.gameId];
