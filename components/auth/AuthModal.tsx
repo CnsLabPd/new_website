@@ -59,7 +59,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-md bg-background border border-border p-8 rounded-3xl shadow-2xl">
         <button onClick={onClose} className="absolute right-6 top-6 text-muted-foreground hover:text-foreground">
           <X className="h-5 w-5" />

@@ -1,12 +1,39 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { X, Gamepad2, PlayCircle, Headphones, ChevronDown } from "lucide-react"
+import { X, Gamepad2, PlayCircle, Headphones, ChevronDown, Lock } from "lucide-react"
+import { createClient } from "@/lib/supabase"
+import { AuthModal } from "@/components/auth/AuthModal"
 
 export default function GamePlayerPage({ params }: { params: { gameId: string } }) {
   const router = useRouter();
   const [hasStarted, setHasStarted] = useState(false);
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const supabase = createClient();
+
+  // Check authentication
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+
+    checkUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        setIsAuthModalOpen(false); // Close modal after successful login
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Auto-minimize header after 3 seconds
   useEffect(() => {
@@ -25,6 +52,60 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
 
   const gameUrl = gameRegistry[params.gameId];
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-black text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-400">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Authentication required
+  if (!user) {
+    return (
+      <>
+        <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+        <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
+          <div className="max-w-md w-full p-8 text-center space-y-8">
+            <div className="flex justify-center">
+              <Lock className="h-20 w-20 text-blue-500" />
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-4xl font-black text-white tracking-tighter uppercase">
+                Sign In Required
+              </h2>
+              <p className="text-slate-400 font-medium text-lg">
+                You need to be logged in to play games. Please sign in to continue.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-black text-white bg-blue-600 rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-blue-500/20"
+              >
+                <span className="text-xl uppercase tracking-tighter">Sign In</span>
+              </button>
+
+              <button
+                onClick={() => router.back()}
+                className="text-slate-400 hover:text-white font-bold text-sm uppercase transition-colors"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Game not found
   if (!gameUrl) {
     return (
       <div className="h-screen flex items-center justify-center bg-black text-white">
