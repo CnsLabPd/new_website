@@ -1,13 +1,23 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation" 
-import { Menu, UserCircle, X } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { Menu, UserCircle, X, LogOut, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import Image from "next/image"
-import { cn } from "@/lib/utils" 
+import { cn } from "@/lib/utils"
 import { AuthModal } from "@/components/auth/AuthModal"
+import { createClient } from "@/lib/supabase"
+import { useToast } from "@/components/ui/use-toast"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -26,7 +36,57 @@ const navLinks = [
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [username, setUsername] = useState<string>("")
   const pathname = usePathname()
+  const supabase = createClient()
+  const { toast } = useToast()
+
+  // Check user authentication
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+      if (user) {
+        // Get username from user metadata
+        const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'
+        setUsername(name)
+      }
+    }
+
+    checkUser()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+      if (session?.user) {
+        const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User'
+        setUsername(name)
+      } else {
+        setUsername("")
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      })
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out.",
+      })
+      setUser(null)
+      setUsername("")
+    }
+  }
 
   return (
     <div className="w-full bg-transparent">
@@ -62,13 +122,33 @@ export default function Header() {
             
             <div className="flex items-center gap-4 pl-4 border-l border-border/50">
               <ThemeToggle />
-              {/* LOGIN/SIGNUP CTA */}
-              <Button 
-                onClick={() => setIsAuthModalOpen(true)}
-                className="bg-[#1c82c2] hover:bg-[#16699d] text-white rounded-full px-6 font-bold transition-all hover:shadow-lg hover:shadow-blue-500/20"
-              >
-                Sign In
-              </Button>
+              {/* LOGIN/SIGNUP CTA or USER MENU */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="rounded-full px-4 font-bold gap-2">
+                      <UserCircle className="h-5 w-5" />
+                      {username}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="bg-[#1c82c2] hover:bg-[#16699d] text-white rounded-full px-6 font-bold transition-all hover:shadow-lg hover:shadow-blue-500/20"
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </nav>
 

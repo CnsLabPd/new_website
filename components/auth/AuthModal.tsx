@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { X, Loader2 } from "lucide-react"
-import { createClient } from "@/lib/supabase" // Ensure this path is correct
+import { createClient } from "@/lib/supabase"
+import { useToast } from "@/components/ui/use-toast"
 
 export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [isSignUp, setIsSignUp] = useState(false)
   const [loading, setLoading] = useState(false)
-  
+  const { toast } = useToast()
+
   // 1. FORM STATES
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -37,7 +39,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           },
         })
         if (error) throw error
-        alert("Success! Check your email for a confirmation link.")
+        toast({
+          title: "Account created successfully!",
+          description: "Please check your email for a confirmation link.",
+        })
       } else {
         // SIGN IN LOGIC
         const { error } = await supabase.auth.signInWithPassword({
@@ -45,12 +50,20 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           password,
         })
         if (error) throw error
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        })
       }
-      
+
       onClose() // Close modal on success
     } catch (error: any) {
       console.error("Auth Error:", error.message)
-      alert(error.message)
+      toast({
+        title: "Authentication failed",
+        description: error.message,
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
