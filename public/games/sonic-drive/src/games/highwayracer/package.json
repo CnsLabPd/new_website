@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@pixi/particle-emitter": "^5.0.8",
+    "matter-js": "^0.20.0",
+    "pixi.js": "^8.14.0"
+  }
+}

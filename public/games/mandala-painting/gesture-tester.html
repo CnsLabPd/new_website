@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Model Tester</title>
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
+    <!-- Simple JavaScript ML library -->
+    <script src="https://unpkg.com/ml-matrix@6.10.4/lib/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .model-loader {
+            text-align: center;
+            padding: 40px;
+            margin-bottom: 20px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .video-container {
+            text-align: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            margin: 20px 0;
+        }
+
+        #input_video {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            display: block;
+            transform: scaleX(-1);
+        }
+
+        #output_canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transform: scaleX(-1);
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.danger {
+            background: #f44336;
+        }
+
+        .btn.danger:hover {
+            background: #da190b;
+        }
+
+        .prediction-display {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .predicted-gesture {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gesture-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffeb3b;
+            margin-bottom: 10px;
+        }
+
+        .confidence-display {
+            margin: 20px 0;
+        }
+
+        .confidence-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            background: linear-gradient(90deg, #ff4444, #ffff44, #44ff44);
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .confidence-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .model-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .gesture-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .status {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            background: rgba(220, 53, 69, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .prediction-history {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+
+        .mouse-actions {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .mouse-actions h4 {
+            color: #ffeb3b;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 8px;
+            padding: 15px 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 60px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .action-btn.triggered {
+            animation: flash 0.5s ease;
+        }
+
+        @keyframes flash {
+            0%, 100% { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); }
+            50% { background: linear-gradient(45deg, #4CAF50, #45a049); }
+        }
+
+        /* Navigation header */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
+            z-index: 100;
+            margin-bottom: 20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffeb3b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 235, 59, 0.2);
+            color: #ffeb3b;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        .nav-bar {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.current {
+            background: #4CAF50;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🖐️</span>
+                <span>Gesture Control</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="gesture-trainer.html">📊 Collect Data</a></li>
+                <li><a href="gesture-retrainer.html">📈 Update Data</a></li>
+                <li><a href="gesture-tester.html" class="active">🧪 Tester</a></li>
+                <li><a href="activities-center.html">🎮 Activities</a></li>
+                <li><a href="README.md" target="_blank">📖 Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <nav class="nav-bar">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">🏠 Home</a>
+                <a href="gesture-trainer.html" class="nav-link">📊 Collect Data</a>
+                <a href="gesture-retrainer.html" class="nav-link">📈 Update Data</a>
+                <a href="gesture-tester.html" class="nav-link current">🧪 Tester</a>
+                <a href="activities-center.html" class="nav-link">🎮 Activities</a>
+            </div>
+        </nav>
+
+        <div class="header">
+            <h1>🧪 Gesture Model Tester</h1>
+            <p>Test your trained gesture recognition model in real-time</p>
+        </div>
+
+        <div class="card model-loader">
+            <h3>📁 Load Trained Model</h3>
+            <p>Upload the gesture model JSON file you downloaded from the trainer</p>
+            
+            <div class="file-input-wrapper">
+                <input type="file" id="modelFile" class="file-input" accept=".json" />
+                <label for="modelFile" class="file-input-label">📂 Choose Model File</label>
+            </div>
+            
+            <div id="modelLoadStatus" class="status" style="display: none;">
+                Model loading...
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card video-container">
+                <h3>📹 Live Camera Feed</h3>
+                
+                <button id="startCamera" class="btn" disabled>📹 Start Camera</button>
+                
+                <div class="video-wrapper">
+                    <video id="input_video" autoplay muted playsinline></video>
+                    <canvas id="output_canvas"></canvas>
+                </div>
+
+                <div id="cameraStatus" class="status">
+                    Please load a model first
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Gesture Prediction</h3>
+                
+                <div class="prediction-display">
+                    <div id="predictedGesture" class="predicted-gesture">🤖</div>
+                    <div id="gestureName" class="gesture-name">No Model Loaded</div>
+                    
+                    <div class="confidence-display">
+                        <div class="confidence-bar">
+                            <div id="confidenceBar" class="confidence-fill"></div>
+                        </div>
+                        <div id="confidenceText" class="confidence-text">Confidence: 0%</div>
+                    </div>
+                </div>
+
+                <div id="modelInfo" class="model-info" style="display: none;">
+                    <div><strong>Model Information:</strong></div>
+                    <div id="modelDetails">No model loaded</div>
+                </div>
+
+                <div class="gesture-stats">
+                    <div class="stat-item">
+                        <div id="totalPredictions" class="stat-value">0</div>
+                        <div class="stat-label">Total Predictions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="avgConfidence" class="stat-value">0%</div>
+                        <div class="stat-label">Avg Confidence</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4>🎮 Activities Center</h4>
+            <p>Test your trained gesture model with interactive activities and real-time gesture mapping</p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="activities-center.html" class="btn" style="display: inline-block; text-decoration: none; font-size: 18px; padding: 20px 40px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4);">
+                    🎮 Open Activities Center
+                </a>
+                <p style="margin-top: 10px; opacity: 0.8; font-size: 14px;">Practice your gestures with dynamic mouse control mapping</p>
+            </div>
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                <h5 style="color: #ffeb3b; margin-bottom: 10px;">🎯 Supported Gesture Mappings:</h5>
+                <ul style="list-style: none; padding: 0;">
+                    <li>📜 <strong>Scroll:</strong> Directional scrolling (up/down movement)</li>
+                    <li>👆 <strong>Left Click:</strong> Primary mouse button</li>
+                    <li>✌️ <strong>Right Click:</strong> Secondary mouse button</li>
+                    <li>🖱️ <strong>Mouse Navigation:</strong> Cursor movement without clicking</li>
+                    <li>✋ <strong>Stay Right There:</strong> Rest posture (no action)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📈 Prediction History</h3>
+            <div id="predictionHistory" class="prediction-history">
+                <div style="text-align: center; opacity: 0.5;">No predictions yet</div>
+            </div>
+            <button id="clearHistory" class="btn danger" style="width: 100%;">🗑️ Clear History</button>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+
+    <script>
+        // Simple k-NN Classifier implementation (same as in trainer)
+        class SimpleKNNClassifier {
+            constructor(k = 5) {
+                this.k = k;
+                this.trainX = [];
+                this.trainY = [];
+            }
+
+            train(X, y) {
+                this.trainX = X.map(row => [...row]);
+                this.trainY = [...y];
+            }
+
+            predict(sample) {
+                const distances = this.trainX.map((trainSample, idx) => ({
+                    distance: this.euclideanDistance(sample, trainSample),
+                    label: this.trainY[idx]
+                }));
+
+                distances.sort((a, b) => a.distance - b.distance);
+                const kNearest = distances.slice(0, this.k);
+
+                const labelCounts = {};
+                kNearest.forEach(neighbor => {
+                    labelCounts[neighbor.label] = (labelCounts[neighbor.label] || 0) + 1;
+                });
+
+                let maxCount = 0;
+                let predictedLabel = 0;
+                for (const [label, count] of Object.entries(labelCounts)) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        predictedLabel = parseInt(label);
+                    }
+                }
+
+                return predictedLabel;
+            }
+
+            predictWithConfidence(sample) {
+                const distances = this.trainX.map((trainSample, idx) => ({
+                    distance: this.euclideanDistance(sample, trainSample),
+                    label: this.trainY[idx]
+                }));
+
+                distances.sort((a, b) => a.distance - b.distance);
+                const kNearest = distances.slice(0, this.k);
+
+                const labelCounts = {};
+                kNearest.forEach(neighbor => {
+                    labelCounts[neighbor.label] = (labelCounts[neighbor.label] || 0) + 1;
+                });
+
+                let maxCount = 0;
+                let predictedLabel = 0;
+                for (const [label, count] of Object.entries(labelCounts)) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        predictedLabel = parseInt(label);
+                    }
+                }
+
+                const confidence = maxCount / this.k;
+                return { prediction: predictedLabel, confidence: confidence };
+            }
+
+            euclideanDistance(a, b) {
+                let sum = 0;
+                for (let i = 0; i < a.length; i++) {
+                    sum += Math.pow(a[i] - b[i], 2);
+                }
+                return Math.sqrt(sum);
+            }
+        }
+
+        class GestureTester {
+            constructor() {
+                this.detector = null;
+                this.camera = null;
+                this.poseType = 'hands'; // Default pose type
+                this.isDetecting = false;
+                this.modelData = null;
+                this.trainedModel = null;
+                
+                this.predictionStats = {
+                    total: 0,
+                    confidenceSum: 0,
+                    history: []
+                };
+                
+                this.gestureActionMapping = {
+                    // Default mappings - will be customizable
+                };
+                
+                this.elements = {};
+                this.init();
+            }
+
+            init() {
+                this.initElements();
+                this.setupEventListeners();
+            }
+
+            initElements() {
+                this.elements = {
+                    modelFile: document.getElementById('modelFile'),
+                    modelLoadStatus: document.getElementById('modelLoadStatus'),
+                    startCamera: document.getElementById('startCamera'),
+                    inputVideo: document.getElementById('input_video'),
+                    outputCanvas: document.getElementById('output_canvas'),
+                    cameraStatus: document.getElementById('cameraStatus'),
+                    predictedGesture: document.getElementById('predictedGesture'),
+                    gestureName: document.getElementById('gestureName'),
+                    confidenceBar: document.getElementById('confidenceBar'),
+                    confidenceText: document.getElementById('confidenceText'),
+                    modelInfo: document.getElementById('modelInfo'),
+                    modelDetails: document.getElementById('modelDetails'),
+                    totalPredictions: document.getElementById('totalPredictions'),
+                    avgConfidence: document.getElementById('avgConfidence'),
+                    predictionHistory: document.getElementById('predictionHistory'),
+                    clearHistory: document.getElementById('clearHistory'),
+                    leftClickBtn: document.getElementById('leftClickBtn'),
+                    rightClickBtn: document.getElementById('rightClickBtn'),
+                    doubleClickBtn: document.getElementById('doubleClickBtn'),
+                    scrollBtn: document.getElementById('scrollBtn'),
+                    errorMessage: document.getElementById('errorMessage')
+                };
+            }
+
+            setupEventListeners() {
+                this.elements.modelFile.addEventListener('change', (e) => {
+                    this.loadModel(e.target.files[0]);
+                });
+
+                this.elements.startCamera.addEventListener('click', () => {
+                    if (this.isDetecting) {
+                        this.stopDetection();
+                    } else {
+                        this.startDetection();
+                    }
+                });
+
+                this.elements.clearHistory.addEventListener('click', () => {
+                    this.clearPredictionHistory();
+                });
+
+                // Mouse action button event listeners (only if elements exist)
+                if (this.elements.leftClickBtn) {
+                    this.elements.leftClickBtn.addEventListener('click', () => {
+                        this.triggerAction('leftClick');
+                    });
+                }
+
+                if (this.elements.rightClickBtn) {
+                    this.elements.rightClickBtn.addEventListener('click', () => {
+                        this.triggerAction('rightClick');
+                    });
+                }
+
+                if (this.elements.doubleClickBtn) {
+                    this.elements.doubleClickBtn.addEventListener('click', () => {
+                        this.triggerAction('doubleClick');
+                    });
+                }
+
+                if (this.elements.scrollBtn) {
+                    this.elements.scrollBtn.addEventListener('click', () => {
+                        this.triggerAction('scroll');
+                    });
+                }
+            }
+
+            async loadModel(file) {
+                if (!file) return;
+
+                try {
+                    this.elements.modelLoadStatus.style.display = 'block';
+                    this.elements.modelLoadStatus.textContent = 'Loading model...';
+
+                    const text = await file.text();
+                    this.modelData = JSON.parse(text);
+
+                    console.log('📋 Loaded model data:', this.modelData);
+
+                    // Validate model data
+                    if (!this.modelData.gestureNames || !this.modelData.labelEncoder) {
+                        throw new Error('Invalid model file format');
+                    }
+
+                    if (this.modelData.poseType) {
+                        this.poseType = this.modelData.poseType;
+                    }
+
+                    // Check if this is the new model format (with pre-trained classifier) or old format (with training data)
+                    if (this.modelData.modelType === 'knn' && this.modelData.model) {
+                        // New format from retrainer - has pre-trained classifier
+                        console.log('🆕 Loading new format model with pre-trained classifier');
+                        await this.loadPretrainedModel();
+                    } else if (this.modelData.trainingData) {
+                        // Old format from trainer - needs retraining
+                        console.log('🔄 Loading old format model, retraining classifier');
+                        await this.retrainModel();
+                    } else {
+                        throw new Error('Unsupported model format - missing both pre-trained model and training data');
+                    }
+
+                    // Update UI
+                    this.elements.modelLoadStatus.textContent = '✅ Model loaded successfully!';
+                    this.elements.startCamera.disabled = false;
+                    this.elements.modelInfo.style.display = 'block';
+
+                    // Display model info (handle both formats)
+                    const totalSamples = this.modelData.trainingData ?
+                        this.modelData.trainingData.length :
+                        'N/A (pre-trained)';
+
+                    this.elements.modelDetails.innerHTML = `
+                        <strong>Pose Type:</strong> ${this.poseType}<br>
+                        <strong>Gestures:</strong> ${this.modelData.gestureNames.join(', ')}<br>
+                        <strong>Features:</strong> ${this.modelData.numFeatures}<br>
+                        <strong>Training Accuracy:</strong> ${(this.modelData.accuracy * 100).toFixed(1)}%<br>
+                        <strong>Training Time:</strong> ${this.modelData.trainingTime}s<br>
+                        <strong>Training Samples:</strong> ${totalSamples}<br>
+                        <strong>k-NN Parameter:</strong> k=${this.modelData.k || 'N/A'}
+                    `;
+
+                    setTimeout(() => {
+                        this.elements.modelLoadStatus.style.display = 'none';
+                    }, 3000);
+
+
+                } catch (error) {
+                    console.error('❌ Failed to load model:', error);
+                    this.showError(`Failed to load model: ${error.message}`);
+                    this.elements.modelLoadStatus.textContent = 'Failed to load model';
+                }
+            }
+
+            async loadPretrainedModel() {
+                console.log('🔧 Reconstructing pre-trained k-NN classifier...');
+
+                // The pre-trained model data is stored as a plain object, need to reconstruct the classifier
+                if (!this.modelData.model || !this.modelData.model.trainX || !this.modelData.model.trainY) {
+                    throw new Error('Invalid pre-trained model data - missing training vectors');
+                }
+
+                // Reconstruct the k-NN classifier
+                const k = this.modelData.k || 5;
+                const knn = new SimpleKNNClassifier(k);
+
+                // Directly set the training data from the stored model
+                knn.trainX = this.modelData.model.trainX;
+                knn.trainY = this.modelData.model.trainY;
+                knn.k = this.modelData.model.k;
+
+                this.trainedModel = knn;
+                console.log('✅ Pre-trained model reconstructed with', knn.trainX.length, 'training samples');
+            }
+
+            async retrainModel() {
+                console.log('🔄 Retraining model from training data...');
+                const X = this.modelData.trainingData.map(d => d.features);
+                const y = this.modelData.trainingData.map(d => d.label);
+                const encodedY = y.map(label => this.modelData.labelEncoder[label]);
+
+                const k = this.modelData.k || Math.min(5, Math.floor(Math.sqrt(X.length)));
+                const knn = new SimpleKNNClassifier(k);
+                knn.train(X, encodedY);
+                this.trainedModel = knn;
+                console.log('✅ Model retrained with', X.length, 'training samples');
+            }
+
+            async startDetection() {
+                try {
+                    this.elements.startCamera.innerHTML = '<div class="loading"></div> Starting...';
+                    this.updateCameraStatus('🔄 Initializing MediaPipe Hands...');
+
+                    await this.initializeMediaPipe();
+
+                    this.updateCameraStatus('📹 Starting camera...');
+                    this.camera = new Camera(this.elements.inputVideo, {
+                        onFrame: async () => {
+                            if (this.detector) {
+                                await this.detector.send({ image: this.elements.inputVideo });
+                            }
+                        },
+                        width: 640,
+                        height: 480
+                    });
+
+                    await this.camera.start();
+
+                    this.isDetecting = true;
+                    this.elements.startCamera.textContent = '🛑 Stop Detection';
+                    this.elements.startCamera.classList.add('danger');
+
+                    this.updateCameraStatus('✅ Detection started! Show your hand to test gestures.');
+
+                } catch (error) {
+                    console.error('❌ Failed to start detection:', error);
+                    this.showError(`Failed to start detection: ${error.message}`);
+                    this.elements.startCamera.textContent = '📹 Start Camera';
+                }
+            }
+
+            async initializeMediaPipe() {
+                
+                if (this.poseType === 'hands') {
+                    this.detector = new Hands({
+                        locateFile: (file) => {
+                            return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                        }
+                    });
+
+                    this.detector.setOptions({
+                        maxNumHands: 1,
+                        modelComplexity: 1,
+                        minDetectionConfidence: 0.7,
+                        minTrackingConfidence: 0.5
+                    });
+
+                } else if (this.poseType === 'pose') {
+                    this.detector = new Pose({
+                        locateFile: (file) => {
+                            return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+                        }
+                    });
+
+                    this.detector.setOptions({
+                        modelComplexity: 1,
+                        smoothLandmarks: true,
+                        enableSegmentation: false,
+                        smoothSegmentation: false,
+                        minDetectionConfidence: 0.7,
+                        minTrackingConfidence: 0.5
+                    });
+
+                } else if (this.poseType === 'holistic') {
+                    this.detector = new Holistic({
+                        locateFile: (file) => {
+                            return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+                        }
+                    });
+
+                    this.detector.setOptions({
+                        modelComplexity: 1,
+                        smoothLandmarks: true,
+                        enableSegmentation: false,
+                        smoothSegmentation: false,
+                        refineFaceLandmarks: true,
+                        minDetectionConfidence: 0.7,
+                        minTrackingConfidence: 0.5
+                    });
+                }
+
+                this.detector.onResults((results) => {
+                    this.processResults(results);
+                });
+            }
+
+            processResults(results) {
+                const canvasCtx = this.elements.outputCanvas.getContext('2d');
+                canvasCtx.save();
+                canvasCtx.clearRect(0, 0, this.elements.outputCanvas.width, this.elements.outputCanvas.height);
+
+                this.elements.outputCanvas.width = this.elements.inputVideo.videoWidth;
+                this.elements.outputCanvas.height = this.elements.inputVideo.videoHeight;
+
+                let landmarks = null;
+
+                // Extract landmarks based on pose type
+                if (this.poseType === 'hands') {
+                    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                        landmarks = results.multiHandLandmarks[0];
+                        this.drawHandLandmarks(canvasCtx, landmarks);
+                    }
+                } else if (this.poseType === 'pose') {
+                    if (results.poseLandmarks) {
+                        landmarks = results.poseLandmarks;
+                        this.drawPoseLandmarks(canvasCtx, landmarks);
+                    }
+                } else if (this.poseType === 'holistic') {
+                    // For holistic, we'll combine all landmarks
+                    let allLandmarks = [];
+                    if (results.poseLandmarks) allLandmarks = allLandmarks.concat(results.poseLandmarks);
+                    if (results.leftHandLandmarks) allLandmarks = allLandmarks.concat(results.leftHandLandmarks);
+                    if (results.rightHandLandmarks) allLandmarks = allLandmarks.concat(results.rightHandLandmarks);
+                    
+                    if (allLandmarks.length > 0) {
+                        landmarks = allLandmarks;
+                        this.drawHolisticLandmarks(canvasCtx, results);
+                    }
+                }
+
+                if (landmarks) {
+                    // Make prediction
+                    this.predictGesture(landmarks);
+                } else {
+                    // No landmarks detected
+                    this.updatePredictionDisplay(null);
+                }
+
+                canvasCtx.restore();
+            }
+
+            drawHandLandmarks(ctx, landmarks) {
+                // Draw connections
+                drawConnectors(ctx, landmarks, HAND_CONNECTIONS,
+                    { color: '#00FF00', lineWidth: 2 });
+
+                // Draw landmarks
+                for (let i = 0; i < landmarks.length; i++) {
+                    const landmark = landmarks[i];
+                    const x = landmark.x * this.elements.outputCanvas.width;
+                    const y = landmark.y * this.elements.outputCanvas.height;
+
+                    // Color coding
+                    if (i === 0) ctx.fillStyle = '#FF0000';
+                    else if (i <= 4) ctx.fillStyle = '#FF6600';
+                    else if (i <= 8) ctx.fillStyle = '#FFFF00';
+                    else if (i <= 12) ctx.fillStyle = '#00FF00';
+                    else if (i <= 16) ctx.fillStyle = '#0066FF';
+                    else ctx.fillStyle = '#9900FF';
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = '10px Arial';
+                    ctx.fillText(i.toString(), x + 6, y - 6);
+                }
+            }
+
+            drawPoseLandmarks(ctx, landmarks) {
+                // Draw pose connections
+                drawConnectors(ctx, landmarks, POSE_CONNECTIONS, 
+                    { color: '#00FF00', lineWidth: 3 });
+                
+                // Draw landmarks
+                for (let i = 0; i < landmarks.length; i++) {
+                    const landmark = landmarks[i];
+                    const x = landmark.x * this.elements.outputCanvas.width;
+                    const y = landmark.y * this.elements.outputCanvas.height;
+                    
+                    // Color coding for different body parts
+                    if (i <= 10) ctx.fillStyle = '#FF0000'; // Face/head
+                    else if (i <= 16) ctx.fillStyle = '#00FF00'; // Arms/shoulders
+                    else if (i <= 22) ctx.fillStyle = '#0066FF'; // Core/hips
+                    else ctx.fillStyle = '#FF00FF'; // Legs
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // Draw landmark number
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = '10px Arial';
+                    ctx.fillText(i.toString(), x + 6, y - 6);
+                }
+            }
+
+            drawHolisticLandmarks(ctx, results) {
+                // Draw pose landmarks
+                if (results.poseLandmarks) {
+                    drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS,
+                        { color: '#00FF00', lineWidth: 2 });
+                    drawLandmarks(ctx, results.poseLandmarks, { color: '#FF0000', radius: 4 });
+                }
+                
+                // Draw hand landmarks
+                if (results.leftHandLandmarks) {
+                    drawConnectors(ctx, results.leftHandLandmarks, HAND_CONNECTIONS,
+                        { color: '#00FFFF', lineWidth: 2 });
+                    drawLandmarks(ctx, results.leftHandLandmarks, { color: '#0000FF', radius: 3 });
+                }
+                
+                if (results.rightHandLandmarks) {
+                    drawConnectors(ctx, results.rightHandLandmarks, HAND_CONNECTIONS,
+                        { color: '#FFFF00', lineWidth: 2 });
+                    drawLandmarks(ctx, results.rightHandLandmarks, { color: '#FF6600', radius: 3 });
+                }
+                
+                // Draw face mesh (simplified for performance)
+                if (results.faceLandmarks) {
+                    drawLandmarks(ctx, results.faceLandmarks, { color: '#C0C0C0', radius: 1 });
+                }
+            }
+
+            predictGesture(landmarks) {
+                if (!this.trainedModel) return;
+
+                try {
+                    // Extract features (same as in training)
+                    const features = this.extractFeatures(landmarks);
+
+                    // Make prediction with confidence
+                    const predResult = this.trainedModel.predictWithConfidence(features);
+                    const predictedLabel = this.modelData.labelDecoder[predResult.prediction];
+                    const confidence = predResult.confidence;
+
+                    // Debug prediction
+                    if (!predictedLabel) {
+                        console.warn('⚠️ Could not decode prediction:', predResult.prediction, 'Available decoders:', Object.keys(this.modelData.labelDecoder));
+                    }
+
+                    const result = {
+                        gesture: predictedLabel,
+                        confidence: confidence,
+                        timestamp: new Date().toLocaleTimeString()
+                    };
+
+                    this.updatePredictionDisplay(result);
+                    this.updateStats(result);
+                    this.checkGestureActions(result);
+
+                } catch (error) {
+                    console.error('Prediction error:', error);
+                }
+            }
+
+            extractFeatures(landmarks) {
+                const features = [];
+                
+                if (this.poseType === 'hands') {
+                    return this.extractHandFeatures(landmarks);
+                } else if (this.poseType === 'pose') {
+                    return this.extractPoseFeatures(landmarks);
+                } else if (this.poseType === 'holistic') {
+                    return this.extractHolisticFeatures(landmarks);
+                }
+                
+                return features;
+            }
+
+            extractHandFeatures(landmarks) {
+                // Extract comprehensive features from hand landmarks
+                const features = [];
+                
+                // 1. Raw coordinates (normalized)
+                landmarks.forEach(landmark => {
+                    features.push(landmark.x, landmark.y, landmark.z);
+                });
+                
+                // 2. Distances between key points
+                const keyPoints = [0, 4, 8, 12, 16, 20]; // Wrist, fingertips
+                for (let i = 0; i < keyPoints.length; i++) {
+                    for (let j = i + 1; j < keyPoints.length; j++) {
+                        const p1 = landmarks[keyPoints[i]];
+                        const p2 = landmarks[keyPoints[j]];
+                        const distance = Math.sqrt(
+                            Math.pow(p1.x - p2.x, 2) + 
+                            Math.pow(p1.y - p2.y, 2) + 
+                            Math.pow(p1.z - p2.z, 2)
+                        );
+                        features.push(distance);
+                    }
+                }
+                
+                // 3. Angles between finger segments
+                const fingerChains = [
+                    [1, 2, 3, 4],   // Thumb
+                    [5, 6, 7, 8],   // Index
+                    [9, 10, 11, 12], // Middle
+                    [13, 14, 15, 16], // Ring
+                    [17, 18, 19, 20] // Pinky
+                ];
+                
+                fingerChains.forEach(chain => {
+                    for (let i = 0; i < chain.length - 2; i++) {
+                        const p1 = landmarks[chain[i]];
+                        const p2 = landmarks[chain[i + 1]];
+                        const p3 = landmarks[chain[i + 2]];
+                        
+                        const angle = this.calculateAngle(p1, p2, p3);
+                        features.push(angle);
+                    }
+                });
+                
+                return features;
+            }
+
+            extractPoseFeatures(landmarks) {
+                // Extract features from body pose landmarks (33 landmarks)
+                const features = [];
+                
+                // 1. Raw coordinates
+                landmarks.forEach(landmark => {
+                    features.push(landmark.x, landmark.y, landmark.z);
+                });
+                
+                // 2. Key body segment distances
+                const keyPoints = [0, 11, 12, 13, 14, 15, 16, 23, 24]; // Key body joints
+                for (let i = 0; i < keyPoints.length; i++) {
+                    for (let j = i + 1; j < keyPoints.length; j++) {
+                        if (landmarks[keyPoints[i]] && landmarks[keyPoints[j]]) {
+                            const p1 = landmarks[keyPoints[i]];
+                            const p2 = landmarks[keyPoints[j]];
+                            const distance = Math.sqrt(
+                                Math.pow(p1.x - p2.x, 2) + 
+                                Math.pow(p1.y - p2.y, 2) + 
+                                Math.pow(p1.z - p2.z, 2)
+                            );
+                            features.push(distance);
+                        }
+                    }
+                }
+                
+                // 3. Body segment angles
+                const bodyChains = [
+                    [11, 13, 15], // Left arm
+                    [12, 14, 16], // Right arm
+                    [23, 25, 27], // Left leg (if available)
+                    [24, 26, 28], // Right leg (if available)
+                ];
+                
+                bodyChains.forEach(chain => {
+                    if (landmarks[chain[0]] && landmarks[chain[1]] && landmarks[chain[2]]) {
+                        const p1 = landmarks[chain[0]];
+                        const p2 = landmarks[chain[1]];
+                        const p3 = landmarks[chain[2]];
+                        
+                        const angle = this.calculateAngle(p1, p2, p3);
+                        features.push(angle);
+                    }
+                });
+                
+                return features;
+            }
+
+            extractHolisticFeatures(landmarks) {
+                // For holistic, landmarks array contains concatenated pose + hands
+                // We'll extract features from all available landmarks
+                const features = [];
+                
+                // 1. Raw coordinates for all landmarks
+                landmarks.forEach(landmark => {
+                    features.push(landmark.x, landmark.y, landmark.z);
+                });
+                
+                // 2. Distances between various key points (simplified for performance)
+                const numLandmarks = landmarks.length;
+                const stepSize = Math.max(1, Math.floor(numLandmarks / 20)); // Sample every few landmarks
+                
+                for (let i = 0; i < numLandmarks; i += stepSize) {
+                    for (let j = i + stepSize; j < numLandmarks; j += stepSize) {
+                        const p1 = landmarks[i];
+                        const p2 = landmarks[j];
+                        const distance = Math.sqrt(
+                            Math.pow(p1.x - p2.x, 2) + 
+                            Math.pow(p1.y - p2.y, 2) + 
+                            Math.pow(p1.z - p2.z, 2)
+                        );
+                        features.push(distance);
+                    }
+                }
+                
+                return features;
+            }
+
+            calculateAngle(p1, p2, p3) {
+                const v1 = { x: p1.x - p2.x, y: p1.y - p2.y };
+                const v2 = { x: p3.x - p2.x, y: p3.y - p2.y };
+
+                const dot = v1.x * v2.x + v1.y * v2.y;
+                const mag1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+                const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+
+                return Math.acos(dot / (mag1 * mag2));
+            }
+
+            updatePredictionDisplay(result) {
+                if (result && result.confidence > 0.6) {
+                    this.elements.predictedGesture.textContent = this.getGestureEmoji(result.gesture);
+                    this.elements.gestureName.textContent = result.gesture.toUpperCase();
+                    this.elements.confidenceBar.style.width = `${result.confidence * 100}%`;
+                    this.elements.confidenceText.textContent = `Confidence: ${(result.confidence * 100).toFixed(1)}%`;
+                } else {
+                    this.elements.predictedGesture.textContent = '🤷‍♂️';
+                    this.elements.gestureName.textContent = result ? 'LOW CONFIDENCE' : 'No Hand Detected';
+                    this.elements.confidenceBar.style.width = '0%';
+                    this.elements.confidenceText.textContent = 'Confidence: 0%';
+                }
+            }
+
+            getGestureEmoji(gestureName) {
+                const emojiMap = {
+                    'fist': '✊',
+                    'point': '👆',
+                    'peace': '✌️',
+                    'palm': '🖐️',
+                    'thumbs_up': '👍',
+                    'ok': '👌',
+                    'rock': '🤘'
+                };
+                return emojiMap[gestureName.toLowerCase()] || '🖐️';
+            }
+
+            updateStats(result) {
+                this.predictionStats.total++;
+                this.predictionStats.confidenceSum += result.confidence;
+                this.predictionStats.history.unshift(result);
+
+                // Keep only last 50 predictions
+                if (this.predictionStats.history.length > 50) {
+                    this.predictionStats.history.pop();
+                }
+
+                // Update UI
+                this.elements.totalPredictions.textContent = this.predictionStats.total;
+                this.elements.avgConfidence.textContent = 
+                    `${((this.predictionStats.confidenceSum / this.predictionStats.total) * 100).toFixed(1)}%`;
+
+                // Update history display
+                this.updateHistoryDisplay();
+            }
+
+            updateHistoryDisplay() {
+                const historyContainer = this.elements.predictionHistory;
+                historyContainer.innerHTML = '';
+
+                this.predictionStats.history.slice(0, 10).forEach(result => {
+                    const item = document.createElement('div');
+                    item.className = 'prediction-item';
+                    item.innerHTML = `
+                        <span>${this.getGestureEmoji(result.gesture)} ${result.gesture}</span>
+                        <span>${(result.confidence * 100).toFixed(1)}% - ${result.timestamp}</span>
+                    `;
+                    historyContainer.appendChild(item);
+                });
+            }
+
+            checkGestureActions(result) {
+                if (result.confidence < 0.8) return; // Only trigger on high confidence
+
+                // Simple action mapping - you can customize this
+                const actionMap = {
+                    'point': 'leftClick',
+                    'peace': 'rightClick',
+                    'fist': 'doubleClick',
+                    'palm': 'scroll'
+                };
+
+                const action = actionMap[result.gesture.toLowerCase()];
+                if (action) {
+                    this.triggerAction(action);
+                }
+            }
+
+            triggerAction(action) {
+                const buttonMap = {
+                    'leftClick': this.elements.leftClickBtn,
+                    'rightClick': this.elements.rightClickBtn,
+                    'doubleClick': this.elements.doubleClickBtn,
+                    'scroll': this.elements.scrollBtn
+                };
+
+                const button = buttonMap[action];
+                if (button) {
+                    button.classList.add('triggered');
+                    setTimeout(() => button.classList.remove('triggered'), 500);
+                    
+                    console.log(`🖱️ Triggered action: ${action}`);
+                }
+            }
+
+            clearPredictionHistory() {
+                this.predictionStats = {
+                    total: 0,
+                    confidenceSum: 0,
+                    history: []
+                };
+
+                this.elements.totalPredictions.textContent = '0';
+                this.elements.avgConfidence.textContent = '0%';
+                this.elements.predictionHistory.innerHTML = 
+                    '<div style="text-align: center; opacity: 0.5;">No predictions yet</div>';
+            }
+
+            stopDetection() {
+                this.isDetecting = false;
+
+                if (this.camera) {
+                    this.camera.stop();
+                    this.camera = null;
+                }
+
+                const canvasCtx = this.elements.outputCanvas.getContext('2d');
+                canvasCtx.clearRect(0, 0, this.elements.outputCanvas.width, this.elements.outputCanvas.height);
+
+                this.elements.startCamera.textContent = '📹 Start Camera';
+                this.elements.startCamera.classList.remove('danger');
+                this.updatePredictionDisplay(null);
+
+                this.updateCameraStatus('Detection stopped');
+            }
+
+            updateCameraStatus(message) {
+                this.elements.cameraStatus.textContent = message;
+            }
+
+            showError(message) {
+                this.elements.errorMessage.textContent = message;
+                this.elements.errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    this.elements.errorMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                window.gestureTester = new GestureTester();
+            });
+        } else {
+            window.gestureTester = new GestureTester();
+        }
+    </script>
+</body>
+</html>

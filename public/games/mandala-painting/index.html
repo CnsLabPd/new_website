@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandala Painting Game</title>
+
+    <!-- Neurogati Game SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.neurogati.com/game-sdk/neurogati-auth.js?v=20260221b"></script>
+    <script src="https://www.neurogati.com/game-sdk/mandala-painting-api.js?v=20260223"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 60px 40px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            margin-bottom: 20px;
+        }
+
+        .icon img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #999;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .features {
+            text-align: left;
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            color: #555;
+        }
+
+        .feature-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+
+        .start-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon"><img src="assets/1.png" alt="Company Logo"></div>
+        <h1>Mandala Painting</h1>
+        <p class="subtitle">Gesture-Controlled Art Experience</p>
+        <p class="description">
+            Paint beautiful mandalas using just your hand gestures!
+            No mouse or keyboard needed.
+        </p>
+
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">✋</span>
+                <span>Control with hand gestures</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎨</span>
+                <span>Paint intricate mandala designs</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                <span>Track your progress & stats</span>
+            </div>
+        </div>
+
+        <div class="loading show" id="loading">
+            <div class="spinner"></div>
+            <p>Loading game...</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect to game (parent page handles auth)
+        async function initGame() {
+            // Wait for NeurogatiAuth to initialize
+            while (!window.NeurogatiAuth || !window.NeurogatiAuth.initialized) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            console.log('🎨 Mandala Painting: Auth ready, redirecting to game...');
+
+            // Wait a moment for splash screen, then redirect
+            setTimeout(() => {
+                window.location.href = 'game.html';
+            }, 1500);
+        }
+
+        initGame();
+    </script>
+</body>
+</html>

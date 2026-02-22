@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Posabets 🚀</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+
+        .auth-card {
+            max-width: 450px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .auth-logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: var(--spacing-lg);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 5px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: var(--spacing-sm);
+            text-align: center;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-normal);
+            font-weight: 600;
+        }
+
+        .auth-tab.active {
+            background: var(--gradient-nebula);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            transition: all var(--transition-normal);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-star-yellow);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .error-message {
+            color: var(--color-danger);
+            font-size: 0.875rem;
+            margin-top: var(--spacing-xs);
+            display: none;
+        }
+
+        .company-branding {
+            margin-top: var(--spacing-xl);
+            text-align: center;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .company-logo-small {
+            height: 30px;
+            vertical-align: middle;
+            margin-left: var(--spacing-xs);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="card auth-card">
+            <div class="auth-logo">
+                <img src="../assets/neurogati_logo.png" alt="Neurogati Logo">
+                <h1 style="font-size: 2rem; margin-top: 10px;">Posabets</h1>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="loginTab">Login</div>
+                <div class="auth-tab" id="signupTab">Sign Up</div>
+            </div>
+
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="username">Space Cadet Name</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Secret Code</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your secret code" required>
+                </div>
+                
+                <div id="errorDisplay" class="error-message"></div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--spacing-md);">
+                    <span id="submitBtnText">Blast Off! 🚀</span>
+                </button>
+            </form>
+
+            <div class="company-branding">
+                Developed with ❤️ by 
+                <img src="../assets/neurogati_logo.png" alt="Neurogati" class="company-logo-small">
+                <strong>Neurogati</strong>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Storage } from '../js/utils/storage.js';
+
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        const authForm = document.getElementById('authForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const errorDisplay = document.getElementById('errorDisplay');
+        const submitBtnText = document.getElementById('submitBtnText');
+
+        let mode = 'login';
+
+        loginTab.addEventListener('click', () => {
+            mode = 'login';
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            submitBtnText.textContent = 'Blast Off! 🚀';
+            errorDisplay.style.display = 'none';
+        });
+
+        signupTab.addEventListener('click', () => {
+            mode = 'signup';
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            submitBtnText.textContent = 'Create Profile ✨';
+            errorDisplay.style.display = 'none';
+        });
+
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (mode === 'login') {
+                const result = Storage.login(username, password);
+                if (result.success) {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    showError(result.message);
+                }
+            } else {
+                const result = Storage.signup(username, password);
+                if (result.success) {
+                    // Automatically login after signup
+                    Storage.login(username, password);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    showError(result.message);
+                }
+            }
+        });
+
+        function showError(message) {
+            errorDisplay.textContent = message;
+            errorDisplay.style.display = 'block';
+            
+            // Add shake animation to the card
+            const card = document.querySelector('.auth-card');
+            card.style.animation = 'none';
+            card.offsetHeight; // trigger reflow
+            card.style.animation = 'shake 0.5s ease-in-out';
+        }
+    </script>
+</body>
+</html>

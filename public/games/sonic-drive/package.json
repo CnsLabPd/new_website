@@ -1,0 +1,11 @@
+{
+  "name": "sonicdrive",
+  "version": "1.0.0",
+  "description": "SonicDrive - Accessible Racing Game for Visually Impaired Players",
+  "scripts": {
+    "build": "echo 'Static files ready for deployment'"
+  },
+  "keywords": ["racing", "accessibility", "audio", "game"],
+  "author": "CnsLabPd",
+  "license": "MIT"
+}

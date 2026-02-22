@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://neurogati.com https://www.neurogati.com;"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "ALLOW-FROM https://neurogati.com"
+        }
+      ]
+    }
+  ],
+  "builds": [
+    { "src": "api/**/*.py", "use": "@vercel/python" },
+    { "src": "**", "use": "@vercel/static" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
+    { "source": "/heartbeat", "destination": "/api/index.py" },
+    { "source": "/tmp_heartbeat", "destination": "/api/index.py" }
+  ]
+}

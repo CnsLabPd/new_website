@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Tracking Calibration</title>
+
+    <!-- MediaPipe Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #container {
+            width: 95vw;
+            height: 95vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #header {
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+
+        #header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        #header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        #main-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #video-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            height: 240px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border: 3px solid #667eea;
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        #calibration-canvas {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+        }
+
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            z-index: 50;
+        }
+
+        #instructions h2 {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        #instructions p {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(56, 239, 125, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .target {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            display: none;
+            animation: pulse 1.5s infinite;
+        }
+
+        .target::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+
+        .target.active {
+            display: block;
+        }
+
+        .target.captured {
+            border-color: #38ef7d;
+            animation: none;
+        }
+
+        .target.captured::before {
+            background: #38ef7d;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+        }
+
+        #progress-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+            z-index: 60;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        #status-text {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: none;
+            z-index: 60;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #cursor {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #ff6b6b;
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+            z-index: 200;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        #testing-mode {
+            display: none;
+        }
+
+        #testing-mode.active {
+            display: block;
+        }
+
+        #test-canvas {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            cursor: none;
+        }
+
+        #test-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 70;
+        }
+
+        .calibration-complete-banner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 150;
+            display: none;
+        }
+
+        .calibration-complete-banner.active {
+            display: block;
+        }
+
+        .calibration-complete-banner h2 {
+            color: #38ef7d;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .calibration-complete-banner p {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1>Hand Tracking Calibration</h1>
+            <p>Let's calibrate your hand movements for the best experience</p>
+        </div>
+
+        <div id="main-content">
+            <!-- Hidden video element for MediaPipe -->
+            <video id="videoElement" style="display: none;" playsinline></video>
+
+            <!-- Video preview container -->
+            <div id="video-container">
+                <canvas id="videoCanvas" width="320" height="240"></canvas>
+            </div>
+
+            <!-- Calibration Canvas -->
+            <canvas id="calibration-canvas"></canvas>
+
+            <!-- Test Canvas (hidden initially) -->
+            <div id="testing-mode">
+                <canvas id="test-canvas"></canvas>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+
+            <!-- Status Text -->
+            <div id="status-text"></div>
+
+            <!-- Virtual Cursor -->
+            <div id="cursor"></div>
+
+            <!-- Calibration Targets (4 corners) -->
+            <div id="target-tl" class="target"></div>
+            <div id="target-tr" class="target"></div>
+            <div id="target-bl" class="target"></div>
+            <div id="target-br" class="target"></div>
+
+            <!-- Initial Instructions -->
+            <div id="instructions">
+                <h2>Welcome to TV Mode Calibration</h2>
+                <p>We'll guide you through a quick calibration to optimize for distance viewing.</p>
+                <p><strong>You'll reach your hand to 4 corner positions:</strong><br>
+                Top-Left, Top-Right, Bottom-Left, Bottom-Right</p>
+                <p><strong>Takes only 40 seconds!</strong> Make sure you're comfortable and the camera can see your hand clearly.</p>
+                <button class="btn btn-primary" onclick="startCalibration()">Start Calibration</button>
+            </div>
+
+            <!-- Calibration Complete Banner -->
+            <div id="complete-banner" class="calibration-complete-banner">
+                <h2>Calibration Complete!</h2>
+                <p>Great job! Now you can test the calibration or start the game.</p>
+                <button class="btn btn-success" onclick="startGame()">Start Game</button>
+                <button class="btn btn-primary" onclick="enterTestMode()">Test Calibration</button>
+                <button class="btn btn-primary" onclick="resetCalibration()">Recalibrate</button>
+            </div>
+
+            <!-- Test Mode Controls -->
+            <div id="test-controls">
+                <button class="btn btn-success" onclick="startGame()">Start Game</button>
+                <button class="btn btn-primary" onclick="resetCalibration()">Recalibrate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Send heartbeat to server to keep it alive
+        function sendHeartbeat() {
+            fetch('/heartbeat').catch(() => {});
+        }
+
+        // Send heartbeat every 2 seconds
+        setInterval(sendHeartbeat, 2000);
+
+        // Send initial heartbeat
+        sendHeartbeat();
+
+        // Calibration state (4-point calibration - no center)
+        const calibrationState = {
+            step: -1, // -1: not started, 0-3: calibration points
+            phase: 'instruction', // 'instruction', 'countdown', 'capture'
+            points: [],
+            positions: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+            positionDescriptions: [
+                'Reach your hand to the TOP-LEFT corner of your comfortable range',
+                'Reach your hand to the TOP-RIGHT corner of your comfortable range',
+                'Reach your hand to the BOTTOM-LEFT corner of your comfortable range',
+                'Reach your hand to the BOTTOM-RIGHT corner of your comfortable range'
+            ],
+            targetIds: ['target-tl', 'target-tr', 'target-bl', 'target-br'],
+            samples: [], // Collect multiple samples per point for averaging
+            samplesPerPoint: 30,
+            currentSamples: 0,
+            testing: false,
+            instructionDelay: 6000, // 6 seconds to read instruction
+            countdownSeconds: 3
+        };
+
+        // MediaPipe Hands
+        let hands = null;
+        let camera = null;
+        let currentHandPosition = null;
+        let previousHandPosition = null;
+
+        // Adaptive speed tracking
+        const adaptiveSpeed = {
+            enabled: true,
+            baseSpeed: 2.5,
+            minSpeed: 1.5,
+            maxSpeed: 6.0,
+            velocityHistory: [],
+            historySize: 5
+        };
+
+        // Canvas references
+        const calibCanvas = document.getElementById('calibration-canvas');
+        const calibCtx = calibCanvas.getContext('2d');
+        const testCanvas = document.getElementById('test-canvas');
+        const testCtx = testCanvas.getContext('2d');
+        const videoCanvas = document.getElementById('videoCanvas');
+        const videoCtx = videoCanvas.getContext('2d');
+
+        // Set canvas sizes
+        function resizeCanvases() {
+            const mainContent = document.getElementById('main-content');
+            calibCanvas.width = mainContent.clientWidth;
+            calibCanvas.height = mainContent.clientHeight;
+            testCanvas.width = mainContent.clientWidth;
+            testCanvas.height = mainContent.clientHeight;
+        }
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+
+        // Initialize MediaPipe Hands
+        function initializeMediaPipe() {
+            hands = new Hands({
+                locateFile: (file) => {
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                }
+            });
+
+            hands.setOptions({
+                maxNumHands: 1,
+                modelComplexity: 1,
+                minDetectionConfidence: 0.7,
+                minTrackingConfidence: 0.7
+            });
+
+            hands.onResults(onHandsResults);
+
+            // Initialize camera
+            const videoElement = document.getElementById('videoElement');
+            camera = new Camera(videoElement, {
+                onFrame: async () => {
+                    await hands.send({image: videoElement});
+                },
+                width: 640,
+                height: 480
+            });
+
+            camera.start();
+        }
+
+        // Handle MediaPipe results
+        function onHandsResults(results) {
+            // Draw video preview
+            videoCtx.save();
+            videoCtx.clearRect(0, 0, videoCanvas.width, videoCanvas.height);
+            videoCtx.scale(-1, 1);
+            videoCtx.translate(-videoCanvas.width, 0);
+            videoCtx.drawImage(results.image, 0, 0, videoCanvas.width, videoCanvas.height);
+
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+
+                // Draw hand skeleton on video preview
+                drawConnectors(videoCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 2});
+                drawLandmarks(videoCtx, landmarks, {color: '#FF0000', lineWidth: 1});
+
+                // Use index finger tip (landmark 8) for tracking
+                const indexTip = landmarks[8];
+                currentHandPosition = {
+                    x: indexTip.x,
+                    y: indexTip.y
+                };
+
+                // Update cursor position if in testing mode
+                if (calibrationState.testing) {
+                    updateCursorPosition();
+                }
+
+                // Collect calibration samples
+                if (calibrationState.step >= 0 && calibrationState.step < 4) {
+                    collectCalibrationSample();
+                }
+            }
+
+            videoCtx.restore();
+        }
+
+        // Start calibration process
+        function startCalibration() {
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'block';
+            document.getElementById('status-text').style.display = 'block';
+
+            calibrationState.step = 0;
+            calibrationState.phase = 'instruction';
+            calibrationState.points = [];
+            calibrationState.samples = [];
+            calibrationState.currentSamples = 0;
+
+            showCalibrationTarget();
+        }
+
+        // Show current calibration target
+        function showCalibrationTarget() {
+            // Hide all targets
+            document.querySelectorAll('.target').forEach(t => {
+                t.classList.remove('active');
+                t.classList.remove('captured');
+            });
+
+            if (calibrationState.step >= 4) {
+                completeCalibration();
+                return;
+            }
+
+            const targetId = calibrationState.targetIds[calibrationState.step];
+            const target = document.getElementById(targetId);
+            const position = calibrationState.positions[calibrationState.step];
+            const description = calibrationState.positionDescriptions[calibrationState.step];
+
+            // Position the target
+            const canvas = calibCanvas;
+            const margin = 100;
+            let x, y;
+
+            switch(position) {
+                case 'top-left':
+                    x = margin;
+                    y = margin;
+                    break;
+                case 'top-right':
+                    x = canvas.width - margin - 80;
+                    y = margin;
+                    break;
+                case 'bottom-left':
+                    x = margin;
+                    y = canvas.height - margin - 80;
+                    break;
+                case 'bottom-right':
+                    x = canvas.width - margin - 80;
+                    y = canvas.height - margin - 80;
+                    break;
+            }
+
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+            target.classList.add('active');
+
+            updateProgress();
+
+            // Start with instruction phase
+            calibrationState.phase = 'instruction';
+            updateStatus(description);
+
+            // After instruction delay, start countdown
+            setTimeout(() => {
+                startCountdown();
+            }, calibrationState.instructionDelay);
+        }
+
+        // Start countdown before capture
+        function startCountdown() {
+            calibrationState.phase = 'countdown';
+            let countdown = calibrationState.countdownSeconds;
+
+            function displayCountdown() {
+                if (countdown > 0) {
+                    updateStatus(`Get ready... ${countdown}`);
+                    countdown--;
+                    setTimeout(displayCountdown, 1000);
+                } else {
+                    // Start capture phase
+                    calibrationState.phase = 'capture';
+                    updateStatus('Hold steady...');
+                }
+            }
+
+            displayCountdown();
+        }
+
+        // Collect calibration sample
+        function collectCalibrationSample() {
+            // Only collect samples during capture phase
+            if (calibrationState.phase !== 'capture') return;
+            if (!currentHandPosition) return;
+
+            calibrationState.samples.push({
+                x: currentHandPosition.x,
+                y: currentHandPosition.y
+            });
+
+            calibrationState.currentSamples++;
+
+            // Update progress within current point
+            const pointProgress = (calibrationState.currentSamples / calibrationState.samplesPerPoint) * 100;
+            updateStatus(`Hold steady... ${Math.round(pointProgress)}%`);
+
+            if (calibrationState.currentSamples >= calibrationState.samplesPerPoint) {
+                captureCalibrationPoint();
+            }
+        }
+
+        // Capture averaged calibration point
+        function captureCalibrationPoint() {
+            // Average all samples
+            const avgX = calibrationState.samples.reduce((sum, s) => sum + s.x, 0) / calibrationState.samples.length;
+            const avgY = calibrationState.samples.reduce((sum, s) => sum + s.y, 0) / calibrationState.samples.length;
+
+            calibrationState.points.push({
+                name: calibrationState.positions[calibrationState.step],
+                handX: avgX,
+                handY: avgY
+            });
+
+            // Mark target as captured
+            const targetId = calibrationState.targetIds[calibrationState.step];
+            const target = document.getElementById(targetId);
+            target.classList.add('captured');
+
+            // Reset for next point
+            calibrationState.samples = [];
+            calibrationState.currentSamples = 0;
+            calibrationState.step++;
+
+            // Small delay before next target
+            setTimeout(() => {
+                showCalibrationTarget();
+            }, 500);
+        }
+
+        // Complete calibration and save data
+        function completeCalibration() {
+            // Calculate calibration bounds from 4 corners (no center)
+            const topLeft = calibrationState.points[0];
+            const topRight = calibrationState.points[1];
+            const bottomLeft = calibrationState.points[2];
+            const bottomRight = calibrationState.points[3];
+
+            const calibrationData = {
+                timestamp: Date.now(),
+                points: calibrationState.points,
+                bounds: {
+                    minX: Math.min(topLeft.handX, bottomLeft.handX),
+                    maxX: Math.max(topRight.handX, bottomRight.handX),
+                    minY: Math.min(topLeft.handY, topRight.handY),
+                    maxY: Math.max(bottomLeft.handY, bottomRight.handY)
+                }
+            };
+
+            // Save to localStorage
+            localStorage.setItem('handTrackingCalibration', JSON.stringify(calibrationData));
+
+            // Hide progress UI
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('status-text').style.display = 'none';
+
+            // Show completion banner
+            document.getElementById('complete-banner').classList.add('active');
+
+            console.log('Calibration saved (4-point):', calibrationData);
+        }
+
+        // Enter test mode
+        function enterTestMode() {
+            document.getElementById('complete-banner').classList.remove('active');
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('calibration-canvas').style.display = 'none';
+            document.getElementById('testing-mode').classList.add('active');
+            document.getElementById('cursor').style.display = 'block';
+            document.getElementById('test-controls').style.display = 'flex';
+
+            calibrationState.testing = true;
+
+            // Reset position tracking for adaptive speed
+            previousHandPosition = null;
+            adaptiveSpeed.velocityHistory = [];
+
+            // Draw test interface
+            drawTestInterface();
+        }
+
+        // Draw test interface
+        function drawTestInterface() {
+            testCtx.clearRect(0, 0, testCanvas.width, testCanvas.height);
+
+            // Draw grid
+            testCtx.strokeStyle = '#e0e0e0';
+            testCtx.lineWidth = 1;
+            const gridSize = 50;
+
+            for (let x = 0; x < testCanvas.width; x += gridSize) {
+                testCtx.beginPath();
+                testCtx.moveTo(x, 0);
+                testCtx.lineTo(x, testCanvas.height);
+                testCtx.stroke();
+            }
+
+            for (let y = 0; y < testCanvas.height; y += gridSize) {
+                testCtx.beginPath();
+                testCtx.moveTo(0, y);
+                testCtx.lineTo(testCanvas.width, y);
+                testCtx.stroke();
+            }
+
+            // Draw corner targets
+            testCtx.fillStyle = '#667eea';
+            testCtx.font = 'bold 20px Arial';
+            testCtx.textAlign = 'center';
+
+            const cornerSize = 40;
+            const margin = 50;
+
+            // Top-left
+            testCtx.fillRect(margin, margin, cornerSize, cornerSize);
+            testCtx.fillStyle = 'white';
+            testCtx.fillText('TL', margin + cornerSize/2, margin + cornerSize/2 + 7);
+
+            // Top-right
+            testCtx.fillStyle = '#667eea';
+            testCtx.fillRect(testCanvas.width - margin - cornerSize, margin, cornerSize, cornerSize);
+            testCtx.fillStyle = 'white';
+            testCtx.fillText('TR', testCanvas.width - margin - cornerSize/2, margin + cornerSize/2 + 7);
+
+            // Bottom-left
+            testCtx.fillStyle = '#667eea';
+            testCtx.fillRect(margin, testCanvas.height - margin - cornerSize, cornerSize, cornerSize);
+            testCtx.fillStyle = 'white';
+            testCtx.fillText('BL', margin + cornerSize/2, testCanvas.height - margin - cornerSize/2 + 7);
+
+            // Bottom-right
+            testCtx.fillStyle = '#667eea';
+            testCtx.fillRect(testCanvas.width - margin - cornerSize, testCanvas.height - margin - cornerSize, cornerSize, cornerSize);
+            testCtx.fillStyle = 'white';
+            testCtx.fillText('BR', testCanvas.width - margin - cornerSize/2, testCanvas.height - margin - cornerSize/2 + 7);
+
+            // Center
+            testCtx.fillStyle = '#667eea';
+            testCtx.fillRect(testCanvas.width/2 - cornerSize/2, testCanvas.height/2 - cornerSize/2, cornerSize, cornerSize);
+            testCtx.fillStyle = 'white';
+            testCtx.fillText('C', testCanvas.width/2, testCanvas.height/2 + 7);
+
+            // Instructions
+            testCtx.fillStyle = '#333';
+            testCtx.font = 'bold 24px Arial';
+            testCtx.textAlign = 'center';
+            testCtx.fillText('Try moving your cursor to each corner and the center', testCanvas.width/2, 40);
+
+            // Adaptive speed info
+            testCtx.font = '18px Arial';
+            testCtx.fillStyle = '#667eea';
+            testCtx.fillText('Adaptive Speed: Move hand FAST for speed, SLOW for precision', testCanvas.width/2, 75);
+        }
+
+        // Draw adaptive speed indicator (called every frame during testing)
+        function drawAdaptiveSpeedIndicator() {
+            if (!calibrationState.testing) return;
+
+            const canvas = testCanvas;
+            const ctx = testCtx;
+
+            // Get current speed
+            const currentSpeed = getAdaptiveSpeedMultiplier();
+            const speedPercent = ((currentSpeed - adaptiveSpeed.minSpeed) / (adaptiveSpeed.maxSpeed - adaptiveSpeed.minSpeed)) * 100;
+
+            // Draw speed bar at bottom
+            const barWidth = 300;
+            const barHeight = 20;
+            const barX = canvas.width / 2 - barWidth / 2;
+            const barY = canvas.height - 100;
+
+            // Background
+            ctx.fillStyle = '#e0e0e0';
+            ctx.fillRect(barX, barY, barWidth, barHeight);
+
+            // Speed fill
+            const fillWidth = (speedPercent / 100) * barWidth;
+            const gradient = ctx.createLinearGradient(barX, 0, barX + barWidth, 0);
+            gradient.addColorStop(0, '#38ef7d');
+            gradient.addColorStop(0.5, '#11998e');
+            gradient.addColorStop(1, '#667eea');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(barX, barY, fillWidth, barHeight);
+
+            // Border
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+            // Text
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Speed: ${currentSpeed.toFixed(1)}x`, canvas.width / 2, barY - 10);
+            ctx.font = '12px Arial';
+            ctx.fillText('SLOW (precise)', barX - 50, barY + 15);
+            ctx.fillText('FAST (quick)', barX + barWidth + 50, barY + 15);
+        }
+
+        // Calculate hand velocity for adaptive speed
+        function calculateHandVelocity() {
+            if (!currentHandPosition || !previousHandPosition) return 0;
+
+            const dx = currentHandPosition.x - previousHandPosition.x;
+            const dy = currentHandPosition.y - previousHandPosition.y;
+            const velocity = Math.sqrt(dx * dx + dy * dy);
+
+            // Add to history for smoothing
+            adaptiveSpeed.velocityHistory.push(velocity);
+            if (adaptiveSpeed.velocityHistory.length > adaptiveSpeed.historySize) {
+                adaptiveSpeed.velocityHistory.shift();
+            }
+
+            // Average velocity over history
+            const avgVelocity = adaptiveSpeed.velocityHistory.reduce((a, b) => a + b, 0) / adaptiveSpeed.velocityHistory.length;
+            return avgVelocity;
+        }
+
+        // Get adaptive speed multiplier based on velocity
+        function getAdaptiveSpeedMultiplier() {
+            if (!adaptiveSpeed.enabled) return adaptiveSpeed.baseSpeed;
+
+            const velocity = calculateHandVelocity();
+
+            // Map velocity to speed multiplier
+            // Slow movements (velocity < 0.005) = minSpeed (precise)
+            // Fast movements (velocity > 0.03) = maxSpeed (quick)
+            const velocityThresholdMin = 0.005;
+            const velocityThresholdMax = 0.03;
+
+            if (velocity < velocityThresholdMin) {
+                return adaptiveSpeed.minSpeed;
+            } else if (velocity > velocityThresholdMax) {
+                return adaptiveSpeed.maxSpeed;
+            } else {
+                // Linear interpolation between min and max speed
+                const ratio = (velocity - velocityThresholdMin) / (velocityThresholdMax - velocityThresholdMin);
+                return adaptiveSpeed.minSpeed + ratio * (adaptiveSpeed.maxSpeed - adaptiveSpeed.minSpeed);
+            }
+        }
+
+        // Update cursor position with adaptive speed
+        function updateCursorPosition() {
+            if (!currentHandPosition) return;
+
+            // Store previous position for velocity calculation
+            if (previousHandPosition) {
+                const dx = currentHandPosition.x - previousHandPosition.x;
+                const dy = currentHandPosition.y - previousHandPosition.y;
+
+                // Get adaptive speed multiplier
+                const speedMultiplier = getAdaptiveSpeedMultiplier();
+
+                // Apply movement with adaptive speed
+                const canvas = calibrationState.testing ? testCanvas : calibCanvas;
+                const cursor = document.getElementById('cursor');
+
+                // Get current cursor position
+                const currentLeft = parseFloat(cursor.style.left) || canvas.width / 2;
+                const currentTop = parseFloat(cursor.style.top) || canvas.height / 2;
+
+                // Apply movement (mirror X for natural hand movement)
+                const newX = currentLeft - (dx * canvas.width * speedMultiplier);
+                const newY = currentTop + (dy * canvas.height * speedMultiplier);
+
+                // Clamp to canvas bounds
+                const clampedX = Math.max(0, Math.min(canvas.width, newX));
+                const clampedY = Math.max(0, Math.min(canvas.height, newY));
+
+                // Update cursor
+                cursor.style.left = clampedX + 'px';
+                cursor.style.top = clampedY + 'px';
+            } else {
+                // First frame - initialize cursor at center
+                const canvas = calibrationState.testing ? testCanvas : calibCanvas;
+                const cursor = document.getElementById('cursor');
+                cursor.style.left = (canvas.width / 2) + 'px';
+                cursor.style.top = (canvas.height / 2) + 'px';
+            }
+
+            // Update previous position
+            previousHandPosition = {
+                x: currentHandPosition.x,
+                y: currentHandPosition.y
+            };
+
+            // Redraw test interface with speed indicator
+            if (calibrationState.testing) {
+                drawTestInterface();
+                drawAdaptiveSpeedIndicator();
+            }
+        }
+
+        // Reset and recalibrate
+        function resetCalibration() {
+            // Reset state
+            calibrationState.step = -1;
+            calibrationState.phase = 'instruction';
+            calibrationState.points = [];
+            calibrationState.samples = [];
+            calibrationState.currentSamples = 0;
+            calibrationState.testing = false;
+
+            // Hide all UI elements
+            document.getElementById('complete-banner').classList.remove('active');
+            document.getElementById('testing-mode').classList.remove('active');
+            document.getElementById('calibration-canvas').style.display = 'block';
+            document.getElementById('cursor').style.display = 'none';
+            document.getElementById('test-controls').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('status-text').style.display = 'none';
+
+            // Show instructions again
+            document.getElementById('instructions').style.display = 'block';
+
+            // Clear all targets
+            document.querySelectorAll('.target').forEach(t => {
+                t.classList.remove('active');
+                t.classList.remove('captured');
+            });
+        }
+
+        // Start the game
+        function startGame() {
+            const calibData = localStorage.getItem('handTrackingCalibration');
+            if (!calibData) {
+                alert('Please complete calibration first!');
+                return;
+            }
+
+            // Redirect to main game
+            window.location.href = 'demo2.html';
+        }
+
+        // Update status text
+        function updateStatus(text) {
+            document.getElementById('status-text').textContent = text;
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = (calibrationState.step / 4) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initializeMediaPipe();
+
+            // Check if already calibrated
+            const existingCalib = localStorage.getItem('handTrackingCalibration');
+            if (existingCalib) {
+                const data = JSON.parse(existingCalib);
+                const age = Date.now() - data.timestamp;
+                const oneDay = 24 * 60 * 60 * 1000;
+
+                if (age < oneDay) {
+                    // Offer to skip calibration
+                    const skip = confirm('You already have a recent calibration. Skip to the game?');
+                    if (skip) {
+                        startGame();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

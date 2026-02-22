@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git stash:*)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Read(//Users/manojkumarsaka/MyProjects/ballon_game_finalised_versions/working_versions/Racing_game/**)",
+      "Read(//Users/manojkumarsaka/Neurogati/new_website/**)",
+      "Bash(ls:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
