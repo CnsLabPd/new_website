@@ -5,7 +5,7 @@ import { X, Gamepad2, PlayCircle, Headphones, ChevronDown, Lock } from "lucide-r
 import { createClient } from "@/lib/supabase"
 import { AuthModal } from "@/components/auth/AuthModal"
 
-export default function GamePlayerPage({ params }: { params: { gameId: string } }) {
+export default function ExergamePlayerPage({ params }: { params: { gameId: string } }) {
   const router = useRouter();
   const [hasStarted, setHasStarted] = useState(false);
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(true);
@@ -17,25 +17,25 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
   // Check authentication
   useEffect(() => {
     const checkUser = async () => {
-      console.log('🎮 Game Player Page: Checking user authentication...');
+      console.log('🎮 Exergame Player Page: Checking user authentication...');
 
       // Check localStorage first
       const storageKey = 'sb-yourttiykfslostesqjp-auth-token';
       const stored = localStorage.getItem(storageKey);
-      console.log('💾 Game Player: localStorage check:', stored ? 'Session FOUND' : 'NO SESSION');
+      console.log('💾 Exergame Player: localStorage check:', stored ? 'Session FOUND' : 'NO SESSION');
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
-          console.log('💾 Game Player: Session data:', parsed);
+          console.log('💾 Exergame Player: Session data:', parsed);
         } catch (e) {
-          console.error('💾 Game Player: Error parsing session:', e);
+          console.error('💾 Exergame Player: Error parsing session:', e);
         }
       }
 
       const { data: { user }, error } = await supabase.auth.getUser();
-      console.log('👤 Game Player: User from Supabase:', user ? user.email : 'No user');
+      console.log('👤 Exergame Player: User from Supabase:', user ? user.email : 'No user');
       if (error) {
-        console.error('❌ Game Player: Error getting user:', error);
+        console.error('❌ Exergame Player: Error getting user:', error);
       }
       setUser(user);
       setLoading(false);
@@ -64,10 +64,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
   }, []);
 
   const gameRegistry: Record<string, string> = {
-    "sonic-drive": "/games/sonic-drive/index.html", // Sonic Racer - served from public/games/sonic-drive/
-    "sonic-pop": "/games/sonic-pop/index.html", // Sonic Pop - served from public/games/sonic-pop/
-    "posabets": "/games/posabets/index.html", // Posabets - served from public/games/posabets/
-    "mandala-painting": "/games/mandala-painting/index.html", // Mandala Painting - served from public/games/mandala-painting/
+    "mandala-painting": "/games/mandala-painting/index.html",
   };
 
   const gameUrl = gameRegistry[params.gameId];
@@ -77,7 +74,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
     return (
       <div className="h-screen flex items-center justify-center bg-black text-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <div className="h-12 w-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-slate-400">Checking authentication...</p>
         </div>
       </div>
@@ -92,7 +89,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
         <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
           <div className="max-w-md w-full p-8 text-center space-y-8">
             <div className="flex justify-center">
-              <Lock className="h-20 w-20 text-blue-500" />
+              <Lock className="h-20 w-20 text-emerald-500" />
             </div>
 
             <div className="space-y-4">
@@ -100,14 +97,14 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
                 Sign In Required
               </h2>
               <p className="text-slate-400 font-medium text-lg">
-                You need to be logged in to play games. Please sign in to continue.
+                You need to be logged in to play exergames. Please sign in to continue.
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-black text-white bg-blue-600 rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-blue-500/20"
+                className="group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-black text-white bg-emerald-600 rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-emerald-500/20"
               >
                 <span className="text-xl uppercase tracking-tighter">Sign In</span>
               </button>
@@ -143,13 +140,13 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
         }`}
       >
         <div className="flex items-center gap-3">
-          <Gamepad2 className="h-5 w-5 text-blue-500" />
+          <Gamepad2 className="h-5 w-5 text-emerald-500" />
           <span className="text-white font-black tracking-tighter uppercase text-xs">
-            {params.gameId.replace("-", " ")} | Neurogati Arcade
+            {params.gameId.replace("-", " ")} | Neurogati Exergames
           </span>
         </div>
         <button
-          onClick={() => router.push('/gamingcategories')}
+          onClick={() => router.push('/exergames')}
           className="text-slate-400 hover:text-white font-bold text-xs uppercase bg-white/5 px-4 py-2 rounded-full transition-all mr-12"
         >
           <X className="h-4 w-4 inline mr-1" /> Exit
@@ -175,28 +172,28 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
           <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-md">
             <div className="max-w-md w-full p-8 text-center space-y-8">
               <div className="flex justify-center gap-4">
-                <Headphones className="h-12 w-12 text-blue-500 animate-pulse" />
+                <Headphones className="h-12 w-12 text-emerald-500 animate-pulse" />
               </div>
-              
+
               <div className="space-y-4">
                 <h2 className="text-3xl font-black text-white tracking-tighter uppercase">
-                  Ready to Play?
+                  Ready to Create?
                 </h2>
                 <p className="text-slate-400 font-medium">
-                  Please ensure your headphones are on. This experience uses spatial audio for navigation.
+                  Get ready for a therapeutic art experience with gesture control.
                 </p>
               </div>
 
-              <button 
+              <button
                 onClick={() => setHasStarted(true)}
-                className="group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-black text-white bg-blue-600 rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-blue-500/20"
+                className="group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-black text-white bg-emerald-600 rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-emerald-500/20"
               >
                 <PlayCircle className="mr-3 h-6 w-6" />
-                <span className="text-xl uppercase tracking-tighter">Enter Experience</span>
+                <span className="text-xl uppercase tracking-tighter">Start Experience</span>
               </button>
 
               <p className="text-[10px] text-slate-600 uppercase font-black tracking-[0.2em]">
-                Interacting unlocks browser audio
+                Interacting unlocks browser features
               </p>
             </div>
           </div>
@@ -207,7 +204,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
           src={gameUrl}
           className={`absolute inset-0 w-full h-full border-none transition-opacity duration-1000 ${hasStarted ? 'opacity-100' : 'opacity-0'}`}
           allow="camera; microphone; autoplay; fullscreen"
-          title="Neurogati Game Player"
+          title="Neurogati Exergame Player"
         />
       </div>
     </div>

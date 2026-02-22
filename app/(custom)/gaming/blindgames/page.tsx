@@ -28,13 +28,13 @@ const blindGames = [
     action: { label: "Play Here", href: "/gaming/play/sonic-drive" }
   },
   {
-    id: "balloon-pop",
-    name: "Balloon Pop",
+    id: "sonic-pop",
+    name: "Sonic Pop",
     tagline: "Echo-Location Reaction Trainer",
-    overview: "Test your auditory reflexes in this fast-paced spatial challenge. Balloons float around a virtual 3D space, emitting unique sound signatures. Use echo-location cues to track and 'pop' them before they drift away.",
+    overview: "Test your auditory reflexes in this fast-paced spatial challenge. Sonic bubbles float around a virtual 3D space, emitting unique sound signatures. Use echo-location cues to track and 'pop' them before they drift away.",
     tech: "Dynamic Spatial Sound-Mapping",
-    videoUrl: null, 
-    images: ["/images/balloon-pop-hero.png"],
+    videoUrl: null,
+    images: ["/images/sonic-pop-hero.png"],
     features: [
       "360-degree sound field tracking",
       "Progression system with increasing audio complexity",
@@ -45,7 +45,7 @@ const blindGames = [
       "Upper-extremity coordination (when paired with gesture)",
       "Cognitive processing speed training"
     ],
-    action: { label: "Play Here", href: "/gaming/play/balloon-pop" }
+    action: { label: "Play Here", href: "/gaming/play/sonic-pop" }
   }
 ];
 
