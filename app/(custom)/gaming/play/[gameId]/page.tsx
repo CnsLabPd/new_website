@@ -17,7 +17,26 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
   // Check authentication
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      console.log('🎮 Game Player Page: Checking user authentication...');
+
+      // Check localStorage first
+      const storageKey = 'sb-yourttiykfslostesqjp-auth-token';
+      const stored = localStorage.getItem(storageKey);
+      console.log('💾 Game Player: localStorage check:', stored ? 'Session FOUND' : 'NO SESSION');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          console.log('💾 Game Player: Session data:', parsed);
+        } catch (e) {
+          console.error('💾 Game Player: Error parsing session:', e);
+        }
+      }
+
+      const { data: { user }, error } = await supabase.auth.getUser();
+      console.log('👤 Game Player: User from Supabase:', user ? user.email : 'No user');
+      if (error) {
+        console.error('❌ Game Player: Error getting user:', error);
+      }
       setUser(user);
       setLoading(false);
     };
@@ -45,9 +64,10 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
   }, []);
 
   const gameRegistry: Record<string, string> = {
-    "sonic-drive": "https://sonic-drive-9w4o.vercel.app/", 
-    "balloon-pop": "https://balloon-game-nine.vercel.app/",
-    "posabets":"https://posabets.vercel.app/",
+    "sonic-drive": "/games/sonic-drive/index.html", // Sonic Racer - served from public/games/sonic-drive/
+    "sonic-pop": "/games/sonic-pop/index.html", // Sonic Pop - served from public/games/sonic-pop/
+    "posabets": "/games/posabets/index.html", // Posabets - served from public/games/posabets/
+    "mandala-painting": "/games/mandala-painting/index.html", // Mandala Painting - served from public/games/mandala-painting/
   };
 
   const gameUrl = gameRegistry[params.gameId];
@@ -129,7 +149,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
           </span>
         </div>
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push('/gamingcategories')}
           className="text-slate-400 hover:text-white font-bold text-xs uppercase bg-white/5 px-4 py-2 rounded-full transition-all mr-12"
         >
           <X className="h-4 w-4 inline mr-1" /> Exit

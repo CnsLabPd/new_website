@@ -47,6 +47,27 @@ const rehabProducts = [
     ],
     color: "Red",
     action: { label: "Play Now!", href: "https://apps.microsoft.com/detail/9n3201tlsnvf?hl=en-GB&gl=IN" }
+  },
+  {
+    name: "Mandala Painting",
+    tagline: "Gesture-based Art Therapy Experience",
+    overview: "Experience the therapeutic power of art with Mandala Painting, an interactive digital art system where creativity meets technology. Paint beautiful mandalas using intuitive gesture controls or traditional mouse input, transforming art therapy into an engaging, accessible experience for all ages and abilities.",
+    tech: null,
+    videoUrl: null,
+    images: ["/images/crgs.png"],
+    features: [
+      "Gesture control with air-hand movements or mouse (No specialized hardware)",
+      "Automatic image segmentation for any uploaded template",
+      "Multiplayer support for collaborative creativity",
+      "Save, continue, and share your artwork"
+    ],
+    applications: [
+      "Fine motor skills and hand-eye coordination",
+      "Cognitive engagement and creative expression",
+      "Stress relief and mindfulness therapy for seniors"
+    ],
+    color: "Purple",
+    action: { label: "Play Now!", href: "/gaming/play/mandala-painting" }
   }
 ];
 
@@ -137,7 +158,10 @@ export default function RehabilitationPage() {
                 {/* Conditional Action Button (Microsoft Store, etc) */}
                 {product.action && (
                   <Button asChild size="lg" variant="outline" className="w-full h-14 border-2 border-blue-500 text-blue-500 hover:bg-blue-700 hover:text-white text-lg font-black rounded-full transition-all">
-                    <Link href={product.action.href} target="_blank">
+                    <Link
+                      href={product.action.href}
+                      target={product.action.href.startsWith('http') ? "_blank" : "_self"}
+                    >
                       {product.action.label} <ExternalLink className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>

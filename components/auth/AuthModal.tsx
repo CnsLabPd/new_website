@@ -21,7 +21,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    console.log("Starting Auth flow...") // Debug log
+    console.log("🔐 Starting Auth flow...") // Debug log
 
     try {
       if (isSignUp) {
@@ -37,16 +37,28 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           },
         })
         if (error) throw error
+        console.log("✅ Sign up successful:", data)
         alert("Success! Check your email for a confirmation link.")
       } else {
         // SIGN IN LOGIC
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
         if (error) throw error
+        console.log("✅ Sign in successful:", data)
+        console.log("📦 Session in response:", data.session)
+        console.log("👤 User data:", data.user)
+
+        // Check localStorage immediately after login
+        const storageKey = 'sb-yourttiykfslostesqjp-auth-token'
+        const stored = localStorage.getItem(storageKey)
+        console.log("💾 localStorage after login:", stored ? "Session found" : "NO SESSION FOUND!")
+        if (stored) {
+          console.log("💾 Stored session:", JSON.parse(stored))
+        }
       }
-      
+
       onClose() // Close modal on success
     } catch (error: any) {
       console.error("Auth Error:", error.message)

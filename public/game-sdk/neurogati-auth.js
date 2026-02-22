@@ -21,6 +21,8 @@ class NeurogatiAuth {
   async init() {
     if (this.initialized) return;
 
+    console.log('🔄 NeurogatiAuth: Starting initialization...');
+
     // Supabase credentials - these are public and safe to expose
     const SUPABASE_URL = 'https://yourttiykfslostesqjp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvdXJ0dGl5a2ZzbG9zdGVzcWpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NzY1NjgsImV4cCI6MjA4NzE1MjU2OH0.R-spS9GY6AXA5cwytwW2KIxDd1F0ryqb84d8C_wwIGc';
@@ -30,14 +32,48 @@ class NeurogatiAuth {
       throw new Error('Supabase library not loaded. Please include: <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>');
     }
 
-    this.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Check localStorage BEFORE creating client
+    const storageKey = 'sb-yourttiykfslostesqjp-auth-token';
+    const existingSession = localStorage.getItem(storageKey);
+    console.log('💾 NeurogatiAuth: Checking localStorage for existing session...');
+    console.log('💾 Storage key:', storageKey);
+    console.log('💾 Session in localStorage:', existingSession ? 'FOUND' : 'NOT FOUND');
+    if (existingSession) {
+      try {
+        const parsed = JSON.parse(existingSession);
+        console.log('💾 Session data:', parsed);
+      } catch (e) {
+        console.error('💾 Error parsing session:', e);
+      }
+    }
+
+    // Configure to use localStorage (same as website)
+    console.log('🔧 Creating Supabase client with localStorage...');
+    this.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        storage: window.localStorage,
+        storageKey: storageKey,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false
+      }
+    });
 
     // Get current user session
-    const { data: { user } } = await this.supabase.auth.getUser();
+    console.log('👤 Getting user session...');
+    const { data: { user }, error } = await this.supabase.auth.getUser();
+    if (error) {
+      console.error('❌ Error getting user:', error);
+    }
     this.user = user;
 
     this.initialized = true;
     console.log('✅ Neurogati Auth initialized', user ? `User: ${user.email}` : 'No user logged in');
+    if (user) {
+      console.log('👤 User details:', user);
+      console.log('📧 Email:', user.email);
+      console.log('🏷️ User metadata:', user.user_metadata);
+    }
 
     return this.user;
   }
@@ -79,7 +115,17 @@ class NeurogatiAuth {
    * @returns {string|null}
    */
   getUserName() {
-    return this.user?.user_metadata?.full_name || this.user?.email || null;
+    // Try multiple possible name fields
+    const metadata = this.user?.user_metadata || {};
+    return (
+      metadata.full_name ||
+      metadata.name ||
+      metadata.display_name ||
+      metadata.username ||
+      this.user?.email?.split('@')[0] || // Use email username part
+      this.user?.email ||
+      null
+    );
   }
 
   /**

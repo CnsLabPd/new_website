@@ -1,6 +1,6 @@
 /**
- * Neurogati Game SDK - Balloon & Racing Game API
- * API helper for Balloon Pop and Sonic Drive games
+ * Neurogati Game SDK - Sonic Games API
+ * API helper for Sonic Pop and Sonic Drive (Sonic Racer) games
  *
  * Usage:
  * <script src="https://neurogati.com/game-sdk/neurogati-auth.js"></script>
@@ -9,7 +9,7 @@
 
 class BalloonRacingAPI {
   constructor(gameSlug) {
-    this.gameSlug = gameSlug; // 'balloon-pop' or 'sonic-drive'
+    this.gameSlug = gameSlug; // 'sonic-pop' or 'sonic-drive'
     this.auth = window.NeurogatiAuth;
   }
 
