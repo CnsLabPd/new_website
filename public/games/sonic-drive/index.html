@@ -7249,33 +7249,77 @@
         window.game = game;
 
         // Navbar Button Event Listeners
-        document.getElementById('instructionsBtn').addEventListener('click', () => {
-            if (window.game) {
-                window.game.showInstructions();
-            }
-        });
+        const instructionsBtn = document.getElementById('instructionsBtn');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
 
-        document.getElementById('musicToggleBtn').addEventListener('click', () => {
-            if (window.game) {
-                window.game.toggleBackgroundMusic();
-            }
-        });
+        console.log('🔍 Looking for navbar buttons...');
+        console.log('📋 Instructions button:', instructionsBtn);
+        console.log('🎵 Music button:', musicToggleBtn);
+
+        if (instructionsBtn) {
+            instructionsBtn.addEventListener('click', () => {
+                console.log('📋 Instructions button clicked!');
+                if (window.game) {
+                    window.game.showInstructions();
+                } else {
+                    console.error('❌ window.game not available!');
+                }
+            });
+            console.log('✅ Instructions button listener attached');
+        } else {
+            console.error('❌ Instructions button not found in DOM!');
+        }
+
+        if (musicToggleBtn) {
+            musicToggleBtn.addEventListener('click', () => {
+                console.log('🎵 Music button clicked!');
+                if (window.game) {
+                    window.game.toggleBackgroundMusic();
+                } else {
+                    console.error('❌ window.game not available!');
+                }
+            });
+            console.log('✅ Music button listener attached');
+        } else {
+            console.error('❌ Music button not found in DOM!');
+        }
 
         // Instructions Modal Event Listeners
-        document.getElementById('closeInstructionsBtn').addEventListener('click', () => {
-            game.hideInstructions();
-        });
+        const closeInstructionsBtn = document.getElementById('closeInstructionsBtn');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const instructionsModal = document.getElementById('instructionsModal');
 
-        document.getElementById('startGameBtn').addEventListener('click', () => {
-            game.startGameFromInstructions();
-        });
+        console.log('🔍 Looking for modal elements...');
+        console.log('❌ Close button:', closeInstructionsBtn);
+        console.log('🚀 Start button:', startGameBtn);
+        console.log('📋 Modal:', instructionsModal);
 
-        // Close modal when clicking outside
-        document.getElementById('instructionsModal').addEventListener('click', (e) => {
-            if (e.target.id === 'instructionsModal') {
+        if (closeInstructionsBtn) {
+            closeInstructionsBtn.addEventListener('click', () => {
+                console.log('❌ Close instructions button clicked!');
                 game.hideInstructions();
-            }
-        });
+            });
+            console.log('✅ Close button listener attached');
+        }
+
+        if (startGameBtn) {
+            startGameBtn.addEventListener('click', () => {
+                console.log('🚀 Start game button clicked!');
+                game.startGameFromInstructions();
+            });
+            console.log('✅ Start game button listener attached');
+        }
+
+        if (instructionsModal) {
+            // Close modal when clicking outside
+            instructionsModal.addEventListener('click', (e) => {
+                if (e.target.id === 'instructionsModal') {
+                    console.log('🖱️ Clicked outside modal, closing...');
+                    game.hideInstructions();
+                }
+            });
+            console.log('✅ Modal backdrop listener attached');
+        }
     </script>
 </body>
 </html>
