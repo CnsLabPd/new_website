@@ -28,7 +28,7 @@
         <header class="flex flex-between mb-2">
             <h1>📊 Parent Dashboard</h1>
             <div class="flex gap-sm">
-                <button id="logoutBtn" class="btn btn-sm btn-danger">🚪 Logout</button>
+                <button id="exitBtn" class="btn btn-sm btn-danger">🚪 Exit</button>
                 <a href="dashboard.html" class="btn">← Back to Game</a>
             </div>
         </header>
@@ -125,10 +125,10 @@
             window.location.href = 'auth.html';
         }
 
-        // Logout handler
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            Storage.logout();
-            window.location.href = 'auth.html';
+        // Exit handler - returns to gaming categories
+        document.getElementById('exitBtn').addEventListener('click', () => {
+            // Redirect to gaming categories page
+            window.top.location.href = 'https://www.neurogati.com/gamingcategories';
         });
 
         // Load data

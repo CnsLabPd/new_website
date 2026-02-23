@@ -41,8 +41,8 @@
             </div>
 
             <div class="flex gap-sm">
-                <button id="logoutBtn" class="btn btn-sm btn-danger">
-                    🚪 Logout
+                <button id="exitBtn" class="btn btn-sm btn-danger">
+                    🚪 Exit
                 </button>
                 <button id="musicToggle" class="btn btn-sm" style="background: rgba(255,255,255,0.2);">
                     🔊 Music
@@ -182,21 +182,10 @@
             musicToggle.textContent = isPlaying ? '🔊 Music' : '🔇 Music';
         });
 
-        // Logout handler
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            // If using Neurogati auth, logout there
-            if (window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
-                const supabase = window.NeurogatiAuth.getClient();
-                await supabase.auth.signOut();
-                // Redirect parent window to home
-                window.top.location.href = window.location.origin.includes('localhost')
-                    ? 'https://www.neurogati.com'
-                    : 'https://neurogati.com';
-            } else {
-                // Fallback to localStorage logout
-                Storage.logout();
-                window.location.href = '../index.html';
-            }
+        // Exit handler - returns to gaming categories
+        document.getElementById('exitBtn').addEventListener('click', () => {
+            // Redirect to gaming categories page
+            window.top.location.href = 'https://www.neurogati.com/gamingcategories';
         });
 
         // Load player data
