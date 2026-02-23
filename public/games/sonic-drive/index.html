@@ -6158,6 +6158,9 @@
                 console.log('🚀 Starting game from instructions...');
                 console.log('📋 Pending level:', this.pendingLevel);
 
+                // IMPORTANT: Save pending level BEFORE hiding modal (hideInstructions clears it)
+                const levelNumber = this.pendingLevel;
+
                 // Check if "don't show again" is checked
                 const checkbox = document.getElementById('dontShowAgainCheckbox');
                 if (checkbox && checkbox.checked) {
@@ -6165,14 +6168,11 @@
                     console.log('✅ Instructions will not be shown again');
                 }
 
-                // Hide modal
+                // Hide modal (this will clear this.pendingLevel)
                 this.hideInstructions();
 
                 // Proceed to level if one was pending
-                if (this.pendingLevel !== null) {
-                    const levelNumber = this.pendingLevel;
-                    this.pendingLevel = null;
-
+                if (levelNumber !== null && levelNumber !== undefined) {
                     console.log('🎮 Proceeding to level:', levelNumber);
 
                     // Set the selected level
