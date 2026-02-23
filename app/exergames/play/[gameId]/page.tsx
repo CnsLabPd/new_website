@@ -45,9 +45,12 @@ export default function ExergamePlayerPage({ params }: { params: { gameId: strin
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('🔄 Auth state changed:', _event, session?.user ? 'User logged in' : 'No user');
       setUser(session?.user ?? null);
+      setLoading(false); // Ensure loading is false after auth change
       if (session?.user) {
         setIsAuthModalOpen(false); // Close modal after successful login
+        console.log('✅ User authenticated, game should load now');
       }
     });
 
