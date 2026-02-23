@@ -6129,20 +6129,14 @@
 
             // Show instructions modal
             showInstructions(levelNumber = null) {
-                console.log('📋 showInstructions called with level:', levelNumber);
-
                 // Store level number if provided (when clicking Play button)
                 if (levelNumber !== null) {
                     this.pendingLevel = levelNumber;
-                    console.log('✅ Stored pending level:', this.pendingLevel);
                 }
 
                 const modal = document.getElementById('instructionsModal');
                 if (modal) {
                     modal.style.display = 'flex';
-                    console.log('✅ Instructions modal displayed');
-                } else {
-                    console.error('❌ Instructions modal not found!');
                 }
             }
 
@@ -6155,9 +6149,6 @@
 
             // Start game from instructions modal
             startGameFromInstructions() {
-                console.log('🚀 Starting game from instructions...');
-                console.log('📋 Pending level:', this.pendingLevel);
-
                 // IMPORTANT: Save pending level BEFORE hiding modal (hideInstructions clears it)
                 const levelNumber = this.pendingLevel;
 
@@ -6165,7 +6156,6 @@
                 const checkbox = document.getElementById('dontShowAgainCheckbox');
                 if (checkbox && checkbox.checked) {
                     localStorage.setItem('sonic-drive-hide-instructions', 'true');
-                    console.log('✅ Instructions will not be shown again');
                 }
 
                 // Hide modal (this will clear this.pendingLevel)
@@ -6173,18 +6163,14 @@
 
                 // Proceed to level if one was pending
                 if (levelNumber !== null && levelNumber !== undefined) {
-                    console.log('🎮 Proceeding to level:', levelNumber);
-
                     // Set the selected level
                     this.selectedLevel = levelNumber;
 
                     // Get level data to check if it's an external game
                     const levelData = this.levelManager.getLevel(levelNumber);
-                    console.log('📊 Level data:', levelData);
 
                     // Check if this is an external game (racing games)
                     if (levelData && levelData.isExternalGame && levelData.externalPath) {
-                        console.log('🏎️ Launching external racing game...');
                         // Launch as external game in iframe
                         this.launchExternalGame({
                             name: levelData.name,
@@ -6192,16 +6178,12 @@
                             levelNumber: levelNumber
                         });
                     } else if (levelNumber >= 1 && levelNumber <= 4) {
-                        console.log('🎈 Showing balloon level instructions...');
                         // Show instructions for balloon levels 1-4
                         this.showLevelInstructions(levelNumber);
                     } else {
-                        console.log('➡️ Proceeding to regular level...');
                         // For other levels, proceed as usual
                         this.proceedToLevel(levelNumber);
                     }
-                } else {
-                    console.warn('⚠️ No pending level to start!');
                 }
             }
 
@@ -7229,42 +7211,25 @@
 
             // Make game accessible globally for button calls
             window.game = game;
-            console.log('✅ window.game assigned:', window.game);
 
             // Navbar Button Event Listeners
             const instructionsBtn = document.getElementById('instructionsBtn');
             const musicToggleBtn = document.getElementById('musicToggleBtn');
 
-            console.log('🔍 Looking for navbar buttons...');
-            console.log('📋 Instructions button:', instructionsBtn);
-            console.log('🎵 Music button:', musicToggleBtn);
-
             if (instructionsBtn) {
                 instructionsBtn.addEventListener('click', () => {
-                    console.log('📋 Instructions button clicked!');
                     if (window.game) {
                         window.game.showInstructions();
-                    } else {
-                        console.error('❌ window.game not available!');
                     }
                 });
-                console.log('✅ Instructions button listener attached');
-            } else {
-                console.error('❌ Instructions button not found in DOM!');
             }
 
             if (musicToggleBtn) {
                 musicToggleBtn.addEventListener('click', () => {
-                    console.log('🎵 Music button clicked!');
                     if (window.game) {
                         window.game.toggleBackgroundMusic();
-                    } else {
-                        console.error('❌ window.game not available!');
                     }
                 });
-                console.log('✅ Music button listener attached');
-            } else {
-                console.error('❌ Music button not found in DOM!');
             }
 
             // Instructions Modal Event Listeners
@@ -7272,36 +7237,25 @@
             const startGameBtn = document.getElementById('startGameBtn');
             const instructionsModal = document.getElementById('instructionsModal');
 
-            console.log('🔍 Looking for modal elements...');
-            console.log('❌ Close button:', closeInstructionsBtn);
-            console.log('🚀 Start button:', startGameBtn);
-            console.log('📋 Modal:', instructionsModal);
-
             if (closeInstructionsBtn) {
                 closeInstructionsBtn.addEventListener('click', () => {
-                    console.log('❌ Close instructions button clicked!');
                     game.hideInstructions();
                 });
-                console.log('✅ Close button listener attached');
             }
 
             if (startGameBtn) {
                 startGameBtn.addEventListener('click', () => {
-                    console.log('🚀 Start game button clicked!');
                     game.startGameFromInstructions();
                 });
-                console.log('✅ Start game button listener attached');
             }
 
             if (instructionsModal) {
                 // Close modal when clicking outside
                 instructionsModal.addEventListener('click', (e) => {
                     if (e.target.id === 'instructionsModal') {
-                        console.log('🖱️ Clicked outside modal, closing...');
                         game.hideInstructions();
                     }
                 });
-                console.log('✅ Modal backdrop listener attached');
             }
         });
 

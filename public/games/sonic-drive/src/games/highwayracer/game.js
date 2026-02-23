@@ -547,18 +547,6 @@ export class Game {
 
     this.startBtn.addEventListener('click', () => this.toggleGame());
     this.exitBtn.addEventListener('click', () => this.exitGame());
-
-    // Floating audio toggle button event listener
-    const floatingAudioBtn = document.getElementById('floatingAudioToggle');
-    if (floatingAudioBtn) {
-      floatingAudioBtn.addEventListener('click', () => {
-        console.log('🔊 Floating audio button clicked');
-        this.toggleAudio();
-      });
-    }
-
-    // Initialize floating audio button state
-    this.updateFloatingAudioButton();
   }
 
   exitGame() {
@@ -628,20 +616,7 @@ export class Game {
       console.log(`🔊 Audio preference saved: ${this.audioEnabled ? 'enabled' : 'disabled'} (will apply when game starts)`);
     }
 
-    // Update button appearance
-    this.updateFloatingAudioButton();
-
     console.log(`🔊 Audio ${this.audioEnabled ? 'enabled' : 'disabled'}`);
-  }
-
-  updateFloatingAudioButton() {
-    const floatingBtn = document.getElementById('floatingAudioToggle');
-    if (floatingBtn) {
-      floatingBtn.textContent = this.audioEnabled ? '🔊 Audio ON' : '🔇 Audio OFF';
-      floatingBtn.style.background = this.audioEnabled
-        ? 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)'
-        : 'linear-gradient(135deg, #f44336 0%, #da190b 100%)';
-    }
   }
 
   toggleGame() {
