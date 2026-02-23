@@ -5,7 +5,7 @@ export const CONFIG = {
     VERSION: "1.0.0",
 
     // Model Configuration
-    MODEL_PATH: './assets/models/rohit_model3.json',
+    MODEL_PATH: '../assets/models/rohit_model3.json',
     POSE_TYPE: 'pose',
 
     // Game Settings
