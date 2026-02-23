@@ -2001,6 +2001,9 @@
                 <div id="navLeft" style="display: contents;">
                     <!-- Back Button injected here -->
                 </div>
+                <button class="exit-btn" id="musicToggleBtn" onclick="window.game && window.game.toggleBackgroundMusic()" style="background: #10b981; margin-right: 10px;">
+                    🎵 Music
+                </button>
                 <button class="exit-btn" onclick="window.top.location.href='https://www.neurogati.com/gamingcategories'">
                     Exit 🚪
                 </button>
@@ -2076,7 +2079,6 @@
             <button class="control-btn" id="startBtn" onclick="game.startGame()" style="display: none;">▶️ Start Game</button>
             <button class="control-btn secondary" id="pauseBtn" onclick="game.pauseGame()" disabled>⏸️ Pause</button>
             <div class="controls-distance-info" id="distanceInfo" style="display: none;">🎯 Ready</div>
-            <button class="control-btn secondary" id="speechToggleBtn" onclick="game.toggleSpeech()" style="display: none;">🔊 Voice</button>
         </div>
 
         <!-- Game Messages -->
@@ -6014,6 +6016,33 @@
 
                 // Provide feedback
                 this.showMessage(this.speechEnabled ? '🔊 Voice assistance enabled' : '🔇 Voice assistance disabled', 2000);
+            }
+
+            toggleBackgroundMusic() {
+                if (!this.introMusic) return;
+
+                const isPlaying = !this.introMusic.paused;
+
+                if (isPlaying) {
+                    // Pause background music
+                    this.introMusic.pause();
+                    console.log('🔇 Background music paused');
+                } else {
+                    // Resume background music
+                    this.introMusic.volume = 0.5;
+                    this.introMusic.play().catch(err => console.log('Could not play music:', err));
+                    console.log('🎵 Background music playing');
+                }
+
+                // Update button text
+                const musicBtn = document.getElementById('musicToggleBtn');
+                if (musicBtn) {
+                    musicBtn.textContent = isPlaying ? '🔇 Music' : '🎵 Music';
+                    musicBtn.style.background = isPlaying ? '#ef4444' : '#10b981';
+                }
+
+                // Provide feedback
+                this.showMessage(isPlaying ? '🔇 Music paused' : '🎵 Music playing', 2000);
             }
 
             hideLoadingScreen() {
