@@ -920,23 +920,21 @@ export class Game {
         }
       }
 
-      // Fallback: Not in iframe or parent communication failed
-      // Navigate the TOP window to close overlay and go to gaming categories
-      console.log('🏠 Using fallback: navigating TOP window to gaming categories');
-      if (window.top) {
-        window.top.location.href = 'https://www.neurogati.com/gamingcategories';
+      // Fallback: Reload the parent iframe to show level selection
+      // This handles the case where the game is loaded in Neurogati's iframe
+      console.log('🏠 Using fallback: reloading parent iframe to show level selection');
+      if (window.parent && window.parent !== window) {
+        // Reload the parent iframe (index.html) which will show level selection
+        window.parent.location.reload();
       } else {
-        window.location.href = 'https://www.neurogati.com/gamingcategories';
+        // If not in iframe, reload current page
+        window.location.reload();
       }
 
     } catch (error) {
       console.error('❌ Error in gameOverGoHome:', error);
-      // Last resort fallback - navigate top window to gaming categories
-      if (window.top) {
-        window.top.location.href = 'https://www.neurogati.com/gamingcategories';
-      } else {
-        window.location.href = 'https://www.neurogati.com/gamingcategories';
-      }
+      // Last resort fallback - reload the page
+      window.location.reload();
     }
   }
 
