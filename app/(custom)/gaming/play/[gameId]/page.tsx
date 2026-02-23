@@ -92,7 +92,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
     return (
       <>
         <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-        <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
+        <div className="fixed inset-0 bg-black z-[100] flex items-center justify-center">
           <div className="max-w-md w-full p-8 text-center space-y-8">
             <div className="flex justify-center">
               <Lock className="h-20 w-20 text-blue-500" />
