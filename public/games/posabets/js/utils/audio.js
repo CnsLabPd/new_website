@@ -20,7 +20,7 @@ export class AudioManager {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
         // Initialize background music
-        this.backgroundMusic = new Audio('/assets/sounds/cheerful-joyful-playful-music-380550.mp3');
+        this.backgroundMusic = new Audio('../assets/sounds/cheerful-joyful-playful-music-380550.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = this.musicVolume;
 
