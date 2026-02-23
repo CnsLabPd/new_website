@@ -6019,7 +6019,12 @@
             }
 
             toggleBackgroundMusic() {
-                if (!this.introMusic) return;
+                // Initialize music if it doesn't exist yet
+                if (!this.introMusic) {
+                    this.introMusic = new Audio('assets/audio/bakgroundmusic.mp3');
+                    this.introMusic.loop = true;
+                    this.introMusic.volume = 0.5;
+                }
 
                 const isPlaying = !this.introMusic.paused;
 
@@ -7079,67 +7084,6 @@
 
         // Make game accessible globally for button calls
         window.game = game;
-
-        // ==================================================
-        // AUTO-SHUTDOWN: Heartbeat System
-        // ==================================================
-        // Send periodic heartbeat to server to keep it alive
-        // Server automatically shuts down after 10s of inactivity
-        (function setupHeartbeat() {
-            const HEARTBEAT_INTERVAL = 5000; // Send heartbeat every 5 seconds
-            const HEARTBEAT_ENDPOINT = '/heartbeat';
-
-            function sendHeartbeat() {
-                // Try to update the heartbeat file via a simple fetch
-                // The server will see this request in its logs
-                fetch(HEARTBEAT_ENDPOINT, {
-                    method: 'GET',
-                    cache: 'no-store'
-                }).catch(() => {
-                    // Ignore errors - server might not have special endpoint
-                    // The request attempt itself is enough to show activity
-                });
-
-                // Also update a timestamp file that the script monitors
-                const timestamp = Date.now();
-                fetch(`/tmp_heartbeat?t=${timestamp}`, {
-                    method: 'GET',
-                    cache: 'no-store'
-                }).catch(() => {
-                    // Alternative: write to localStorage as backup indicator
-                    try {
-                        localStorage.setItem('balloon_game_heartbeat', timestamp.toString());
-                    } catch (e) {
-                        // Ignore localStorage errors
-                    }
-                });
-            }
-
-            // Send heartbeat immediately on load
-            sendHeartbeat();
-
-            // Send heartbeat periodically while page is open
-            const heartbeatTimer = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
-
-            // Stop heartbeat when page unloads
-            window.addEventListener('beforeunload', () => {
-                clearInterval(heartbeatTimer);
-            });
-
-            // Stop heartbeat when page is hidden (tab switched)
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    // Page hidden - could be closed soon
-                    // Send one final heartbeat
-                    sendHeartbeat();
-                } else {
-                    // Page visible again - resume normal heartbeat
-                    sendHeartbeat();
-                }
-            });
-
-            console.log('💓 Heartbeat system active - server will auto-shutdown when all tabs close');
-        })();
     </script>
 </body>
 </html>
