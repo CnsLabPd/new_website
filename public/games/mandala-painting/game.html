@@ -11762,17 +11762,6 @@ if (!window.gestureSystem) {
             }
         }
 
-        // Send heartbeat to server to keep it alive
-        function sendHeartbeat() {
-            fetch('/heartbeat').catch(() => {});
-        }
-
-        // Send heartbeat every 2 seconds
-        setInterval(sendHeartbeat, 2000);
-
-        // Send initial heartbeat
-        sendHeartbeat();
-
         // Initialize application when page loads
         document.addEventListener('DOMContentLoaded', () => {
             console.log('📄 MANDALA: DOM Content Loaded');
