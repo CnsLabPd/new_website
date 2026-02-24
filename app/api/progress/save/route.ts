@@ -18,16 +18,23 @@ async function saveProgressToDatabase(
   completed: boolean,
   token: string
 ) {
-  // Create a Supabase client with the user's token for RLS
-  // This is critical - RLS policies check auth.uid() which comes from the token
-  const supabase = createClient();
+  // Create an authenticated Supabase client using the user's access token
+  // This is critical - RLS policies check auth.uid() which comes from this token
+  const { createClient: createSupabaseClient } = await import('@supabase/supabase-js');
 
-  // Set the auth context using the user's token
-  // This ensures RLS policies work correctly
-  await supabase.auth.setSession({
-    access_token: token,
-    refresh_token: '' // Not needed for this operation
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+  // Create a new client with the user's token in the auth header
+  const supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey, {
+    global: {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
   });
+
+  console.log('🔐 [DB] Created authenticated Supabase client with user token');
 
   try {
     console.log(`📝 Attempting to save score: userId=${userId}, level=${levelNumber}, score=${score}`);
