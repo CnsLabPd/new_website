@@ -6,6 +6,7 @@ async function queryUserScoreHistory(userId: string, levelNumber: number, gameSl
 
   try {
     // Query game_score_history table
+    // Note: Original schema uses 'played_at', but we renamed it to 'created_at' in migration
     const { data: historyData, error } = await supabase
       .from('game_score_history')
       .select('score, completed, created_at')
@@ -14,7 +15,10 @@ async function queryUserScoreHistory(userId: string, levelNumber: number, gameSl
       .eq('level_number', levelNumber)
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error fetching score history:', error);
+      throw error;
+    }
 
     // Get high score from game_progress table
     const { data: progressData } = await supabase
