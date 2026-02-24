@@ -13,34 +13,56 @@ export class LeaderboardManager {
     }
 
     /**
-     * Get auth token from localStorage
-     * Tries parent window first (when running in iframe), then current window
+     * Get auth token from Supabase session
+     * Uses NeurogatiAuth SDK to get the access token
      */
-    getAuthToken() {
+    async getAuthToken() {
         try {
-            // Try to get token from parent window (when running in iframe from main game)
-            if (window.parent && window.parent !== window && window.parent.localStorage) {
-                const parentToken = window.parent.localStorage.getItem('auth_token');
-                if (parentToken) {
-                    return parentToken;
-                }
+            // Check if NeurogatiAuth is available
+            if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
+                const supabaseClient = window.NeurogatiAuth.getClient();
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                return session?.access_token || null;
             }
-        } catch (e) {
-            // Cross-origin error - parent is different origin
-            console.log('Cannot access parent localStorage (cross-origin), using current window');
-        }
 
-        // Fall back to current window's localStorage
-        return localStorage.getItem('auth_token');
+            // Fallback: try to get from localStorage (legacy support)
+            try {
+                if (window.parent && window.parent !== window && window.parent.localStorage) {
+                    const parentToken = window.parent.localStorage.getItem('auth_token');
+                    if (parentToken) {
+                        return parentToken;
+                    }
+                }
+            } catch (e) {
+                console.log('Cannot access parent localStorage (cross-origin)');
+            }
+
+            return localStorage.getItem('auth_token');
+        } catch (error) {
+            console.error('Error getting auth token:', error);
+            return null;
+        }
     }
 
     /**
-     * Get current user from localStorage
-     * Tries parent window first (when running in iframe), then current window
+     * Get current user from NeurogatiAuth or localStorage
+     * Tries NeurogatiAuth first, then falls back to localStorage
      */
     getCurrentUser() {
         try {
-            // Try to get user from parent window (when running in iframe from main game)
+            // Try to get user from NeurogatiAuth
+            if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
+                const user = window.NeurogatiAuth.getCurrentUser();
+                if (user) {
+                    return {
+                        id: window.NeurogatiAuth.getUserId(),
+                        username: window.NeurogatiAuth.getUserName(),
+                        email: window.NeurogatiAuth.getUserEmail()
+                    };
+                }
+            }
+
+            // Try to get user from parent window (legacy support)
             if (window.parent && window.parent !== window && window.parent.localStorage) {
                 const parentUserStr = window.parent.localStorage.getItem('user');
                 if (parentUserStr) {
@@ -48,8 +70,7 @@ export class LeaderboardManager {
                 }
             }
         } catch (e) {
-            // Cross-origin error - parent is different origin
-            console.log('Cannot access parent localStorage (cross-origin), using current window');
+            console.log('Cannot access parent localStorage (cross-origin)');
         }
 
         // Fall back to current window's localStorage
@@ -61,7 +82,13 @@ export class LeaderboardManager {
      * Check if user is logged in
      */
     isLoggedIn() {
-        return !!this.getAuthToken() && !!this.getCurrentUser();
+        // Use NeurogatiAuth if available
+        if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
+            return window.NeurogatiAuth.isAuthenticated();
+        }
+
+        // Fallback to localStorage check (legacy)
+        return !!this.getCurrentUser();
     }
 
     /**
@@ -75,11 +102,19 @@ export class LeaderboardManager {
         }
 
         try {
+            const token = await this.getAuthToken();
+
+            if (!token) {
+                console.error('No auth token available');
+                alert('Authentication error. Please log in again.');
+                return false;
+            }
+
             const response = await fetch(`${API_URL}/progress/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.getAuthToken()}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     level_number: this.levelNumber,
@@ -111,7 +146,7 @@ export class LeaderboardManager {
      */
     async fetchLeaderboard(limit = 10) {
         try {
-            const response = await fetch(`${API_URL}/leaderboard/${this.levelNumber}?limit=${limit}`);
+            const response = await fetch(`${API_URL}/leaderboard/${this.levelNumber}?game_slug=sonic-drive&limit=${limit}`);
             const data = await response.json();
 
             if (response.ok) {

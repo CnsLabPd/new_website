@@ -4170,7 +4170,7 @@
 
                 try {
                     const API_URL = `${window.location.origin}/api`;
-                    const response = await fetch(`${API_URL}/leaderboard/${levelNumber}?limit=10`);
+                    const response = await fetch(`${API_URL}/leaderboard/${levelNumber}?game_slug=sonic-drive&limit=10`);
                     const data = await response.json();
 
                     if (response.ok && data.leaderboard && data.leaderboard.length > 0) {
@@ -4221,7 +4221,7 @@
                     }
 
                     const API_URL = `${window.location.origin}/api`;
-                    const response = await fetch(`${API_URL}/progress/user/${currentUser.username}/level/${levelNumber}/history`);
+                    const response = await fetch(`${API_URL}/progress/user/${currentUser.username}/level/${levelNumber}/history?game_slug=sonic-drive`);
                     const data = await response.json();
 
                     if (response.ok && data.scores && data.scores.length > 0) {

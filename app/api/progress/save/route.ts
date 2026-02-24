@@ -1,146 +1,81 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as fs from 'fs';
-import * as path from 'path';
+import { createClient } from '@/lib/supabase';
 
 interface SaveProgressRequest {
   level_number: number;
   module_number: number;
   score: number;
   completed: boolean;
+  game_slug?: string;
 }
 
 async function saveProgressToDatabase(
-  token: string,
+  userId: string,
+  gameSlug: string,
   levelNumber: number,
   moduleNumber: number,
   score: number,
   completed: boolean
 ) {
-  const dbPath = path.join(process.cwd(), 'public', 'games', 'sonic-drive', 'server', 'balloon_game.db');
+  const supabase = createClient();
 
-  // Check if database exists
-  if (!fs.existsSync(dbPath)) {
-    throw new Error('Database file not found');
+  try {
+    // 1. Save to history (all attempts)
+    const { error: historyError } = await supabase
+      .from('game_score_history')
+      .insert({
+        user_id: userId,
+        game_slug: gameSlug,
+        level_number: levelNumber,
+        score: score,
+        completed: completed
+      });
+
+    if (historyError) throw historyError;
+
+    // 2. Get current progress
+    const { data: currentProgress } = await supabase
+      .from('game_progress')
+      .select('high_score')
+      .eq('user_id', userId)
+      .eq('game_slug', gameSlug)
+      .eq('level_number', levelNumber)
+      .single();
+
+    // 3. Update or insert progress (only if new high score)
+    const isNewHighScore = !currentProgress || score > currentProgress.high_score;
+    const highScore = isNewHighScore ? score : currentProgress.high_score;
+
+    const { data: progressData, error: progressError } = await supabase
+      .from('game_progress')
+      .upsert({
+        user_id: userId,
+        game_slug: gameSlug,
+        level_number: levelNumber,
+        module_number: moduleNumber,
+        high_score: highScore,
+        completed: completed,
+        last_played: new Date().toISOString()
+      }, {
+        onConflict: 'user_id,game_slug,level_number'
+      })
+      .select()
+      .single();
+
+    if (progressError) throw progressError;
+
+    console.log(`✅ Score saved: Level ${levelNumber}, Score: ${score}${isNewHighScore ? ' (NEW HIGH SCORE!)' : ''}`);
+
+    return {
+      success: true,
+      isNewHighScore,
+      progress: progressData
+    };
+
+  } catch (error) {
+    console.error('❌ Error saving score to Supabase:', error);
+    throw error;
   }
-
-  const { spawn } = await import('child_process');
-
-  return new Promise((resolve, reject) => {
-    const pythonScript = `
-import sqlite3
-import json
-import sys
-from datetime import datetime
-
-db_path = "${dbPath.replace(/\\/g, '\\\\')}"
-token = "${token}"
-level_number = ${levelNumber}
-module_number = ${moduleNumber}
-score = ${score}
-completed = ${completed ? 1 : 0}
-
-try:
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    # Verify session token and get user
-    cursor.execute("""
-        SELECT user_id FROM sessions
-        WHERE token = ? AND expires_at > datetime('now')
-    """, (token,))
-    session = cursor.fetchone()
-
-    if not session:
-        print(json.dumps({'success': False, 'error': 'Unauthorized'}))
-        sys.exit(0)
-
-    user_id = session[0]
-
-    # Insert into score history (every attempt)
-    cursor.execute("""
-        INSERT INTO score_history
-        (user_id, level_number, score, completed, played_at)
-        VALUES (?, ?, ?, ?, datetime('now'))
-    """, (user_id, level_number, score, completed))
-
-    # Check if progress exists
-    cursor.execute("""
-        SELECT high_score FROM progress
-        WHERE user_id = ? AND level_number = ?
-    """, (user_id, level_number))
-    existing = cursor.fetchone()
-
-    if existing:
-        # Update only if new score is higher
-        new_high_score = max(existing[0], score)
-        cursor.execute("""
-            UPDATE progress
-            SET high_score = ?, completed = ?, last_played = datetime('now')
-            WHERE user_id = ? AND level_number = ?
-        """, (new_high_score, completed, user_id, level_number))
-    else:
-        # Insert new progress record
-        cursor.execute("""
-            INSERT INTO progress
-            (user_id, level_number, module_number, high_score, completed, last_played)
-            VALUES (?, ?, ?, ?, ?, datetime('now'))
-        """, (user_id, level_number, module_number, score, completed))
-
-    # Get updated progress
-    cursor.execute("""
-        SELECT * FROM progress
-        WHERE user_id = ? AND level_number = ?
-    """, (user_id, level_number))
-    updated = cursor.fetchone()
-
-    conn.commit()
-    conn.close()
-
-    if updated:
-        progress = {
-            'id': updated[0],
-            'user_id': updated[1],
-            'level_number': updated[2],
-            'module_number': updated[3],
-            'high_score': updated[4],
-            'completed': updated[5],
-            'last_played': updated[6]
-        }
-        print(json.dumps({'success': True, 'progress': progress}))
-    else:
-        print(json.dumps({'success': False, 'error': 'Failed to retrieve updated progress'}))
-
-except Exception as e:
-    print(json.dumps({'success': False, 'error': str(e)}))
-    sys.exit(1)
-`;
-
-    const python = spawn('python3', ['-c', pythonScript]);
-    let output = '';
-    let errorOutput = '';
-
-    python.stdout.on('data', (data) => {
-      output += data.toString();
-    });
-
-    python.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-    });
-
-    python.on('close', (code) => {
-      if (code !== 0) {
-        reject(new Error(`Python script failed: ${errorOutput}`));
-        return;
-      }
-
-      try {
-        const result = JSON.parse(output);
-        resolve(result);
-      } catch (err) {
-        reject(new Error(`Failed to parse Python output: ${output}`));
-      }
-    });
-  });
 }
 
 export async function POST(request: NextRequest) {
@@ -158,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body: SaveProgressRequest = await request.json();
-    const { level_number, module_number, score, completed } = body;
+    const { level_number, module_number, score, completed, game_slug = 'sonic-drive' } = body;
 
     // Validation
     if (level_number === undefined || module_number === undefined) {
@@ -168,18 +103,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save progress using Python subprocess
-    const result: any = await saveProgressToDatabase(token, level_number, module_number, score, completed);
+    // Verify token and get user from Supabase
+    const supabase = createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
-    if (!result.success) {
+    if (authError || !user) {
       return NextResponse.json(
-        { error: result.error },
-        { status: result.error === 'Unauthorized' ? 401 : 500 }
+        { error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
+    // Save progress to Supabase
+    const result = await saveProgressToDatabase(
+      user.id,
+      game_slug,
+      level_number,
+      module_number,
+      score,
+      completed
+    );
+
     return NextResponse.json({
       success: true,
+      isNewHighScore: result.isNewHighScore,
       progress: result.progress
     });
 
