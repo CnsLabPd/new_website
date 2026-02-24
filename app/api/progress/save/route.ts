@@ -20,7 +20,10 @@ async function saveProgressToDatabase(
   const supabase = createClient();
 
   try {
+    console.log(`📝 Attempting to save score: userId=${userId}, level=${levelNumber}, score=${score}`);
+
     // 1. Save to history (all attempts)
+    console.log('💾 Step 1: Inserting into game_score_history...');
     const { error: historyError } = await supabase
       .from('game_score_history')
       .insert({
@@ -31,10 +34,15 @@ async function saveProgressToDatabase(
         completed: completed
       });
 
-    if (historyError) throw historyError;
+    if (historyError) {
+      console.error('❌ History insert error:', historyError);
+      throw historyError;
+    }
+    console.log('✅ Step 1 complete: Score added to history');
 
     // 2. Get current progress
-    const { data: currentProgress } = await supabase
+    console.log('🔍 Step 2: Checking for existing progress...');
+    const { data: currentProgress, error: selectError } = await supabase
       .from('game_progress')
       .select('high_score')
       .eq('user_id', userId)
@@ -42,9 +50,16 @@ async function saveProgressToDatabase(
       .eq('level_number', levelNumber)
       .single();
 
+    if (selectError && selectError.code !== 'PGRST116') {
+      // PGRST116 = no rows found, which is fine for first play
+      console.error('❌ Select error:', selectError);
+    }
+    console.log('📊 Current progress:', currentProgress);
+
     // 3. Update or insert progress (only if new high score)
     const isNewHighScore = !currentProgress || score > currentProgress.high_score;
     const highScore = isNewHighScore ? score : currentProgress.high_score;
+    console.log(`💾 Step 3: Upserting progress... (isNewHighScore=${isNewHighScore}, highScore=${highScore})`);
 
     const { data: progressData, error: progressError } = await supabase
       .from('game_progress')
@@ -62,7 +77,11 @@ async function saveProgressToDatabase(
       .select()
       .single();
 
-    if (progressError) throw progressError;
+    if (progressError) {
+      console.error('❌ Progress upsert error:', progressError);
+      throw progressError;
+    }
+    console.log('✅ Step 3 complete: Progress updated');
 
     console.log(`✅ Score saved: Level ${levelNumber}, Score: ${score}${isNewHighScore ? ' (NEW HIGH SCORE!)' : ''}`);
 
@@ -132,8 +151,22 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Save progress API error:', error);
+
+    // Enhanced error logging for debugging
+    if (error && typeof error === 'object') {
+      console.error('Error details:', JSON.stringify(error, null, 2));
+    }
+
     return NextResponse.json(
-      { error: 'Server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Server error',
+        details: error instanceof Error ? error.message : (
+          error && typeof error === 'object' && 'message' in error
+            ? String(error.message)
+            : 'Unknown error'
+        ),
+        errorObject: error && typeof error === 'object' ? error : undefined
+      },
       { status: 500 }
     );
   }
