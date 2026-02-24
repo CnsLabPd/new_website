@@ -784,7 +784,10 @@ export class Game {
   }
 
   async showGameOverScreen() {
-    console.log('🎬 Showing game over screen...');
+    console.log('═══════════════════════════════════════════════════════');
+    console.log('🎬🎬🎬 SHOW GAME OVER SCREEN CALLED 🎬🎬🎬');
+    console.log('═══════════════════════════════════════════════════════');
+
     const overlay = document.getElementById('gameOverOverlay');
     const scoreEl = document.getElementById('gameOverScore');
     const distanceEl = document.getElementById('gameOverDistance');
@@ -795,10 +798,15 @@ export class Game {
     const nextBtn = document.getElementById('gameOverNextBtn');
 
     console.log('🔍 Overlay element:', overlay);
-    console.log('🔍 Score element:', scoreEl);
+    console.log('🔍 All elements found:', {
+      overlay: !!overlay,
+      scoreEl: !!scoreEl,
+      distanceEl: !!distanceEl,
+      maxSpeedEl: !!maxSpeedEl
+    });
 
     if (!overlay) {
-      console.error('❌ Game over overlay not found!');
+      console.error('❌❌❌ Game over overlay NOT FOUND!');
       return;
     }
 
@@ -1121,9 +1129,17 @@ export class Game {
       const dy = this.playerCar.position.y - vehicle.position.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // Cars are 40x70, so collision when centers are within 70 pixels
-      if (distance < 70) {
-        console.log(`💥 COLLISION! Vehicle ${i} at distance ${Math.round(distance)}px`);
+      // Debug: Log close encounters
+      if (distance < 150) {
+        console.log(`🚗 Close encounter: Vehicle ${i} at ${Math.round(distance)}px`);
+      }
+
+      // Cars are 40x70, so collision when centers are within 80 pixels (increased from 70)
+      if (distance < 80) {
+        console.log(`💥💥💥 COLLISION DETECTED! Vehicle ${i} at distance ${Math.round(distance)}px 💥💥💥`);
+        console.log(`Player pos: (${Math.round(this.playerCar.position.x)}, ${Math.round(this.playerCar.position.y)})`);
+        console.log(`Vehicle pos: (${Math.round(vehicle.position.x)}, ${Math.round(vehicle.position.y)})`);
+        console.log(`Calling gameOver() NOW...`);
         this.gameOver();
         return; // Stop processing immediately
       }
