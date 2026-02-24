@@ -68,33 +68,42 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const gameSlug = searchParams.get('game_slug') || 'sonic-drive';
 
+    // Get auth token from Authorization header
+    const authHeader = request.headers.get('Authorization');
+    const token = authHeader?.replace('Bearer ', '');
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Token required' },
+        { status: 401 }
+      );
+    }
+
     const supabase = createClient();
 
-    // Find user by username from metadata
-    const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers();
+    // Verify token and get the authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
-    if (usersError) {
-      console.error('Error listing users:', usersError);
+    if (authError || !user) {
       return NextResponse.json(
-        { error: 'Failed to find user' },
-        { status: 500 }
+        { error: 'Unauthorized - Invalid token' },
+        { status: 401 }
       );
     }
 
-    // Find user by matching username in metadata or email
-    const user = users?.find(u =>
-      u.user_metadata?.username === username ||
-      u.email?.split('@')[0] === username
-    );
+    // For security, only allow users to view their own history
+    // Check if the requested username matches the authenticated user
+    const userMetadata = user.user_metadata || {};
+    const userUsername = userMetadata.username || user.email?.split('@')[0] || '';
 
-    if (!user) {
+    if (userUsername !== username) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
+        { error: 'Forbidden - Can only view your own scores' },
+        { status: 403 }
       );
     }
 
-    // Query user score history
+    // Query user score history using the authenticated user's ID
     const historyData = await queryUserScoreHistory(user.id, levelNumber, gameSlug);
 
     return NextResponse.json({

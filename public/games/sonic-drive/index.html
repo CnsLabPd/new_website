@@ -4220,8 +4220,25 @@
                         return;
                     }
 
+                    // Get auth token
+                    let authToken = null;
+                    if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
+                        const supabaseClient = window.NeurogatiAuth.getClient();
+                        const { data: { session } } = await supabaseClient.auth.getSession();
+                        authToken = session?.access_token;
+                    }
+
+                    if (!authToken) {
+                        modalBody.innerHTML = '<p style="text-align: center; color: #ff4444; padding: 20px;">⚠️ Authentication error. Please refresh and log in again.</p>';
+                        return;
+                    }
+
                     const API_URL = `${window.location.origin}/api`;
-                    const response = await fetch(`${API_URL}/progress/user/${currentUser.username}/level/${levelNumber}/history?game_slug=sonic-drive`);
+                    const response = await fetch(`${API_URL}/progress/user/${currentUser.username}/level/${levelNumber}/history?game_slug=sonic-drive`, {
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    });
                     const data = await response.json();
 
                     if (response.ok && data.scores && data.scores.length > 0) {
