@@ -38,12 +38,7 @@ ALTER TABLE game_score_history ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for game_progress
 
--- Allow users to view their own progress
-CREATE POLICY "Users can view their own progress"
-    ON game_progress FOR SELECT
-    USING (auth.uid() = user_id);
-
--- Allow users to view all progress for leaderboards (read-only)
+-- Allow anyone to view all progress for leaderboards (public leaderboard access)
 CREATE POLICY "Anyone can view progress for leaderboards"
     ON game_progress FOR SELECT
     USING (true);
