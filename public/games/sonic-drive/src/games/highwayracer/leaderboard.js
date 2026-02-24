@@ -84,31 +84,48 @@ export class LeaderboardManager {
     isLoggedIn() {
         // Use NeurogatiAuth if available
         if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
-            return window.NeurogatiAuth.isAuthenticated();
+            const isAuth = window.NeurogatiAuth.isAuthenticated();
+            console.log(`🔐 [LEADERBOARD] NeurogatiAuth check: ${isAuth}`);
+            return isAuth;
         }
 
         // Fallback to localStorage check (legacy)
-        return !!this.getCurrentUser();
+        const hasUser = !!this.getCurrentUser();
+        console.log(`🔐 [LEADERBOARD] localStorage check: ${hasUser}`);
+        return hasUser;
     }
 
     /**
      * Save score to server
      */
     async saveScore(score, completed = false) {
+        console.log(`💾 [LEADERBOARD] saveScore called: score=${score}, level=${this.levelNumber}`);
+
         if (!this.isLoggedIn()) {
-            console.warn('Not logged in, cannot save score');
+            console.warn('❌ [LEADERBOARD] Not logged in, cannot save score');
             alert('Please log in to save your score!');
             return false;
         }
 
         try {
+            console.log('🔑 [LEADERBOARD] Getting auth token...');
             const token = await this.getAuthToken();
 
             if (!token) {
-                console.error('No auth token available');
+                console.error('❌ [LEADERBOARD] No auth token available');
                 alert('Authentication error. Please log in again.');
                 return false;
             }
+
+            console.log(`📤 [LEADERBOARD] Sending score to API: ${API_URL}/progress/save`);
+            const requestBody = {
+                level_number: this.levelNumber,
+                module_number: this.moduleNumber,
+                score: Math.round(score),
+                completed: completed,
+                game_slug: 'sonic-drive'
+            };
+            console.log('📦 [LEADERBOARD] Request body:', requestBody);
 
             const response = await fetch(`${API_URL}/progress/save`, {
                 method: 'POST',
@@ -116,26 +133,22 @@ export class LeaderboardManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    level_number: this.levelNumber,
-                    module_number: this.moduleNumber,
-                    score: Math.round(score),
-                    completed: completed
-                })
+                body: JSON.stringify(requestBody)
             });
 
             const data = await response.json();
+            console.log(`📥 [LEADERBOARD] API response (${response.status}):`, data);
 
             if (response.ok) {
-                console.log(`✅ Score saved: ${score} for level ${this.levelNumber}`);
+                console.log(`✅ [LEADERBOARD] Score saved successfully: ${score} for level ${this.levelNumber}`);
                 return true;
             } else {
-                console.error('Failed to save score:', data.error);
+                console.error('❌ [LEADERBOARD] Failed to save score:', data.error);
                 alert(`Failed to save score: ${data.error}`);
                 return false;
             }
         } catch (error) {
-            console.error('Error saving score:', error);
+            console.error('❌ [LEADERBOARD] Error saving score:', error);
             alert('Connection error. Could not save score.');
             return false;
         }

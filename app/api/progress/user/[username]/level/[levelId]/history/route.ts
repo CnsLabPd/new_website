@@ -98,11 +98,15 @@ export async function GET(
     // For security, only allow users to view their own history
     // Check if the requested username matches the authenticated user
     const userMetadata = user.user_metadata || {};
-    const userUsername = userMetadata.username || user.email?.split('@')[0] || '';
+    const userUsername = userMetadata.username || userMetadata.full_name || user.email?.split('@')[0] || '';
 
-    if (userUsername !== username) {
+    console.log(`🔍 Username check: requested="${username}", user="${userUsername}", metadata=`, userMetadata);
+
+    // Case-insensitive comparison
+    if (userUsername.toLowerCase() !== username.toLowerCase()) {
+      console.error(`❌ Username mismatch: "${userUsername}" !== "${username}"`);
       return NextResponse.json(
-        { error: 'Forbidden - Can only view your own scores' },
+        { error: 'Forbidden - Can only view your own scores', requested: username, authenticated: userUsername },
         { status: 403 }
       );
     }
