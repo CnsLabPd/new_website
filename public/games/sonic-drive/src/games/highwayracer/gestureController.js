@@ -150,12 +150,12 @@ export class GestureController {
     }
 
     // Debug: Log that onResults is being called (only occasionally to avoid spam)
-    if (Math.random() < 0.01) { // 1% of frames
-      console.log('🎬 onResults called', {
-        hasLandmarks: !!results.multiHandLandmarks,
-        handCount: results.multiHandLandmarks?.length || 0
-      });
-    }
+    // if (Math.random() < 0.01) { // 1% of frames
+    //   console.log('🎬 onResults called', {
+    //     hasLandmarks: !!results.multiHandLandmarks,
+    //     handCount: results.multiHandLandmarks?.length || 0
+    //   });
+    // }
 
     try {
       // Clear canvas
@@ -164,7 +164,7 @@ export class GestureController {
 
       // Draw hand landmarks if detected
       if (results.multiHandLandmarks && results.multiHandedness) {
-        console.log(`👋 HANDS DETECTED: ${results.multiHandLandmarks.length} hand(s)`);
+        // console.log(`👋 HANDS DETECTED: ${results.multiHandLandmarks.length} hand(s)`);
 
         const currentTime = Date.now();
         const detectedHands = new Set();
@@ -365,9 +365,9 @@ export class GestureController {
     state.thumbsDown = this.isThumbsDown(landmarks);
 
     // Debug logging (only log state changes)
-    if (state.isOpen !== state.wasOpen) {
-      console.log(`${hand} hand: ${state.wasOpen ? 'OPEN' : 'CLOSED'} → ${state.isOpen ? 'OPEN' : 'CLOSED'}`);
-    }
+    // if (state.isOpen !== state.wasOpen) {
+    //   console.log(`${hand} hand: ${state.wasOpen ? 'OPEN' : 'CLOSED'} → ${state.isOpen ? 'OPEN' : 'CLOSED'}`);
+    // }
 
     // Don't trigger callbacks if paused
     if (this.isPaused) return;
@@ -375,18 +375,18 @@ export class GestureController {
     // EDGE DETECTION: closed → open transition triggers lane shift
     if (state.isOpen && !state.wasOpen) {
       // Hand just opened - trigger lane shift
-      console.log(`🎯 ${hand} hand: TRANSITION DETECTED (closed → open)`);
+      // console.log(`🎯 ${hand} hand: TRANSITION DETECTED (closed → open)`);
 
       if (hand === 'left') {
         if (this.onLaneShiftLeft) {
-          console.log('👈 Left hand opened - calling onLaneShiftLeft callback');
+          // console.log('👈 Left hand opened - calling onLaneShiftLeft callback');
           this.onLaneShiftLeft();
         } else {
           console.log('⚠️ onLaneShiftLeft callback is not set!');
         }
       } else if (hand === 'right') {
         if (this.onLaneShiftRight) {
-          console.log('👉 Right hand opened - calling onLaneShiftRight callback');
+          // console.log('👉 Right hand opened - calling onLaneShiftRight callback');
           this.onLaneShiftRight();
         } else {
           console.log('⚠️ onLaneShiftRight callback is not set!');
@@ -398,16 +398,16 @@ export class GestureController {
     // Right hand pointing/thumbs up = Accelerate
     // Left hand pointing/thumbs up = Decelerate
     if (hand === 'right' && (state.isPointing || state.thumbsUp) && this.onAccelerate) {
-      if (state.isPointing) {
-        // Only log occasionally to avoid spam
-        if (Math.random() < 0.05) console.log('☝️ RIGHT pointing - accelerating');
-      }
+      // if (state.isPointing) {
+      //   // Only log occasionally to avoid spam
+      //   if (Math.random() < 0.05) console.log('☝️ RIGHT pointing - accelerating');
+      // }
       this.onAccelerate();
     } else if (hand === 'left' && (state.isPointing || state.thumbsUp) && this.onDecelerate) {
-      if (state.isPointing) {
-        // Only log occasionally to avoid spam
-        if (Math.random() < 0.05) console.log('☝️ LEFT pointing - decelerating');
-      }
+      // if (state.isPointing) {
+      //   // Only log occasionally to avoid spam
+      //   if (Math.random() < 0.05) console.log('☝️ LEFT pointing - decelerating');
+      // }
       this.onDecelerate();
     }
   }
@@ -531,9 +531,9 @@ export class GestureController {
     const isThumbsUp = thumbExtended && thumbExtendedDist && fingersCurled;
 
     // Debug logging (only log occasionally to avoid spam)
-    if (Math.random() < 0.05) { // Log ~5% of the time
-      console.log(`👍 Thumbs Up Check: extended=${thumbExtended}, dist=${thumbExtendedDist}, curled=${fingersCurled} (${curledCount}/4) -> ${isThumbsUp}`);
-    }
+    // if (Math.random() < 0.05) { // Log ~5% of the time
+    //   console.log(`👍 Thumbs Up Check: extended=${thumbExtended}, dist=${thumbExtendedDist}, curled=${fingersCurled} (${curledCount}/4) -> ${isThumbsUp}`);
+    // }
 
     // Thumbs up: thumb extended upward, fingers curled
     return isThumbsUp;
