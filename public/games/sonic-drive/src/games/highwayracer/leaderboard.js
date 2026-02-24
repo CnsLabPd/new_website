@@ -18,18 +18,39 @@ export class LeaderboardManager {
      */
     async getAuthToken() {
         try {
-            // Check if NeurogatiAuth is available
+            // Try current window first
             if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
+                console.log('🔑 [LEADERBOARD] Getting token from current window NeurogatiAuth');
                 const supabaseClient = window.NeurogatiAuth.getClient();
                 const { data: { session } } = await supabaseClient.auth.getSession();
-                return session?.access_token || null;
+                if (session?.access_token) {
+                    console.log('✅ [LEADERBOARD] Got token from current window');
+                    return session.access_token;
+                }
+            }
+
+            // Try parent window (when running in iframe)
+            try {
+                if (window.parent && window.parent !== window && window.parent.NeurogatiAuth && window.parent.NeurogatiAuth.initialized) {
+                    console.log('🔑 [LEADERBOARD] Getting token from parent window NeurogatiAuth');
+                    const supabaseClient = window.parent.NeurogatiAuth.getClient();
+                    const { data: { session } } = await supabaseClient.auth.getSession();
+                    if (session?.access_token) {
+                        console.log('✅ [LEADERBOARD] Got token from parent window');
+                        return session.access_token;
+                    }
+                }
+            } catch (e) {
+                console.log('🔐 [LEADERBOARD] Cannot access parent NeurogatiAuth (cross-origin):', e.message);
             }
 
             // Fallback: try to get from localStorage (legacy support)
+            console.log('🔑 [LEADERBOARD] Trying localStorage fallback');
             try {
                 if (window.parent && window.parent !== window && window.parent.localStorage) {
                     const parentToken = window.parent.localStorage.getItem('auth_token');
                     if (parentToken) {
+                        console.log('✅ [LEADERBOARD] Got token from parent localStorage');
                         return parentToken;
                     }
                 }
@@ -37,9 +58,15 @@ export class LeaderboardManager {
                 console.log('Cannot access parent localStorage (cross-origin)');
             }
 
-            return localStorage.getItem('auth_token');
+            const localToken = localStorage.getItem('auth_token');
+            if (localToken) {
+                console.log('✅ [LEADERBOARD] Got token from current localStorage');
+            } else {
+                console.log('❌ [LEADERBOARD] No token found anywhere');
+            }
+            return localToken;
         } catch (error) {
-            console.error('Error getting auth token:', error);
+            console.error('❌ [LEADERBOARD] Error getting auth token:', error);
             return null;
         }
     }
@@ -50,10 +77,11 @@ export class LeaderboardManager {
      */
     getCurrentUser() {
         try {
-            // Try to get user from NeurogatiAuth
+            // Try current window NeurogatiAuth
             if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
                 const user = window.NeurogatiAuth.getCurrentUser();
                 if (user) {
+                    console.log('👤 [LEADERBOARD] Got user from current window NeurogatiAuth');
                     return {
                         id: window.NeurogatiAuth.getUserId(),
                         username: window.NeurogatiAuth.getUserName(),
@@ -62,31 +90,62 @@ export class LeaderboardManager {
                 }
             }
 
-            // Try to get user from parent window (legacy support)
+            // Try parent window NeurogatiAuth
+            if (window.parent && window.parent !== window && window.parent.NeurogatiAuth && window.parent.NeurogatiAuth.initialized) {
+                const user = window.parent.NeurogatiAuth.getCurrentUser();
+                if (user) {
+                    console.log('👤 [LEADERBOARD] Got user from parent window NeurogatiAuth');
+                    return {
+                        id: window.parent.NeurogatiAuth.getUserId(),
+                        username: window.parent.NeurogatiAuth.getUserName(),
+                        email: window.parent.NeurogatiAuth.getUserEmail()
+                    };
+                }
+            }
+
+            // Try to get user from parent window localStorage (legacy support)
             if (window.parent && window.parent !== window && window.parent.localStorage) {
                 const parentUserStr = window.parent.localStorage.getItem('user');
                 if (parentUserStr) {
+                    console.log('👤 [LEADERBOARD] Got user from parent localStorage');
                     return JSON.parse(parentUserStr);
                 }
             }
         } catch (e) {
-            console.log('Cannot access parent localStorage (cross-origin)');
+            console.log('Cannot access parent window (cross-origin):', e.message);
         }
 
         // Fall back to current window's localStorage
         const userStr = localStorage.getItem('user');
-        return userStr ? JSON.parse(userStr) : null;
+        if (userStr) {
+            console.log('👤 [LEADERBOARD] Got user from current localStorage');
+            return JSON.parse(userStr);
+        }
+
+        console.log('❌ [LEADERBOARD] No user found');
+        return null;
     }
 
     /**
      * Check if user is logged in
      */
     isLoggedIn() {
-        // Use NeurogatiAuth if available
+        // Try current window first
         if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
             const isAuth = window.NeurogatiAuth.isAuthenticated();
-            console.log(`🔐 [LEADERBOARD] NeurogatiAuth check: ${isAuth}`);
+            console.log(`🔐 [LEADERBOARD] Current window NeurogatiAuth check: ${isAuth}`);
             return isAuth;
+        }
+
+        // Try parent window (when running in iframe)
+        try {
+            if (window.parent && window.parent !== window && window.parent.NeurogatiAuth && window.parent.NeurogatiAuth.initialized) {
+                const isAuth = window.parent.NeurogatiAuth.isAuthenticated();
+                console.log(`🔐 [LEADERBOARD] Parent window NeurogatiAuth check: ${isAuth}`);
+                return isAuth;
+            }
+        } catch (e) {
+            console.log('🔐 [LEADERBOARD] Cannot access parent NeurogatiAuth (cross-origin)');
         }
 
         // Fallback to localStorage check (legacy)
