@@ -15,9 +15,19 @@ async function saveProgressToDatabase(
   levelNumber: number,
   moduleNumber: number,
   score: number,
-  completed: boolean
+  completed: boolean,
+  token: string
 ) {
+  // Create a Supabase client with the user's token for RLS
+  // This is critical - RLS policies check auth.uid() which comes from the token
   const supabase = createClient();
+
+  // Set the auth context using the user's token
+  // This ensures RLS policies work correctly
+  await supabase.auth.setSession({
+    access_token: token,
+    refresh_token: '' // Not needed for this operation
+  });
 
   try {
     console.log(`📝 Attempting to save score: userId=${userId}, level=${levelNumber}, score=${score}`);
@@ -103,7 +113,11 @@ export async function POST(request: NextRequest) {
     const authHeader = request.headers.get('Authorization');
     const token = authHeader?.replace('Bearer ', '');
 
+    console.log('🔐 [API] Received save score request');
+    console.log('🔑 [API] Token present:', !!token);
+
     if (!token) {
+      console.error('❌ [API] No token provided');
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -114,33 +128,52 @@ export async function POST(request: NextRequest) {
     const body: SaveProgressRequest = await request.json();
     const { level_number, module_number, score, completed, game_slug = 'sonic-drive' } = body;
 
+    console.log('📦 [API] Request body:', { level_number, module_number, score, completed, game_slug });
+
     // Validation
     if (level_number === undefined || module_number === undefined) {
+      console.error('❌ [API] Missing required fields');
       return NextResponse.json(
         { error: 'level_number and module_number are required' },
         { status: 400 }
       );
     }
 
-    // Verify token and get user from Supabase
+    // Create Supabase client - this uses ANON key for initial connection
+    console.log('🔧 [API] Creating Supabase client...');
     const supabase = createClient();
+
+    // Verify token and get user from Supabase
+    console.log('👤 [API] Verifying user token...');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
-    if (authError || !user) {
+    if (authError) {
+      console.error('❌ [API] Auth error:', authError);
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized', details: authError.message },
         { status: 401 }
       );
     }
 
-    // Save progress to Supabase
+    if (!user) {
+      console.error('❌ [API] No user found for token');
+      return NextResponse.json(
+        { error: 'Unauthorized - No user found' },
+        { status: 401 }
+      );
+    }
+
+    console.log('✅ [API] User authenticated:', user.id);
+
+    // Save progress to Supabase - pass the token so RLS can work
     const result = await saveProgressToDatabase(
       user.id,
       game_slug,
       level_number,
       module_number,
       score,
-      completed
+      completed,
+      token // Pass token for RLS
     );
 
     return NextResponse.json({
