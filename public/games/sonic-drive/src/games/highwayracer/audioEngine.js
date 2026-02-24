@@ -453,14 +453,14 @@ export class AudioEngine {
     let closestVehicle = null;
 
     const laneNames = ['LEFT', 'CENTER', 'RIGHT'];
-    console.log(`🚗 Checking ${trafficVehicles.length} vehicles | Player lane: ${laneNames[currentLane]} (x=${playerLaneX.toFixed(1)}) | Player Y: ${Math.round(playerY)}`);
+    // console.log(`🚗 Checking ${trafficVehicles.length} vehicles | Player lane: ${laneNames[currentLane]} (x=${playerLaneX.toFixed(1)}) | Player Y: ${Math.round(playerY)}`);
 
     trafficVehicles.forEach((vehicle, idx) => {
       // Distance: NEGATIVE = vehicle is AHEAD (above player), POSITIVE = vehicle is BEHIND (below player)
       const distance = playerY - vehicle.position.y;
       const laneDiff = Math.abs(vehicle.position.x - playerLaneX);
 
-      console.log(`  Vehicle ${idx}: x=${Math.round(vehicle.position.x)}, y=${Math.round(vehicle.position.y)}, distance=${Math.round(distance)}, laneDiff=${Math.round(laneDiff)}`);
+      // console.log(`  Vehicle ${idx}: x=${Math.round(vehicle.position.x)}, y=${Math.round(vehicle.position.y)}, distance=${Math.round(distance)}, laneDiff=${Math.round(laneDiff)}`);
 
       // Only check vehicles ahead in same lane (distance > 0 means vehicle is above/ahead of player)
       if (distance > 0 && distance < 600 && laneDiff < 50) {
@@ -479,7 +479,7 @@ export class AudioEngine {
 
     if (foundVehicleInLane && closestDistance < 350) {
       // Only check escape routes when vehicle is close enough to matter
-      console.log(`⚠️ Vehicle detected at ${Math.round(closestDistance)}px - checking escape routes...`);
+      // console.log(`⚠️ Vehicle detected at ${Math.round(closestDistance)}px - checking escape routes...`);
 
       // Calculate urgency to determine how strict to be with blocking detection
       const urgency = Math.max(0, 1 - closestDistance / 350);
@@ -489,7 +489,7 @@ export class AudioEngine {
       // Very close = smaller margin (more lenient, need to warn NOW)
       const dynamicSafetyMargin = 50 + (1 - urgency) * 100; // 50-150px based on urgency
 
-      console.log(`  Urgency: ${urgency.toFixed(2)}, Safety margin: ${Math.round(dynamicSafetyMargin)}px`);
+      // console.log(`  Urgency: ${urgency.toFixed(2)}, Safety margin: ${Math.round(dynamicSafetyMargin)}px`);
 
       // Check all adjacent lanes for blocking vehicles
       for (let lane = 0; lane < numLanes; lane++) {
@@ -515,25 +515,25 @@ export class AudioEngine {
 
           if (isInLane && isInBlockingZone && !isBehindAndFar) {
             laneIsBlocked = true;
-            const position = verticalDistance < 0 ? 'AHEAD' : 'BEHIND';
-            console.log(`  ❌ ${laneNames[lane]} lane BLOCKED: Car ${position} at y=${Math.round(vehicle.position.y)} (${Math.round(verticalDiff)}px from player)`);
+            // const position = verticalDistance < 0 ? 'AHEAD' : 'BEHIND';
+            // console.log(`  ❌ ${laneNames[lane]} lane BLOCKED: Car ${position} at y=${Math.round(vehicle.position.y)} (${Math.round(verticalDiff)}px from player)`);
             break;
           }
         }
 
         if (!laneIsBlocked) {
           hasEscapeRoute = true;
-          console.log(`  ✅ ${laneNames[lane]} lane is CLEAR - safe escape route!`);
+          // console.log(`  ✅ ${laneNames[lane]} lane is CLEAR - safe escape route!`);
         }
       }
 
       if (!hasEscapeRoute) {
-        console.log(`🚫 NO ESCAPE ROUTE - suppressing warnings until a lane clears`);
+        // console.log(`🚫 NO ESCAPE ROUTE - suppressing warnings until a lane clears`);
       }
     } else if (foundVehicleInLane) {
       // Vehicle is far away (>350px), always allow warnings
       hasEscapeRoute = true;
-      console.log(`✅ Vehicle far away (${Math.round(closestDistance)}px) - warnings allowed`);
+      // console.log(`✅ Vehicle far away (${Math.round(closestDistance)}px) - warnings allowed`);
     }
 
     // ========================================
@@ -543,7 +543,7 @@ export class AudioEngine {
       // Calculate urgency based on distance (0 = far, 1 = very close)
       const urgency = Math.max(0, 1 - closestDistance / 600);
 
-      console.log(`🚨 WARNING ACTIVE! Distance: ${Math.round(closestDistance)}px, Urgency: ${urgency.toFixed(2)}`);
+      // console.log(`🚨 WARNING ACTIVE! Distance: ${Math.round(closestDistance)}px, Urgency: ${urgency.toFixed(2)}`);
 
       // ========================================
       // INCOMING VEHICLE ENGINE SOUND
@@ -560,7 +560,7 @@ export class AudioEngine {
       const filterFreq = 600 + urgency * 800; // 600-1400 Hz
       warning.vehicleFilter.frequency.setTargetAtTime(filterFreq, now, 0.1);
 
-      console.log(`  🔊 Vehicle Sound: volume=${vehicleVolume.toFixed(2)}, freq=${Math.round(engineFreq)}Hz`);
+      // console.log(`  🔊 Vehicle Sound: volume=${vehicleVolume.toFixed(2)}, freq=${Math.round(engineFreq)}Hz`);
 
       // ========================================
       // BEEPING ALARM SOUND
@@ -578,11 +578,11 @@ export class AudioEngine {
         const beepFreq = 800 + urgency * 600;
         warning.beepOsc.frequency.setTargetAtTime(beepFreq, now, 0.05);
 
-        console.log(`  📢 Beep Alarm: volume=${(beepVolume * pulseValue).toFixed(2)}, freq=${Math.round(beepFreq)}Hz, pulse=${pulseSpeed.toFixed(1)}Hz`);
+        // console.log(`  📢 Beep Alarm: volume=${(beepVolume * pulseValue).toFixed(2)}, freq=${Math.round(beepFreq)}Hz, pulse=${pulseSpeed.toFixed(1)}Hz`);
       } else {
         // No beeping when far away
         warning.beepGain.gain.setTargetAtTime(0, now, 0.1);
-        console.log(`  🔇 Beep off (urgency < 0.3)`);
+        // console.log(`  🔇 Beep off (urgency < 0.3)`);
       }
 
       // ========================================
@@ -609,9 +609,9 @@ export class AudioEngine {
 
     } else {
       // No vehicle in lane OR no escape route - fade out all warnings
-      if (!foundVehicleInLane) {
-        console.log(`✅ No vehicle in lane - warnings off`);
-      }
+      // if (!foundVehicleInLane) {
+      //   console.log(`✅ No vehicle in lane - warnings off`);
+      // }
       warning.vehicleGain.gain.setTargetAtTime(0, now, 0.2);
       warning.beepGain.gain.setTargetAtTime(0, now, 0.2);
     }
