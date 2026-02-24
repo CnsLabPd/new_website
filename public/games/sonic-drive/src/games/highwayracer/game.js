@@ -802,55 +802,78 @@ export class Game {
       return;
     }
 
-    // Update stats
-    scoreEl.textContent = this.score.toLocaleString();
-    distanceEl.textContent = Math.round(this.distance) + 'm';
-    maxSpeedEl.textContent = Math.round(this.maxSpeed);
+    // Update stats FIRST - before any async operations
+    console.log('📊 Updating stats...');
+    if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
+    if (distanceEl) distanceEl.textContent = Math.round(this.distance) + 'm';
+    if (maxSpeedEl) maxSpeedEl.textContent = Math.round(this.maxSpeed);
+    console.log(`✅ Stats updated: Score=${this.score}, Distance=${this.distance}m, MaxSpeed=${this.maxSpeed}`);
 
-    // Check if user is logged in
-    const leaderboardManager = window.racingLeaderboard;
-    const isLoggedIn = leaderboardManager && leaderboardManager.isLoggedIn();
-
-    // Auto-save score if logged in
-    let scoreSaved = false;
-    if (isLoggedIn) {
-      scoreSaved = await leaderboardManager.saveScore(this.score, false);
-      if (scoreSaved) {
-        saveStatus.textContent = '✅ Score saved successfully!';
-        saveBtn.style.display = 'none';
-      } else {
-        saveStatus.textContent = '';
-        saveBtn.style.display = 'inline-block';
-      }
-    } else {
-      saveStatus.textContent = '⚠️ Please log in to save your score';
-      saveBtn.style.display = 'none';
-    }
-
-    // Load and display leaderboard
-    if (leaderboardManager) {
-      await leaderboardManager.displayLeaderboard(leaderboardContent);
-    } else {
-      leaderboardContent.innerHTML = '<p style="text-align: center; color: #888;">Leaderboard unavailable</p>';
-    }
-
-    // Handle next level button
-    if (this.gameLevel === 1) {
-      // Currently on level 1 (2-lane), can go to level 2 (3-lane)
-      nextBtn.disabled = false;
-      nextBtn.title = 'Go to 3-Lane Highway Racer';
-    } else {
-      // Already on level 2 (3-lane), no next level
-      nextBtn.disabled = true;
-      nextBtn.title = 'No more levels available';
-    }
-
-    // Show overlay - set inline style to override the default display: none
-    console.log('✅ Showing overlay with inline style');
+    // Show overlay IMMEDIATELY - don't wait for async operations
+    console.log('✅ Showing overlay NOW (before async operations)');
     overlay.style.display = 'flex';
     overlay.classList.add('show');
-    console.log('✅ Overlay display:', window.getComputedStyle(overlay).display);
-    console.log('✅ Overlay classList:', overlay.classList.toString());
+    console.log('✅ Overlay is now visible');
+
+    // Handle next level button
+    if (nextBtn) {
+      if (this.gameLevel === 1) {
+        // Currently on level 1 (2-lane), can go to level 2 (3-lane)
+        nextBtn.disabled = false;
+        nextBtn.title = 'Go to 3-Lane Highway Racer';
+      } else {
+        // Already on level 2 (3-lane), no next level
+        nextBtn.disabled = true;
+        nextBtn.title = 'No more levels available';
+      }
+    }
+
+    // Now handle async operations (leaderboard, score saving) in background
+    try {
+      // Check if user is logged in
+      const leaderboardManager = window.racingLeaderboard;
+      const isLoggedIn = leaderboardManager && leaderboardManager.isLoggedIn();
+
+      // Auto-save score if logged in
+      if (isLoggedIn && leaderboardManager) {
+        console.log('💾 Attempting to save score...');
+        try {
+          const scoreSaved = await leaderboardManager.saveScore(this.score, false);
+          if (scoreSaved && saveStatus) {
+            saveStatus.textContent = '✅ Score saved successfully!';
+            if (saveBtn) saveBtn.style.display = 'none';
+          } else if (saveBtn && saveStatus) {
+            saveStatus.textContent = '';
+            saveBtn.style.display = 'inline-block';
+          }
+        } catch (saveError) {
+          console.error('Error saving score:', saveError);
+          if (saveStatus) saveStatus.textContent = '⚠️ Failed to save score';
+        }
+      } else {
+        if (saveStatus) saveStatus.textContent = '⚠️ Please log in to save your score';
+        if (saveBtn) saveBtn.style.display = 'none';
+      }
+
+      // Load and display leaderboard
+      if (leaderboardManager && leaderboardContent) {
+        console.log('📊 Loading leaderboard...');
+        try {
+          await leaderboardManager.displayLeaderboard(leaderboardContent);
+          console.log('✅ Leaderboard loaded');
+        } catch (leaderboardError) {
+          console.error('Error loading leaderboard:', leaderboardError);
+          leaderboardContent.innerHTML = '<p style="text-align: center; color: #ff4444;">⚠️ Leaderboard unavailable</p>';
+        }
+      } else if (leaderboardContent) {
+        leaderboardContent.innerHTML = '<p style="text-align: center; color: #888;">Leaderboard unavailable</p>';
+      }
+    } catch (error) {
+      console.error('Error in async operations:', error);
+      // Don't let errors prevent the overlay from showing
+    }
+
+    console.log('✅ showGameOverScreen() complete');
   }
 
   hideGameOverScreen() {
