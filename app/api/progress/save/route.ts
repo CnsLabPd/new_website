@@ -11,6 +11,7 @@ interface SaveProgressRequest {
 
 async function saveProgressToDatabase(
   userId: string,
+  username: string,
   gameSlug: string,
   levelNumber: number,
   moduleNumber: number,
@@ -82,6 +83,7 @@ async function saveProgressToDatabase(
       .from('game_progress')
       .upsert({
         user_id: userId,
+        username: username,
         game_slug: gameSlug,
         level_number: levelNumber,
         module_number: moduleNumber,
@@ -172,9 +174,17 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ [API] User authenticated:', user.id);
 
+    // Get username from user metadata
+    const username = user.user_metadata?.full_name ||
+                    user.user_metadata?.username ||
+                    user.email?.split('@')[0] ||
+                    'Anonymous';
+    console.log('👤 [API] Username:', username);
+
     // Save progress to Supabase - pass the token so RLS can work
     const result = await saveProgressToDatabase(
       user.id,
+      username,
       game_slug,
       level_number,
       module_number,

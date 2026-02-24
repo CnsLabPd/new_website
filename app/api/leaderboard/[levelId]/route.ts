@@ -5,14 +5,14 @@ async function queryLeaderboard(levelNumber: number, gameSlug: string, limit: nu
   const supabase = createClient();
 
   try {
-    // Query game_progress table for leaderboard
+    // Query game_progress table for leaderboard - now includes username
     const { data, error } = await supabase
       .from('game_progress')
       .select(`
+        username,
         high_score,
         completed,
-        last_played,
-        user_id
+        last_played
       `)
       .eq('game_slug', gameSlug)
       .eq('level_number', levelNumber)
@@ -21,22 +21,13 @@ async function queryLeaderboard(levelNumber: number, gameSlug: string, limit: nu
 
     if (error) throw error;
 
-    // Get usernames from auth.users metadata
-    const enrichedData = await Promise.all(
-      (data || []).map(async (entry) => {
-        // Get user profile from Supabase auth
-        const { data: { user } } = await supabase.auth.admin.getUserById(entry.user_id);
-
-        return {
-          username: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Anonymous',
-          high_score: entry.high_score,
-          completed: entry.completed,
-          last_played: entry.last_played
-        };
-      })
-    );
-
-    return enrichedData;
+    // Return data directly - username is now stored in the table
+    return (data || []).map(entry => ({
+      username: entry.username || 'Anonymous',
+      high_score: entry.high_score,
+      completed: entry.completed,
+      last_played: entry.last_played
+    }));
   } catch (error) {
     console.error('Error querying leaderboard from Supabase:', error);
     throw error;
