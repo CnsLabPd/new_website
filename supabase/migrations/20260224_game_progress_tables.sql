@@ -20,14 +20,32 @@ DROP POLICY IF EXISTS "Users can view their own score history" ON game_score_his
 DROP POLICY IF EXISTS "Users can insert their own scores" ON game_score_history;
 
 -- ============================================
--- CREATE OPTIMIZED INDEXES (if not exist)
+-- FIX COLUMN NAME FIRST (before creating indexes)
+-- ============================================
+
+-- The original schema uses 'played_at' but we need 'created_at' for consistency
+-- Rename it first before creating any indexes
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'game_score_history'
+        AND column_name = 'created_at'
+    ) THEN
+        -- Rename played_at to created_at for consistency
+        ALTER TABLE game_score_history RENAME COLUMN played_at TO created_at;
+    END IF;
+END $$;
+
+-- ============================================
+-- CREATE OPTIMIZED INDEXES (after column rename)
 -- ============================================
 
 -- Add indexes for leaderboard queries (high score DESC is critical for performance)
 CREATE INDEX IF NOT EXISTS idx_game_progress_leaderboard
     ON game_progress(game_slug, level_number, high_score DESC);
 
--- Add index for user history queries
+-- Add index for user history queries (now safe to use created_at)
 CREATE INDEX IF NOT EXISTS idx_game_score_history_user_level
     ON game_score_history(user_id, game_slug, level_number, created_at DESC);
 
@@ -79,21 +97,3 @@ CREATE POLICY "Users can insert own scores"
     WITH CHECK (auth.uid() = user_id);
 
 -- Note: We intentionally don't allow UPDATE or DELETE on score history to maintain integrity
-
--- ============================================
--- VERIFY COLUMN EXISTS (played_at vs created_at)
--- ============================================
-
--- The original schema uses 'played_at' but we reference 'created_at' in some queries
--- Add created_at if it doesn't exist for compatibility
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_name = 'game_score_history'
-        AND column_name = 'created_at'
-    ) THEN
-        -- Rename played_at to created_at for consistency
-        ALTER TABLE game_score_history RENAME COLUMN played_at TO created_at;
-    END IF;
-END $$;
