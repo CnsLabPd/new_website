@@ -46,26 +46,6 @@ const blindGames = [
       "Cognitive processing speed training"
     ],
     action: { label: "Play Here", href: "/gaming/play/sonic-pop" }
-  },
-  {
-    id: "mandala-painting",
-    name: "Mandala Painting",
-    tagline: "Gesture-based Art Therapy Experience",
-    overview: "Experience the therapeutic power of art with Mandala Painting, an interactive digital art system where creativity meets technology. Paint beautiful mandalas using intuitive gesture controls or traditional mouse input, transforming art therapy into an engaging, accessible experience for all ages and abilities.",
-    tech: "Gesture Recognition & Adaptive Input System",
-    videoUrl: null,
-    images: ["/mandala painting game card.png"],
-    features: [
-      "Gesture control with air-hand movements or mouse (No specialized hardware)",
-      "Rich audio feedback with every stroke",
-      "Multiple templates and color palettes for creative exploration"
-    ],
-    applications: [
-      "Fine motor skills and hand-eye coordination",
-      "Cognitive engagement and creative expression",
-      "Stress relief and mindfulness therapy for seniors"
-    ],
-    action: { label: "Play Here", href: "/gaming/play/mandala-painting" }
   }
 ];
 

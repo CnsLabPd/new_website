@@ -54,7 +54,7 @@ const rehabProducts = [
     overview: "Experience the therapeutic power of art with Mandala Painting, an interactive digital art system where creativity meets technology. Paint beautiful mandalas using intuitive gesture controls or traditional mouse input, transforming art therapy into an engaging, accessible experience for all ages and abilities.",
     tech: null,
     videoUrl: null,
-    images: ["/images/crgs.png"],
+    images: ["/mandala painting game card.png"],
     features: [
       "Gesture control with air-hand movements or mouse (No specialized hardware)",
       "Automatic image segmentation for any uploaded template",
