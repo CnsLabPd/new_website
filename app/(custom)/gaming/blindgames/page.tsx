@@ -13,8 +13,8 @@ const blindGames = [
     tagline: "Precision Audio-Spatial Racing",
     overview: "Sonic Drive is a groundbreaking experience designed specifically for the visually impaired. By utilizing binaural 3D audio cues, players navigate complex racing circuits at high speeds, transforming auditory feedback into a competitive racing simulation.",
     tech: "Binaural Audio Engine & Haptic Integration",
-    videoUrl: null, 
-    images: ["/images/sonic-drive-hero.png"],
+    videoUrl: null,
+    images: ["/sonic drive game card.png"],
     features: [
       "Advanced 3D Spatial Audio (Requires Headphones)",
       "Dynamic Haptic feedback for obstacle detection",
@@ -34,7 +34,7 @@ const blindGames = [
     overview: "Test your auditory reflexes in this fast-paced spatial challenge. Sonic bubbles float around a virtual 3D space, emitting unique sound signatures. Use echo-location cues to track and 'pop' them before they drift away.",
     tech: "Dynamic Spatial Sound-Mapping",
     videoUrl: null,
-    images: ["/images/sonic-pop-hero.png"],
+    images: ["/sonic pop game card.jpeg"],
     features: [
       "360-degree sound field tracking",
       "Progression system with increasing audio complexity",
@@ -102,11 +102,21 @@ export default function BlindGamesPage() {
           {blindGames.map((game) => (
             <div key={game.name} className="grid lg:grid-cols-12 gap-16 items-start">
               <div className="lg:col-span-5 space-y-8">
-                <div className="relative aspect-video rounded-3xl overflow-hidden border border-border shadow-2xl bg-black flex items-center justify-center">
-                   <div className="flex flex-col items-center justify-center text-center p-8 bg-slate-900 w-full h-full">
-                        <Volume2 className="h-16 w-16 text-blue-500 mb-4 animate-pulse" />
-                        <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">Audio Optimized Experience</span>
+                <div className="relative aspect-video rounded-3xl overflow-hidden border border-border shadow-2xl bg-black">
+                  {game.images && game.images.length > 0 ? (
+                    <Image
+                      src={game.images[0]}
+                      alt={`${game.name} game card`}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center text-center p-8 bg-slate-900 w-full h-full">
+                      <Volume2 className="h-16 w-16 text-blue-500 mb-4 animate-pulse" />
+                      <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">Audio Optimized Experience</span>
                     </div>
+                  )}
                 </div>
 
                 {game.tech && (
