@@ -102,7 +102,7 @@ export default function BlindGamesPage() {
           {blindGames.map((game) => (
             <div key={game.name} className="grid lg:grid-cols-12 gap-16 items-start">
               <div className="lg:col-span-5 space-y-8">
-                <div className="relative aspect-video rounded-3xl overflow-hidden border border-border shadow-2xl bg-black">
+                <div className="relative aspect-[3/2] rounded-3xl overflow-hidden border border-border shadow-2xl bg-black">
                   {game.images && game.images.length > 0 ? (
                     <Image
                       src={game.images[0]}

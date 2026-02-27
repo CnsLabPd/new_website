@@ -134,7 +134,7 @@ export default function RehabilitationPage() {
               
               {/* LEFT COLUMN: Media & Dynamic Action */}
               <div className="lg:col-span-5 space-y-8">
-                <div className="relative aspect-video rounded-3xl overflow-hidden border border-border shadow-2xl bg-black flex items-center justify-center">
+                <div className="relative aspect-[3/2] rounded-3xl overflow-hidden border border-border shadow-2xl bg-black flex items-center justify-center">
                   {product.videoUrl ? (
                     <video src={product.videoUrl} controls className="w-full h-full object-contain" />
                   ) : (
