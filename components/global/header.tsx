@@ -2,13 +2,22 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, UserCircle, X, LogOut } from "lucide-react"
+import { Menu, UserCircle, X, LogOut, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { AuthModal } from "@/components/auth/AuthModal"
 import { createClient } from "@/lib/supabase"
+import { useToast } from "@/components/ui/use-toast"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -28,16 +37,21 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [username, setUsername] = useState<string>("")
   const pathname = usePathname()
   const supabase = createClient()
+  const { toast } = useToast()
 
-  // Check if user is logged in
+  // Check user authentication
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-      setLoading(false)
+      if (user) {
+        // Get username from user metadata
+        const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'
+        setUsername(name)
+      }
     }
 
     checkUser()
@@ -45,15 +59,33 @@ export default function Header() {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User'
+        setUsername(name)
+      } else {
+        setUsername("")
+      }
     })
 
     return () => subscription.unsubscribe()
   }, [])
 
-  // Logout handler
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      })
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out.",
+      })
+      setUser(null)
+      setUsername("")
+    }
   }
 
   return (
@@ -90,24 +122,25 @@ export default function Header() {
             
             <div className="flex items-center gap-4 pl-4 border-l border-border/50">
               <ThemeToggle />
-              {/* LOGIN/SIGNUP CTA or USER INFO */}
-              {loading ? (
-                <div className="h-10 w-24 bg-muted/50 animate-pulse rounded-full" />
-              ) : user ? (
-                <div className="flex items-center gap-3">
-                  <p className="text-sm font-bold text-foreground">
-                    {user.user_metadata?.full_name || user.email}
-                  </p>
-                  <Button
-                    onClick={handleLogout}
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
-                  </Button>
-                </div>
+              {/* LOGIN/SIGNUP CTA or USER MENU */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="rounded-full px-4 font-bold gap-2">
+                      <UserCircle className="h-5 w-5" />
+                      {username}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Button
                   onClick={() => setIsAuthModalOpen(true)}
@@ -120,17 +153,9 @@ export default function Header() {
           </nav>
 
           <div className="md:hidden flex items-center gap-4">
-            {!loading && (
-              user ? (
-                <Button variant="ghost" size="sm" onClick={handleLogout}>
-                  <LogOut className="h-5 w-5" />
-                </Button>
-              ) : (
-                <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
-                  <UserCircle className="h-6 w-6" />
-                </Button>
-              )
-            )}
+             <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
+                <UserCircle className="h-6 w-6" />
+             </Button>
             <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -146,22 +171,12 @@ export default function Header() {
       {isMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border animate-in slide-in-from-top-5 duration-300">
           <nav className="flex flex-col items-center gap-6 py-10">
-            {user && (
-              <div className="text-center pb-4 border-b border-border/50 w-full">
-                <p className="text-lg font-bold text-foreground">
-                  {user.user_metadata?.full_name || user.email}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {user.email}
-                </p>
-              </div>
-            )}
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
                   className={cn(
                     "text-xl font-bold",
                     isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"

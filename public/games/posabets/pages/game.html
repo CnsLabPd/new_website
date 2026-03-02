@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posabets 🎮</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Neurogati Game SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.neurogati.com/game-sdk/neurogati-auth.js?v=20260221b"></script>
+    <script src="https://www.neurogati.com/game-sdk/posabets-api.js?v=20260220a"></script>
+
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="flex flex-between mb-1">
+            <div class="flex gap-md">
+                <button id="backButton" class="btn btn-sm">← Back</button>
+                <h3 id="modeTitle" style="margin: 0;">Training Mode</h3>
+            </div>
+
+            <div class="flex gap-md">
+                <button id="musicToggle" class="btn btn-sm" style="background: rgba(255,255,255,0.2);">
+                    🔊
+                </button>
+                <div class="stars-display">
+                    <span>⭐</span>
+                    <span id="starsDisplay">0</span>
+                </div>
+                <button id="pauseButton" class="btn btn-sm btn-warning">⏸️ Pause</button>
+            </div>
+        </header>
+
+        <!-- Target Letter Display (Smaller, at top) -->
+        <div id="targetDisplay" class="card text-center mb-2 zoom-in" style="background: var(--gradient-nebula); padding: var(--spacing-md);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-md);">
+                <div style="font-family: var(--font-display); font-size: 4rem; line-height: 1;" id="targetLetter">A</div>
+                <div style="text-align: left;">
+                    <div style="font-size: 1.25rem; font-weight: 700;">Form this letter!</div>
+                    <div style="font-size: 1rem; opacity: 0.9;" id="instruction">Stand in front of the camera</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="grid grid-2 gap-md">
+            <!-- Left Column - Reference Image OR Camera (based on mode) -->
+            <div>
+                <!-- Reference Image (Training Mode Only) -->
+                <div id="referenceImageContainer" class="card hidden" style="text-align: center; height: 100%; display: flex; flex-direction: column;">
+                    <h4 style="margin-bottom: var(--spacing-sm);">📸 Reference Pose</h4>
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img id="referenceImage" src="" alt="Reference pose" style="max-width: 100%; max-height: 480px; height: auto; width: auto; border-radius: var(--radius-md); box-shadow: var(--shadow-md); object-fit: contain;">
+                    </div>
+                    <p style="margin-top: var(--spacing-sm); opacity: 0.8; font-size: 0.875rem;">Match your body to this pose!</p>
+                </div>
+
+                <!-- Camera Feed (shown in left column for non-training modes) -->
+                <div id="cameraContainerLeft" class="camera-container fade-in delay-1 hidden">
+                    <video id="videoElement" class="camera-video" autoplay muted playsinline></video>
+                    <canvas id="canvasElement" class="camera-canvas"></canvas>
+
+                    <!-- Hold Progress Indicator -->
+                    <div id="holdIndicator" class="hold-indicator">
+                        <div class="hold-progress-bar">
+                            <div id="holdProgressFill" class="hold-progress-fill" style="width: 0%;">
+                                Hold it! <span id="holdPercentage">0%</span>
+                            </div>
+                        </div>
+                        <div class="hold-text">Keep the pose steady!</div>
+                    </div>
+
+                    <div class="camera-overlay">
+                        <div class="camera-status">
+                            <div id="statusIndicator" class="status-indicator"></div>
+                            <span id="cameraStatus">Initializing...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="loadingOverlay" class="text-center mt-2">
+                    <div class="spinner"></div>
+                    <p style="margin-top: var(--spacing-sm);">Loading AI model...</p>
+                </div>
+            </div>
+
+            <!-- Right Column - Camera (for training) OR Info (for other modes) -->
+            <div>
+                <!-- Camera Feed (Training Mode - Right Side) -->
+                <div id="cameraContainerRight" class="camera-container fade-in delay-1 hidden">
+                    <video id="videoElementRight" class="camera-video" autoplay muted playsinline></video>
+                    <canvas id="canvasElementRight" class="camera-canvas"></canvas>
+
+                    <!-- Hold Progress Indicator -->
+                    <div id="holdIndicatorRight" class="hold-indicator">
+                        <div class="hold-progress-bar">
+                            <div id="holdProgressFillRight" class="hold-progress-fill" style="width: 0%;">
+                                Hold it! <span id="holdPercentageRight">0%</span>
+                            </div>
+                        </div>
+                        <div class="hold-text">Keep the pose steady!</div>
+                    </div>
+
+                    <div class="camera-overlay">
+                        <div class="camera-status">
+                            <div id="statusIndicatorRight" class="status-indicator"></div>
+                            <span id="cameraStatusRight">Ready!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Display (for word mode) -->
+                <div id="wordDisplayContainer" class="card mb-2 hidden">
+                    <h4 class="text-center">Spell the word:</h4>
+                    <div id="wordDisplay" class="word-display">
+                        <!-- Word letters will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Letter Grid (for mission mode) -->
+                <div id="letterGridContainer" class="card mb-2 hidden">
+                    <h4>Alphabet Progress</h4>
+                    <div id="letterGrid" class="letter-grid">
+                        <!-- Letters will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Attempts -->
+                <div id="attemptsContainer" class="card mb-2 hidden">
+                    <div class="flex flex-between">
+                        <h4 style="margin: 0;">Attempts</h4>
+                        <div id="attemptsDisplay" class="attempts-display">
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="card">
+                    <h4>How to Play</h4>
+                    <ol style="line-height: 1.8; padding-left: var(--spacing-md);">
+                        <li>Stand in front of the camera</li>
+                        <li>Form the target letter with your body</li>
+                        <li>Hold the pose for 2 seconds</li>
+                        <li>Earn stars and unlock badges!</li>
+                    </ol>
+                </div>
+
+                <!-- Controls -->
+                <div class="card mt-2">
+                    <h4>Controls</h4>
+                    <button id="nextLetterButton" class="btn btn-primary hidden" style="width: 100%; margin-bottom: var(--spacing-sm);">
+                        Next Letter →
+                    </button>
+                    <button id="retryButton" class="btn btn-warning hidden" style="width: 100%; margin-bottom: var(--spacing-sm);">
+                        🔄 Try Again
+                    </button>
+                    <button id="selectLetterButton" class="btn btn-success hidden" style="width: 100%;">
+                        Choose Letter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal-overlay">
+        <div class="modal">
+            <div id="feedbackContent" class="text-center">
+                <div id="feedbackIcon" class="feedback-icon">🎉</div>
+                <h2 id="feedbackTitle" class="feedback-text">Amazing!</h2>
+                <p id="feedbackMessage" class="feedback-subtext">You earned 100 stars!</p>
+                <button id="feedbackClose" class="btn btn-lg" style="width: 100%; margin-top: var(--spacing-lg);">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pauseModal" class="modal-overlay">
+        <div class="modal text-center">
+            <h2>⏸️ Game Paused</h2>
+            <p style="font-size: 1.25rem; margin: var(--spacing-lg) 0;">Take a break, space cadet!</p>
+            <button id="resumeButton" class="btn btn-lg btn-success" style="width: 100%; margin-bottom: var(--spacing-sm);">
+                ▶️ Resume
+            </button>
+            <button id="quitButton" class="btn btn-lg btn-danger" style="width: 100%;">
+                🏠 Return to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Letter Selection Modal (for training mode) -->
+    <div id="letterSelectModal" class="modal-overlay">
+        <div class="modal">
+            <h2 class="text-center">Choose a Letter</h2>
+            <div id="letterSelectGrid" class="letter-grid mt-2">
+                <!-- Letters will be generated -->
+            </div>
+            <button id="closeLetter SelectModal" class="btn btn-danger" style="width: 100%; margin-top: var(--spacing-lg);">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GameEngine } from '../js/core/GameEngine.js';
+        import { Storage } from '../js/utils/storage.js';
+        import { audioManager } from '../js/utils/audio.js';
+        import { CONFIG } from '../config.js';
+        import { GameMode, ALPHABET, Events } from '../js/utils/constants.js';
+
+        // Authentication Check - Parent page handles auth, skip redirect
+        // if (!Storage.isAuthenticated()) {
+        //     window.location.href = 'auth.html';
+        // }
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode') || 'training';
+        const initialLetter = urlParams.get('letter') || 'A';
+        const initialWord = urlParams.get('word') || 'CAT';
+
+        // Initialize game engine
+        const gameEngine = new GameEngine();
+        let currentMode = mode;
+        let currentLetter = initialLetter.toUpperCase();
+        let currentWord = initialWord.toUpperCase();
+
+        // DOM elements (use videoElement as the main one, will be assigned based on mode)
+        let videoElement, canvasElement, holdIndicator, holdProgressFill, holdPercentage, cameraStatus, statusIndicator;
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const modeTitle = document.getElementById('modeTitle');
+        const targetLetter = document.getElementById('targetLetter');
+        const instruction = document.getElementById('instruction');
+
+        // Container elements
+        const cameraContainerLeft = document.getElementById('cameraContainerLeft');
+        const cameraContainerRight = document.getElementById('cameraContainerRight');
+        const starsDisplay = document.getElementById('starsDisplay');
+        const feedbackModal = document.getElementById('feedbackModal');
+        let feedbackAutoCloseTimer = null;
+        let feedbackHandled = false;
+        const pauseModal = document.getElementById('pauseModal');
+
+        // Mode-specific elements
+        const wordDisplayContainer = document.getElementById('wordDisplayContainer');
+        const wordDisplay = document.getElementById('wordDisplay');
+        const letterGridContainer = document.getElementById('letterGridContainer');
+        const letterGrid = document.getElementById('letterGrid');
+        const attemptsContainer = document.getElementById('attemptsContainer');
+        const attemptsDisplay = document.getElementById('attemptsDisplay');
+        const referenceImageContainer = document.getElementById('referenceImageContainer');
+        const referenceImage = document.getElementById('referenceImage');
+        const musicToggle = document.getElementById('musicToggle');
+
+        // Initialize
+        init();
+
+        async function init() {
+            try {
+                // Initialize game engine
+                await gameEngine.initialize();
+
+                // Continue background music
+                if (!audioManager.isMusicPlaying()) {
+                    await audioManager.startBackgroundMusic();
+                }
+
+                // Setup music toggle
+                musicToggle.addEventListener('click', () => {
+                    const isPlaying = audioManager.toggleMusic();
+                    musicToggle.textContent = isPlaying ? '🔊' : '🔇';
+                });
+
+                // Setup UI based on mode
+                setupModeUI();
+
+                // Start camera
+                await gameEngine.startCamera(videoElement, canvasElement);
+
+                // Setup event listeners
+                setupEventListeners();
+
+                // Start game mode
+                startGameMode();
+
+                // Hide loading
+                loadingOverlay.style.display = 'none';
+                cameraStatus.textContent = 'Ready!';
+                statusIndicator.classList.add('recording');
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                cameraStatus.textContent = 'Error: ' + error.message;
+                alert('Failed to start game. Please check camera permissions and reload.');
+            }
+        }
+
+        function setupModeUI() {
+            const progress = Storage.getProgress();
+            starsDisplay.textContent = progress.totalStars || 0;
+
+            // Assign camera elements based on mode
+            if (currentMode === 'training') {
+                // Training mode: Camera on right, reference image on left
+                videoElement = document.getElementById('videoElementRight'); // Use RIGHT video for training
+                canvasElement = document.getElementById('canvasElementRight');
+                holdIndicator = document.getElementById('holdIndicatorRight');
+                holdProgressFill = document.getElementById('holdProgressFillRight');
+                holdPercentage = document.getElementById('holdPercentageRight');
+                cameraStatus = document.getElementById('cameraStatusRight');
+                statusIndicator = document.getElementById('statusIndicatorRight');
+
+                // Show containers
+                referenceImageContainer.classList.remove('hidden');
+                cameraContainerRight.classList.remove('hidden');
+                cameraContainerLeft.classList.add('hidden');
+            } else {
+                // Other modes: Camera on left, info panels on right
+                videoElement = document.getElementById('videoElement');
+                canvasElement = document.getElementById('canvasElement');
+                holdIndicator = document.getElementById('holdIndicator');
+                holdProgressFill = document.getElementById('holdProgressFill');
+                holdPercentage = document.getElementById('holdPercentage');
+                cameraStatus = document.getElementById('cameraStatus');
+                statusIndicator = document.getElementById('statusIndicator');
+
+                // Show containers
+                cameraContainerLeft.classList.remove('hidden');
+                cameraContainerRight.classList.add('hidden');
+                referenceImageContainer.classList.add('hidden');
+            }
+
+            switch (currentMode) {
+                case 'training':
+                    modeTitle.textContent = '🚀 Training Mode';
+                    instruction.textContent = 'Practice at your own pace!';
+                    document.getElementById('selectLetterButton').classList.remove('hidden');
+                    // Show reference image
+                    updateReferenceImage(currentLetter);
+                    break;
+
+                case 'mission':
+                    modeTitle.textContent = '🌟 Letter Mission';
+                    instruction.textContent = 'Complete to unlock next letter!';
+                    attemptsContainer.classList.remove('hidden');
+                    letterGridContainer.classList.remove('hidden');
+                    generateLetterGrid();
+                    document.getElementById('nextLetterButton').classList.remove('hidden');
+                    break;
+
+                case 'word':
+                    modeTitle.textContent = '🪐 Word Explorer';
+                    instruction.textContent = `Spell: ${currentWord}`;
+                    wordDisplayContainer.classList.remove('hidden');
+                    generateWordDisplay();
+                    break;
+            }
+
+            targetLetter.textContent = currentLetter;
+        }
+
+        function generateLetterGrid() {
+            const progress = Storage.getProgress();
+            letterGrid.innerHTML = '';
+
+            ALPHABET.forEach(letter => {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                box.textContent = letter;
+
+                if (progress.lettersCompleted?.includes(letter)) {
+                    box.classList.add('completed');
+                }
+                if (letter === currentLetter) {
+                    box.classList.add('current');
+                }
+
+                letterGrid.appendChild(box);
+            });
+        }
+
+        function generateWordDisplay() {
+            wordDisplay.innerHTML = '';
+
+            for (let i = 0; i < currentWord.length; i++) {
+                const letterBox = document.createElement('div');
+                letterBox.className = 'word-letter';
+                letterBox.textContent = currentWord[i];
+
+                if (i === 0) {
+                    letterBox.classList.add('current');
+                }
+
+                wordDisplay.appendChild(letterBox);
+            }
+        }
+
+        function startGameMode() {
+            if (currentMode === 'word') {
+                gameEngine.startMode(GameMode.WORD_EXPLORER, { word: currentWord });
+            } else if (currentMode === 'mission') {
+                gameEngine.startMode(GameMode.LETTER_MISSION, { letter: currentLetter });
+            } else {
+                gameEngine.startMode(GameMode.TRAINING, { letter: currentLetter });
+            }
+        }
+
+        function setupEventListeners() {
+            // Game events
+            gameEngine.addEventListener('hold_start', () => {
+                holdIndicator.classList.add('active');
+                audioManager.playEncouragement();
+            });
+
+            gameEngine.addEventListener('hold_progress', (e) => {
+                const progress = Math.round(e.detail.progress * 100);
+                holdProgressFill.style.width = progress + '%';
+                holdPercentage.textContent = progress + '%';
+            });
+
+            gameEngine.addEventListener('hold_cancelled', () => {
+                holdIndicator.classList.remove('active');
+                holdProgressFill.style.width = '0%';
+            });
+
+            gameEngine.addEventListener(Events.POSE_CORRECT, (e) => {
+                handleSuccess(e.detail);
+            });
+
+            // UI buttons
+            document.getElementById('backButton').addEventListener('click', () => {
+                if (confirm('Are you sure you want to go back? Progress will be saved.')) {
+                    gameEngine.dispose();
+                    window.location.href = 'dashboard.html';
+                }
+            });
+
+            document.getElementById('pauseButton').addEventListener('click', () => {
+                gameEngine.pauseGame();
+                pauseModal.classList.add('show');
+            });
+
+            document.getElementById('resumeButton').addEventListener('click', () => {
+                gameEngine.resumeGame();
+                pauseModal.classList.remove('show');
+            });
+
+            document.getElementById('quitButton').addEventListener('click', () => {
+                gameEngine.dispose();
+                window.location.href = 'dashboard.html';
+            });
+
+            document.getElementById('feedbackClose').addEventListener('click', () => {
+                proceedAfterFeedback();
+            });
+
+            document.getElementById('nextLetterButton').addEventListener('click', () => {
+                goToNextLetter();
+            });
+
+            document.getElementById('selectLetterButton').addEventListener('click', () => {
+                showLetterSelection();
+            });
+
+            document.getElementById('retryButton').addEventListener('click', () => {
+                retryLetter();
+            });
+        }
+
+        function handleSuccess(detail) {
+            const { letter, stars, attempts, message } = detail;
+
+            // Pause game to prevent multiple triggers
+            gameEngine.pauseGame();
+
+            // Update attempts display
+            if (currentMode === 'mission') {
+                updateAttemptsDisplay(attempts);
+            }
+
+            // Update stars
+            const progress = Storage.getProgress();
+            starsDisplay.textContent = progress.totalStars || 0;
+
+            // Show feedback
+            showFeedback(true, message, stars);
+
+            // Create confetti
+            createConfetti();
+        }
+
+        function updateAttemptsDisplay(attempts) {
+            const dots = attemptsDisplay.querySelectorAll('.attempt-dot');
+            dots.forEach((dot, index) => {
+                if (index < attempts) {
+                    dot.classList.add('used');
+                }
+            });
+        }
+
+        function showFeedback(success, message, stars = 0) {
+            const icon = document.getElementById('feedbackIcon');
+            const title = document.getElementById('feedbackTitle');
+            const messageEl = document.getElementById('feedbackMessage');
+
+            // Reset any previous auto-close timer
+            if (feedbackAutoCloseTimer) {
+                clearTimeout(feedbackAutoCloseTimer);
+            }
+            feedbackHandled = false;
+
+            if (success) {
+                icon.textContent = '🎉';
+                title.textContent = message;
+                messageEl.textContent = `You earned ${stars} stars!`;
+                audioManager.speak(message);
+            } else {
+                icon.textContent = '💫';
+                title.textContent = message;
+                messageEl.textContent = 'Try again!';
+            }
+
+            feedbackModal.classList.add('show');
+
+            // Auto-close after 3 seconds
+            feedbackAutoCloseTimer = setTimeout(() => {
+                proceedAfterFeedback();
+            }, 3000);
+        }
+
+        function proceedAfterFeedback() {
+            if (feedbackHandled) return;
+            feedbackHandled = true;
+            if (feedbackAutoCloseTimer) {
+                clearTimeout(feedbackAutoCloseTimer);
+                feedbackAutoCloseTimer = null;
+            }
+            feedbackModal.classList.remove('show');
+
+            // Resume game before handling next action
+            gameEngine.resumeGame();
+            handleNextAction();
+        }
+
+        // Update reference image for training mode
+        function updateReferenceImage(letter) {
+            if (currentMode === 'training') {
+                referenceImage.src = `../assets/images/Alphabets/${letter}.jpg`;
+                referenceImageContainer.classList.remove('hidden');
+            } else {
+                referenceImageContainer.classList.add('hidden');
+            }
+        }
+
+        function handleNextAction() {
+            if (currentMode === 'word') {
+                const state = gameEngine.getState();
+                if (state.state === 'complete') {
+                    // Word complete, return to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                } else {
+                    // Next letter in word
+                    currentLetter = state.currentLetter;
+                    targetLetter.textContent = currentLetter;
+                    updateWordDisplay(state.currentWordIndex);
+                }
+            } else if (currentMode === 'mission') {
+                goToNextLetter();
+            } else if (currentMode === 'training') {
+                // Training mode: Auto-advance to next letter
+                goToNextLetterInTraining();
+            }
+        }
+
+        function goToNextLetterInTraining() {
+            // Find current letter index
+            const currentIndex = ALPHABET.indexOf(currentLetter);
+
+            if (currentIndex < ALPHABET.length - 1) {
+                // Move to next letter
+                currentLetter = ALPHABET[currentIndex + 1];
+                targetLetter.textContent = currentLetter;
+                updateReferenceImage(currentLetter);
+                gameEngine.startMode(GameMode.TRAINING, { letter: currentLetter });
+            } else {
+                // Completed all letters! Show celebration and go back to dashboard
+                alert('🎉 Amazing! You practiced all 26 letters!');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function updateWordDisplay(currentIndex) {
+            const letters = wordDisplay.querySelectorAll('.word-letter');
+            letters.forEach((letter, i) => {
+                letter.classList.remove('current', 'completed');
+                if (i < currentIndex) {
+                    letter.classList.add('completed');
+                } else if (i === currentIndex) {
+                    letter.classList.add('current');
+                }
+            });
+        }
+
+        function goToNextLetter() {
+            const progress = Storage.getProgress();
+            const nextLetter = ALPHABET.find(l => !progress.lettersCompleted?.includes(l));
+
+            if (nextLetter) {
+                currentLetter = nextLetter;
+                targetLetter.textContent = currentLetter;
+                gameEngine.startMode(GameMode.LETTER_MISSION, { letter: currentLetter });
+                resetAttemptsDisplay();
+                if (currentMode === 'mission') {
+                    generateLetterGrid();
+                }
+            } else {
+                alert('🎉 Congratulations! You completed all letters!');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function resetAttemptsDisplay() {
+            const dots = attemptsDisplay.querySelectorAll('.attempt-dot');
+            dots.forEach(dot => dot.classList.remove('used'));
+        }
+
+        // Store event listener references for proper cleanup
+        let letterSelectClickHandler = null;
+        let closeLetterModalHandler = null;
+
+        function showLetterSelection() {
+            const modal = document.getElementById('letterSelectModal');
+            const grid = document.getElementById('letterSelectGrid');
+            const closeButton = document.getElementById('closeLetterSelectModal');
+
+            // Remove old event listeners before adding new ones
+            if (letterSelectClickHandler) {
+                grid.removeEventListener('click', letterSelectClickHandler);
+            }
+            if (closeLetterModalHandler) {
+                closeButton.removeEventListener('click', closeLetterModalHandler);
+            }
+
+            grid.innerHTML = '';
+
+            // Create letter boxes without individual listeners
+            ALPHABET.forEach(letter => {
+                const box = document.createElement('div');
+                box.className = 'letter-box hover-lift';
+                box.textContent = letter;
+                box.dataset.letter = letter; // Store letter in data attribute
+                grid.appendChild(box);
+            });
+
+            // Use event delegation - single listener for all letters
+            letterSelectClickHandler = (e) => {
+                if (e.target.classList.contains('letter-box')) {
+                    const letter = e.target.dataset.letter;
+                    currentLetter = letter;
+                    targetLetter.textContent = letter;
+                    updateReferenceImage(letter);
+                    gameEngine.startMode(GameMode.TRAINING, { letter });
+                    modal.classList.remove('show');
+                }
+            };
+            grid.addEventListener('click', letterSelectClickHandler);
+
+            // Single close button listener
+            closeLetterModalHandler = () => {
+                modal.classList.remove('show');
+            };
+            closeButton.addEventListener('click', closeLetterModalHandler);
+
+            modal.classList.add('show');
+        }
+
+        function retryLetter() {
+            resetAttemptsDisplay();
+            gameEngine.resetGame();
+            startGameMode();
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#4ecdc4', '#ffd93d', '#6366f1', '#10b981'];
+
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // Comprehensive cleanup function
+        function cleanupAllResources() {
+            // Clear any pending timers
+            if (feedbackAutoCloseTimer) {
+                clearTimeout(feedbackAutoCloseTimer);
+                feedbackAutoCloseTimer = null;
+            }
+
+            // Remove letter selection event listeners
+            const grid = document.getElementById('letterSelectGrid');
+            const closeButton = document.getElementById('closeLetterSelectModal');
+            if (letterSelectClickHandler && grid) {
+                grid.removeEventListener('click', letterSelectClickHandler);
+                letterSelectClickHandler = null;
+            }
+            if (closeLetterModalHandler && closeButton) {
+                closeButton.removeEventListener('click', closeLetterModalHandler);
+                closeLetterModalHandler = null;
+            }
+
+            // Clear reference image to free memory
+            if (referenceImage) {
+                referenceImage.src = '';
+            }
+
+            // Dispose game engine
+            gameEngine.dispose();
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            cleanupAllResources();
+        });
+
+        // Also cleanup when navigating away
+        window.addEventListener('pagehide', () => {
+            cleanupAllResources();
+        });
+    </script>
+</body>
+</html>

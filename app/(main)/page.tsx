@@ -79,7 +79,7 @@ export default function HomePage() {
               Neurogati is a pioneering neurotechnology company focused on one mission: transforming brain healthcare. We translate advanced research in artificial intelligence and computational neuroscience into a suite of powerful, clinically-proven medical solutions.            
             </p>
             <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
-              Our integrated portfolio addresses a continuum of neurological care, featuring <strong>AI-powered diagnostic platforms</strong> for Parkinson's and Alzheimer's, <strong>personalized gamified therapy</strong> for stroke rehabilitation, neurodiversity, elderly cognitive decline, a new generation of <strong>assistive technologies</strong> that foster greater independence and <strong>a Neuro-Tech education</strong> segment to build an expert network.
+              Our integrated portfolio addresses a continuum of neurological care, featuring <strong>AI-powered diagnostic platforms</strong> for Parkinson's, <strong>personalized gamified therapy</strong> for stroke rehabilitation, neurodiversity, elderly cognitive decline, a new generation of <strong>assistive technologies</strong> that foster greater independence and <strong>a Neuro-Tech education</strong> segment to build an expert network.
             </p>
             <br />
           </div>
@@ -104,7 +104,7 @@ export default function HomePage() {
                 <CardTitle className="text-xl font-semibold text-blue-400">Clinical Monitoring (Quamon-PD™)</CardTitle>
               </CardHeader>
               <CardContent className="text-justify px-8">
-                Revolutionary <strong>AI-powered clinical monitoring platform</strong> for <strong>Parkinson's disease</strong>, <strong>Alzheimer's</strong>, and neurological disorders. Quamon-PD™ analyzes behavioral biomarkers using advanced machine learning, integrating seamlessly with clinical workflows to provide comprehensive diagnosis assisstive reports for healthcare providers.
+                Revolutionary <strong>AI-powered clinical monitoring platform</strong> for <strong>Parkinson's disease</strong>. Quamon-PD™ analyzes behavioral biomarkers using advanced machine learning, integrating seamlessly with clinical workflows to provide comprehensive diagnosis assisstive reports for healthcare providers.
               </CardContent>
             </Card>
             <Card className="text-center bg-card border-t-4 border-violet-500 pt-4 transition-all hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-500/10">

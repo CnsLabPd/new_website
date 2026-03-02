@@ -13,8 +13,8 @@ const adhdGames = [
     tagline: "Cognitive Focus & Alphabet Challenge",
     overview: "Posabets supports movement-based learning and can be a valuable tool for educators and parents working with children with ADHD.",
     tech: "Dynamic Difficulty Adjustment (DDA)",
-    videoUrl: null, 
-    images: ["/images/posabets-hero.png"],
+    videoUrl: null,
+    images: ["/posabets game card.png"],
     features: [
       "Adaptive speed based on focus levels",
       "Minimalist UI to reduce sensory overload",
@@ -86,11 +86,21 @@ export default function ADHDPage() {
           {adhdGames.map((game) => (
             <div key={game.name} className="grid lg:grid-cols-12 gap-16 items-start">
               <div className="lg:col-span-5 space-y-8">
-                <div className="relative aspect-video rounded-3xl overflow-hidden border border-border shadow-2xl bg-black flex items-center justify-center">
-                   <div className="flex flex-col items-center justify-center text-center p-8 bg-slate-900 w-full h-full">
-                        <Zap className="h-16 w-16 text-cyan-500 mb-4 animate-pulse" />
-                        <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">Visual Focus Optimized</span>
+                <div className="relative aspect-[3/2] rounded-3xl overflow-hidden border border-border shadow-2xl bg-black">
+                  {game.images && game.images.length > 0 ? (
+                    <Image
+                      src={game.images[0]}
+                      alt={`${game.name} game card`}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center text-center p-8 bg-slate-900 w-full h-full">
+                      <Zap className="h-16 w-16 text-cyan-500 mb-4 animate-pulse" />
+                      <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">Visual Focus Optimized</span>
                     </div>
+                  )}
                 </div>
 
                 {game.tech && (

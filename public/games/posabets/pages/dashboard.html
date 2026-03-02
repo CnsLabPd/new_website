@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control 🎮</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Neurogati Game SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.neurogati.com/game-sdk/neurogati-auth.js?v=20260221b"></script>
+    <script src="https://www.neurogati.com/game-sdk/posabets-api.js?v=20260220a"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        .company-logo-header {
+            height: 40px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="flex flex-between mb-2 bounce-in">
+            <div class="flex gap-md">
+                <div id="playerAvatar" style="font-size: 3rem;">👨‍🚀</div>
+                <div>
+                    <h2 id="playerName" style="margin: 0;">Space Cadet</h2>
+                    <p style="margin: 0; opacity: 0.8;">Mission Control</p>
+                </div>
+            </div>
+
+            <div class="flex gap-sm">
+                <button id="exitBtn" class="btn btn-sm btn-danger">
+                    🚪 Exit
+                </button>
+                <button id="musicToggle" class="btn btn-sm" style="background: rgba(255,255,255,0.2);">
+                    🔊 Music
+                </button>
+                <div class="stars-display pulse">
+                    <span class="icon">⭐</span>
+                    <span id="totalStars">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Section -->
+        <div class="card fade-in delay-1">
+            <h3 class="card-header">📊 Your Progress</h3>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="lettersCompleted">0</div>
+                    <div class="stat-label">Letters Mastered</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="wordsCompleted">0</div>
+                    <div class="stat-label">Words Spelled</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="badgesEarned">0</div>
+                    <div class="stat-label">Badges Earned</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <div class="stat-label">Perfect Streak</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Modes -->
+        <h3 class="text-center mt-2 mb-2 slide-in-left delay-2" style="font-size: 2.5rem;">Choose Your Mission</h3>
+
+        <div class="grid grid-3 gap-lg">
+            <!-- Training Mode -->
+            <div class="card hover-lift slide-in-left delay-3" style="cursor: pointer;" id="trainingModeCard">
+                <div style="text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: var(--spacing-md);">🚀</div>
+                    <h4>Training Mode</h4>
+                    <p style="opacity: 0.9;">Practice any letter you want at your own pace. No pressure!</p>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-md);">
+                        Start Training
+                    </button>
+                </div>
+            </div>
+
+            <!-- Letter Mission -->
+            <div class="card hover-lift slide-in-left delay-4" style="cursor: pointer;" id="letterMissionCard">
+                <div style="text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: var(--spacing-md);">🌟</div>
+                    <h4>Letter Mission</h4>
+                    <p style="opacity: 0.9;">Complete letters A-Z and earn stars. Track your progress!</p>
+                    <button class="btn btn-success" style="width: 100%; margin-top: var(--spacing-md);">
+                        Start Mission
+                    </button>
+                </div>
+            </div>
+
+            <!-- Word Explorer -->
+            <div class="card hover-lift slide-in-left delay-5" id="wordExplorerCard" style="position: relative; cursor: pointer;">
+                <div style="text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: var(--spacing-md);">🪐</div>
+                    <h4>Word Explorer</h4>
+                    <p style="opacity: 0.9;">Spell words by forming letters in sequence. More challenging!</p>
+                    <button class="btn btn-warning" id="wordExplorerBtn" style="width: 100%; margin-top: var(--spacing-md);">
+                        Explore Words
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alphabet Progress -->
+        <div class="card mt-2 fade-in delay-6">
+            <h3 class="card-header">🔤 Alphabet Progress</h3>
+            <div class="letter-grid" id="letterGrid">
+                <!-- Letters will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Recent Badges -->
+        <div class="card mt-2 fade-in delay-7">
+            <h3 class="card-header">🏆 Badges</h3>
+            <div class="badge-container" id="badgeContainer">
+                <!-- Badges will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Parent Dashboard & Branding -->
+        <div class="flex flex-between mt-2 p-2" style="background: rgba(255,255,255,0.05); border-radius: var(--radius-lg);">
+            <div>
+                <img src="../assets/neurogati_logo.png" alt="Neurogati" class="company-logo-header">
+                <span style="opacity: 0.8;">Powered by <strong>Neurogati</strong></span>
+            </div>
+            <a href="parent.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2);">
+                📊 Parent Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Storage } from '../js/utils/storage.js';
+        import { audioManager } from '../js/utils/audio.js';
+        import { CONFIG } from '../config.js';
+        import { ALPHABET } from '../js/utils/constants.js';
+
+        // Authentication Check - Parent page handles auth, skip redirect
+        // if (!Storage.isAuthenticated()) {
+        //     window.location.href = 'auth.html';
+        // }
+
+        console.log('🎯 Dashboard: Starting initialization...');
+
+        // Wait for NeurogatiAuth to initialize
+        while (!window.NeurogatiAuth || !window.NeurogatiAuth.initialized) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        console.log('✅ NeurogatiAuth ready!');
+
+        // Initialize
+        console.log('🎵 Initializing audio manager...');
+        await audioManager.init();
+        console.log('✅ Audio manager initialized');
+
+        // Continue background music if not already playing
+        if (!audioManager.isMusicPlaying()) {
+            await audioManager.startBackgroundMusic();
+        }
+
+        // Music toggle button
+        const musicToggle = document.getElementById('musicToggle');
+        musicToggle.addEventListener('click', () => {
+            const isPlaying = audioManager.toggleMusic();
+            musicToggle.textContent = isPlaying ? '🔊 Music' : '🔇 Music';
+        });
+
+        // Exit handler - returns to gaming categories
+        document.getElementById('exitBtn').addEventListener('click', () => {
+            // Redirect to gaming categories page
+            window.top.location.href = 'https://www.neurogati.com/gamingcategories';
+        });
+
+        // Load player data
+        const playerName = Storage.getPlayerName() || 'Space Cadet';
+        const progress = Storage.getProgress();
+        const stats = Storage.getStats();
+
+        // Debug logging
+        console.log('🔍 Debug - Player name:', playerName);
+        console.log('🔍 Debug - NeurogatiAuth authenticated?', window.NeurogatiAuth?.isAuthenticated());
+        console.log('🔍 Debug - getUserName() returns:', window.NeurogatiAuth?.getUserName());
+        console.log('🔍 Debug - Current user:', window.NeurogatiAuth?.getCurrentUser());
+
+        // Update UI
+        document.getElementById('playerName').textContent = playerName;
+        document.getElementById('playerAvatar').textContent = progress.character || '👨‍🚀';
+        document.getElementById('totalStars').textContent = stats.totalStars;
+        document.getElementById('lettersCompleted').textContent = stats.lettersCount;
+        document.getElementById('wordsCompleted').textContent = stats.wordsCount;
+        document.getElementById('badgesEarned').textContent = stats.badgesCount;
+        document.getElementById('currentStreak').textContent = stats.streak;
+
+        // Generate letter grid
+        const letterGrid = document.getElementById('letterGrid');
+        ALPHABET.forEach(letter => {
+            const letterBox = document.createElement('div');
+            letterBox.className = 'letter-box';
+            letterBox.textContent = letter;
+
+            if (progress.lettersCompleted?.includes(letter)) {
+                letterBox.classList.add('completed');
+            }
+
+            letterBox.addEventListener('click', () => {
+                audioManager.playClick();
+                startTraining(letter);
+            });
+
+            letterGrid.appendChild(letterBox);
+        });
+
+        // Generate badges
+        const badgeContainer = document.getElementById('badgeContainer');
+        Object.entries(CONFIG.BADGES).forEach(([badgeId, badge]) => {
+            const badgeItem = document.createElement('div');
+            badgeItem.className = 'badge-item';
+
+            const isEarned = progress.badges?.includes(badgeId);
+            if (isEarned) {
+                badgeItem.classList.add('earned', 'badge-unlock');
+            } else {
+                badgeItem.classList.add('locked');
+            }
+
+            badgeItem.innerHTML = `
+                <div class="badge-icon">${isEarned ? '🏆' : '🔒'}</div>
+                <div class="badge-name">${badge.name}</div>
+                <div class="badge-description">${badge.description}</div>
+            `;
+
+            badgeContainer.appendChild(badgeItem);
+        });
+
+        // Mode selection handlers
+        console.log('🎮 Setting up game mode button handlers...');
+
+        const trainingCard = document.getElementById('trainingModeCard');
+        const letterCard = document.getElementById('letterMissionCard');
+        const wordCard = document.getElementById('wordExplorerCard');
+
+        console.log('🔍 Button elements:', {
+            trainingCard: !!trainingCard,
+            letterCard: !!letterCard,
+            wordCard: !!wordCard
+        });
+
+        if (trainingCard) {
+            trainingCard.addEventListener('click', () => {
+                console.log('🎯 Training Mode clicked!');
+                audioManager.playClick();
+                window.location.href = 'game.html?mode=training';
+            });
+        }
+
+        if (letterCard) {
+            letterCard.addEventListener('click', () => {
+                console.log('🎯 Letter Mission clicked!');
+                audioManager.playClick();
+                // Find next uncompleted letter
+                const nextLetter = ALPHABET.find(l => !progress.lettersCompleted?.includes(l)) || 'A';
+                window.location.href = `game.html?mode=mission&letter=${nextLetter}`;
+            });
+        }
+
+        // Word Explorer is always available
+        if (wordCard) {
+            wordCard.addEventListener('click', () => {
+                console.log('🎯 Word Explorer clicked!');
+                audioManager.playClick();
+                // Pick a random word
+                const word = CONFIG.WORDS[Math.floor(Math.random() * CONFIG.WORDS.length)];
+                window.location.href = `game.html?mode=word&word=${word}`;
+            });
+        }
+
+        console.log('✅ All button handlers set up!');
+
+        function startTraining(letter) {
+            console.log('🎯 Starting training for letter:', letter);
+            window.location.href = `game.html?mode=training&letter=${letter}`;
+        }
+
+        console.log('🎉 Dashboard initialization complete!');
+    </script>
+</body>
+</html>

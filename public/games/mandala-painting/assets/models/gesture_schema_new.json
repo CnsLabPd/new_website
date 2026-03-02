@@ -1,0 +1,57 @@
+{
+  "version": "2.1",
+  "description": "Dual-hand gesture control schema for painting game with independent models",
+  "modelFile": "individual_right_and_left_models",
+  "mapping": {
+    "right hand open": "moveRightCursor",
+    "right hand close": "selectClick",
+    "right hand staythere": "right hand staythere",
+    "left hand open": "left hand open",
+    "left hand zoom in": "zoomIn",
+    "left hand zoom out": "zoomOut",
+    "left hand grab": "panCanvas"
+  },
+  "actions": {
+    "moveRightCursor": {
+      "description": "Move the right hand cursor for navigation",
+      "hand": "right"
+    },
+    "selectClick": {
+      "description": "Select/click action (paint region)",
+      "hand": "right"
+    },
+    "right hand staythere": {
+      "description": "Freeze right cursor at current position",
+      "hand": "right"
+    },
+    "left hand open": {
+      "description": "Freeze left cursor at current position",
+      "hand": "left"
+    },
+    "zoomIn": {
+      "description": "Zoom into the canvas",
+      "hand": "left"
+    },
+    "zoomOut": {
+      "description": "Zoom out of the canvas",
+      "hand": "left"
+    },
+    "panCanvas": {
+      "description": "Pan/move the canvas around",
+      "hand": "left"
+    }
+  },
+  "colors": {
+    "right hand open": "#FF9800",
+    "right hand close": "#4CAF50",
+    "right hand staythere": "#FF5722",
+    "left hand open": "#FFEB3B",
+    "left hand zoom in": "#2196F3",
+    "left hand zoom out": "#9C27B0",
+    "left hand grab": "#00BCD4"
+  },
+  "cursorColors": {
+    "right": "#FF9800",
+    "left": "#2196F3"
+  }
+}

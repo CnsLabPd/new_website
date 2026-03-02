@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(awk:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(open demo2.html)",
+      "Bash(find:*)",
+      "Bash(git checkout:*)",
+      "Read(//Users/manojkumarsaka/MyProjects/PaintingGame/**)",
+      "Bash(curl:*)",
+      "Bash(python3 -m json.tool:*)",
+      "Bash(ls:*)",
+      "Bash(chmod:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posabets 🚀</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Neurogati Game SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.neurogati.com/game-sdk/neurogati-auth.js?v=20260221b"></script>
+    <script src="https://www.neurogati.com/game-sdk/posabets-api.js?v=20260220a"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        /* Entry Page Specific Styles */
+        .entry-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-lg);
+        }
+
+        .logo-container {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .logo {
+            font-size: 8rem;
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 0 10px 30px rgba(255, 215, 61, 0.5);
+        }
+
+        .title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            margin: var(--spacing-md) 0;
+            background: var(--gradient-nebula);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .footer-branding {
+            position: absolute;
+            bottom: var(--spacing-lg);
+            left: 0;
+            right: 0;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards 1s;
+        }
+
+        .footer-logo {
+            height: 40px;
+            vertical-align: middle;
+            margin-left: var(--spacing-xs);
+        }
+    </style>
+</head>
+<body>
+    <div class="entry-container">
+        <div>
+            <div class="logo-container">
+                <div class="logo">🚀</div>
+            </div>
+
+            <h1 class="title">Posabets</h1>
+            <p class="subtitle">Get ready for an amazing journey through the alphabet!</p>
+
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <p>Launching your adventure...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-branding">
+        Developed by 
+        <img src="assets/neurogati_logo.png" alt="Neurogati Logo" class="footer-logo">
+        <strong>Neurogati</strong>
+    </div>
+
+    <script>
+        // Wait for Neurogati Auth to initialize, then go to dashboard
+        async function initGame() {
+            // Wait for NeurogatiAuth to be ready
+            while (!window.NeurogatiAuth || !window.NeurogatiAuth.initialized) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            // Always go to dashboard (parent page handles auth)
+            // User data will be loaded by storage.js wrapper
+            setTimeout(() => {
+                window.location.href = 'pages/dashboard.html';
+            }, 2500); // 2.5 second splash screen
+        }
+
+        initGame();
+    </script>
+</body>
+</html>

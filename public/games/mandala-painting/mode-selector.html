@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Mode - Gesture Painting</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        #container {
+            width: 90vw;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 50px;
+        }
+
+        .modes-container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-card {
+            flex: 1;
+            max-width: 350px;
+            background: #f8f9fa;
+            border: 3px solid transparent;
+            border-radius: 20px;
+            padding: 40px 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .mode-card.selected {
+            border-color: #38ef7d;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+        }
+
+        .mode-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .mode-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .mode-distance {
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .mode-features {
+            text-align: left;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .mode-feature {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .mode-feature::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #38ef7d;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            padding: 20px 60px;
+            font-size: 1.4em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .checkbox-container {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            font-size: 1.1em;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .selected-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #38ef7d;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .mode-card.selected .selected-indicator {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>🎨 Gesture Painting Game</h1>
+        <p class="subtitle">Choose your player mode to get started</p>
+
+        <!-- Player Mode Selection -->
+        <h2 style="color: #667eea; font-size: 1.8em; margin: 30px 0 20px 0;">👥 Player Mode</h2>
+        <div class="modes-container">
+            <!-- One Player Mode -->
+            <div class="mode-card" id="one-player-mode" onclick="selectPlayerMode('one')">
+                <div class="selected-indicator">SELECTED</div>
+                <div class="mode-icon">👤</div>
+                <div class="mode-title">One Player</div>
+                <div class="mode-distance">Single Hand Tracking</div>
+                <div class="mode-features">
+                    <div class="mode-feature">Track one hand</div>
+                    <div class="mode-feature">Single virtual cursor</div>
+                    <div class="mode-feature">Classic gameplay</div>
+                    <div class="mode-feature">Perfect for solo painting</div>
+                </div>
+            </div>
+
+            <!-- Two Player Mode -->
+            <div class="mode-card" id="two-player-mode" onclick="selectPlayerMode('two')">
+                <div class="selected-indicator">SELECTED</div>
+                <div class="mode-icon">👥</div>
+                <div class="mode-title">Two Players</div>
+                <div class="mode-distance">Dual Hand Tracking</div>
+                <div class="mode-features">
+                    <div class="mode-feature">Track two hands</div>
+                    <div class="mode-feature">Two virtual cursors</div>
+                    <div class="mode-feature">Paint simultaneously</div>
+                    <div class="mode-feature">Perfect for co-op painting</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="remember-choice">
+            <label for="remember-choice">Remember my choice</label>
+        </div>
+
+        <button class="btn" id="continue-btn" onclick="continueToGame()">Continue</button>
+    </div>
+
+    <script>
+        // Send heartbeat to server to keep it alive
+        function sendHeartbeat() {
+            fetch('/heartbeat').catch(() => {});
+        }
+
+        // Send heartbeat every 2 seconds
+        setInterval(sendHeartbeat, 2000);
+
+        // Send initial heartbeat
+        sendHeartbeat();
+
+        let selectedPlayerMode = null;
+
+        // Check if player mode was previously selected
+        window.addEventListener('load', () => {
+            const savedPlayerMode = localStorage.getItem('playerMode');
+            const rememberChoice = localStorage.getItem('rememberModeChoice') === 'true';
+
+            if (savedPlayerMode && rememberChoice) {
+                // Auto-redirect with saved player mode
+                window.location.replace('demo2.html');
+            } else {
+                // Pre-select saved mode or default to one player
+                if (savedPlayerMode) {
+                    selectPlayerMode(savedPlayerMode);
+                } else {
+                    selectPlayerMode('one');
+                }
+            }
+        });
+
+        function selectPlayerMode(mode) {
+            selectedPlayerMode = mode;
+
+            // Update UI
+            document.getElementById('one-player-mode').classList.remove('selected');
+            document.getElementById('two-player-mode').classList.remove('selected');
+            document.getElementById(mode + '-player-mode').classList.add('selected');
+
+            // Enable continue button
+            document.getElementById('continue-btn').disabled = false;
+        }
+
+        function continueToGame() {
+            if (!selectedPlayerMode) {
+                alert('Please select a player mode!');
+                return;
+            }
+
+            // Save player mode preference
+            localStorage.setItem('playerMode', selectedPlayerMode);
+
+            // Save remember choice
+            const rememberChoice = document.getElementById('remember-choice').checked;
+            localStorage.setItem('rememberModeChoice', rememberChoice);
+
+            // Go to game - use window.location.replace to stay in same context
+            window.location.replace('demo2.html');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+# Vercel ignore file
+
+# Development files
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation (optional - remove if you want docs deployed)
+Documentation/
+
+# Local database (SQLite won't work on Vercel - use PostgreSQL)
+server/balloon_game.db
+
+# Node modules (if any)
+node_modules/
+
+# Test files
+test/
+tests/
+*.test.js
+
+# Build artifacts
+*.log
+.cache/

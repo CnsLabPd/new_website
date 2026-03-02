@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Racing - Blind Accessible Game</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="header">
+      <h1 id="gameTitle">Audio Racing</h1>
+      <p class="subtitle" id="gameSubtitle">An audio-first racing game for blind players</p>
+    </div>
+
+    <script>
+      console.log('🏁 [RACING GAME] HTML inline script executing');
+      console.log('🏁 [RACING GAME] URL:', window.location.href);
+
+      // Update title based on level parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const level = parseInt(urlParams.get('level')) || 2;
+      const numLanes = level === 1 ? 2 : 3;
+
+      console.log('🏁 [RACING GAME] Level:', level, 'Lanes:', numLanes);
+
+      const titleEl = document.getElementById('gameTitle');
+      const subtitleEl = document.getElementById('gameSubtitle');
+
+      if (level === 1) {
+        titleEl.textContent = 'Highway Racer - Level 1 (2 Lanes)';
+        subtitleEl.textContent = 'Beginner mode: LEFT and RIGHT lanes with stereo audio';
+      } else {
+        titleEl.textContent = 'Highway Racer - Level 2 (3 Lanes)';
+        subtitleEl.textContent = 'Advanced mode: LEFT, CENTER, and RIGHT lanes with spatial audio';
+      }
+
+      console.log('🏁 [RACING GAME] Title updated:', titleEl.textContent);
+    </script>
+
+    <!-- LEFT PANEL: Start Button -->
+    <div class="left-panel">
+      <!-- Control Mode Selection (shown before game starts) -->
+      <div class="control-mode-selection" id="controlModeSelection">
+        <h3 class="mode-title">Choose Control Mode</h3>
+        <button class="btn btn-mode" id="gestureBtn">Play with Gestures</button>
+        <button class="btn btn-mode" id="keyboardBtn">Play with Keyboard</button>
+      </div>
+
+      <!-- Game Controls (shown after mode selected) -->
+      <div class="game-controls" id="gameControls" style="display: none;">
+        <button class="btn" id="startBtn">Start Game (Space)</button>
+        <button class="btn btn-warning" id="saveQuitBtn" style="display: none;">💾 Save & Quit</button>
+        <button class="btn btn-secondary" id="changeModeBtn">Change Mode</button>
+      </div>
+
+      <button class="btn btn-exit" id="exitBtn">Exit Game</button>
+
+      <!-- Old simple game over (kept for backward compatibility, hidden by default) -->
+      <div class="game-over" id="gameOver" style="display: none;">
+        <h2>Game Over!</h2>
+        <p id="finalScore">Final Score: 0</p>
+        <p id="distanceCovered"></p>
+      </div>
+
+      <!-- Leaderboard Display -->
+      <div class="leaderboard-panel" id="leaderboardPanel" style="display: none;">
+        <h3>🏆 Leaderboard</h3>
+        <div id="leaderboardContent">
+          <p>Loading...</p>
+        </div>
+        <button class="btn btn-secondary" id="closeLeaderboardBtn" style="margin-top: 15px;">Close</button>
+      </div>
+    </div>
+
+    <!-- CENTER: Game Canvas -->
+    <div class="game-card">
+      <div class="status-bar">
+        <div class="stat">
+          <div class="stat-label">Speed</div>
+          <div class="stat-value" id="speedDisplay">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Score</div>
+          <div class="stat-value" id="scoreDisplay">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Lane</div>
+          <div class="stat-value" id="laneDisplay">LEFT</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Distance</div>
+          <div class="stat-value" id="distanceDisplay">0m</div>
+        </div>
+        <div class="stat gear-stat">
+          <div class="stat-label">Gear</div>
+          <div class="stat-value" id="gearDisplay">1</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">RPM</div>
+          <div class="stat-value" id="rpmDisplay">1200</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Difficulty</div>
+          <div class="stat-value" id="difficultyDisplay">0</div>
+        </div>
+      </div>
+
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <!-- RIGHT PANEL: Controls -->
+    <div class="controls">
+      <h3>Controls & Audio Cues (3-Lane Highway)</h3>
+      <div class="control-item">
+        <span>Start/Pause:</span>
+        <strong>SPACE</strong>
+      </div>
+      <div class="control-item">
+        <span>Accelerate:</span>
+        <strong>UP ARROW (Hold)</strong>
+      </div>
+      <div class="control-item">
+        <span>Brake/Decelerate:</span>
+        <strong>DOWN ARROW (Hold)</strong>
+      </div>
+      <div class="control-item">
+        <span>Move Left (Left ← Center ← Right):</span>
+        <strong>LEFT ARROW</strong>
+      </div>
+      <div class="control-item">
+        <span>Move Right (Left → Center → Right):</span>
+        <strong>RIGHT ARROW</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Webcam overlay for gesture mode -->
+  <div id="webcamContainer" style="display: none;">
+    <video id="webcamVideo" autoplay playsinline></video>
+    <canvas id="handCanvas"></canvas>
+    <div id="handStatus" class="hand-status">Waiting for hands...</div>
+  </div>
+
+  <!-- Game Over Overlay -->
+  <div class="game-over-overlay" id="gameOverOverlay" style="display: none;">
+    <div class="game-over-card">
+      <div class="game-over-title">💥 GAME OVER! 💥</div>
+
+      <div class="game-over-stats">
+        <div class="game-over-stat">
+          <div class="game-over-stat-label">Final Score</div>
+          <div class="game-over-stat-value" id="gameOverScore">0</div>
+        </div>
+        <div class="game-over-stat">
+          <div class="game-over-stat-label">Distance Traveled</div>
+          <div class="game-over-stat-value" id="gameOverDistance">0m</div>
+        </div>
+        <div class="game-over-stat">
+          <div class="game-over-stat-label">Max Speed Reached</div>
+          <div class="game-over-stat-value" id="gameOverMaxSpeed">0</div>
+        </div>
+      </div>
+
+      <!-- Leaderboard Section -->
+      <div class="game-over-leaderboard">
+        <h3 style="margin: 0 0 15px 0; color: #ffd700; text-align: center;">🏆 Leaderboard</h3>
+        <div id="gameOverLeaderboardContent">
+          <p style="text-align: center; color: #888;">Loading...</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="game-over-buttons">
+        <button class="game-over-btn home" id="gameOverHomeBtn">
+          🏠 Home
+        </button>
+        <button class="game-over-btn retry" id="gameOverRetryBtn">
+          🔄 Play Again
+        </button>
+        <button class="game-over-btn next" id="gameOverNextBtn">
+          ➡️ Next Level
+        </button>
+      </div>
+
+      <!-- Save Score Button (if not saved) -->
+      <div style="text-align: center; margin-top: 15px;">
+        <button class="btn btn-primary" id="gameOverSaveBtn" style="display: none;">
+          💾 Save Score
+        </button>
+        <p id="gameOverSaveStatus" style="color: #4CAF50; margin-top: 10px;"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load libraries before modules -->
+  <!-- Matter.js Physics Engine from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <!-- Pixi.js removed - using native Canvas 2D renderer -->
+
+  <!-- MediaPipe Hands -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+  <!-- Main game module (with cache busting) -->
+  <script type="module">
+    // Add timestamp to force fresh load of modules
+    const timestamp = Date.now();
+    import(`./main.js?v=${timestamp}`);
+  </script>
+</body>
+</html>

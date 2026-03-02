@@ -1,98 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as fs from 'fs';
-import * as path from 'path';
+import { createClient } from '@/lib/supabase';
 
-// Simple SQLite query function without native dependencies
-// This reads the SQLite database file directly using a pure JavaScript implementation
-async function queryLeaderboard(levelNumber: number, limit: number) {
-  const dbPath = path.join(process.cwd(), 'public', 'games', 'sonic-drive', 'server', 'balloon_game.db');
+async function queryLeaderboard(levelNumber: number, gameSlug: string, limit: number) {
+  const supabase = createClient();
 
-  // Check if database exists
-  if (!fs.existsSync(dbPath)) {
-    throw new Error('Database file not found');
+  try {
+    // Query game_progress table for leaderboard - now includes username
+    const { data, error } = await supabase
+      .from('game_progress')
+      .select(`
+        username,
+        high_score,
+        completed,
+        last_played
+      `)
+      .eq('game_slug', gameSlug)
+      .eq('level_number', levelNumber)
+      .order('high_score', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+
+    // Return data directly - username is now stored in the table
+    return (data || []).map(entry => ({
+      username: entry.username || 'Anonymous',
+      high_score: entry.high_score,
+      completed: entry.completed,
+      last_played: entry.last_played
+    }));
+  } catch (error) {
+    console.error('Error querying leaderboard from Supabase:', error);
+    throw error;
   }
-
-  // Since better-sqlite3 requires native bindings which don't work in Next.js serverless,
-  // we'll use a workaround: spawn a Python process to query the database
-  const { spawn } = await import('child_process');
-
-  return new Promise((resolve, reject) => {
-    const pythonScript = `
-import sqlite3
-import json
-import sys
-
-db_path = "${dbPath.replace(/\\/g, '\\\\')}"
-level_number = ${levelNumber}
-limit = ${limit}
-
-try:
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    query = """
-        SELECT
-            users.username,
-            progress.high_score,
-            progress.completed,
-            progress.last_played
-        FROM progress
-        JOIN users ON progress.user_id = users.id
-        WHERE progress.level_number = ?
-        ORDER BY progress.high_score DESC
-        LIMIT ?
-    """
-
-    cursor.execute(query, (level_number, limit))
-    results = cursor.fetchall()
-
-    leaderboard = []
-    for row in results:
-        leaderboard.append({
-            'username': row[0],
-            'high_score': row[1],
-            'completed': row[2],
-            'last_played': row[3]
-        })
-
-    conn.close()
-    print(json.dumps({'success': True, 'leaderboard': leaderboard}))
-
-except Exception as e:
-    print(json.dumps({'success': False, 'error': str(e)}))
-    sys.exit(1)
-`;
-
-    const python = spawn('python3', ['-c', pythonScript]);
-    let output = '';
-    let errorOutput = '';
-
-    python.stdout.on('data', (data) => {
-      output += data.toString();
-    });
-
-    python.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-    });
-
-    python.on('close', (code) => {
-      if (code !== 0) {
-        reject(new Error(`Python script failed: ${errorOutput}`));
-        return;
-      }
-
-      try {
-        const result = JSON.parse(output);
-        if (result.success) {
-          resolve(result.leaderboard);
-        } else {
-          reject(new Error(result.error));
-        }
-      } catch (err) {
-        reject(new Error(`Failed to parse Python output: ${output}`));
-      }
-    });
-  });
 }
 
 export async function GET(
@@ -110,16 +49,18 @@ export async function GET(
       );
     }
 
-    // Get limit from query parameters (default: 10)
+    // Get query parameters
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const gameSlug = searchParams.get('game_slug') || 'sonic-drive'; // Default to sonic-drive
 
-    // Query leaderboard using Python subprocess
-    const leaderboard = await queryLeaderboard(levelNumber, limit);
+    // Query leaderboard from Supabase
+    const leaderboard = await queryLeaderboard(levelNumber, gameSlug, limit);
 
     return NextResponse.json({
       success: true,
       level_number: levelNumber,
+      game_slug: gameSlug,
       leaderboard: leaderboard
     });
 

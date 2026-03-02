@@ -40,6 +40,7 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 import type { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -54,7 +55,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="dark" storageKey="neurogati-ui-theme">
-          {children} 
+          {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb"
+      }
+    },
+    {
+      "src": "**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py",
+      "headers": {
+        "Content-Security-Policy": "frame-ancestors 'self' https://neurogati.com https://www.neurogati.com http://localhost:3000;",
+        "X-Frame-Options": "ALLOW-FROM https://neurogati.com"
+      }
+    },
+    {
+      "src": "/heartbeat",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1",
+      "headers": {
+        "Content-Security-Policy": "frame-ancestors 'self' https://neurogati.com https://www.neurogati.com http://localhost:3000;",
+        "X-Frame-Options": "ALLOW-FROM https://neurogati.com"
+      }
+    }
+  ]
+}

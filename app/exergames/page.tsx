@@ -3,10 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Eye, Brain, Users, Gamepad2, Hand, Activity, TrendingUp, BarChart3, Heart } from "lucide-react"
-import { WaveBackground } from "@/components/wave-background"
-import { NetworkAnimation } from "@/components/network-animation"
-import { StickyBanner } from "@/components/ui/sticky-banner"
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 
 export default function ExergamesPage() {
   const categories = [
@@ -43,17 +40,7 @@ export default function ExergamesPage() {
   ]
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="relative flex w-full flex-col overflow-y-auto">
-        <StickyBanner className="bg-gradient-to-b from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-          <p className="mx-0 max-w-[90%] text-white drop-shadow-md">
-            Announcing Workshop on Brain Modeling from January 09th to 13th, 2026.{" "}
-            <a href="/modelingworkshop">
-              Visit Website
-            </a>
-          </p>
-        </StickyBanner>
-      </div>
+    <div className="flex min-h-screen flex-col bg-royal-950">
       <header className="container z-10 flex h-20 items-center justify-between py-6">
         <div className="flex items-center gap-2">
           <Link
@@ -99,10 +86,7 @@ export default function ExergamesPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-royal-950 py-20 md:py-32">
-          <div className="absolute inset-0 z-0">
-            <NetworkAnimation />
-            <div className="absolute inset-0 z-5 bg-gradient-to-b from-royal-950/50 via-transparent to-royal-950/80"></div>
-          </div>
+          <div className="absolute inset-0 z-0 bg-gradient-to-b from-royal-900 via-royal-950 to-royal-900"></div>
           <div className="container relative z-20">
             <div className="mx-auto max-w-3xl text-center">
               <motion.div
@@ -378,9 +362,7 @@ export default function ExergamesPage() {
 
         {/* CTA Section */}
         <section className="relative overflow-hidden bg-royal-950 py-20">
-          <div className="absolute inset-0 z-0">
-            <WaveBackground />
-          </div>
+          <div className="absolute inset-0 z-0 bg-gradient-to-b from-royal-900 via-royal-950 to-royal-900"></div>
           <div className="container relative z-10">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">

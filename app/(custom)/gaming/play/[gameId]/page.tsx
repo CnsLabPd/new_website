@@ -45,9 +45,12 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('🔄 Auth state changed:', _event, session?.user ? 'User logged in' : 'No user');
       setUser(session?.user ?? null);
+      setLoading(false); // Ensure loading is false after auth change
       if (session?.user) {
         setIsAuthModalOpen(false); // Close modal after successful login
+        console.log('✅ User authenticated, game should load now');
       }
     });
 
@@ -89,7 +92,7 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
     return (
       <>
         <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-        <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
+        <div className="fixed inset-0 bg-black z-[100] flex items-center justify-center">
           <div className="max-w-md w-full p-8 text-center space-y-8">
             <div className="flex justify-center">
               <Lock className="h-20 w-20 text-blue-500" />

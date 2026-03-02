@@ -50,7 +50,7 @@ export default function NeuroDiagnosticsPage() {
               Diagnostics & <br /> Monitoring
             </h1>
             <p className="max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-              Transforming neurological care through AI-powered behavioral biomarkers. We provide the tools for earlier detection and precise monitoring of Parkinson's and Alzheimer's.
+              Transforming neurological care through AI-powered behavioral biomarkers. We provide the tools for earlier detection and precise monitoring of Parkinson's Disease.
             </p>
           </div>
         </div>

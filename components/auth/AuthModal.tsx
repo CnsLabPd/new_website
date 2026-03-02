@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { X, Loader2 } from "lucide-react"
-import { createClient } from "@/lib/supabase" // Ensure this path is correct
+import { createClient } from "@/lib/supabase"
+import { useToast } from "@/components/ui/use-toast"
 
 export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [isSignUp, setIsSignUp] = useState(false)
   const [loading, setLoading] = useState(false)
-  
+  const { toast } = useToast()
+
   // 1. FORM STATES
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -21,7 +23,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    console.log("🔐 Starting Auth flow...") // Debug log
+    console.log("Starting Auth flow...") // Debug log
 
     try {
       if (isSignUp) {
@@ -37,32 +39,31 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           },
         })
         if (error) throw error
-        console.log("✅ Sign up successful:", data)
-        alert("Success! Check your email for a confirmation link.")
+        toast({
+          title: "Account created successfully!",
+          description: "Please check your email for a confirmation link.",
+        })
       } else {
         // SIGN IN LOGIC
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
         if (error) throw error
-        console.log("✅ Sign in successful:", data)
-        console.log("📦 Session in response:", data.session)
-        console.log("👤 User data:", data.user)
-
-        // Check localStorage immediately after login
-        const storageKey = 'sb-yourttiykfslostesqjp-auth-token'
-        const stored = localStorage.getItem(storageKey)
-        console.log("💾 localStorage after login:", stored ? "Session found" : "NO SESSION FOUND!")
-        if (stored) {
-          console.log("💾 Stored session:", JSON.parse(stored))
-        }
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        })
       }
 
       onClose() // Close modal on success
     } catch (error: any) {
       console.error("Auth Error:", error.message)
-      alert(error.message)
+      toast({
+        title: "Authentication failed",
+        description: error.message,
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
@@ -71,7 +72,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-md bg-background border border-border p-8 rounded-3xl shadow-2xl">
         <button onClick={onClose} className="absolute right-6 top-6 text-muted-foreground hover:text-foreground">
           <X className="h-5 w-5" />
