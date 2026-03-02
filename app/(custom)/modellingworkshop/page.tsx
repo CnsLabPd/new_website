@@ -597,73 +597,117 @@ export default function BrainModelingWorkshopPage() {
         </div>
       </section>
 
-     {/* ================= OVERVIEW ================= */}
-      <section id="overview" className="container mx-auto px-6 py-24 grid gap-8 md:grid-cols-4">
-        {[
-          { icon: <Brain />, title: "Single Neuron Models", desc: "HH, Morris-Lecar, FitzHugh–Nagumo, Izhikevich" },
-          { icon: <Network />, title: "Neural Networks", desc: "Deep learning & CNN applications" },
-          { icon: <Activity />, title: "Oscillations", desc: "Phase plane analysis & DONNs" },
-          { icon: <Layers />, title: "Systems Modeling", desc: "Basal ganglia, hippocampus, fMRI networks" },
-        ].map((item, idx) => (
-          <Card key={idx} className="bg-white/5 border border-white/10 p-8 rounded-3xl hover:shadow-2xl hover:-translate-y-2 transition-all">
-            <div className="text-cyan-400 mb-6">
-              {React.cloneElement(item.icon as React.ReactElement, { className: "h-10 w-10" })}
-            </div>
-            <h3 className="text-xl font-black mb-3">{item.title}</h3>
-            <p className="text-slate-400 text-sm">{item.desc}</p>
-          </Card>
-        ))}
-      </section>
+    {/* --- CONTENT --- */}
+{       <div className="container mx-auto px-6 py-24 space-y-32">
 
-      {/* ================= SCHEDULE ================= */}
-      <section id="schedule" className="container mx-auto px-6 py-24 space-y-12">
-        <h2 className="text-4xl font-black text-center mb-16">Workshop Schedule</h2>
+         {/* Overview */}
+         <section className="grid gap-8 md:grid-cols-4">
+          {[
+            {
+              icon: <Brain />,
+              title: "Single Neuron Models",
+              desc: "HH, Morris-Lecar, FitzHugh–Nagumo, Izhikevich models",
+            },
+            {
+              icon: <Network />,
+              title: "Neural Networks",
+              desc: "Deep learning & CNN applications in neuroscience",
+            },
+            {
+              icon: <Activity />,
+              title: "Oscillations",
+              desc: "Phase plane analysis, rhythms & DONNs",
+            },
+            {
+              icon: <Layers />,
+              title: "Systems Modeling",
+              desc: "Basal ganglia, hippocampus, fMRI network models",
+            },
+          ].map((item, idx) => (
+            <Card
+              key={idx}
+              className="bg-card border border-border p-8 rounded-[2rem] hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+            >
+              <div className="text-blue-500 mb-6">
+                {React.cloneElement(item.icon as React.ReactElement, {
+                  className: "h-10 w-10",
+                })}
+              </div>
+              <h3 className="text-xl font-black mb-3">
+                {item.title}
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {item.desc}
+              </p>
+            </Card>
+          ))}
+        </section>
 
-        {[
-          {
-            day: "Day 1 – Single Neuron",
-            points: [
-              "Introduction to Computational Neuroscience",
-              "Single neuron signaling",
-              "HH, Morris-Lecar, FN & Izhikevich models",
-              "Practical sessions (PyTorch)"
-            ]
-          },
-          {
-            day: "Day 2 – Networks",
-            points: [
-              "CNNs in motor, visual & auditory neuroscience",
-              "Deep neural networks perspective",
-              "Hands-on training & project"
-            ]
-          },
-          {
-            day: "Day 3 – Oscillations",
-            points: [
-              "Neural rhythms & measurement",
-              "Phase plane & limit cycles",
-              "Deep Oscillatory Neural Networks (DONNs)"
-            ]
-          },
-          {
-            day: "Day 4 & 5 – Systems & Projects",
-            points: [
-              "Basal ganglia model for DBS",
-              "Hippocampal spatial cell modeling",
-              "Oscillator network model of fMRI"
-            ]
-          }
-        ].map((item, idx) => (
-          <Card key={idx} className="p-8 rounded-3xl bg-white/5 border border-white/10">
-            <h3 className="text-2xl font-black mb-6">{item.day}</h3>
-            <ul className="space-y-2 text-slate-400">
-              {item.points.map((p, i) => (
-                <li key={i}>• {p}</li>
-              ))}
-            </ul>
-          </Card>
-        ))}
-      </section>
+        {/* Schedule */}
+        <section id="schedule" className="space-y-12">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black tracking-tight mb-4">
+              Workshop Schedule
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              Five days of theory, simulations, and hands-on PyTorch labs.
+            </p>
+          </div>
+
+          <div className="space-y-8 max-w-5xl mx-auto">
+
+            {/* Day 1 */}
+            <Card className="p-8 rounded-[2rem]">
+              <h3 className="text-2xl font-black mb-6">
+                Day 1 – Single Neuron Dynamics
+              </h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>• Introduction to Computational Neuroscience</li>
+                <li>• Single neuron signaling</li>
+                <li>• HH, Morris-Lecar, FN & Izhikevich models</li>
+                <li>• Practical sessions (PyTorch implementation)</li>
+              </ul>
+            </Card>
+
+            {/* Day 2 */}
+            <Card className="p-8 rounded-[2rem]">
+              <h3 className="text-2xl font-black mb-6">
+                Day 2 – Neural Networks
+              </h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>• CNNs in motor, visual & auditory neuroscience</li>
+                <li>• Deep neural networks & system organization</li>
+                <li>• Practical sessions & mini project</li>
+              </ul>
+            </Card>
+
+            {/* Day 3 */}
+            <Card className="p-8 rounded-[2rem]">
+              <h3 className="text-2xl font-black mb-6">
+                Day 3 – Oscillations
+              </h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>• Neural rhythms & measurement techniques</li>
+                <li>• Phase plane analysis & limit cycles</li>
+                <li>• Deep Oscillatory Neural Networks (DONNs)</li>
+                <li>• Practical: xppaut & DONNs applications</li>
+              </ul>
+            </Card>
+
+            {/* Day 4 & 5 */}
+            <Card className="p-8 rounded-[2rem]">
+              <h3 className="text-2xl font-black mb-6">
+                Day 4 & 5 – Systems & Projects
+              </h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>• Bilateral reaching networks (normal & stroke)</li>
+                <li>• Basal ganglia model for DBS</li>
+                <li>• Deep network model of hippocampal spatial cells</li>
+                <li>• Oscillator network model of fMRI</li>
+              </ul>
+            </Card>
+          </div>
+        </section> }
 
       {/* ================= IMPORTANT DATES & FEES ================= */}
       <section id="fees" className="container mx-auto px-6 py-32 grid lg:grid-cols-2 gap-20">
