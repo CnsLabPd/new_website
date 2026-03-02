@@ -54,7 +54,7 @@ export default function WorkshopPage() {
               className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-black uppercase tracking-tight hover:from-cyan-500 hover:to-blue-600 rounded-full px-6"
               asChild
             >
-              <a href="https://forms.gle/3KwdkrdpSVUxHsWQ6" target="_blank" rel="noopener noreferrer">
+              <a href="https://forms.gle/btcfr8wDBMN3PWCeA" target="_blank" rel="noopener noreferrer">
                 Apply Now
               </a>
             </Button>
@@ -68,7 +68,7 @@ export default function WorkshopPage() {
         <div className="container mx-auto px-6 py-24 md:py-32 relative"> {/* Increased py-32 */}
           <div className="mx-auto max-w-5xl text-center">
             <Badge className="mb-6 bg-white/10 text-white border-white/20 font-bold px-4 py-1" variant="secondary">
-              <Calendar className="mr-2 h-4 w-4 inline text-cyan-400" /> 9 - 13 January 2026
+              <Calendar className="mr-2 h-4 w-4 inline text-cyan-400" /> 27 - 31 March 2026
             </Badge>
             
             {/* Added leading-[1.1] and py-2 to prevent clipping */}
@@ -87,7 +87,7 @@ export default function WorkshopPage() {
                 className="h-14 bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-black rounded-full px-10 text-lg hover:from-cyan-500 hover:to-blue-600 shadow-lg shadow-cyan-500/20"
                 asChild
               >
-                <a href="https://forms.gle/3KwdkrdpSVUxHsWQ6" target="_blank" rel="noopener noreferrer">
+                <a href="https://forms.gle/btcfr8wDBMN3PWCeA" target="_blank" rel="noopener noreferrer">
                   Apply Now <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
               </Button>
