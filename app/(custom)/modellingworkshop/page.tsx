@@ -436,30 +436,6 @@ export default function BrainModelingWorkshopPage() {
 
   </div>
 </section>
-        /* {/* Dates & Fees */}
-        <section className="grid lg:grid-cols-2 gap-12">
-          <div>
-            <h2 className="text-3xl font-black mb-6">
-              Important Dates
-            </h2>
-            <ul className="space-y-4 text-muted-foreground">
-              <li>• SOP Submission – 10 March 2026</li>
-              <li>• Selection Results – 11 March 2026</li>
-              <li>• Registration Deadline – 20 March 2026</li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="text-3xl font-black mb-6">
-              Fee Structure
-            </h2>
-            <ul className="space-y-4 text-muted-foreground">
-              <li>• UG Students – ₹3000</li>
-              <li>• PG/PhD Students – ₹3500</li>
-              <li>• Professionals – ₹4000</li>
-            </ul>
-          </div>
-        </section> */
 
         {/* CTA */}
         <section id="apply" className="text-center py-20 border-t border-border">
