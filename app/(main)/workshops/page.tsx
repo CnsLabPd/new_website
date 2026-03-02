@@ -8,18 +8,6 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
-    id: "comp-neuro-training-1",
-    status: "Ongoing",
-    title: "5-Month Research Training Program in Computational Neuroscience",
-    date: "January 01st - May 31st, 2026",
-    duration: "20 weeks (Phase 01: 10w | Phase 02: 10w)",
-    participants: "50 Max",
-    type: "Online (Zoom)",
-    pricing: "Phase 01: 25,000 INR | Phase 02: 35,000 INR",
-    description: "A mentorship-driven online program that takes students from foundational coursework to a supervised, conference-ready research project in computational neuroscience.",
-    registrationLink: "/researchprogram"
-  },
-  {
     id: "comp-neuro-training-3",
     status: "Upcoming",
     title: "Workshop on Brain Modeling",
@@ -30,6 +18,18 @@ const workshops = [
     pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
     description: "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures and practical implementations for complex brain dynamics.",
     registrationLink: "/modellingworkshop"
+  },
+  {
+    id: "comp-neuro-training-1",
+    status: "Ongoing",
+    title: "5-Month Research Training Program in Computational Neuroscience",
+    date: "January 01st - May 31st, 2026",
+    duration: "20 weeks (Phase 01: 10w | Phase 02: 10w)",
+    participants: "50 Max",
+    type: "Online (Zoom)",
+    pricing: "Phase 01: 25,000 INR | Phase 02: 35,000 INR",
+    description: "A mentorship-driven online program that takes students from foundational coursework to a supervised, conference-ready research project in computational neuroscience.",
+    registrationLink: "/researchprogram"
   },
   {
     id: "AI-EEG-4",
