@@ -190,7 +190,47 @@ import {
 
 export default function BrainModelingWorkshopPage() {
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-[#050814] via-[#0a0f2c] to-[#0b163f] text-white">
+       {/* Header/Nav - Logo & Title Fixed */}
+       <header className="sticky top-0 z-50 backdrop-blur-md bg-black/40 border-b border-white/10">
+         <div className="container mx-auto flex items-center justify-between px-6 py-4">
+          
+           <Link 
+             href="/" 
+             className="flex items-center gap-3 hover:opacity-90 transition group"
+           >
+             <img 
+               src="/bg_just_logo.png" 
+               alt="Neurogati Logo" 
+               className="h-14 w-14 object-contain group-hover:scale-105 transition-transform" 
+             />
+             <span className="text-2xl font-black tracking-tighter text-[#1c82c2] dark:text-[#38bdf8]">
+               NEUROGATI
+             </span>
+           </Link>
+
+          <nav className="hidden gap-8 md:flex items-center">
+             <a href="#overview" className="text-sm font-bold text-slate-400 hover:text-cyan-400 transition">Overview</a>
+             <a href="#schedule" className="text-sm font-bold text-slate-400 hover:text-cyan-400 transition">Schedule</a>
+             <a href="#fees" className="text-sm font-bold text-slate-400 hover:text-cyan-400 transition">Fees</a>
+             <a href="#instructor" className="text-sm font-bold text-slate-400 hover:text-cyan-400 transition">Instructor</a>
+             <Link href="/workshops" className="text-sm font-bold text-slate-400 hover:text-cyan-400 transition">
+               View all Workshops
+             </Link>
+           </nav>
+
+           <div className="flex items-center gap-3">
+             <Button
+               className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-black uppercase tracking-tight hover:from-cyan-500 hover:to-blue-600 rounded-full px-6"
+               asChild
+             >
+               <a href="https://forms.gle/btcfr8wDBMN3PWCeA" target="_blank" rel="noopener noreferrer">
+                 Apply Now
+               </a>
+             </Button>
+           </div>
+         </div>
+       </header>
       
       {/* --- HERO SECTION --- */}
       <section className="relative pt-40 pb-24 overflow-hidden border-b border-border">
