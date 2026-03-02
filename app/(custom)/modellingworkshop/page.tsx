@@ -487,7 +487,7 @@ export default function BrainModelingWorkshopPage() {
             className="bg-blue-800 hover:bg-blue-900 text-white px-10 py-4 rounded-xl font-bold"
           >
           <a href="https://forms.gle/btcfr8wDBMN3PWCeA" target="_blank" rel="noopener noreferrer">
-            Apply Now <ArrowRight className="h-5 w-5 ml-2" />
+            Apply Now 
                     </a>
           </Button>
 
