@@ -20,18 +20,6 @@ const workshops = [
     registrationLink: "/researchprogram"
   },
   {
-    id: "AI-EEG-4",
-    status: "Past",
-    title: "AI Applications in EEG",
-    date: "February 20-22, 2026",
-    duration: "3 days",
-    participants: "70 Max",
-    type: "Online (Zoom)",
-    pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
-    description: "Explore how EEG signals are collected, processed, and analyzed using AI and machine learning for breakthrough applications in brain-computer interfaces and neurological diagnosis.",
-    registrationLink: "/eegworkshop"
-  },
-  {
     id: "comp-neuro-training-3",
     status: "Upcoming",
     title: "Workshop on Brain Modeling",
@@ -42,6 +30,18 @@ const workshops = [
     pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
     description: "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures and practical implementations for complex brain dynamics.",
     registrationLink: "/modellingworkshop"
+  },
+  {
+    id: "AI-EEG-4",
+    status: "Past",
+    title: "AI Applications in EEG",
+    date: "February 20-22, 2026",
+    duration: "3 days",
+    participants: "70 Max",
+    type: "Online (Zoom)",
+    pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
+    description: "Explore how EEG signals are collected, processed, and analyzed using AI and machine learning for breakthrough applications in brain-computer interfaces and neurological diagnosis.",
+    registrationLink: "/eegworkshop"
   },
     {
     id: "comp-neuro-training-2",
