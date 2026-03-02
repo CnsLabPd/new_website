@@ -366,7 +366,77 @@ export default function BrainModelingWorkshopPage() {
           </div>
         </section>
 
-        {/* Dates & Fees */}
+
+        {/* --- Important Dates & Fees (Enhanced) --- */}
+<section className="relative py-28">
+  {/* Background Glow */}
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-cyan-900/20 blur-3xl opacity-40 pointer-events-none" />
+
+  <div className="relative container mx-auto px-6 grid lg:grid-cols-2 gap-16">
+
+    {/* IMPORTANT DATES */}
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-4xl font-black tracking-tight mb-3">
+          Important Dates
+        </h2>
+        <div className="h-1 w-20 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
+      </div>
+
+      <div className="space-y-6">
+        {[
+          { title: "SOP Submission", date: "10 March 2026" },
+          { title: "Selection Results", date: "11 March 2026" },
+          { title: "Registration Deadline", date: "20 March 2026" },
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className="flex items-center justify-between p-6 rounded-2xl border border-border bg-card/60 backdrop-blur-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          >
+            <span className="font-semibold text-lg">
+              {item.title}
+            </span>
+            <span className="text-blue-400 font-black text-lg">
+              {item.date}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* FEE STRUCTURE */}
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-4xl font-black tracking-tight mb-3">
+          Fee Structure
+        </h2>
+        <div className="h-1 w-20 bg-gradient-to-r from-violet-400 to-blue-500 rounded-full" />
+      </div>
+
+      <div className="grid gap-6">
+        {[
+          { label: "UG Students", price: "₹3,000" },
+          { label: "PG / PhD Students", price: "₹3,500" },
+          { label: "Professionals", price: "₹4,000" },
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className="p-8 rounded-3xl bg-gradient-to-br from-blue-600/20 to-cyan-600/10 border border-blue-500/20 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+          >
+            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+              {item.label}
+            </p>
+            <p className="text-4xl font-black text-blue-400">
+              {item.price}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+        /* {/* Dates & Fees */}
         <section className="grid lg:grid-cols-2 gap-12">
           <div>
             <h2 className="text-3xl font-black mb-6">
@@ -389,7 +459,7 @@ export default function BrainModelingWorkshopPage() {
               <li>• Professionals – ₹4000</li>
             </ul>
           </div>
-        </section>
+        </section> */
 
         {/* CTA */}
         <section id="apply" className="text-center py-20 border-t border-border">
