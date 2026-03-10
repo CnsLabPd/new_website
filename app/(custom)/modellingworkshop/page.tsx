@@ -597,11 +597,11 @@ export default function BrainModelingWorkshopPage() {
         </div>
       </section>
 
-    {/* --- CONTENT --- */}
-{       <div className="container mx-auto px-6 py-24 space-y-32">
+      {/* --- CONTENT --- */}
+      <div className="container mx-auto px-6 py-24 space-y-32">
 
-         {/* Overview */}
-         <section className="grid gap-8 md:grid-cols-4">
+        {/* Overview */}
+        <section className="grid gap-8 md:grid-cols-4">
           {[
             {
               icon: <Brain />,
@@ -656,7 +656,6 @@ export default function BrainModelingWorkshopPage() {
 
           <div className="space-y-8 max-w-5xl mx-auto">
 
-            {/* Day 1 */}
             <Card className="p-8 rounded-[2rem]">
               <h3 className="text-2xl font-black mb-6">
                 Day 1 – Single Neuron Dynamics
@@ -669,7 +668,6 @@ export default function BrainModelingWorkshopPage() {
               </ul>
             </Card>
 
-            {/* Day 2 */}
             <Card className="p-8 rounded-[2rem]">
               <h3 className="text-2xl font-black mb-6">
                 Day 2 – Neural Networks
@@ -681,7 +679,6 @@ export default function BrainModelingWorkshopPage() {
               </ul>
             </Card>
 
-            {/* Day 3 */}
             <Card className="p-8 rounded-[2rem]">
               <h3 className="text-2xl font-black mb-6">
                 Day 3 – Oscillations
@@ -694,7 +691,6 @@ export default function BrainModelingWorkshopPage() {
               </ul>
             </Card>
 
-            {/* Day 4 & 5 */}
             <Card className="p-8 rounded-[2rem]">
               <h3 className="text-2xl font-black mb-6">
                 Day 4 & 5 – Systems & Projects
@@ -706,13 +702,15 @@ export default function BrainModelingWorkshopPage() {
                 <li>• Oscillator network model of fMRI</li>
               </ul>
             </Card>
+
           </div>
-        </section> }
+        </section>
+
+      </div>
 
       {/* ================= IMPORTANT DATES & FEES ================= */}
       <section id="fees" className="container mx-auto px-6 py-32 grid lg:grid-cols-2 gap-20">
 
-        {/* IMPORTANT DATES */}
         <div>
           <h2 className="text-4xl font-black mb-4">Important Dates</h2>
           <div className="h-1 w-20 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mb-12" />
@@ -738,7 +736,6 @@ export default function BrainModelingWorkshopPage() {
           </div>
         </div>
 
-        {/* FEE STRUCTURE */}
         <div>
           <h2 className="text-4xl font-black mb-4">Fee Structure</h2>
           <div className="h-1 w-20 bg-gradient-to-r from-violet-400 to-blue-500 rounded-full mb-12" />
@@ -748,6 +745,7 @@ export default function BrainModelingWorkshopPage() {
               { label: "UG Students", price: "₹3,000" },
               { label: "PG / PhD Students", price: "₹3,500" },
               { label: "Professionals", price: "₹4,000" },
+              { label: "For International attendees", price: "$45" },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -792,5 +790,3 @@ export default function BrainModelingWorkshopPage() {
     </div>
   )
 }
-
-
