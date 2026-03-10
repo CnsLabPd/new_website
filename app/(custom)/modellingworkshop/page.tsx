@@ -748,7 +748,6 @@ export default function BrainModelingWorkshopPage() {
               { label: "UG Students", price: "₹3,000" },
               { label: "PG / PhD Students", price: "₹3,500" },
               { label: "Professionals", price: "₹4,000" },
-              { label: "For International attendees", price: "$45" },
             ].map((item, idx) => (
               <div
                 key={idx}
