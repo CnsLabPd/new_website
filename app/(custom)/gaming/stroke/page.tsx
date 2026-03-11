@@ -12,7 +12,7 @@ const rehabProducts = [
     tagline: "Personalized neuro-rehabilitation",
     overview: "A clinically-validated rehabilitation platform that gamifies therapy and progress tracking. Using AI-driven feedback, cRGS™ provides targeted exercises that adapt to each patient's unique recovery curve, maximizing motor function improvement and cognitive engagement.",
     tech: "cRGS™ : Completed clinical trials at Sree Chitra Tirunal Institute (SCTIMST) and NIMHANS",
-    images: ["/images/crgs.png"],
+    images: ["/images/crgs_games.jpeg"],
     features: [
       "Adaptive exercise programs that scale with patient progress",
       "Real-time postural and movement tracking via computer vision",

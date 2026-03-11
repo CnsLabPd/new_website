@@ -11,10 +11,10 @@ import Image from "next/image"
 // --- PRODUCT DATA ---
 const diagnosticProducts = [
   {
-    name: "Quamon-PD™",
-    tagline: "Precision AI Behavioral Biomarkers",
-    overview: "Our flagship clinical monitoring application uses advanced AI to analyze behavioral data for early detection and progression monitoring of Parkinson’s Disease and related disorders. By replacing subjective clinical observation with quantitative multi-modal data, Quamon-PD™ provides comprehensive, evidence-based reports for healthcare providers.",
-    tech: "Quamon-PD™ : Multi-modal quantitative system",
+    name: "Qumon-PD™",
+    tagline: "Quantitative monitoring for Parkinson's disease",
+    overview: "Our flagship clinical monitoring application uses advanced AI to analyze behavioral data for early detection and progression monitoring of Parkinson's Disease and related disorders. By replacing subjective clinical observation with quantitative multi-modal data, Qumon-PD™ provides comprehensive, evidence-based reports for healthcare providers. Clinical trials are ongoing at JIPMER Pondicherry.",
+    tech: "Qumon-PD™ : Multi-modal quantitative system",
     images: ["/Quamon-Pd.png"],
     features: [
       "Multi-modal data analysis (gait, speech, decision making, tremor)",
@@ -93,7 +93,8 @@ export default function NeuroDiagnosticsPage() {
               {/* RIGHT COLUMN: Content */}
               <div className="space-y-12">
                 <div>
-                  <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-6">{product.name}</h2>
+                  <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-3">{product.name}</h2>
+                  <p className="text-xl text-blue-500 font-semibold mb-6">{product.tagline}</p>
                   <p className="text-[19px] text-foreground/80 leading-relaxed font-medium">
                     {product.overview}
                   </p>

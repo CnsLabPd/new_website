@@ -14,7 +14,7 @@ const rehabProducts = [
     overview: "Step into a winter wonderland with Frosty Flicks, an exergaming experience designed for players of all abilities. Using standard laptop webcams, it translates physical movement into in-game action, encouraging mobility through immersive play.",
     tech: null, // No tech highlight for now
     videoUrl: "/frostyFlicks.mp4",
-    images: ["/images/crgs.png"],
+    images: ["/images/crgs_games.jpeg"],
     features: [
       "Intuitive gesture-based controls (No specialized hardware)",
       "Reward systems and levels to incentivize training",
@@ -34,7 +34,7 @@ const rehabProducts = [
     overview: "Hit the court with Dunk-it!!, an immersive basketball exergaming experience that turns your physical rehabilitation into a high-energy competition. Using advanced motion tracking, the game translates your arm and upper-body movements into precise shots and slam dunks, making repetitive therapeutic exercises feel like a trip to the arena.",
     tech: null, // No tech highlight for now
     videoUrl: "/DunkIt.mp4",
-    images: ["/images/crgs.png"],
+    images: ["/images/crgs_games.jpeg"],
     features: [
       "Real-time skeletal tracking via standard webcam (No wearables required)",
       "Adaptive difficulty scaling based on range of motion",

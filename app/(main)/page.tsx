@@ -32,10 +32,13 @@ export default function HomePage() {
           */}
 
           {/* WAVE BACKGROUND COMPONENT */}
-          <WaveBackground 
+          <WaveBackground
             lineColor="rgba(0, 138, 216, 0.3)" // Matches your #008AD8 brand blue
             backgroundColor="transparent"      // Let the page background show through
-            waveCount={35} 
+            waveCount={35}
+            enableZoom={true}
+            zoomSpeed={0.0015}
+            zoomIntensity={0.2}
           />
 
           {/* Subtle overlay to ensure text remains legible */}
@@ -73,24 +76,38 @@ export default function HomePage() {
         
         {/* What is Neurogati? */}
         <section className="bg-muted mx-auto py-24 px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">What is Neurogati?</h2>
-          <div className="mt-6 max-w-3xl mx-auto space-y-4">
-            <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
-              Neurogati is a pioneering neurotechnology company focused on one mission: transforming brain healthcare. We translate advanced research in artificial intelligence and computational neuroscience into a suite of powerful, clinically-proven medical solutions.            
-            </p>
-            <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
-              Our integrated portfolio addresses a continuum of neurological care, featuring <strong>AI-powered diagnostic platforms</strong> for Parkinson's, <strong>personalized gamified therapy</strong> for stroke rehabilitation, neurodiversity, elderly cognitive decline, a new generation of <strong>assistive technologies</strong> that foster greater independence and <strong>a Neuro-Tech education</strong> segment to build an expert network.
-            </p>
-            <br />
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">What is Neurogati?</h2>
+
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="text-center">
+              <h3 className="text-2xl font-semibold text-foreground mb-4">
+                Applied Computational Neuroscience in Measurement, Modeling, and Intervention
+              </h3>
+              <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
+                Neurogati develops neurotechnology tools and structured digital interventions guided by computational principles. Our programs span clinical measurement, mechanistic modeling, and therapeutic design.
+              </p>
+            </div>
+
+            <div className="mt-8">
+              <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
+                Apps = Measurement<br />
+                Games = Intervention<br />
+                Modelling = Backbone<br />
+                Workshops = Knowledge Dissemination
+              </p>
+            </div>
           </div>
-          <DynamicMagneticButton>
-            <Link 
-              href="/about"
-              className="bg-[#104581] px-10 text-lg font-semibold text-white py-2 rounded-full inline-flex items-center gap-2 whitespace-nowrap"
-            >
-              Discover Us
-            </Link>
-          </DynamicMagneticButton>
+
+          <div className="mt-12">
+            <DynamicMagneticButton>
+              <Link
+                href="/about"
+                className="bg-[#104581] px-10 text-lg font-semibold text-white py-2 rounded-full inline-flex items-center gap-2 whitespace-nowrap"
+              >
+                Discover Us
+              </Link>
+            </DynamicMagneticButton>
+          </div>
         </section>
 
         {/* Products Teaser */}
@@ -101,10 +118,10 @@ export default function HomePage() {
           <div className="grid gap-8 md:grid-cols-3">
             <Card className="text-center bg-card border-t-4 border-blue-500 pt-4 transition-all hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold text-blue-400">Clinical Monitoring (Quamon-PD™)</CardTitle>
+                <CardTitle className="text-xl font-semibold text-blue-400">Clinical Monitoring (Qumon-PD™)</CardTitle>
               </CardHeader>
               <CardContent className="text-justify px-8">
-                Revolutionary <strong>AI-powered clinical monitoring platform</strong> for <strong>Parkinson's disease</strong>. Quamon-PD™ analyzes behavioral biomarkers using advanced machine learning, integrating seamlessly with clinical workflows to provide comprehensive diagnosis assisstive reports for healthcare providers.
+                Revolutionary <strong>AI-powered clinical monitoring platform</strong> for <strong>Parkinson's disease</strong>. Qumon-PD™ analyzes behavioral biomarkers using advanced machine learning, integrating seamlessly with clinical workflows to provide comprehensive diagnosis assisstive reports for healthcare providers.
               </CardContent>
             </Card>
             <Card className="text-center bg-card border-t-4 border-violet-500 pt-4 transition-all hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-500/10">

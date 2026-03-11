@@ -69,8 +69,14 @@
                 <!-- Reference Image (Training Mode Only) -->
                 <div id="referenceImageContainer" class="card hidden" style="text-align: center; height: 100%; display: flex; flex-direction: column;">
                     <h4 style="margin-bottom: var(--spacing-sm);">📸 Reference Pose</h4>
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img id="referenceImage" src="" alt="Reference pose" style="max-width: 100%; max-height: 480px; height: auto; width: auto; border-radius: var(--radius-md); box-shadow: var(--shadow-md); object-fit: contain;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto;">
+                        <img id="referenceImage" src="" alt="Reference pose" style="max-width: 100%; max-height: 480px; height: auto; width: auto; border-radius: var(--radius-md); box-shadow: var(--shadow-md); object-fit: contain; transform: scaleX(-1); transition: transform 0.3s ease;">
+                    </div>
+                    <!-- Zoom Controls -->
+                    <div style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-sm); margin-top: var(--spacing-sm);">
+                        <button id="zoomOutBtn" class="btn btn-sm" style="padding: 0.5rem 1rem;">🔍- Zoom Out</button>
+                        <span id="zoomLevel" style="font-weight: bold; min-width: 50px;">100%</span>
+                        <button id="zoomInBtn" class="btn btn-sm" style="padding: 0.5rem 1rem;">🔍+ Zoom In</button>
                     </div>
                     <p style="margin-top: var(--spacing-sm); opacity: 0.8; font-size: 0.875rem;">Match your body to this pose!</p>
                 </div>
@@ -278,6 +284,12 @@
         const referenceImage = document.getElementById('referenceImage');
         const musicToggle = document.getElementById('musicToggle');
 
+        // Zoom controls
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const zoomLevel = document.getElementById('zoomLevel');
+        let currentZoom = 1; // 100%
+
         // Initialize
         init();
 
@@ -295,6 +307,21 @@
                 musicToggle.addEventListener('click', () => {
                     const isPlaying = audioManager.toggleMusic();
                     musicToggle.textContent = isPlaying ? '🔊' : '🔇';
+                });
+
+                // Setup zoom controls
+                zoomInBtn.addEventListener('click', () => {
+                    if (currentZoom < 3) { // Max 300%
+                        currentZoom += 0.25;
+                        updateZoom();
+                    }
+                });
+
+                zoomOutBtn.addEventListener('click', () => {
+                    if (currentZoom > 1) { // Min 100%
+                        currentZoom -= 0.25;
+                        updateZoom();
+                    }
                 });
 
                 // Setup UI based on mode
@@ -573,9 +600,23 @@
             if (currentMode === 'training') {
                 referenceImage.src = `../assets/images/Alphabets/${letter}.jpg`;
                 referenceImageContainer.classList.remove('hidden');
+                // Reset zoom when changing letter
+                currentZoom = 1;
+                updateZoom();
             } else {
                 referenceImageContainer.classList.add('hidden');
             }
+        }
+
+        // Update zoom level
+        function updateZoom() {
+            // Apply zoom while maintaining the horizontal flip
+            referenceImage.style.transform = `scaleX(-1) scale(${currentZoom})`;
+            zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
+
+            // Enable/disable buttons based on zoom level
+            zoomInBtn.disabled = currentZoom >= 3;
+            zoomOutBtn.disabled = currentZoom <= 1;
         }
 
         function handleNextAction() {
