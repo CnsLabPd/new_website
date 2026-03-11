@@ -6,8 +6,8 @@ import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motio
 
 const workshopConfig = {
   active: true,
-  message: "Applications NOW OPEN for our 'AI Applications in EEG' online workshop - Feb 20th to Feb 22nd",
-  link: "../eegworkshop",
+  message: "Applications NOW OPEN for our 'Workshop on Brain Modeling' online workshop - Mar 27th to Mar 31st",
+  link: "../modellingworkshop",
 };
 
 export default function WorkshopBanner() {

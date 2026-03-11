@@ -8,6 +8,18 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
+    id: "comp-neuro-training-3",
+    status: "Upcoming",
+    title: "Workshop on Brain Modeling",
+    date: "March 27-31, 2026",
+    duration: "5 days",
+    participants: "70 Max",
+    type: "Online (Zoom)",
+    pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
+    description: "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures and practical implementations for complex brain dynamics.",
+    registrationLink: "/modellingworkshop"
+  },
+  {
     id: "comp-neuro-training-1",
     status: "Ongoing",
     title: "5-Month Research Training Program in Computational Neuroscience",
@@ -21,7 +33,7 @@ const workshops = [
   },
   {
     id: "AI-EEG-4",
-    status: "Upcoming",
+    status: "Past",
     title: "AI Applications in EEG",
     date: "February 20-22, 2026",
     duration: "3 days",
@@ -30,30 +42,6 @@ const workshops = [
     pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
     description: "Explore how EEG signals are collected, processed, and analyzed using AI and machine learning for breakthrough applications in brain-computer interfaces and neurological diagnosis.",
     registrationLink: "/eegworkshop"
-  },
-  {
-    id: "comp-neuro-training-3",
-    status: "Upcoming",
-    title: "Workshop on Brain Modeling",
-    date: "March 21-25, 2026",
-    duration: "5 days",
-    participants: "70 Max",
-    type: "Online (Zoom)",
-    pricing: "UG: 3,000 INR | PG: 3,500 INR | Professionals: 4,000 INR",
-    description: "Master machine learning approaches to model and simulate brain functions. This advanced workshop covers neural network architectures and practical implementations for complex brain dynamics.",
-    registrationLink: "/modellingworkshop"
-  },
-  {
-    id: "demystify-1",
-    status: "Past",
-    title: "Demystifying the Brain",
-    date: "January 23 - 25, 2026",
-    duration: "3 days",
-    participants: "70 Max",
-    type: "Online (Zoom)",
-    pricing: "UG: 2,500 INR | PG: 3,000 INR | Professionals: 3,500 INR",
-    description: "A comprehensive introductory workshop designed to simplify complex neurological concepts through computational lenses and interactive signal processing demonstrations.",
-    registrationLink: "/contact"
   },
     {
     id: "comp-neuro-training-2",
