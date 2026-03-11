@@ -53,7 +53,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
         <div className="container mx-auto px-6 relative z-10">
           {/* Back Navigation */}
           <Link
-            href="/gamingcategories-new"
+            href="/gamingcategories"
             className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors mb-8 group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />

@@ -14,7 +14,7 @@ interface GameCardProps {
 export function GameCard({ game, categorySlug }: GameCardProps) {
   return (
     <Link
-      href={`/gamingcategories-new/games/${game.id}`}
+      href={`/gamingcategories/games/${game.id}`}
       className="group block"
     >
       <Card className="overflow-hidden border-border/50 bg-card hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full">
