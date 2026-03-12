@@ -89,27 +89,45 @@ export default function GalleryPage() {
 
   // Auto-scroll effect for photo and video rows
   useEffect(() => {
-    const intervals: { [key: string]: NodeJS.Timeout } = {};
+    const intervals: { [key: string]: number } = {};
     const isPaused: { [key: string]: boolean } = {};
+    const animationFrames: { [key: string]: number } = {};
 
     events.forEach(event => {
-      // Auto-scroll for photos
+      // Auto-scroll for photos using requestAnimationFrame for smoother performance
       const photoScrollContainer = photoScrollRefs.current[`${event.id}-photos`];
       if (photoScrollContainer) {
-        const autoScrollPhotos = () => {
-          if (isPaused[`${event.id}-photos`]) return;
+        let lastTimestamp = 0;
+        const scrollSpeed = 0.5; // pixels per frame (slower = smoother)
+
+        const autoScrollPhotos = (timestamp: number) => {
+          if (isPaused[`${event.id}-photos`]) {
+            animationFrames[`${event.id}-photos`] = requestAnimationFrame(autoScrollPhotos);
+            return;
+          }
+
+          // Throttle to ~60fps
+          if (timestamp - lastTimestamp < 16) {
+            animationFrames[`${event.id}-photos`] = requestAnimationFrame(autoScrollPhotos);
+            return;
+          }
+          lastTimestamp = timestamp;
 
           const maxScroll = photoScrollContainer.scrollWidth - photoScrollContainer.clientWidth;
           const currentScroll = photoScrollContainer.scrollLeft;
 
-          if (currentScroll >= maxScroll) {
-            photoScrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          if (currentScroll >= maxScroll - 1) {
+            // Stop at the end
+            cancelAnimationFrame(animationFrames[`${event.id}-photos`]);
+            return;
           } else {
-            photoScrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+            photoScrollContainer.scrollLeft += scrollSpeed;
           }
+
+          animationFrames[`${event.id}-photos`] = requestAnimationFrame(autoScrollPhotos);
         };
 
-        intervals[`${event.id}-photos`] = setInterval(autoScrollPhotos, 30);
+        animationFrames[`${event.id}-photos`] = requestAnimationFrame(autoScrollPhotos);
 
         const handleMouseEnter = () => { isPaused[`${event.id}-photos`] = true; };
         const handleMouseLeave = () => { isPaused[`${event.id}-photos`] = false; };
@@ -124,23 +142,40 @@ export default function GalleryPage() {
         photoScrollContainer.addEventListener('touchstart', handleUserScroll);
       }
 
-      // Auto-scroll for videos
+      // Auto-scroll for videos using requestAnimationFrame
       const videoScrollContainer = videoScrollRefs.current[`${event.id}-videos`];
       if (videoScrollContainer) {
-        const autoScrollVideos = () => {
-          if (isPaused[`${event.id}-videos`]) return;
+        let lastTimestamp = 0;
+        const scrollSpeed = 0.5; // pixels per frame
+
+        const autoScrollVideos = (timestamp: number) => {
+          if (isPaused[`${event.id}-videos`]) {
+            animationFrames[`${event.id}-videos`] = requestAnimationFrame(autoScrollVideos);
+            return;
+          }
+
+          // Throttle to ~60fps
+          if (timestamp - lastTimestamp < 16) {
+            animationFrames[`${event.id}-videos`] = requestAnimationFrame(autoScrollVideos);
+            return;
+          }
+          lastTimestamp = timestamp;
 
           const maxScroll = videoScrollContainer.scrollWidth - videoScrollContainer.clientWidth;
           const currentScroll = videoScrollContainer.scrollLeft;
 
-          if (currentScroll >= maxScroll) {
-            videoScrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          if (currentScroll >= maxScroll - 1) {
+            // Stop at the end
+            cancelAnimationFrame(animationFrames[`${event.id}-videos`]);
+            return;
           } else {
-            videoScrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+            videoScrollContainer.scrollLeft += scrollSpeed;
           }
+
+          animationFrames[`${event.id}-videos`] = requestAnimationFrame(autoScrollVideos);
         };
 
-        intervals[`${event.id}-videos`] = setInterval(autoScrollVideos, 30);
+        animationFrames[`${event.id}-videos`] = requestAnimationFrame(autoScrollVideos);
 
         const handleMouseEnter = () => { isPaused[`${event.id}-videos`] = true; };
         const handleMouseLeave = () => { isPaused[`${event.id}-videos`] = false; };
@@ -157,7 +192,7 @@ export default function GalleryPage() {
     });
 
     return () => {
-      Object.values(intervals).forEach(interval => clearInterval(interval));
+      Object.values(animationFrames).forEach(frame => cancelAnimationFrame(frame));
     };
   }, []);
 
@@ -238,6 +273,7 @@ export default function GalleryPage() {
                     <div
                       ref={(el) => (photoScrollRefs.current[`${event.id}-photos`] = el)}
                       className="overflow-x-auto overflow-y-hidden scrollbar-thin pb-4"
+                      style={{ willChange: 'scroll-position' }}
                     >
                       <div className="flex gap-6" style={{ width: 'max-content' }}>
                         {event.images.map((image, idx) => (
@@ -275,6 +311,7 @@ export default function GalleryPage() {
                       <div
                         ref={(el) => (videoScrollRefs.current[`${event.id}-videos`] = el)}
                         className="overflow-x-auto overflow-y-hidden scrollbar-thin pb-4"
+                        style={{ willChange: 'scroll-position' }}
                       >
                         <div className="flex gap-6" style={{ width: 'max-content' }}>
                           {event.videos.map((video, idx) => (

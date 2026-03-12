@@ -123,9 +123,10 @@ export default function GamingCategoriesNewPage() {
         const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
         const currentScroll = scrollContainer.scrollLeft;
 
-        if (currentScroll >= maxScroll) {
-          // Reset to beginning smoothly
-          scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+        if (currentScroll >= maxScroll - 1) {
+          // Stop at the end
+          clearInterval(intervals[category.id]);
+          return;
         } else {
           // Scroll slowly to the right
           scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
