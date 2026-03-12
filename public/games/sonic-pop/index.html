@@ -2073,7 +2073,7 @@
                 this.isDraggingCamera = false;
 
                 // Selected module and level
-                this.selectedModule = null;
+                this.selectedModule = 1; // Default to Module 1 to skip module selection
                 this.selectedLevel = null;
 
                 // Level 7: Highway Driver game instance
@@ -4160,9 +4160,10 @@
                 this.timeLeft = 100;
                 this.balloonsPopped = 0;
                 this.levelBalloonsPopped = 0;
-                this.selectedModule = null;
+                this.selectedModule = 1; // Default to Module 1 to skip module selection
                 this.selectedLevel = null;
 
+                this.levelManager.setModule(1); // Set level manager to Module 1
                 this.levelManager.setLevel(1);
                 this.updateUI();
                 this.stopAudioFeedback();
@@ -4377,9 +4378,18 @@
                 controlsPanel.classList.remove('beating');
                 distanceInfo.innerHTML = '🎯 Ready';
 
-                // Stop active audio
-                this.audioManager.stopHandPositionAudio();
-                this.audioManager.stopAllBombAlarms();
+                // Stop ALL active audio to prevent overlapping
+                this.audioManager.stopAllAudio();
+
+                // Also pause and reset intro music if it exists
+                if (this.introMusic) {
+                    try {
+                        this.introMusic.pause();
+                        this.introMusic.currentTime = 0;
+                    } catch (e) {
+                        // Ignore errors if music hasn't loaded yet
+                    }
+                }
             }
 
             createPopEffect(x, y) {
@@ -5947,6 +5957,9 @@
             }
 
             showLevelSelection() {
+                // CRITICAL: Stop all audio when returning to level selection
+                this.stopAudioFeedback();
+
                 const levelSelectionScreen = document.getElementById('levelSelectionScreen');
                 const levelGrid = document.getElementById('levelGrid');
 
@@ -6115,18 +6128,19 @@
             }
 
             showLevelsInModule(container, moduleNumber) {
-                // Clear nav left container and add back button
+                // Clear nav left container - back button removed since we skip module selection
                 const navLeft = document.getElementById('navLeft');
                 if (navLeft) {
                     navLeft.innerHTML = '';
-                    const backButton = document.createElement('button');
-                    backButton.className = 'back-to-modules-btn';
-                    backButton.innerHTML = 'Modules 🔙';
-                    backButton.onclick = () => {
-                        this.selectedModule = null;
-                        this.showLevelSelection();
-                    };
-                    navLeft.appendChild(backButton);
+                    // Removed back button - no module selection to go back to
+                    // const backButton = document.createElement('button');
+                    // backButton.className = 'back-to-modules-btn';
+                    // backButton.innerHTML = 'Modules 🔙';
+                    // backButton.onclick = () => {
+                    //     this.selectedModule = null;
+                    //     this.showLevelSelection();
+                    // };
+                    // navLeft.appendChild(backButton);
                 }
 
                 // Get levels in module
@@ -6514,6 +6528,9 @@
                     clearTimeout(this.hoverSpeechTimeout);
                     this.hoverSpeechTimeout = null;
                 }
+
+                // CRITICAL: Stop all audio from previous level to prevent overlapping
+                this.stopAudioFeedback();
 
                 const levelData = this.levelManager.getLevel(levelNumber);
 

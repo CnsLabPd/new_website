@@ -17,22 +17,28 @@ export class AudioEngine {
       vehicleFilter: null
     };
 
-    // Engine parameters
-    this.currentRPM = 1200;
-    this.targetRPM = 1200;
-    this.MIN_RPM = 1200;
-    this.MAX_RPM = 8500;
-    this.IDLE_RPM = 1200;
-    this.cylinders = 8;
+    // Engine parameters - IMPROVED for realistic V8 supercar sound
+    this.currentRPM = 1000;
+    this.targetRPM = 1000;
+    this.MIN_RPM = 800;      // Lower idle for deeper rumble
+    this.MAX_RPM = 9000;     // Higher redline for performance car
+    this.IDLE_RPM = 1000;
+    this.cylinders = 8;      // V8 engine
 
-    // Gear shift parameters
+    // Gear shift parameters - IMPROVED for smoother progression
     this.gear = 1;
-    this.GEAR_RATIOS = [180, 135, 105, 82, 68, 56];
-    this.GEAR_SPEED_MAX = [22, 38, 56, 76, 98, 120];
-    this.GEAR_SPEED_MIN = [0, 14, 28, 44, 62, 82];
+    // Updated ratios for better gear spacing (240 km/h max speed)
+    this.GEAR_RATIOS = [220, 160, 120, 95, 75, 62];  // RPM per km/h
+    this.GEAR_SPEED_MAX = [40, 70, 105, 145, 190, 240];  // Match game's MAX_SPEED
+    this.GEAR_SPEED_MIN = [0, 30, 60, 95, 135, 180];
     this.shiftCooldown = 0;
     this.throttle = 0;
     this.engineLoad = 0;
+
+    // NEW: Realistic engine behavior
+    this.turboSpooling = 0;    // Turbo/supercharger effect
+    this.backfireChance = 0;   // Chance of backfire on decel
+    this.rpmFluctuation = 0;   // Natural RPM variation
 
     // Proximity warning state
     this.lastWarningUpdate = 0;
@@ -73,87 +79,110 @@ export class AudioEngine {
     nodes.panner = ctx.createStereoPanner();
     nodes.panner.pan.value = 0;
 
+    // IMPROVED: More aggressive compressor for punchier sound
     nodes.compressor = ctx.createDynamicsCompressor();
-    nodes.compressor.threshold.value = -24;
-    nodes.compressor.knee.value = 16;
-    nodes.compressor.ratio.value = 6;
-    nodes.compressor.attack.value = 0.002;
-    nodes.compressor.release.value = 0.2;
+    nodes.compressor.threshold.value = -20;  // More aggressive
+    nodes.compressor.knee.value = 12;
+    nodes.compressor.ratio.value = 8;        // Higher ratio
+    nodes.compressor.attack.value = 0.001;   // Faster attack
+    nodes.compressor.release.value = 0.15;
 
-    // Fundamental frequency
+    // Fundamental frequency - IMPROVED: Richer tone
     nodes.fundamental = ctx.createOscillator();
     nodes.fundamental.type = "sawtooth";
     nodes.fundamentalGain = ctx.createGain();
-    nodes.fundamentalGain.gain.value = 0.45;
+    nodes.fundamentalGain.gain.value = 0.5;  // Increased from 0.45
     nodes.fundamental.connect(nodes.fundamentalGain);
 
-    // 2nd harmonic
+    // 2nd harmonic - IMPROVED
     nodes.harmonic2 = ctx.createOscillator();
     nodes.harmonic2.type = "triangle";
     nodes.harmonic2Gain = ctx.createGain();
-    nodes.harmonic2Gain.gain.value = 0.28;
+    nodes.harmonic2Gain.gain.value = 0.32;   // Increased from 0.28
     nodes.harmonic2.connect(nodes.harmonic2Gain);
 
-    // 3rd harmonic
+    // 3rd harmonic - V8 character
     nodes.harmonic3 = ctx.createOscillator();
     nodes.harmonic3.type = "sine";
     nodes.harmonic3Gain = ctx.createGain();
-    nodes.harmonic3Gain.gain.value = 0.18;
+    nodes.harmonic3Gain.gain.value = 0.22;   // Increased from 0.18
     nodes.harmonic3.connect(nodes.harmonic3Gain);
 
-    // 4th harmonic
+    // 4th harmonic - Aggression
     nodes.harmonic4 = ctx.createOscillator();
     nodes.harmonic4.type = "square";
     nodes.harmonic4Gain = ctx.createGain();
-    nodes.harmonic4Gain.gain.value = 0.12;
+    nodes.harmonic4Gain.gain.value = 0.15;   // Increased from 0.12
     nodes.harmonic4.connect(nodes.harmonic4Gain);
 
-    // Combustion noise
+    // NEW: 5th harmonic for extra richness (V8 characteristic)
+    nodes.harmonic5 = ctx.createOscillator();
+    nodes.harmonic5.type = "sine";
+    nodes.harmonic5Gain = ctx.createGain();
+    nodes.harmonic5Gain.gain.value = 0.08;
+    nodes.harmonic5.connect(nodes.harmonic5Gain);
+
+    // Combustion noise - IMPROVED: More aggressive
     nodes.combustionNoise = ctx.createBufferSource();
     nodes.combustionNoise.buffer = noiseBuffer;
     nodes.combustionNoise.loop = true;
     nodes.combustionFilter = ctx.createBiquadFilter();
     nodes.combustionFilter.type = "highpass";
-    nodes.combustionFilter.frequency.value = 800;
-    nodes.combustionFilter.Q.value = 0.5;
+    nodes.combustionFilter.frequency.value = 600;  // Lower for deeper
+    nodes.combustionFilter.Q.value = 0.8;           // Sharper
     nodes.combustionGain = ctx.createGain();
-    nodes.combustionGain.gain.value = 0.15;
+    nodes.combustionGain.gain.value = 0.2;         // Increased from 0.15
     nodes.combustionNoise.connect(nodes.combustionFilter);
     nodes.combustionFilter.connect(nodes.combustionGain);
 
-    // Intake noise
+    // Intake noise - IMPROVED: More pronounced
     nodes.intakeNoise = ctx.createBufferSource();
     nodes.intakeNoise.buffer = noiseBuffer;
     nodes.intakeNoise.loop = true;
     nodes.intakeFilter = ctx.createBiquadFilter();
     nodes.intakeFilter.type = "bandpass";
-    nodes.intakeFilter.frequency.value = 2200;
-    nodes.intakeFilter.Q.value = 2.5;
+    nodes.intakeFilter.frequency.value = 2500;     // Higher for turbo whistle
+    nodes.intakeFilter.Q.value = 3.0;               // Sharper resonance
     nodes.intakeGain = ctx.createGain();
-    nodes.intakeGain.gain.value = 0.08;
+    nodes.intakeGain.gain.value = 0.12;            // Increased from 0.08
     nodes.intakeNoise.connect(nodes.intakeFilter);
     nodes.intakeFilter.connect(nodes.intakeGain);
 
-    // Formant filter
+    // NEW: Turbo/Supercharger whine
+    nodes.turboNoise = ctx.createBufferSource();
+    nodes.turboNoise.buffer = noiseBuffer;
+    nodes.turboNoise.loop = true;
+    nodes.turboFilter = ctx.createBiquadFilter();
+    nodes.turboFilter.type = "bandpass";
+    nodes.turboFilter.frequency.value = 4000;
+    nodes.turboFilter.Q.value = 8.0;  // Very sharp for whistle
+    nodes.turboGain = ctx.createGain();
+    nodes.turboGain.gain.value = 0;  // Start silent
+    nodes.turboNoise.connect(nodes.turboFilter);
+    nodes.turboFilter.connect(nodes.turboGain);
+
+    // Formant filter - IMPROVED: V8 character
     nodes.formantFilter = ctx.createBiquadFilter();
     nodes.formantFilter.type = "peaking";
-    nodes.formantFilter.frequency.value = 480;
-    nodes.formantFilter.Q.value = 4.5;
-    nodes.formantFilter.gain.value = 18;
+    nodes.formantFilter.frequency.value = 420;     // Lower for V8 rumble
+    nodes.formantFilter.Q.value = 5.5;              // Sharper resonance
+    nodes.formantFilter.gain.value = 20;            // More pronounced
 
-    // Exhaust lowpass
+    // Exhaust lowpass - IMPROVED
     nodes.exhaustFilter = ctx.createBiquadFilter();
     nodes.exhaustFilter.type = "lowpass";
-    nodes.exhaustFilter.frequency.value = 2400;
-    nodes.exhaustFilter.Q.value = 0.7;
+    nodes.exhaustFilter.frequency.value = 3200;    // Higher cutoff
+    nodes.exhaustFilter.Q.value = 1.2;              // More resonance
 
-    // Connect routing
+    // Connect routing - UPDATED with new nodes
     nodes.fundamentalGain.connect(nodes.formantFilter);
     nodes.harmonic2Gain.connect(nodes.formantFilter);
     nodes.harmonic3Gain.connect(nodes.formantFilter);
     nodes.harmonic4Gain.connect(nodes.formantFilter);
+    nodes.harmonic5Gain.connect(nodes.formantFilter);  // NEW
     nodes.combustionGain.connect(nodes.formantFilter);
     nodes.intakeGain.connect(nodes.formantFilter);
+    nodes.turboGain.connect(nodes.formantFilter);      // NEW
 
     nodes.formantFilter.connect(nodes.exhaustFilter);
     nodes.exhaustFilter.connect(nodes.panner);
@@ -166,8 +195,10 @@ export class AudioEngine {
     nodes.harmonic2.start();
     nodes.harmonic3.start();
     nodes.harmonic4.start();
+    nodes.harmonic5.start();        // NEW
     nodes.combustionNoise.start();
     nodes.intakeNoise.start();
+    nodes.turboNoise.start();       // NEW
   }
 
   setupWindNodes(noiseBuffer) {
@@ -319,11 +350,11 @@ export class AudioEngine {
     if (!this.audioCtx) return;
 
     const now = this.audioCtx.currentTime;
-    const MAX_SPEED = 120;
+    const MAX_SPEED = 240;  // Updated to match game's max speed
 
-    // Update throttle with smooth acceleration
-    const ACCEL_RATE = 0.05; // Slower buildup for realism
-    const COAST_DECAY = 0.02;
+    // Update throttle with smooth acceleration - IMPROVED
+    const ACCEL_RATE = 0.06;  // Slightly faster
+    const COAST_DECAY = 0.03; // Faster decay for responsive feel
 
     if (isAccelerating) {
       this.throttle = Math.min(this.throttle + ACCEL_RATE, 1);
@@ -339,58 +370,81 @@ export class AudioEngine {
     // Auto shift based on speed
     this.autoShift(speed);
 
-    // Calculate target RPM using gear ratios
+    // Calculate target RPM using gear ratios - IMPROVED
     const gearIndex = Math.max(0, this.gear - 1);
     const ratio = this.GEAR_RATIOS[gearIndex];
-    const gearBoost = (this.gear - 1) * 180;
+    const gearBoost = (this.gear - 1) * 200;  // Increased from 180
     const baseRPM = this.IDLE_RPM + gearBoost;
     let rpmFromSpeed = baseRPM + speed * ratio;
 
-    // Add throttle response (load-based)
-    const rpmFromThrottle = this.throttle * 1800 * (1 + this.engineLoad * 0.5);
+    // Add throttle response (load-based) - IMPROVED
+    const rpmFromThrottle = this.throttle * 2000 * (1 + this.engineLoad * 0.6);
 
     this.targetRPM = Math.max(this.MIN_RPM, Math.min(rpmFromSpeed + rpmFromThrottle, this.MAX_RPM));
 
-    // Smooth RPM transition with realistic response
+    // NEW: Add natural RPM fluctuation for realism
+    const fluctuationAmount = 5 + this.throttle * 15; // 5-20 RPM variation
+    this.rpmFluctuation = (Math.random() - 0.5) * fluctuationAmount;
+    this.targetRPM += this.rpmFluctuation;
+
+    // Smooth RPM transition - IMPROVED: Variable response based on throttle
     const diff = this.targetRPM - this.currentRPM;
-    const RESPONSE = 0.08; // Smoothing factor
+    const RESPONSE = isAccelerating ? 0.12 : 0.06; // Faster on accel, slower on coast
     this.currentRPM += diff * RESPONSE;
 
-    // Calculate engine load
+    // Calculate engine load - IMPROVED
     const rpmRatio = (this.currentRPM - this.IDLE_RPM) / (this.MAX_RPM - this.IDLE_RPM);
-    this.engineLoad = this.throttle * (0.3 + 0.7 * rpmRatio);
+    this.engineLoad = this.throttle * (0.4 + 0.6 * rpmRatio);
+
+    // NEW: Turbo spooling effect
+    const speedRatio = speed / MAX_SPEED;
+    if (this.throttle > 0.5 && speedRatio > 0.3) {
+      this.turboSpooling = Math.min(this.turboSpooling + 0.02, speedRatio);
+    } else {
+      this.turboSpooling = Math.max(this.turboSpooling - 0.03, 0);
+    }
 
     // Calculate engine order frequency
     const engineOrderHz = (this.currentRPM * this.cylinders) / 120;
 
-    // Update oscillator frequencies
+    // Update oscillator frequencies - IMPROVED with 5th harmonic
     this.engineNodes.fundamental.frequency.setTargetAtTime(engineOrderHz, now, 0.04);
     this.engineNodes.harmonic2.frequency.setTargetAtTime(engineOrderHz * 2, now, 0.04);
     this.engineNodes.harmonic3.frequency.setTargetAtTime(engineOrderHz * 3, now, 0.04);
     this.engineNodes.harmonic4.frequency.setTargetAtTime(engineOrderHz * 4, now, 0.04);
+    this.engineNodes.harmonic5.frequency.setTargetAtTime(engineOrderHz * 5, now, 0.04);  // NEW
 
-    // Adjust harmonic gains
+    // Adjust harmonic gains - IMPROVED: More dynamic
     const rpmFactor = (this.currentRPM - this.MIN_RPM) / (this.MAX_RPM - this.MIN_RPM);
-    this.engineNodes.harmonic2Gain.gain.setTargetAtTime(0.28 + rpmFactor * 0.15, now, 0.1);
-    this.engineNodes.harmonic4Gain.gain.setTargetAtTime(0.12 + rpmFactor * 0.08, now, 0.1);
+    this.engineNodes.harmonic2Gain.gain.setTargetAtTime(0.32 + rpmFactor * 0.18, now, 0.1);
+    this.engineNodes.harmonic3Gain.gain.setTargetAtTime(0.22 + rpmFactor * 0.12, now, 0.1);
+    this.engineNodes.harmonic4Gain.gain.setTargetAtTime(0.15 + rpmFactor * 0.10, now, 0.1);
+    this.engineNodes.harmonic5Gain.gain.setTargetAtTime(0.08 + rpmFactor * 0.06, now, 0.1);  // NEW
 
-    // Combustion noise
-    const combustionLevel = 0.1 + this.engineLoad * 0.3 + rpmFactor * 0.2;
+    // Combustion noise - IMPROVED: More aggressive
+    const combustionLevel = 0.15 + this.engineLoad * 0.4 + rpmFactor * 0.25;
     this.engineNodes.combustionGain.gain.setTargetAtTime(combustionLevel, now, 0.15);
-    this.engineNodes.combustionFilter.frequency.setTargetAtTime(800 + rpmFactor * 1200, now, 0.12);
+    this.engineNodes.combustionFilter.frequency.setTargetAtTime(600 + rpmFactor * 1800, now, 0.12);
 
-    // Intake noise
-    const intakeLevel = this.throttle * 0.15 * (1 + rpmFactor * 0.8);
+    // Intake noise - IMPROVED: More pronounced
+    const intakeLevel = this.throttle * 0.18 * (1 + rpmFactor * 1.0);
     this.engineNodes.intakeGain.gain.setTargetAtTime(intakeLevel, now, 0.08);
-    this.engineNodes.intakeFilter.frequency.setTargetAtTime(1800 + this.throttle * 1500, now, 0.1);
+    this.engineNodes.intakeFilter.frequency.setTargetAtTime(2200 + this.throttle * 1800, now, 0.1);
 
-    // Exhaust filter
-    const exhaustCutoff = 1200 + rpmFactor * 4000;
+    // NEW: Turbo whine - audible when spooling
+    const turboLevel = this.turboSpooling * 0.15;
+    this.engineNodes.turboGain.gain.setTargetAtTime(turboLevel, now, 0.12);
+    this.engineNodes.turboFilter.frequency.setTargetAtTime(3500 + this.turboSpooling * 2500, now, 0.08);
+
+    // Exhaust filter - IMPROVED: Wider range
+    const exhaustCutoff = 1500 + rpmFactor * 5500;
     this.engineNodes.exhaustFilter.frequency.setTargetAtTime(exhaustCutoff, now, 0.12);
 
-    // Formant shift
-    const formantFreq = 380 + this.engineLoad * 300;
+    // Formant shift - IMPROVED: More dynamic V8 character
+    const formantFreq = 350 + this.engineLoad * 400;
     this.engineNodes.formantFilter.frequency.setTargetAtTime(formantFreq, now, 0.15);
+    const formantGain = 20 + rpmFactor * 5;  // Boost at high RPM
+    this.engineNodes.formantFilter.gain.setTargetAtTime(formantGain, now, 0.15);
 
     // Update stereo panning based on lane
     // 2-lane mode: LEFT=-1.0 (full left), RIGHT=1.0 (full right)

@@ -83,18 +83,11 @@ export class Game {
     this.gameOverDiv = document.getElementById('gameOver');
     this.finalScoreSpan = document.getElementById('finalScore');
 
-    // Matter.js setup
-    const Engine = Matter.Engine;
-    const World = Matter.World;
-    const Bodies = Matter.Bodies;
-    const Body = Matter.Body;
-
-    this.Matter = { Engine, World, Bodies, Body };
-    this.engine = Engine.create();
-    this.engine.gravity.y = 0;
+    // REMOVED Matter.js - not needed for simple position-based movement
+    // Using lightweight object-based vehicle tracking instead
 
     // Game constants
-    this.MAX_SPEED = 120;
+    this.MAX_SPEED = 240; // Doubled for more realistic high-speed racing experience
     this.MIN_SPEED = 0;
     this.ACCEL_RATE = 1.2;
     this.DECEL_RATE = 1.8;
@@ -108,6 +101,11 @@ export class Game {
     this.BASE_MAX_CARS = 3;          // Starting max cars on screen
     this.MAX_MAX_CARS = 10;          // Maximum cars allowed at high distances - more cars
     this.DIFFICULTY_MILESTONE = 300; // Distance (meters) per difficulty increase - faster progression
+
+    // NEW: Smart traffic management
+    this.lastSpawnedLane = -1;       // Track last spawned lane to avoid clustering
+    this.guaranteedEscapeTimer = 0;  // Timer to guarantee escape routes
+    this.ESCAPE_GUARANTEE_INTERVAL = 5000; // Guarantee escape route every 5 seconds
 
     // Game state
     this.gameRunning = false;
@@ -131,6 +129,12 @@ export class Game {
     this.lastLoggedDifficulty = 0; // Track when difficulty level changes
     this.isShifting = false; // Track gear shift animation state
 
+    // Performance optimization: Delta time tracking
+    this.lastFrameTime = performance.now();
+    this.animationFrameId = null;
+    this.frameCount = 0;
+    this.lastDOMUpdateFrame = 0;
+
     // Input state
     this.keys = {
       up: false,
@@ -139,21 +143,15 @@ export class Game {
       right: false
     };
 
-    // Player car (positioned lower on taller canvas, start in CENTER lane)
-    this.playerCar = this.Matter.Bodies.rectangle(
-      this.LANE_POSITIONS[1], // Center lane
-      480,
-      40,
-      70,
-      {
-        isStatic: false,
-        friction: 0,
-        frictionAir: 0,
-        restitution: 0,
-        label: 'player'
-      }
-    );
-    this.Matter.World.add(this.engine.world, this.playerCar);
+    // Player car - simple position object (no physics engine needed)
+    this.playerCar = {
+      position: {
+        x: this.LANE_POSITIONS[1], // Center lane
+        y: 480
+      },
+      width: 40,
+      height: 70
+    };
 
     // Audio engine
     this.audioEngine = new AudioEngine();
@@ -682,15 +680,16 @@ export class Game {
     this.spawnTimer = 0;
     this.lastLoggedDifficulty = 0;
 
+    // Reset smart traffic management
+    this.lastSpawnedLane = -1;
+    this.guaranteedEscapeTimer = 0;
+
     // Clear traffic
-    this.trafficVehicles.forEach(v => this.Matter.World.remove(this.engine.world, v));
     this.trafficVehicles = [];
 
     // Reset player position
-    this.Matter.Body.setPosition(this.playerCar, {
-      x: this.LANE_POSITIONS[this.currentLane],
-      y: 480
-    });
+    this.playerCar.position.x = this.LANE_POSITIONS[this.currentLane];
+    this.playerCar.position.y = 480;
 
     console.log(`✅ Player car positioned at x=${this.LANE_POSITIONS[this.currentLane]}, y=480`);
     console.log(`✅ Canvas size: ${this.canvas.width}x${this.canvas.height}`);
@@ -719,6 +718,12 @@ export class Game {
     this.gameRunning = false;
     this.startBtn.textContent = 'Resume (Space)';
     this.audioEngine.fadeOut();
+
+    // Cancel animation frame
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
 
     // Pause gesture processing but keep camera running
     if (this.gestureController) {
@@ -971,10 +976,8 @@ export class Game {
     this.currentLane = newLane;
     const targetX = this.LANE_POSITIONS[this.currentLane];
 
-    this.Matter.Body.setPosition(this.playerCar, {
-      x: targetX,
-      y: this.playerCar.position.y
-    });
+    // Update player position directly (no physics engine)
+    this.playerCar.position.x = targetX;
 
     // Get lane names based on number of lanes
     let laneNames;
@@ -987,7 +990,6 @@ export class Game {
     }
     this.laneDisplay.textContent = laneNames[this.currentLane];
     console.log(`🚗 Switched to ${laneNames[this.currentLane]} lane (lane ${this.currentLane})`);
-    this.audioEngine.updateProximityWarnings(this.playerCar, this.trafficVehicles, this.currentLane, this.LANE_POSITIONS, this.numLanes);
 
     // Visual feedback
     if (this.graphics) {
@@ -995,22 +997,12 @@ export class Game {
     }
   }
 
+  /**
+   * INTELLIGENT TRAFFIC SPAWNING ALGORITHM
+   * Prevents impossible situations where all lanes are blocked
+   */
   spawnTrafficVehicle() {
-    const lane = Math.floor(Math.random() * this.numLanes); // 0 to (numLanes-1)
-    const x = this.LANE_POSITIONS[lane];
-    const y = -50;
-
-    const vehicle = this.Matter.Bodies.rectangle(x, y, 40, 70, {
-      isStatic: false,
-      friction: 0,
-      frictionAir: 0,
-      label: 'traffic'
-    });
-
-    this.Matter.World.add(this.engine.world, vehicle);
-    this.trafficVehicles.push(vehicle);
-
-    // Get lane names based on number of lanes
+    // Get lane names for logging
     let laneNames;
     if (this.numLanes === 2) {
       laneNames = ['LEFT', 'RIGHT'];
@@ -1019,7 +1011,150 @@ export class Game {
     } else if (this.numLanes === 4) {
       laneNames = ['LANE 1', 'LANE 2', 'LANE 3', 'LANE 4'];
     }
-    console.log(`🚙 Spawned vehicle in ${laneNames[lane]} lane at x=${x}, y=${y}`);
+
+    // STEP 1: Check which lanes are currently blocked near spawn point
+    const SPAWN_ZONE_HEIGHT = 200; // Check top 200px for recent spawns
+    const MIN_VEHICLE_SPACING = 150; // Minimum vertical spacing between cars
+
+    const blockedLanes = new Set();
+    for (let vehicle of this.trafficVehicles) {
+      // Only check vehicles near the spawn area (top of screen)
+      if (vehicle.position.y < SPAWN_ZONE_HEIGHT && vehicle.position.y > -100) {
+        blockedLanes.add(vehicle.lane);
+      }
+    }
+
+    // STEP 2: Find available lanes
+    const availableLanes = [];
+    for (let i = 0; i < this.numLanes; i++) {
+      if (!blockedLanes.has(i)) {
+        availableLanes.push(i);
+      }
+    }
+
+    // STEP 3: Intelligent lane selection
+    let selectedLane;
+
+    // CRITICAL: If all lanes are blocked, don't spawn (wait for space)
+    if (availableLanes.length === 0) {
+      console.log(`⚠️ All lanes blocked in spawn zone - skipping spawn`);
+      return; // Don't spawn, wait for space
+    }
+
+    // GUARANTEE: Always keep at least one lane open when spawning
+    // If only 1 lane is available, use it (but this means 2 lanes will be blocked)
+    // If 2+ lanes available, randomly choose but NEVER block all lanes
+
+    if (availableLanes.length === 1) {
+      // Only one lane available - use it (will block 2 out of 3 lanes)
+      selectedLane = availableLanes[0];
+      console.log(`⚠️ Only 1 lane available: ${laneNames[selectedLane]} - spawning here`);
+    } else if (availableLanes.length === this.numLanes) {
+      // All lanes are clear - use smart distribution
+      // Avoid spawning in the same lane consecutively
+      let candidateLanes = availableLanes.filter(lane => lane !== this.lastSpawnedLane);
+
+      if (candidateLanes.length === 0) {
+        candidateLanes = availableLanes; // Fallback if all lanes were last spawned
+      }
+
+      selectedLane = candidateLanes[Math.floor(Math.random() * candidateLanes.length)];
+    } else {
+      // Some lanes available - choose randomly from available
+      selectedLane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
+    }
+
+    // STEP 4: Additional safety check - ensure spacing in selected lane
+    let canSpawn = true;
+    for (let vehicle of this.trafficVehicles) {
+      if (vehicle.lane === selectedLane) {
+        const verticalDistance = Math.abs(vehicle.position.y - (-50));
+        if (verticalDistance < MIN_VEHICLE_SPACING) {
+          canSpawn = false;
+          console.log(`⚠️ Vehicle too close in ${laneNames[selectedLane]} (${Math.round(verticalDistance)}px) - skipping spawn`);
+          break;
+        }
+      }
+    }
+
+    if (!canSpawn) return; // Skip this spawn, try again next interval
+
+    // STEP 5: Spawn the vehicle
+    const x = this.LANE_POSITIONS[selectedLane];
+    const y = -50;
+
+    const vehicle = {
+      position: { x, y },
+      width: 40,
+      height: 70,
+      lane: selectedLane
+    };
+
+    this.trafficVehicles.push(vehicle);
+    this.lastSpawnedLane = selectedLane;
+
+    console.log(`🚙 SMART SPAWN: ${laneNames[selectedLane]} lane (${availableLanes.length}/${this.numLanes} lanes available)`);
+  }
+
+  /**
+   * GUARANTEED ESCAPE ROUTE SPAWNING
+   * Called periodically to ensure player always has a way out
+   * Spawns in a pattern that leaves at least one lane completely clear
+   */
+  spawnWithEscapeGuarantee() {
+    // Get lane names for logging
+    let laneNames;
+    if (this.numLanes === 2) {
+      laneNames = ['LEFT', 'RIGHT'];
+    } else if (this.numLanes === 3) {
+      laneNames = ['LEFT', 'CENTER', 'RIGHT'];
+    } else if (this.numLanes === 4) {
+      laneNames = ['LANE 1', 'LANE 2', 'LANE 3', 'LANE 4'];
+    }
+
+    // STRATEGY: Randomly pick one lane to keep completely clear
+    const guaranteedClearLane = Math.floor(Math.random() * this.numLanes);
+
+    // Check which lanes currently have vehicles in spawn zone
+    const SPAWN_ZONE_HEIGHT = 300; // Larger zone for escape guarantee
+    const lanesWithVehicles = new Set();
+
+    for (let vehicle of this.trafficVehicles) {
+      if (vehicle.position.y < SPAWN_ZONE_HEIGHT && vehicle.position.y > -100) {
+        lanesWithVehicles.add(vehicle.lane);
+      }
+    }
+
+    // Choose a lane to spawn in (any lane EXCEPT the guaranteed clear lane)
+    const spawnableLanes = [];
+    for (let i = 0; i < this.numLanes; i++) {
+      if (i !== guaranteedClearLane && !lanesWithVehicles.has(i)) {
+        spawnableLanes.push(i);
+      }
+    }
+
+    // If no spawnable lanes, skip (the guaranteed clear lane is working)
+    if (spawnableLanes.length === 0) {
+      console.log(`✅ Escape guaranteed: ${laneNames[guaranteedClearLane]} is clear, others blocked`);
+      return;
+    }
+
+    // Spawn in one of the non-guaranteed lanes
+    const selectedLane = spawnableLanes[Math.floor(Math.random() * spawnableLanes.length)];
+    const x = this.LANE_POSITIONS[selectedLane];
+    const y = -50;
+
+    const vehicle = {
+      position: { x, y },
+      width: 40,
+      height: 70,
+      lane: selectedLane
+    };
+
+    this.trafficVehicles.push(vehicle);
+    this.lastSpawnedLane = selectedLane;
+
+    console.log(`✅ ESCAPE SPAWN: ${laneNames[selectedLane]} spawned, ${laneNames[guaranteedClearLane]} guaranteed clear`);
   }
 
   updatePhysics() {
@@ -1058,42 +1193,51 @@ export class Game {
     }
 
     // KEEP PLAYER CAR FIXED AT y=480 (only x changes with lane switching)
-    this.Matter.Body.setPosition(this.playerCar, {
-      x: this.playerCar.position.x,
-      y: 480
-    });
+    this.playerCar.position.y = 480;
 
     // Move traffic vehicles down (they come toward the player)
-    this.trafficVehicles.forEach(vehicle => {
-      this.Matter.Body.setPosition(vehicle, {
-        x: vehicle.position.x,
-        y: vehicle.position.y + 2 + this.playerSpeed * 0.05
-      });
-    });
+    const moveSpeed = 2 + this.playerSpeed * 0.05;
+    for (let i = 0; i < this.trafficVehicles.length; i++) {
+      const vehicle = this.trafficVehicles[i];
+      vehicle.position.y += moveSpeed;
+    }
 
-    // Remove off-screen vehicles and add score
-    this.trafficVehicles = this.trafficVehicles.filter(vehicle => {
+    // Remove off-screen vehicles and add score (reverse loop for safe removal)
+    for (let i = this.trafficVehicles.length - 1; i >= 0; i--) {
+      const vehicle = this.trafficVehicles[i];
       if (vehicle.position.y > this.canvas.height + 100) {
-        this.Matter.World.remove(this.engine.world, vehicle);
+        this.trafficVehicles.splice(i, 1);
         this.score += 10;
         // Play reward sound for successfully dodging the car
         if (this.audioEngine) {
           this.audioEngine.playRewardSound();
         }
-        return false;
       }
-      return true;
-    });
+    }
 
     // Get current difficulty parameters
     const difficulty = this.calculateDifficulty();
 
     // Spawn new vehicles based on dynamic spawn interval and max cars
     this.spawnTimer += 16;
+    this.guaranteedEscapeTimer += 16;
+
     if (this.spawnTimer >= difficulty.currentSpawnInterval) {
       // Only spawn if we haven't reached the max cars limit
       if (this.trafficVehicles.length < difficulty.currentMaxCars) {
-        this.spawnTrafficVehicle();
+        // SMART SPAWN: Check if we should guarantee an escape route
+        const shouldGuaranteeEscape = this.guaranteedEscapeTimer >= this.ESCAPE_GUARANTEE_INTERVAL;
+
+        if (shouldGuaranteeEscape) {
+          // Force spawn with escape route guarantee
+          this.spawnWithEscapeGuarantee();
+          this.guaranteedEscapeTimer = 0; // Reset timer
+          console.log(`✅ ESCAPE ROUTE GUARANTEED - spawning safe pattern`);
+        } else {
+          // Normal smart spawn
+          this.spawnTrafficVehicle();
+        }
+
         // Log difficulty changes
         if (this.lastLoggedDifficulty !== difficulty.difficultyLevel) {
           this.lastLoggedDifficulty = difficulty.difficultyLevel;
@@ -1103,18 +1247,41 @@ export class Game {
       this.spawnTimer = 0;
     }
 
-    // Update proximity warnings (every frame)
-    this.audioEngine.updateProximityWarnings(this.playerCar, this.trafficVehicles, this.currentLane, this.LANE_POSITIONS, this.numLanes);
-
     // Check collisions - end game immediately on hit
+    // OPTIMIZED: Use squared distance to avoid expensive Math.sqrt()
+    const collisionThresholdSquared = 80 * 80; // 6400
+    const playerX = this.playerCar.position.x;
+    const playerY = this.playerCar.position.y;
+
+    // Update proximity warnings (OPTIMIZED - only check nearby vehicles)
+    // Filter vehicles to only those in front of player and nearby
+    const nearbyVehicles = [];
     for (let i = 0; i < this.trafficVehicles.length; i++) {
       const vehicle = this.trafficVehicles[i];
-      const dx = this.playerCar.position.x - vehicle.position.x;
-      const dy = this.playerCar.position.y - vehicle.position.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      // Only check vehicles in front (lower Y) and within 300px range
+      if (vehicle.position.y < playerY && (playerY - vehicle.position.y) < 300) {
+        nearbyVehicles.push(vehicle);
+      }
+    }
+    this.audioEngine.updateProximityWarnings(this.playerCar, nearbyVehicles, this.currentLane, this.LANE_POSITIONS, this.numLanes);
+
+    for (let i = 0; i < this.trafficVehicles.length; i++) {
+      const vehicle = this.trafficVehicles[i];
+
+      // Quick bounding box check first (cheapest)
+      const vehicleY = vehicle.position.y;
+      if (Math.abs(vehicleY - playerY) > 100) continue; // Too far vertically
+
+      const vehicleX = vehicle.position.x;
+      if (Math.abs(vehicleX - playerX) > 100) continue; // Too far horizontally
+
+      // Now do precise collision with squared distance
+      const dx = playerX - vehicleX;
+      const dy = playerY - vehicleY;
+      const distanceSquared = dx * dx + dy * dy;
 
       // Cars are 40x70, so collision when centers are within 80 pixels
-      if (distance < 80) {
+      if (distanceSquared < collisionThresholdSquared) {
         this.gameOver();
         return; // Stop processing immediately
       }
@@ -1124,10 +1291,10 @@ export class Game {
     this.distance += this.playerSpeed * 0.016;
   }
 
-  updateGame() {
+  updateGame(deltaTime = 16) {
     if (!this.gameRunning) return;
 
-    this.Matter.Engine.update(this.engine, 16);
+    // No physics engine - just update game state
     this.updatePhysics();
 
     // Update audio
@@ -1136,14 +1303,29 @@ export class Game {
     // Update graphics
     this.updateGraphics();
 
-    // Update displays
-    this.speedDisplay.textContent = Math.round(this.playerSpeed);
-    this.scoreDisplay.textContent = this.score;
-    this.distanceDisplay.textContent = Math.round(this.distance) + 'm';
+    // Update displays (THROTTLED - only every 3 frames to reduce DOM reflows)
+    const shouldUpdateDOM = (this.frameCount - this.lastDOMUpdateFrame) >= 3;
 
-    // Update difficulty display
-    const currentDifficulty = this.calculateDifficulty();
-    this.difficultyDisplay.textContent = currentDifficulty.difficultyLevel;
+    if (shouldUpdateDOM) {
+      this.lastDOMUpdateFrame = this.frameCount;
+
+      const currentSpeed = Math.round(this.playerSpeed);
+      this.speedDisplay.textContent = currentSpeed;
+      this.scoreDisplay.textContent = this.score;
+      this.distanceDisplay.textContent = Math.round(this.distance) + 'm';
+
+      // Update difficulty display
+      const currentDifficulty = this.calculateDifficulty();
+      this.difficultyDisplay.textContent = currentDifficulty.difficultyLevel;
+
+      // Update speedometer arc - FIXED: Use actual MAX_SPEED (240 km/h)
+      const speedPercent = Math.min(currentSpeed / this.MAX_SPEED, 1);
+      const speedArc = document.getElementById('speedArc');
+      if (speedArc) {
+        const dashOffset = 282.6 * (1 - speedPercent);
+        speedArc.style.strokeDashoffset = dashOffset;
+      }
+    }
 
     // Gear display with shift animation
     const currentGear = this.audioEngine.gear;
@@ -1151,19 +1333,32 @@ export class Game {
       this.lastGear = currentGear;
       this.gearDisplay.textContent = currentGear;
 
-      // Add shifting animation
+      // Add shifting animation to new gear display
+      const gearValue = document.querySelector('.gear-value');
+      if (gearValue) {
+        gearValue.classList.add('shifting');
+        setTimeout(() => {
+          gearValue.classList.remove('shifting');
+        }, 300);
+      }
+
+      // Legacy gear-stat for backwards compatibility
       const gearStat = document.querySelector('.gear-stat');
-      gearStat.classList.add('shifting');
+      if (gearStat) {
+        gearStat.classList.add('shifting');
+        setTimeout(() => {
+          gearStat.classList.remove('shifting');
+        }, 350);
+      }
 
       // Set shifting state for visual effects
       this.isShifting = true;
       setTimeout(() => {
-        gearStat.classList.remove('shifting');
         this.isShifting = false;
       }, 350);
     }
 
-    this.rpmDisplay.textContent = Math.round(this.audioEngine.currentRPM);
+    // RPM display removed - no longer needed for cleaner dashboard
   }
 
   updateGraphics() {
@@ -1228,10 +1423,21 @@ export class Game {
     }
   }
 
-  gameLoop() {
-    if (!this.gameRunning) return;
-    this.updateGame();
-    setTimeout(() => this.gameLoop(), 16);
+  gameLoop(currentTime = performance.now()) {
+    if (!this.gameRunning) {
+      this.animationFrameId = null;
+      return;
+    }
+
+    // Calculate delta time (cap at 50ms to prevent huge jumps)
+    const deltaTime = Math.min(currentTime - this.lastFrameTime, 50);
+    this.lastFrameTime = currentTime;
+    this.frameCount++;
+
+    this.updateGame(deltaTime);
+
+    // Use requestAnimationFrame for smooth 60fps
+    this.animationFrameId = requestAnimationFrame((time) => this.gameLoop(time));
   }
 
   renderWithPixi() {

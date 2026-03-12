@@ -475,6 +475,25 @@ class AudioManager {
         this.backgroundMusic = null;
     }
 
+    // Comprehensive cleanup method to stop ALL audio
+    stopAllAudio() {
+        console.log('🔇 Stopping all audio...');
+
+        // Stop hand position audio
+        this.stopHandPositionAudio();
+
+        // Stop all bomb alarms
+        this.stopAllBombAlarms();
+
+        // Stop background music
+        this.stopBackgroundMusic();
+
+        // Cancel any scheduled audio (success sounds, level up sounds, etc.)
+        // Note: Individual oscillators stop automatically after their duration
+
+        console.log('✅ All audio stopped');
+    }
+
     playSound(soundName, ...params) {
         if (!this.isInitialized || !this.sounds[soundName]) {
             console.warn(`Sound '${soundName}' not available`);
@@ -568,8 +587,9 @@ class AudioManager {
 
         try {
             const now = this.context.currentTime;
-            // Calculate target speed: 1.0 (normal) to 3.0 (extreme panic) based on urgency
-            const targetPlaybackRate = 1.0 + (urgency * 2.0);
+            // NEW: Keep playback rate constant at 1.0x (normal speed)
+            // Only use volume to indicate proximity
+            const targetPlaybackRate = 1.0; // Always normal speed
 
             // === USE MP3 ALARM FILE IF AVAILABLE ===
             if (this.bombAlarmBuffer) {
@@ -577,24 +597,26 @@ class AudioManager {
                 if (this.currentBombSound && this.currentBombSound.isPlaying) {
                     // Update existing sound parameters
                     const { panner, gain, source } = this.currentBombSound;
-                    
+
                     // Update Position
                     this.set3DPosition(panner, position3D);
-                    
-                    // Update Volume based on distance/urgency
-                    const alarmVolume = volume * (0.6 + urgency * 0.4);
+
+                    // NEW: Enhanced volume scaling based on distance only
+                    // Far = very quiet, Close = very loud
+                    const alarmVolume = volume * (0.3 + urgency * 0.7); // Range: 0.3 to 1.0
                     gain.gain.cancelScheduledValues(now);
                     gain.gain.linearRampToValueAtTime(alarmVolume, now + 0.1);
-                    
-                    // Update Playback Rate (Speed/Pitch)
-                    if (source.playbackRate) {
-                        source.playbackRate.cancelScheduledValues(now);
-                        source.playbackRate.linearRampToValueAtTime(targetPlaybackRate, now + 0.1);
-                    }
-                    
+
+                    // Keep playback rate constant (no speed changes)
+                    // Commented out the dynamic playback rate
+                    // if (source.playbackRate) {
+                    //     source.playbackRate.cancelScheduledValues(now);
+                    //     source.playbackRate.linearRampToValueAtTime(targetPlaybackRate, now + 0.1);
+                    // }
+
                     return; // Successfully updated
                 }
-                
+
                 // START NEW SOUND (if not playing)
                 const alarmSource = this.context.createBufferSource();
                 const alarmGain = this.context.createGain();
@@ -606,10 +628,11 @@ class AudioManager {
 
                 alarmSource.buffer = this.bombAlarmBuffer;
                 alarmSource.loop = true; // Loop the alarm!
-                alarmSource.playbackRate.value = targetPlaybackRate;
+                alarmSource.playbackRate.value = targetPlaybackRate; // Always 1.0x
 
-                const alarmVolume = volume * (0.6 + urgency * 0.4);
-                
+                // NEW: Enhanced volume scaling
+                const alarmVolume = volume * (0.3 + urgency * 0.7); // Range: 0.3 to 1.0
+
                 // Fade in
                 alarmGain.gain.setValueAtTime(0, now);
                 alarmGain.gain.linearRampToValueAtTime(alarmVolume, now + 0.1);
@@ -620,11 +643,11 @@ class AudioManager {
 
                 alarmSource.start(now);
 
-                this.currentBombSound = { 
-                    source: alarmSource, 
-                    gain: alarmGain, 
-                    panner: alarmPanner, 
-                    isPlaying: true 
+                this.currentBombSound = {
+                    source: alarmSource,
+                    gain: alarmGain,
+                    panner: alarmPanner,
+                    isPlaying: true
                 };
 
                 return;
@@ -636,18 +659,21 @@ class AudioManager {
                 return; // Skip if playing too fast
             }
             this.lastSynthBombTime = now;
-            
+
             const osc = this.context.createOscillator();
             const gain = this.context.createGain();
             const panner = this.context.createPanner();
-            
+
             this.configure3DPanner(panner);
             this.set3DPosition(panner, position3D);
-            
-            osc.frequency.setValueAtTime(frequency * targetPlaybackRate, now); // Pitch up synthesized sound too
+
+            // NEW: Keep frequency constant (no speed changes for fallback either)
+            osc.frequency.setValueAtTime(frequency, now); // Normal frequency, no pitch changes
             osc.type = 'sawtooth';
-            
-            gain.gain.setValueAtTime(volume * 0.5, now);
+
+            // NEW: Enhanced volume scaling for fallback (same as MP3 version)
+            const synthVolume = volume * (0.3 + urgency * 0.7) * 0.5; // Match MP3 volume behavior
+            gain.gain.setValueAtTime(synthVolume, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
             
             osc.connect(gain);
