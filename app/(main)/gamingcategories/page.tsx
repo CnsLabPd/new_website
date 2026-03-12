@@ -53,6 +53,7 @@ export default function GamingCategoriesNewPage() {
   const [selectedCategories, setSelectedCategories] = useState<CategoryId[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const scrollRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Toggle category selection
   const toggleCategory = (categoryId: CategoryId) => {
@@ -70,6 +71,28 @@ export default function GamingCategoriesNewPage() {
         game.categories.some(cat => selectedCategories.includes(cat))
       );
 
+  // Group games by category - ALWAYS show grouped view with horizontal scroll
+  const getGamesByCategory = () => {
+    const categoriesToShow = selectedCategories.length === 0
+      ? categories.map(c => c.id) // Show all categories by default
+      : selectedCategories;
+
+    const grouped = categoriesToShow.map(categoryId => {
+      const category = categories.find(c => c.id === categoryId);
+      const categoryGames = games.filter(game => game.categories.includes(categoryId));
+      return { category, games: categoryGames };
+    });
+
+    // Sort by number of games (descending) when showing all categories
+    if (selectedCategories.length === 0) {
+      return grouped.sort((a, b) => b.games.length - a.games.length);
+    }
+
+    return grouped;
+  };
+
+  const groupedGames = getGamesByCategory();
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -81,6 +104,76 @@ export default function GamingCategoriesNewPage() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Auto-scroll effect for horizontal rows
+  useEffect(() => {
+    const intervals: { [key: string]: NodeJS.Timeout } = {};
+    const isPaused: { [key: string]: boolean } = {};
+
+    groupedGames.forEach(({ category }) => {
+      if (!category) return;
+
+      const scrollContainer = scrollRefs.current[category.id];
+      if (!scrollContainer) return;
+
+      // Auto-scroll function
+      const autoScroll = () => {
+        if (isPaused[category.id]) return;
+
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+        const currentScroll = scrollContainer.scrollLeft;
+
+        if (currentScroll >= maxScroll) {
+          // Reset to beginning smoothly
+          scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          // Scroll slowly to the right
+          scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+        }
+      };
+
+      // Start auto-scrolling
+      intervals[category.id] = setInterval(autoScroll, 30);
+
+      // Pause on mouse enter
+      const handleMouseEnter = () => {
+        isPaused[category.id] = true;
+      };
+
+      // Resume on mouse leave
+      const handleMouseLeave = () => {
+        isPaused[category.id] = false;
+      };
+
+      // Pause on user scroll
+      const handleUserScroll = () => {
+        isPaused[category.id] = true;
+        // Resume after 2 seconds of no interaction
+        setTimeout(() => {
+          isPaused[category.id] = false;
+        }, 2000);
+      };
+
+      scrollContainer.addEventListener('mouseenter', handleMouseEnter);
+      scrollContainer.addEventListener('mouseleave', handleMouseLeave);
+      scrollContainer.addEventListener('wheel', handleUserScroll);
+      scrollContainer.addEventListener('touchstart', handleUserScroll);
+    });
+
+    return () => {
+      Object.values(intervals).forEach(interval => clearInterval(interval));
+      groupedGames.forEach(({ category }) => {
+        if (!category) return;
+        const scrollContainer = scrollRefs.current[category.id];
+        if (scrollContainer) {
+          scrollContainer.removeEventListener('mouseenter', () => {});
+          scrollContainer.removeEventListener('mouseleave', () => {});
+          scrollContainer.removeEventListener('wheel', () => {});
+          scrollContainer.removeEventListener('touchstart', () => {});
+        }
+      });
+    };
+  }, [groupedGames]);
 
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -132,7 +225,7 @@ export default function GamingCategoriesNewPage() {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center gap-2 px-3 py-1.5 border border-border rounded-lg bg-card hover:bg-accent transition-colors font-medium text-sm"
                 >
-                  <span>Filter</span>
+                  <span>{selectedCategories.length === 0 ? 'All Categories' : 'Filter'}</span>
                   {selectedCategories.length > 0 && (
                     <Badge variant="secondary" className="h-5 min-w-5 flex items-center justify-center px-1.5">
                       {selectedCategories.length}
@@ -234,25 +327,54 @@ export default function GamingCategoriesNewPage() {
             </div>
           )}
 
-          {/* Games Grid */}
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {filteredGames.map((game) => (
-              <GameCard
-                key={game.id}
-                game={game}
-                categorySlug=""
-              />
-            ))}
-          </div>
+          {/* Games Display - Always Grouped by Category with Horizontal Scroll */}
+          <div className="space-y-12">
+            {groupedGames.map(({ category, games: categoryGames }) => {
+              if (!category || categoryGames.length === 0) return null;
+              const colors = getColorClasses(category.color);
 
-          {/* No Results Message */}
-          {filteredGames.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-xl text-muted-foreground font-medium">
-                No games found for the selected filters
-              </p>
-            </div>
-          )}
+              return (
+                <div key={category.id} className="space-y-4">
+                  {/* Category Header */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-1 w-12 rounded-full ${colors.bgActive}`} />
+                      <h3 className={`text-2xl md:text-3xl font-bold tracking-tight ${colors.text}`}>
+                        {category.title}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-4 ml-15">
+                      <p className="text-base text-muted-foreground">
+                        {category.description}
+                      </p>
+                      <p className="text-sm text-muted-foreground whitespace-nowrap">
+                        {categoryGames.length} {categoryGames.length === 1 ? 'game' : 'games'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Horizontal Scrollable Games Row */}
+                  <div className="relative group">
+                    <div
+                      ref={(el) => (scrollRefs.current[category.id] = el)}
+                      className="overflow-x-auto overflow-y-hidden scrollbar-thin pb-4"
+                    >
+                      <div className="flex gap-6" style={{ width: 'max-content' }}>
+                        {categoryGames.map((game) => (
+                          <div key={game.id} className="w-[350px] flex-shrink-0">
+                            <GameCard
+                              game={game}
+                              categorySlug=""
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

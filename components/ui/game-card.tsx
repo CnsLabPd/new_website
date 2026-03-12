@@ -18,9 +18,16 @@ export function GameCard({ game, categorySlug }: GameCardProps) {
       className="group block"
     >
       <Card className="overflow-hidden border-border/50 bg-card hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full">
-        {/* Game Image/Video Thumbnail */}
+        {/* Game Image/Video Thumbnail - Prioritize images over videos for card view */}
         <div className="relative aspect-[3/2] overflow-hidden bg-black">
-          {game.videoUrl ? (
+          {game.images && game.images.length > 0 ? (
+            <Image
+              src={game.images[0]}
+              alt={game.name}
+              fill
+              className="object-contain group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : game.videoUrl ? (
             <div className="relative w-full h-full">
               <video
                 src={game.videoUrl}
@@ -38,14 +45,7 @@ export function GameCard({ game, categorySlug }: GameCardProps) {
                 <PlayCircle className="h-16 w-16 text-white/80 group-hover:scale-110 transition-transform" />
               </div>
             </div>
-          ) : (
-            <Image
-              src={game.images[0]}
-              alt={game.name}
-              fill
-              className="object-contain group-hover:scale-105 transition-transform duration-500"
-            />
-          )}
+          ) : null}
 
           {/* Platform Badge */}
           {game.isPlatform && (

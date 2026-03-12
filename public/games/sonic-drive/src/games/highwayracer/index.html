@@ -9,35 +9,6 @@
 </head>
 <body>
   <div class="game-container">
-    <div class="header">
-      <h1 id="gameTitle">Audio Racing</h1>
-      <p class="subtitle" id="gameSubtitle">An audio-first racing game for blind players</p>
-    </div>
-
-    <script>
-      console.log('🏁 [RACING GAME] HTML inline script executing');
-      console.log('🏁 [RACING GAME] URL:', window.location.href);
-
-      // Update title based on level parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      const level = parseInt(urlParams.get('level')) || 2;
-      const numLanes = level === 1 ? 2 : 3;
-
-      console.log('🏁 [RACING GAME] Level:', level, 'Lanes:', numLanes);
-
-      const titleEl = document.getElementById('gameTitle');
-      const subtitleEl = document.getElementById('gameSubtitle');
-
-      if (level === 1) {
-        titleEl.textContent = 'Highway Racer - Level 1 (2 Lanes)';
-        subtitleEl.textContent = 'Beginner mode: LEFT and RIGHT lanes with stereo audio';
-      } else {
-        titleEl.textContent = 'Highway Racer - Level 2 (3 Lanes)';
-        subtitleEl.textContent = 'Advanced mode: LEFT, CENTER, and RIGHT lanes with spatial audio';
-      }
-
-      console.log('🏁 [RACING GAME] Title updated:', titleEl.textContent);
-    </script>
 
     <!-- LEFT PANEL: Start Button -->
     <div class="left-panel">
@@ -74,64 +45,91 @@
       </div>
     </div>
 
-    <!-- CENTER: Game Canvas -->
-    <div class="game-card">
-      <div class="status-bar">
-        <div class="stat">
-          <div class="stat-label">Speed</div>
-          <div class="stat-value" id="speedDisplay">0</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Score</div>
-          <div class="stat-value" id="scoreDisplay">0</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Lane</div>
-          <div class="stat-value" id="laneDisplay">LEFT</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Distance</div>
-          <div class="stat-value" id="distanceDisplay">0m</div>
-        </div>
-        <div class="stat gear-stat">
-          <div class="stat-label">Gear</div>
-          <div class="stat-value" id="gearDisplay">1</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">RPM</div>
-          <div class="stat-value" id="rpmDisplay">1200</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Difficulty</div>
-          <div class="stat-value" id="difficultyDisplay">0</div>
-        </div>
-      </div>
+    <!-- Game Canvas (Full Screen) -->
+    <canvas id="gameCanvas"></canvas>
 
-      <canvas id="gameCanvas"></canvas>
+    <!-- Top-Right Stats Panel -->
+    <div class="stats-panel">
+      <div class="stats-panel-item">
+        <div class="stats-panel-label">SCORE</div>
+        <div class="stats-panel-value" id="scoreDisplay">0</div>
+      </div>
+      <div class="stats-panel-item">
+        <div class="stats-panel-label">DISTANCE</div>
+        <div class="stats-panel-value" id="distanceDisplay">0m</div>
+      </div>
+      <div class="stats-panel-item">
+        <div class="stats-panel-label">DIFFICULTY</div>
+        <div class="stats-panel-value" id="difficultyDisplay">0</div>
+      </div>
     </div>
 
-    <!-- RIGHT PANEL: Controls -->
-    <div class="controls">
-      <h3>Controls & Audio Cues (3-Lane Highway)</h3>
-      <div class="control-item">
-        <span>Start/Pause:</span>
-        <strong>SPACE</strong>
+    <!-- Bottom-Left Control Buttons -->
+    <div class="controls-panel">
+      <button class="control-btn-icon" id="exitBtn" title="Exit">🏠</button>
+      <button class="control-btn-icon" id="startBtn" title="Start/Pause">▶️</button>
+    </div>
+
+    <!-- Bottom-Center Racing Dashboard -->
+    <div class="racing-dashboard">
+      <!-- Speedometer -->
+      <div class="dashboard-gauge speedometer">
+        <svg class="gauge-svg" viewBox="0 0 240 140">
+          <!-- Background Arc -->
+          <path d="M 30 120 A 90 90 0 0 1 210 120" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14" stroke-linecap="round"/>
+
+          <!-- Speed Zones (tick marks) -->
+          <g class="speed-ticks" stroke="rgba(255,255,255,0.3)" stroke-width="2">
+            <!-- 0 km/h -->
+            <line x1="30" y1="120" x2="30" y2="110" />
+            <!-- 100 km/h -->
+            <line x1="70" y1="50" x2="75" y2="43" />
+            <!-- 200 km/h -->
+            <line x1="120" y1="20" x2="120" y2="10" stroke-width="3" />
+            <!-- 300 km/h -->
+            <line x1="170" y1="50" x2="165" y2="43" />
+            <!-- 400 km/h -->
+            <line x1="210" y1="120" x2="210" y2="110" />
+          </g>
+
+          <!-- Speed labels -->
+          <g class="speed-labels" fill="rgba(255,255,255,0.5)" font-family="Courier New" font-size="10" font-weight="bold">
+            <text x="25" y="135" text-anchor="middle">0</text>
+            <text x="70" y="40" text-anchor="middle">100</text>
+            <text x="120" y="12" text-anchor="middle">200</text>
+            <text x="170" y="40" text-anchor="middle">300</text>
+            <text x="215" y="135" text-anchor="middle">400</text>
+          </g>
+
+          <!-- Colored Speed Arc -->
+          <path id="speedArc" d="M 30 120 A 90 90 0 0 1 210 120" fill="none" stroke="url(#speedGradient)" stroke-width="14" stroke-linecap="round" stroke-dasharray="282.6" stroke-dashoffset="282.6"/>
+
+          <defs>
+            <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+              <stop offset="40%" style="stop-color:#00ccff;stop-opacity:1" />
+              <stop offset="70%" style="stop-color:#ffdd00;stop-opacity:1" />
+              <stop offset="90%" style="stop-color:#ff8800;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#ff3366;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="gauge-label">KM/H</div>
+        <div class="gauge-value" id="speedDisplay">0</div>
       </div>
-      <div class="control-item">
-        <span>Accelerate:</span>
-        <strong>UP ARROW (Hold)</strong>
+
+      <!-- Gear Indicator -->
+      <div class="dashboard-center">
+        <div class="gear-display">
+          <div class="gear-label">GEAR</div>
+          <div class="gear-value" id="gearDisplay">1</div>
+        </div>
       </div>
-      <div class="control-item">
-        <span>Brake/Decelerate:</span>
-        <strong>DOWN ARROW (Hold)</strong>
-      </div>
-      <div class="control-item">
-        <span>Move Left (Left ← Center ← Right):</span>
-        <strong>LEFT ARROW</strong>
-      </div>
-      <div class="control-item">
-        <span>Move Right (Left → Center → Right):</span>
-        <strong>RIGHT ARROW</strong>
+
+      <!-- Lane Indicator -->
+      <div class="lane-indicator">
+        <div class="lane-label">LANE</div>
+        <div class="lane-value" id="laneDisplay">CENTER</div>
       </div>
     </div>
   </div>

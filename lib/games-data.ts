@@ -113,7 +113,7 @@ export const games: Game[] = [
     tagline: "Cognitive Focus & Alphabet Challenge",
     overview: "Posabets supports movement-based learning and can be a valuable tool for educators and parents working with children with ADHD.",
     tech: "Dynamic Difficulty Adjustment (DDA)",
-    images: ["/posabets game card.png"],
+    images: ["/images/game-cards/posabets game card.png"],
     features: [
       "Adaptive speed based on focus levels",
       "Minimalist UI to reduce sensory overload",
@@ -138,8 +138,8 @@ export const games: Game[] = [
     tagline: "Gesture-based Snowball Challenge",
     overview: "Step into a winter wonderland with Frosty Flicks, an exergaming experience designed for players of all abilities. Using standard laptop webcams, it translates physical movement into in-game action, encouraging mobility through immersive play.",
     tech: null,
-    videoUrl: "/frostyFlicks.mp4",
-    images: ["/images/crgs_games.jpeg"],
+    videoUrl: "/frostyFlicks.mp4", // Video will show on detail page
+    images: ["/images/game-cards/frosty flicks game card.jpeg"], // Image card for categories page
     features: [
       "Intuitive gesture-based controls (No specialized hardware)",
       "Reward systems and levels to incentivize training",
@@ -166,7 +166,7 @@ export const games: Game[] = [
     overview: "Hit the court with Dunk-it!!, an immersive basketball exergaming experience that turns your physical rehabilitation into a high-energy competition. Using advanced motion tracking, the game translates your arm and upper-body movements into precise shots and slam dunks, making repetitive therapeutic exercises feel like a trip to the arena.",
     tech: null,
     videoUrl: "/DunkIt.mp4",
-    images: ["/images/crgs_games.jpeg"],
+    images: ["/images/game-cards/dunk it game card.jpeg"],
     features: [
       "Real-time skeletal tracking via standard webcam (No wearables required)",
       "Adaptive difficulty scaling based on range of motion",
@@ -192,7 +192,7 @@ export const games: Game[] = [
     tagline: "Gesture-based Art Therapy Experience",
     overview: "Experience the therapeutic power of art with Mandala Painting, an interactive digital art system where creativity meets technology. Paint beautiful mandalas using intuitive gesture controls or traditional mouse input, transforming art therapy into an engaging, accessible experience for all ages and abilities.",
     tech: null,
-    images: ["/mandala painting game card.png"],
+    images: ["/images/game-cards/mandala painting game card.png"],
     features: [
       "Gesture control with air-hand movements or mouse (No specialized hardware)",
       "Automatic image segmentation for any uploaded template",
@@ -218,7 +218,7 @@ export const games: Game[] = [
     tagline: "Precision Audio-Spatial Racing",
     overview: "Sonic Drive is a groundbreaking experience designed specifically for the visually impaired. By utilizing binaural 3D audio cues, players navigate complex racing circuits at high speeds, transforming auditory feedback into a competitive racing simulation.",
     tech: "Binaural Audio Engine & Haptic Integration",
-    images: ["/sonic drive game card.png"],
+    images: ["/images/game-cards/sonic drive game card.png"],
     features: [
       "Advanced 3D Spatial Audio (Requires Headphones)",
       "Dynamic Haptic feedback for obstacle detection",
@@ -243,7 +243,7 @@ export const games: Game[] = [
     tagline: "Echo-Location Reaction Trainer",
     overview: "Test your auditory reflexes in this fast-paced spatial challenge. Sonic bubbles float around a virtual 3D space, emitting unique sound signatures. Use echo-location cues to track and 'pop' them before they drift away.",
     tech: "Dynamic Spatial Sound-Mapping",
-    images: ["/sonic pop game card.jpeg"],
+    images: ["/images/game-cards/sonic pop game card.jpeg"],
     features: [
       "360-degree sound field tracking",
       "Progression system with increasing audio complexity",
@@ -268,7 +268,7 @@ export const games: Game[] = [
     tagline: "Gesture-based Dart Challenge",
     overview: "Step up to the line with Dart Knight, the gesture-based dart game that turns your laptop screen into a dartboard. Challenge a friend in offline multiplayer mode and see who has the steadiest hand and the sharpest eye. Simply aim and throw with your natural hand movements to rack up points and hit that Bullseye.",
     tech: null,
-    images: ["/images/dart_knight_game_card.jpeg"],
+    images: ["/images/game-cards/dart knight game card.jpeg"],
     features: [
       "Gesture-based dart throwing (No controllers, no buttons)",
       "Offline multiplayer mode for competitive play",
@@ -296,7 +296,7 @@ export const games: Game[] = [
     tagline: "Gesture-based Slingshot Game",
     overview: "Aim and release the stone to hit all the mangoes in the tree. Collect them all before the timer runs out. A gesture-based slingshot game where all you need is a laptop and a webcam. No controllers, no buttons - just natural hand movements.",
     tech: "Note: Play in a well-lit room. Make sure the light is not creating any camera glare for effective hand detection.",
-    images: ["/images/shoot_froot_game_card.jpeg"],
+    images: ["/images/game-cards/shoot froot game card.jpeg"],
     features: [
       "Intuitive slingshot mechanics using hand gestures",
       "Time-based challenge mode",

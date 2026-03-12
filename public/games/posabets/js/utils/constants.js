@@ -3,7 +3,8 @@
 export const GameMode = {
     TRAINING: 'training',
     LETTER_MISSION: 'letter_mission',
-    WORD_EXPLORER: 'word_explorer'
+    WORD_EXPLORER: 'word_explorer',
+    NAME_SPELL: 'name_spell'  // NEW: Spell any custom name
 };
 
 export const GameState = {
@@ -34,6 +35,7 @@ export const StorageKeys = {
     BADGES_EARNED: 'alphabet_badges',
     LETTERS_MASTERED: 'alphabet_letters_mastered',
     WORDS_COMPLETED: 'alphabet_words_completed',
+    NAMES_COMPLETED: 'alphabet_names_completed',  // NEW: Track completed names
     SETTINGS: 'alphabet_settings'
 };
 
@@ -75,6 +77,7 @@ export const Events = {
     POSE_INCORRECT: 'pose_incorrect',
     LETTER_COMPLETE: 'letter_complete',
     WORD_COMPLETE: 'word_complete',
+    NAME_COMPLETE: 'name_complete',  // NEW: Name spelling complete
     BADGE_EARNED: 'badge_earned',
     LEVEL_UP: 'level_up',
     GAME_OVER: 'game_over'

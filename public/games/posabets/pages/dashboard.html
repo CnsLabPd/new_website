@@ -57,7 +57,7 @@
         <!-- Stats Section -->
         <div class="card fade-in delay-1">
             <h3 class="card-header">📊 Your Progress</h3>
-            <div class="stats-grid">
+            <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
                 <div class="stat-box">
                     <div class="stat-value" id="lettersCompleted">0</div>
                     <div class="stat-label">Letters Mastered</div>
@@ -65,6 +65,10 @@
                 <div class="stat-box">
                     <div class="stat-value" id="wordsCompleted">0</div>
                     <div class="stat-label">Words Spelled</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="namesCompleted">0</div>
+                    <div class="stat-label">Names Spelled</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-value" id="badgesEarned">0</div>
@@ -80,7 +84,7 @@
         <!-- Game Modes -->
         <h3 class="text-center mt-2 mb-2 slide-in-left delay-2" style="font-size: 2.5rem;">Choose Your Mission</h3>
 
-        <div class="grid grid-3 gap-lg">
+        <div class="grid grid-4 gap-lg">
             <!-- Training Mode -->
             <div class="card hover-lift slide-in-left delay-3" style="cursor: pointer;" id="trainingModeCard">
                 <div style="text-align: center;">
@@ -116,6 +120,18 @@
                     </button>
                 </div>
             </div>
+
+            <!-- NEW: Name Spell Mode -->
+            <div class="card hover-lift slide-in-left delay-6" id="nameSpellCard" style="position: relative; cursor: pointer;">
+                <div style="text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: var(--spacing-md);">💝</div>
+                    <h4>Name Spell</h4>
+                    <p style="opacity: 0.9;">Spell anyone's name - Mom, Dad, friends! Personalized fun!</p>
+                    <button class="btn btn-info" id="nameSpellBtn" style="width: 100%; margin-top: var(--spacing-md); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        Spell a Name
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Alphabet Progress -->
@@ -143,6 +159,45 @@
             <a href="parent.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2);">
                 📊 Parent Dashboard
             </a>
+        </div>
+    </div>
+
+    <!-- Name Input Modal -->
+    <div id="nameInputModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" style="max-width: 500px;">
+            <h3 style="margin-bottom: 1.5rem; font-size: 2rem; text-align: center;">
+                💝 Spell a Name
+            </h3>
+            <p style="text-align: center; opacity: 0.9; margin-bottom: 2rem;">
+                Enter someone's name and spell it letter by letter!
+            </p>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label for="nameInput" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                    Enter Name:
+                </label>
+                <input
+                    type="text"
+                    id="nameInput"
+                    placeholder="e.g., MOM, DAD, SARAH"
+                    style="width: 100%; padding: 1rem; font-size: 1.2rem; border-radius: var(--radius-md); border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; text-transform: uppercase;"
+                    maxlength="20"
+                    autocomplete="off"
+                />
+                <small style="opacity: 0.7; margin-top: 0.5rem; display: block;">
+                    Only letters A-Z allowed (2-20 characters)
+                </small>
+            </div>
+
+            <div class="flex gap-md" style="margin-top: 2rem;">
+                <button id="cancelNameBtn" class="btn btn-secondary" style="flex: 1;">
+                    Cancel
+                </button>
+                <button id="startNameBtn" class="btn" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    Start Spelling! 🎯
+                </button>
+            </div>
         </div>
     </div>
 
@@ -205,6 +260,7 @@
         document.getElementById('totalStars').textContent = stats.totalStars;
         document.getElementById('lettersCompleted').textContent = stats.lettersCount;
         document.getElementById('wordsCompleted').textContent = stats.wordsCount;
+        document.getElementById('namesCompleted').textContent = stats.namesCount || 0;
         document.getElementById('badgesEarned').textContent = stats.badgesCount;
         document.getElementById('currentStreak').textContent = stats.streak;
 
@@ -255,11 +311,13 @@
         const trainingCard = document.getElementById('trainingModeCard');
         const letterCard = document.getElementById('letterMissionCard');
         const wordCard = document.getElementById('wordExplorerCard');
+        const nameCard = document.getElementById('nameSpellCard');
 
         console.log('🔍 Button elements:', {
             trainingCard: !!trainingCard,
             letterCard: !!letterCard,
-            wordCard: !!wordCard
+            wordCard: !!wordCard,
+            nameCard: !!nameCard
         });
 
         if (trainingCard) {
@@ -290,6 +348,65 @@
                 window.location.href = `game.html?mode=word&word=${word}`;
             });
         }
+
+        // Name Spell Mode Handler
+        if (nameCard) {
+            nameCard.addEventListener('click', () => {
+                console.log('🎯 Name Spell clicked!');
+                audioManager.playClick();
+                // Show name input modal
+                document.getElementById('nameInputModal').style.display = 'flex';
+                document.getElementById('nameInput').focus();
+            });
+        }
+
+        // Name Input Modal Handlers
+        const nameInputModal = document.getElementById('nameInputModal');
+        const nameInput = document.getElementById('nameInput');
+        const startNameBtn = document.getElementById('startNameBtn');
+        const cancelNameBtn = document.getElementById('cancelNameBtn');
+
+        // Filter input to only allow A-Z
+        nameInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
+        });
+
+        // Start Name Spell
+        startNameBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name.length < 2) {
+                alert('Please enter at least 2 letters!');
+                return;
+            }
+            if (name.length > 20) {
+                alert('Name is too long! Maximum 20 letters.');
+                return;
+            }
+
+            console.log('🎯 Starting Name Spell mode for:', name);
+            audioManager.playClick();
+            window.location.href = `game.html?mode=name&name=${encodeURIComponent(name)}`;
+        });
+
+        // Cancel button
+        cancelNameBtn.addEventListener('click', () => {
+            audioManager.playClick();
+            nameInputModal.style.display = 'none';
+            nameInput.value = '';
+        });
+
+        // Close on overlay click
+        nameInputModal.querySelector('.modal-overlay').addEventListener('click', () => {
+            nameInputModal.style.display = 'none';
+            nameInput.value = '';
+        });
+
+        // Enter key to submit
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                startNameBtn.click();
+            }
+        });
 
         console.log('✅ All button handlers set up!');
 

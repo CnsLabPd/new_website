@@ -53,10 +53,14 @@
 
         <!-- Target Letter Display (Smaller, at top) -->
         <div id="targetDisplay" class="card text-center mb-2 zoom-in" style="background: var(--gradient-nebula); padding: var(--spacing-md);">
-            <div style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-md);">
+            <div id="nameSpellingInfo" style="display: none; text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700;" id="spellingName">Spelling: ROHIT</div>
+                <div style="font-size: 1.1rem; opacity: 0.9;" id="letterProgress">2/5 letters done</div>
+            </div>
+            <div id="defaultInfo" style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-md);">
                 <div style="font-family: var(--font-display); font-size: 4rem; line-height: 1;" id="targetLetter">A</div>
                 <div style="text-align: left;">
-                    <div style="font-size: 1.25rem; font-weight: 700;">Form this letter!</div>
+                    <div id="formLetterText" style="font-size: 1.25rem; font-weight: 700;">Form this letter!</div>
                     <div style="font-size: 1rem; opacity: 0.9;" id="instruction">Stand in front of the camera</div>
                 </div>
             </div>
@@ -227,7 +231,7 @@
             <div id="letterSelectGrid" class="letter-grid mt-2">
                 <!-- Letters will be generated -->
             </div>
-            <button id="closeLetter SelectModal" class="btn btn-danger" style="width: 100%; margin-top: var(--spacing-lg);">
+            <button id="closeLetterSelectModal" class="btn btn-danger" style="width: 100%; margin-top: var(--spacing-lg);">
                 Cancel
             </button>
         </div>
@@ -250,12 +254,14 @@
         const mode = urlParams.get('mode') || 'training';
         const initialLetter = urlParams.get('letter') || 'A';
         const initialWord = urlParams.get('word') || 'CAT';
+        const initialName = urlParams.get('name') || 'MOM';  // NEW: Name parameter
 
         // Initialize game engine
         const gameEngine = new GameEngine();
         let currentMode = mode;
         let currentLetter = initialLetter.toUpperCase();
         let currentWord = initialWord.toUpperCase();
+        let currentName = initialName.toUpperCase();  // NEW: Current name
 
         // DOM elements (use videoElement as the main one, will be assigned based on mode)
         let videoElement, canvasElement, holdIndicator, holdProgressFill, holdPercentage, cameraStatus, statusIndicator;
@@ -352,10 +358,17 @@
             const progress = Storage.getProgress();
             starsDisplay.textContent = progress.totalStars || 0;
 
+            // Get display elements
+            const nameSpellingInfo = document.getElementById('nameSpellingInfo');
+            const defaultInfo = document.getElementById('defaultInfo');
+            const spellingName = document.getElementById('spellingName');
+            const letterProgress = document.getElementById('letterProgress');
+            const formLetterText = document.getElementById('formLetterText');
+
             // Assign camera elements based on mode
-            if (currentMode === 'training') {
-                // Training mode: Camera on right, reference image on left
-                videoElement = document.getElementById('videoElementRight'); // Use RIGHT video for training
+            if (currentMode === 'training' || currentMode === 'name') {
+                // Training and Name modes: Camera on right, reference image on left
+                videoElement = document.getElementById('videoElementRight'); // Use RIGHT video
                 canvasElement = document.getElementById('canvasElementRight');
                 holdIndicator = document.getElementById('holdIndicatorRight');
                 holdProgressFill = document.getElementById('holdProgressFillRight');
@@ -386,7 +399,11 @@
             switch (currentMode) {
                 case 'training':
                     modeTitle.textContent = '🚀 Training Mode';
+                    // Show default info, hide name spelling info
+                    nameSpellingInfo.style.display = 'none';
+                    defaultInfo.style.display = 'block';
                     instruction.textContent = 'Practice at your own pace!';
+                    formLetterText.style.display = 'block';
                     document.getElementById('selectLetterButton').classList.remove('hidden');
                     // Show reference image
                     updateReferenceImage(currentLetter);
@@ -394,7 +411,11 @@
 
                 case 'mission':
                     modeTitle.textContent = '🌟 Letter Mission';
+                    // Show default info, hide name spelling info
+                    nameSpellingInfo.style.display = 'none';
+                    defaultInfo.style.display = 'block';
                     instruction.textContent = 'Complete to unlock next letter!';
+                    formLetterText.style.display = 'block';
                     attemptsContainer.classList.remove('hidden');
                     letterGridContainer.classList.remove('hidden');
                     generateLetterGrid();
@@ -403,9 +424,26 @@
 
                 case 'word':
                     modeTitle.textContent = '🪐 Word Explorer';
+                    // Show default info, hide name spelling info
+                    nameSpellingInfo.style.display = 'none';
+                    defaultInfo.style.display = 'block';
                     instruction.textContent = `Spell: ${currentWord}`;
+                    formLetterText.style.display = 'block';
                     wordDisplayContainer.classList.remove('hidden');
                     generateWordDisplay();
+                    break;
+
+                case 'name':
+                    modeTitle.textContent = '💝 Name Spell';
+                    // Show name spelling info, hide default info
+                    nameSpellingInfo.style.display = 'block';
+                    defaultInfo.style.display = 'none';
+                    spellingName.textContent = `Spelling: ${currentName}`;
+                    letterProgress.textContent = `0/${currentName.length} letters done`;
+                    // Show reference image for current letter
+                    updateReferenceImage(currentLetter);
+                    // Show name display in the reference image container
+                    addNameDisplayToReference();
                     break;
             }
 
@@ -448,9 +486,27 @@
             }
         }
 
+        function generateNameDisplay() {
+            wordDisplay.innerHTML = '';
+
+            for (let i = 0; i < currentName.length; i++) {
+                const letterBox = document.createElement('div');
+                letterBox.className = 'word-letter';
+                letterBox.textContent = currentName[i];
+
+                if (i === 0) {
+                    letterBox.classList.add('current');
+                }
+
+                wordDisplay.appendChild(letterBox);
+            }
+        }
+
         function startGameMode() {
             if (currentMode === 'word') {
                 gameEngine.startMode(GameMode.WORD_EXPLORER, { word: currentWord });
+            } else if (currentMode === 'name') {
+                gameEngine.startMode(GameMode.NAME_SPELL, { name: currentName });
             } else if (currentMode === 'mission') {
                 gameEngine.startMode(GameMode.LETTER_MISSION, { letter: currentLetter });
             } else {
@@ -478,6 +534,10 @@
 
             gameEngine.addEventListener(Events.POSE_CORRECT, (e) => {
                 handleSuccess(e.detail);
+            });
+
+            gameEngine.addEventListener(Events.NAME_COMPLETE, (e) => {
+                handleNameComplete(e.detail);
             });
 
             // UI buttons
@@ -595,9 +655,9 @@
             handleNextAction();
         }
 
-        // Update reference image for training mode
+        // Update reference image for training and name modes
         function updateReferenceImage(letter) {
-            if (currentMode === 'training') {
+            if (currentMode === 'training' || currentMode === 'name') {
                 referenceImage.src = `../assets/images/Alphabets/${letter}.jpg`;
                 referenceImageContainer.classList.remove('hidden');
                 // Reset zoom when changing letter
@@ -606,6 +666,31 @@
             } else {
                 referenceImageContainer.classList.add('hidden');
             }
+        }
+
+        // Add name display below reference image for name mode
+        function addNameDisplayToReference() {
+            // Remove existing name display if any
+            const existingDisplay = document.getElementById('nameDisplayInReference');
+            if (existingDisplay) {
+                existingDisplay.remove();
+            }
+
+            // Create name display
+            const nameDisplayDiv = document.createElement('div');
+            nameDisplayDiv.id = 'nameDisplayInReference';
+            nameDisplayDiv.style.cssText = 'margin-top: var(--spacing-md); padding: var(--spacing-sm);';
+            nameDisplayDiv.innerHTML = `
+                <h4 style="text-align: center; margin-bottom: var(--spacing-sm);">Spelling: ${currentName}</h4>
+                <div id="nameProgressDisplay" class="word-display" style="justify-content: center;">
+                    ${currentName.split('').map((letter, i) => `
+                        <div class="word-letter ${i === 0 ? 'current' : ''}">${letter}</div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Add to reference image container
+            referenceImageContainer.appendChild(nameDisplayDiv);
         }
 
         // Update zoom level
@@ -617,6 +702,31 @@
             // Enable/disable buttons based on zoom level
             zoomInBtn.disabled = currentZoom >= 3;
             zoomOutBtn.disabled = currentZoom <= 1;
+        }
+
+        function handleNameComplete(detail) {
+            const { name, stars } = detail;
+
+            // Show completion feedback
+            const icon = document.getElementById('feedbackIcon');
+            const title = document.getElementById('feedbackTitle');
+            const messageEl = document.getElementById('feedbackMessage');
+
+            icon.textContent = '🎉';
+            title.textContent = `Awesome! You spelled ${name}!`;
+            messageEl.textContent = `You earned ${stars} stars! Great job spelling that name!`;
+
+            feedbackModal.classList.add('show');
+            audioManager.speak(`Amazing job spelling ${name}!`);
+
+            // Create confetti
+            createConfetti();
+
+            // Auto-close and return to dashboard after 3 seconds
+            setTimeout(() => {
+                feedbackModal.classList.remove('show');
+                window.location.href = 'dashboard.html';
+            }, 3000);
         }
 
         function handleNextAction() {
@@ -632,6 +742,20 @@
                     currentLetter = state.currentLetter;
                     targetLetter.textContent = currentLetter;
                     updateWordDisplay(state.currentWordIndex);
+                }
+            } else if (currentMode === 'name') {
+                const state = gameEngine.getState();
+                if (state.state === 'complete') {
+                    // Name complete - handleNameComplete will take care of this
+                    return;
+                } else {
+                    // Next letter in name
+                    currentLetter = state.currentLetter;
+                    targetLetter.textContent = currentLetter;
+                    // Update reference image for new letter
+                    updateReferenceImage(currentLetter);
+                    // Update name progress display
+                    updateNameProgressDisplay(state.currentNameIndex);
                 }
             } else if (currentMode === 'mission') {
                 goToNextLetter();
@@ -670,6 +794,40 @@
             });
         }
 
+        function updateNameDisplay(currentIndex) {
+            const letters = wordDisplay.querySelectorAll('.word-letter');
+            letters.forEach((letter, i) => {
+                letter.classList.remove('current', 'completed');
+                if (i < currentIndex) {
+                    letter.classList.add('completed');
+                } else if (i === currentIndex) {
+                    letter.classList.add('current');
+                }
+            });
+        }
+
+        function updateNameProgressDisplay(currentIndex) {
+            // Update the progress counter in the header
+            const letterProgress = document.getElementById('letterProgress');
+            if (letterProgress) {
+                letterProgress.textContent = `${currentIndex}/${currentName.length} letters done`;
+            }
+
+            // Update the name progress display in the reference container
+            const nameProgressDisplay = document.getElementById('nameProgressDisplay');
+            if (nameProgressDisplay) {
+                const letters = nameProgressDisplay.querySelectorAll('.word-letter');
+                letters.forEach((letter, i) => {
+                    letter.classList.remove('current', 'completed');
+                    if (i < currentIndex) {
+                        letter.classList.add('completed');
+                    } else if (i === currentIndex) {
+                        letter.classList.add('current');
+                    }
+                });
+            }
+        }
+
         function goToNextLetter() {
             const progress = Storage.getProgress();
             const nextLetter = ALPHABET.find(l => !progress.lettersCompleted?.includes(l));
@@ -701,6 +859,12 @@
             const modal = document.getElementById('letterSelectModal');
             const grid = document.getElementById('letterSelectGrid');
             const closeButton = document.getElementById('closeLetterSelectModal');
+
+            // Check if elements exist
+            if (!modal || !grid || !closeButton) {
+                console.error('❌ Letter selection modal elements not found:', { modal, grid, closeButton });
+                return;
+            }
 
             // Remove old event listeners before adding new ones
             if (letterSelectClickHandler) {

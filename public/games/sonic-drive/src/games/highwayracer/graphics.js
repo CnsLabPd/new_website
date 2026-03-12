@@ -369,7 +369,8 @@ export class GraphicsEngine {
 
   createStarFieldCanvas() {
     this.stars = [];
-    const numStars = Math.floor((this.canvas.width * this.canvas.height) / 5000);
+    // OPTIMIZED: Reduced star density from /5000 to /6000 for better performance
+    const numStars = Math.floor((this.canvas.width * this.canvas.height) / 6000);
     for (let i = 0; i < numStars; i++) {
       this.stars.push({
         x: Math.random() * this.canvas.width,
@@ -541,13 +542,8 @@ export class GraphicsEngine {
     const speedRatio = speed / 120; // Normalize speed (0-1)
     const isHighSpeed = speed > 60;
 
-    // Speed-based vibration/shake effect
-    if (isHighSpeed) {
-      const shakeAmount = (speedRatio - 0.5) * 2; // 0-1 for speeds 60-120
-      const shakeX = (Math.random() - 0.5) * shakeAmount * 2;
-      const shakeY = (Math.random() - 0.5) * shakeAmount * 2;
-      ctx.translate(shakeX, shakeY);
-    }
+    // Speed-based vibration/shake effect (DISABLED for performance - causes micro-stutters)
+    // Removed shake effect entirely to improve frame consistency
 
     // Gear shift effects - intense glow and distortion
     if (isShifting) {
@@ -615,11 +611,12 @@ export class GraphicsEngine {
     ctx.roundRect(-15, -25, 30, 25, 5);
     ctx.fill();
 
-    // Headlights (brighter and larger at high speeds)
-    const headlightSize = 4 + speedRatio * 3;
+    // Headlights (OPTIMIZED - reduced shadow blur for performance)
+    const headlightSize = 4 + speedRatio * 2;
     ctx.fillStyle = isShifting ? '#00ffff' : '#ffff00';
+    // Reduced shadow blur from 10-20 to 5-8 for better performance
     ctx.shadowColor = ctx.fillStyle;
-    ctx.shadowBlur = isShifting ? 20 : (10 + speedRatio * 10);
+    ctx.shadowBlur = isShifting ? 8 : 5;
     ctx.beginPath();
     ctx.arc(-12, 30, headlightSize, 0, Math.PI * 2);
     ctx.arc(12, 30, headlightSize, 0, Math.PI * 2);
@@ -683,7 +680,8 @@ export class GraphicsEngine {
     if (speed <= 30) return;
 
     const ctx = this.ctx;
-    const lineCount = Math.floor(speed / 10);
+    // OPTIMIZED: Cap line count at 15 to prevent excessive drawing at very high speeds
+    const lineCount = Math.min(Math.floor(speed / 10), 15);
 
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2;

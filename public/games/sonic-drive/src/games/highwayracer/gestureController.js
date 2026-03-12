@@ -68,11 +68,12 @@ export class GestureController {
         }
       });
 
+      // OPTIMIZED: Reduced model complexity for better performance
       this.hands.setOptions({
         maxNumHands: 2,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5
+        modelComplexity: 0,  // Changed from 1 to 0 for faster processing
+        minDetectionConfidence: 0.6,  // Increased from 0.5 to reduce false positives
+        minTrackingConfidence: 0.6    // Increased from 0.5 for more stable tracking
       });
 
       this.hands.onResults((results) => this.onResults(results));
@@ -178,18 +179,19 @@ export class GestureController {
 
           detectedHands.add(handLabel);
 
-          // Draw hand connections
-          if (typeof drawConnectors !== 'undefined') {
+          // OPTIMIZED: Reduce visual drawing frequency (every 2 frames) to save CPU
+          const shouldDraw = (i % 2 === 0); // Only draw for first hand each frame
+          if (shouldDraw && typeof drawConnectors !== 'undefined') {
             drawConnectors(this.canvasCtx, landmarks, HAND_CONNECTIONS, {
               color: handLabel === 'right' ? '#00ff00' : '#ff00ff',
-              lineWidth: 3
+              lineWidth: 2  // Reduced from 3 to 2
             });
 
-            // Draw landmarks
+            // Draw landmarks with smaller radius
             drawLandmarks(this.canvasCtx, landmarks, {
               color: handLabel === 'right' ? '#00ffff' : '#ffff00',
               lineWidth: 1,
-              radius: 3
+              radius: 2  // Reduced from 3 to 2
             });
           }
 

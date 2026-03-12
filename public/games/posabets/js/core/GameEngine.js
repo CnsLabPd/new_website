@@ -16,6 +16,9 @@ export class GameEngine extends EventTarget {
         this.currentLetter = null;
         this.currentWord = null;
         this.currentWordIndex = 0;
+        this.currentName = null;           // NEW: For name spell mode
+        this.currentNameIndex = 0;         // NEW: Track position in name
+        this.nameLetters = [];             // NEW: Unique letters in name order
         this.attempts = 0;
         this.holdStartTime = null;
         this.isHolding = false;
@@ -104,6 +107,9 @@ export class GameEngine extends EventTarget {
             case GameMode.WORD_EXPLORER:
                 this.startWordExplorer(options.word);
                 break;
+            case GameMode.NAME_SPELL:
+                this.startNameSpell(options.name);
+                break;
         }
     }
 
@@ -137,6 +143,16 @@ export class GameEngine extends EventTarget {
         this.currentWordIndex = 0;
         this.currentLetter = this.currentWord[0];
         console.log('Word Explorer started for:', this.currentWord);
+    }
+
+    startNameSpell(name) {
+        this.currentName = name.toUpperCase();
+        this.currentNameIndex = 0;
+        // Get letters in order (includes duplicates like M-O-M)
+        this.nameLetters = this.currentName.split('');
+        this.currentLetter = this.nameLetters[0];
+        console.log('Name Spell started for:', this.currentName);
+        console.log('Name letters sequence:', this.nameLetters);
     }
 
     onPoseDetected(detail) {
@@ -281,6 +297,28 @@ export class GameEngine extends EventTarget {
         } else if (this.mode === GameMode.TRAINING) {
             // Just save stars
             Storage.updateStars(stars);
+
+        } else if (this.mode === GameMode.NAME_SPELL) {
+            // Name Spell Mode - similar to word explorer
+            this.currentNameIndex++;
+
+            if (this.currentNameIndex >= this.nameLetters.length) {
+                // Name complete!
+                const nameStars = stars * this.nameLetters.length;
+                Storage.markNameComplete(this.currentName, nameStars);
+
+                audioManager.playBadgeUnlock();
+
+                this.dispatchEvent(new CustomEvent(Events.NAME_COMPLETE, {
+                    detail: { name: this.currentName, stars: nameStars }
+                }));
+
+                this.state = GameState.COMPLETE;
+            } else {
+                // Next letter in name
+                this.currentLetter = this.nameLetters[this.currentNameIndex];
+                this.attempts = 0;
+            }
         }
     }
 
@@ -356,6 +394,8 @@ export class GameEngine extends EventTarget {
             currentLetter: this.currentLetter,
             currentWord: this.currentWord,
             currentWordIndex: this.currentWordIndex,
+            currentName: this.currentName,
+            currentNameIndex: this.currentNameIndex,
             attempts: this.attempts,
             playerName: this.playerName
         };

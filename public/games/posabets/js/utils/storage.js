@@ -122,6 +122,7 @@ export class Storage {
             currentLevel: 0,
             lettersCompleted: [],
             wordsCompleted: [],
+            namesCompleted: [],  // NEW: Track completed names
             badges: [],
             totalStars: 0,
             streak: 0,
@@ -169,6 +170,35 @@ export class Storage {
         if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
             const api = new window.PosabetsAPI();
             await api.markWordComplete(word, stars);
+        }
+
+        return true;
+    }
+
+    static async markNameComplete(name, stars) {
+        // Update localStorage first
+        const progress = this.getProgress();
+
+        // Initialize namesCompleted array if it doesn't exist
+        if (!progress.namesCompleted) {
+            progress.namesCompleted = [];
+        }
+
+        // Add name if not already completed
+        if (!progress.namesCompleted.includes(name)) {
+            progress.namesCompleted.push(name);
+        }
+
+        progress.totalStars = (progress.totalStars || 0) + stars;
+        progress.lastPlayed = new Date().toISOString();
+        this.saveProgress(progress);
+
+        // Sync to API if available (name mode may not have API endpoint yet)
+        if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+            const api = new window.PosabetsAPI();
+            if (api.markNameComplete) {
+                await api.markNameComplete(name, stars);
+            }
         }
 
         return true;
@@ -222,6 +252,7 @@ export class Storage {
         return {
             lettersCount: progress.lettersCompleted?.length || 0,
             wordsCount: progress.wordsCompleted?.length || 0,
+            namesCount: progress.namesCompleted?.length || 0,  // NEW: Names count
             badgesCount: progress.badges?.length || 0,
             totalStars: progress.totalStars || 0,
             streak: progress.streak || 0,
