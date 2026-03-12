@@ -364,11 +364,11 @@ export default function TeamPage() {
                 <div className="text-3xl font-bold text-amber-400 mb-2">5</div>
                 <p className="text-muted-foreground">Patents Filed</p>
               </div>
-              <div>
+              {/* <div>
                 <div className="text-3xl font-bold text-green-400 mb-2">10+</div>
                 <p className="text-muted-foreground">Awards & Recognition</p>
               </div>
-            </div>
+            </div> */}
           </section>
 
           {/* Call to Action */}
