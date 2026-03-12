@@ -351,7 +351,7 @@ export default function TeamPage() {
           {/* Team Stats */}
           <section className="bg-muted rounded-2xl p-8 mb-20">
             <h2 className="text-3xl font-bold text-foreground text-center mb-8">Our Team by Numbers</h2>
-            <div className="grid md:grid-cols-4 gap-6 text-center">
+            <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
                 <div className="text-3xl font-bold text-blue-400 mb-2">45+</div>
                 <p className="text-muted-foreground">Years Combined Experience</p>
