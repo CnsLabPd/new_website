@@ -179,21 +179,22 @@ export class GestureController {
 
           detectedHands.add(handLabel);
 
+          // Hand skeleton overlay removed - keeping gesture detection only
           // OPTIMIZED: Reduce visual drawing frequency (every 2 frames) to save CPU
-          const shouldDraw = (i % 2 === 0); // Only draw for first hand each frame
-          if (shouldDraw && typeof drawConnectors !== 'undefined') {
-            drawConnectors(this.canvasCtx, landmarks, HAND_CONNECTIONS, {
-              color: handLabel === 'right' ? '#00ff00' : '#ff00ff',
-              lineWidth: 2  // Reduced from 3 to 2
-            });
-
-            // Draw landmarks with smaller radius
-            drawLandmarks(this.canvasCtx, landmarks, {
-              color: handLabel === 'right' ? '#00ffff' : '#ffff00',
-              lineWidth: 1,
-              radius: 2  // Reduced from 3 to 2
-            });
-          }
+          // const shouldDraw = (i % 2 === 0); // Only draw for first hand each frame
+          // if (shouldDraw && typeof drawConnectors !== 'undefined') {
+          //   drawConnectors(this.canvasCtx, landmarks, HAND_CONNECTIONS, {
+          //     color: handLabel === 'right' ? '#00ff00' : '#ff00ff',
+          //     lineWidth: 2  // Reduced from 3 to 2
+          //   });
+          //
+          //   // Draw landmarks with smaller radius
+          //   drawLandmarks(this.canvasCtx, landmarks, {
+          //     color: handLabel === 'right' ? '#00ffff' : '#ffff00',
+          //     lineWidth: 1,
+          //     radius: 2  // Reduced from 3 to 2
+          //   });
+          // }
 
           // Update hand state
           const wasDetected = this.handStates[handLabel].detected;
@@ -210,8 +211,8 @@ export class GestureController {
           // Analyze gestures
           this.analyzeGestures(landmarks, handLabel);
 
-          // Draw gesture label on canvas
-          this.drawGestureLabel(landmarks, handLabel);
+          // Gesture label drawing removed - cleaner camera view
+          // this.drawGestureLabel(landmarks, handLabel);
         }
 
         // Check if both hands are detected
