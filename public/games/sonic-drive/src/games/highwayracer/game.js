@@ -87,7 +87,7 @@ export class Game {
     // Using lightweight object-based vehicle tracking instead
 
     // Game constants
-    this.MAX_SPEED = 240; // Doubled for more realistic high-speed racing experience
+    this.MAX_SPEED = 180; // 75% of previous value (240 * 0.75 = 180)
     this.MIN_SPEED = 0;
     this.ACCEL_RATE = 1.2;
     this.DECEL_RATE = 1.8;

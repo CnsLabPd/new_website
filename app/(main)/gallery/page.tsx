@@ -22,7 +22,7 @@ const events: Event[] = [
     id: "clarke-anubhav-2024",
     title: "Anubhav",
     subtitle: "Inclusive Innovation Showcase",
-    date: "December 2024",
+    date: "3rd December 2025",
     location: "The Clarke School for the Deaf, Chennai",
     description: "An interactive technology and learning experience event introducing children and educators to innovative assistive technologies and rehabilitation games. Students explored gesture-based interactive games and AI-assisted learning activities designed to support motor development, cognitive engagement, and inclusive learning experiences.",
     images: [
