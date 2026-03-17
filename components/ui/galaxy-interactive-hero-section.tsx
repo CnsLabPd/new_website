@@ -17,7 +17,7 @@ interface HeroContentProps {
 function HeroContent({
   title = "Neurogati",
   tagline = "Empowering Brains",
-  description = "Revolutionizing neurological care through AI, BCI, and computational neuroscience.",
+  description = "Revolutionizing neurological care through AI and computational neuroscience.",
   primaryButtonText = "Explore Our Products",
   primaryButtonHref = "/products",
   secondaryButtonText = "Watch Demo",
@@ -112,7 +112,7 @@ export const GalaxyHeroSection = ({
               Empowering Brains
             </p>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-80 max-w-2xl text-gray-200 animate-fade-in-delay-2">
-              Revolutionizing neurological care through AI, BCI, and computational neuroscience.
+              Revolutionizing neurological care through AI and computational neuroscience.
             </p>
             <div className="flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-3 animate-fade-in-delay-3">
               <GradientButton variant={"variant"} asChild>

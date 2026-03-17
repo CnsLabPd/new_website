@@ -11,7 +11,7 @@
 
 // export const metadata: Metadata = {
 //   title: "Neurogati - Empowering Brains",
-//   description: "Revolutionizing neurological care through AI, BCI, and computational neuroscience.",
+//   description: "Revolutionizing neurological care through AI and computational neuroscience.",
 //     generator: 'v0.dev'
 // }
 
@@ -47,7 +47,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Neurogati - Empowering Brains",
-  description: "Revolutionizing neurological care through AI, BCI, and computational neuroscience.",
+  description: "Revolutionizing neurological care through AI and computational neuroscience.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
