@@ -102,42 +102,86 @@ export class GraphicsEngine {
     this.roadOffset += speed * 0.3;
     if (this.roadOffset > 40) this.roadOffset = 0;
 
-    // Road surface (dark with slight glow)
-    this.roadGraphics.rect(100, 0, 600, 600);
+    // 60-degree perspective view: Road narrows towards the top (vanishing point)
+    // Bottom width: 600px (100 to 700)
+    // Top width: narrower for perspective (250 to 550 = 300px)
+    const roadBottomLeft = 100;
+    const roadBottomRight = 700;
+    const roadTopLeft = 250;   // Narrower at top
+    const roadTopRight = 550;  // Narrower at top
+    const roadHeight = 600;
+
+    // Draw perspective road surface as a trapezoid
+    this.roadGraphics.moveTo(roadTopLeft, 0);
+    this.roadGraphics.lineTo(roadTopRight, 0);
+    this.roadGraphics.lineTo(roadBottomRight, roadHeight);
+    this.roadGraphics.lineTo(roadBottomLeft, roadHeight);
+    this.roadGraphics.lineTo(roadTopLeft, 0);
     this.roadGraphics.fill({ color: 0x1a1a2e, alpha: 0.8 });
 
-    // Lane dividers (animated dashed lines)
+    // Lane dividers (animated dashed lines) with perspective
     const dashLength = 30;
     const gapLength = 20;
 
+    // Helper function to calculate X position with perspective at given Y
+    const getPerspectiveX = (bottomX, y) => {
+      const ratio = y / roadHeight; // 0 at top, 1 at bottom
+      const topX = roadTopLeft + ((bottomX - roadBottomLeft) / (roadBottomRight - roadBottomLeft)) * (roadTopRight - roadTopLeft);
+      return topX + (bottomX - topX) * ratio;
+    };
+
     if (this.LANE_POSITIONS.length === 2) {
       // 2-lane mode: Single center divider between LEFT and RIGHT
+      const centerX = (this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2;
       for (let y = -this.roadOffset; y < 600; y += dashLength + gapLength) {
-        this.roadGraphics.moveTo((this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2, y);
-        this.roadGraphics.lineTo((this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2, y + dashLength);
+        const x1 = getPerspectiveX(centerX, y);
+        const x2 = getPerspectiveX(centerX, Math.min(y + dashLength, 600));
+        this.roadGraphics.moveTo(x1, y);
+        this.roadGraphics.lineTo(x2, Math.min(y + dashLength, 600));
       }
     } else if (this.LANE_POSITIONS.length === 3) {
       // 3-lane mode: Two dividers
+      const leftDividerX = (this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2;
+      const rightDividerX = (this.LANE_POSITIONS[1] + this.LANE_POSITIONS[2]) / 2;
+
       // Left-Center divider
       for (let y = -this.roadOffset; y < 600; y += dashLength + gapLength) {
-        this.roadGraphics.moveTo((this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2, y);
-        this.roadGraphics.lineTo((this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2, y + dashLength);
+        const x1 = getPerspectiveX(leftDividerX, y);
+        const x2 = getPerspectiveX(leftDividerX, Math.min(y + dashLength, 600));
+        this.roadGraphics.moveTo(x1, y);
+        this.roadGraphics.lineTo(x2, Math.min(y + dashLength, 600));
       }
 
       // Center-Right divider
       for (let y = -this.roadOffset; y < 600; y += dashLength + gapLength) {
-        this.roadGraphics.moveTo((this.LANE_POSITIONS[1] + this.LANE_POSITIONS[2]) / 2, y);
-        this.roadGraphics.lineTo((this.LANE_POSITIONS[1] + this.LANE_POSITIONS[2]) / 2, y + dashLength);
+        const x1 = getPerspectiveX(rightDividerX, y);
+        const x2 = getPerspectiveX(rightDividerX, Math.min(y + dashLength, 600));
+        this.roadGraphics.moveTo(x1, y);
+        this.roadGraphics.lineTo(x2, Math.min(y + dashLength, 600));
+      }
+    } else if (this.LANE_POSITIONS.length === 4) {
+      // 4-lane mode: Three dividers
+      const divider1X = (this.LANE_POSITIONS[0] + this.LANE_POSITIONS[1]) / 2;
+      const divider2X = (this.LANE_POSITIONS[1] + this.LANE_POSITIONS[2]) / 2;
+      const divider3X = (this.LANE_POSITIONS[2] + this.LANE_POSITIONS[3]) / 2;
+
+      for (const dividerX of [divider1X, divider2X, divider3X]) {
+        for (let y = -this.roadOffset; y < 600; y += dashLength + gapLength) {
+          const x1 = getPerspectiveX(dividerX, y);
+          const x2 = getPerspectiveX(dividerX, Math.min(y + dashLength, 600));
+          this.roadGraphics.moveTo(x1, y);
+          this.roadGraphics.lineTo(x2, Math.min(y + dashLength, 600));
+        }
       }
     }
 
     this.roadGraphics.stroke({ width: 3, color: 0x00ff88, alpha: 0.8 });
 
-    // Road boundaries (glowing neon lines)
-    this.roadGraphics.moveTo(100, 0);
-    this.roadGraphics.lineTo(100, 600);
-    this.roadGraphics.moveTo(700, 0);
-    this.roadGraphics.lineTo(700, 600);
+    // Road boundaries (glowing neon lines) with perspective
+    this.roadGraphics.moveTo(roadTopLeft, 0);
+    this.roadGraphics.lineTo(roadBottomLeft, roadHeight);
+    this.roadGraphics.moveTo(roadTopRight, 0);
+    this.roadGraphics.lineTo(roadBottomRight, roadHeight);
     this.roadGraphics.stroke({ width: 4, color: 0xff0066, alpha: 1 });
 
     // Add glow effect to boundaries
@@ -188,22 +232,26 @@ export class GraphicsEngine {
 
     const car = new PIXI.Graphics();
 
-    // Car body (sleek cyberpunk design)
-    car.roundRect(-20, -35, 40, 70, 8);
+    // 60-degree perspective view: Player car is closer (larger)
+    // Scale factor based on Y position (closer to bottom = larger)
+    const perspectiveScale = 1.0; // Player car at bottom is full size
+
+    // Car body (sleek cyberpunk design) - wider and more visible from 60-degree angle
+    car.roundRect(-20 * perspectiveScale, -45 * perspectiveScale, 40 * perspectiveScale, 90 * perspectiveScale, 8);
     car.fill(0xff0066);
 
-    // Windshield
-    car.roundRect(-15, -25, 30, 25, 5);
+    // Windshield - visible from angled view
+    car.roundRect(-15 * perspectiveScale, -30 * perspectiveScale, 30 * perspectiveScale, 35 * perspectiveScale, 5);
     car.fill({ color: 0x00ffff, alpha: 0.6 });
 
-    // Headlights (glowing)
-    car.circle(-12, 30, 4);
-    car.circle(12, 30, 4);
+    // Headlights (glowing) - positioned at front
+    car.circle(-12 * perspectiveScale, 35 * perspectiveScale, 5 * perspectiveScale);
+    car.circle(12 * perspectiveScale, 35 * perspectiveScale, 5 * perspectiveScale);
     car.fill(0xffff00);
 
     // Neon underglow
     const glow = new PIXI.Graphics();
-    glow.ellipse(0, 0, 30, 50);
+    glow.ellipse(0, 0, 35 * perspectiveScale, 60 * perspectiveScale);
     glow.fill({ color: 0xff0066, alpha: 0.3 });
     glow.filters = [new PIXI.BlurFilter({ strength: 8 })];
 
@@ -217,7 +265,7 @@ export class GraphicsEngine {
     // Add lane indicator glow
     const laneColors = [0x00ff88, 0xffff00, 0xff00ff];
     const laneGlow = new PIXI.Graphics();
-    laneGlow.circle(0, -50, 15);
+    laneGlow.circle(0, -60 * perspectiveScale, 18 * perspectiveScale);
     laneGlow.fill({ color: laneColors[currentLane], alpha: 0.4 });
     laneGlow.filters = [new PIXI.BlurFilter({ strength: 10 })];
     car.addChild(laneGlow);
@@ -253,21 +301,27 @@ export class GraphicsEngine {
     const colors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00];
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Car body
-    car.roundRect(-20, -35, 40, 70, 8);
+    // 60-degree perspective: Calculate scale based on Y position
+    // Y=0 (top/far) should be smaller, Y=600 (bottom/near) should be larger
+    // Using exponential scaling for realistic perspective
+    const perspectiveScale = 0.3 + (y / 600) * 0.7; // Range: 0.3 to 1.0
+
+    // Car body - scaled based on distance
+    car.roundRect(-20 * perspectiveScale, -45 * perspectiveScale, 40 * perspectiveScale, 90 * perspectiveScale, 8 * perspectiveScale);
     car.fill({ color: color, alpha: 0.9 });
 
-    // Windshield
-    car.roundRect(-15, -10, 30, 25, 5);
+    // Windshield (back window visible from behind)
+    car.roundRect(-15 * perspectiveScale, -15 * perspectiveScale, 30 * perspectiveScale, 30 * perspectiveScale, 5 * perspectiveScale);
     car.fill({ color: 0x000000, alpha: 0.5 });
 
-    // Taillights (red glow)
-    car.circle(-12, -30, 3);
-    car.circle(12, -30, 3);
+    // Taillights (red glow) - visible from behind
+    car.circle(-12 * perspectiveScale, -35 * perspectiveScale, 4 * perspectiveScale);
+    car.circle(12 * perspectiveScale, -35 * perspectiveScale, 4 * perspectiveScale);
     car.fill({ color: 0xff0000, alpha: 0.8 });
 
     car.x = x;
     car.y = y;
+    car._perspectiveScale = perspectiveScale; // Store for updates
 
     this.vehicleSprites.set(id, car);
     this.vehicleLayer.addChild(car);
@@ -276,8 +330,22 @@ export class GraphicsEngine {
   updateTrafficVehicle(id, x, y) {
     const sprite = this.vehicleSprites.get(id);
     if (sprite) {
+      // Update position
       sprite.x = x;
       sprite.y = y;
+
+      // Recalculate perspective scale based on new Y position
+      const newPerspectiveScale = 0.3 + (y / 600) * 0.7; // Range: 0.3 to 1.0
+
+      // Only redraw if scale changed significantly (optimization)
+      if (Math.abs(newPerspectiveScale - sprite._perspectiveScale) > 0.05) {
+        sprite._perspectiveScale = newPerspectiveScale;
+
+        // Recreate the vehicle with new scale
+        this.vehicleLayer.removeChild(sprite);
+        this.vehicleSprites.delete(id);
+        this.createTrafficVehicle(id, x, y);
+      }
     }
   }
 
@@ -384,13 +452,16 @@ export class GraphicsEngine {
 
   updateStarFieldCanvas(speed) {
     if (!this.stars) return;
-    this.stars.forEach(star => {
-      star.y += star.speed * (1 + speed * 0.02);
-      if (star.y > this.canvas.height) {
-        star.y = -10;
-        star.x = Math.random() * this.canvas.width;
-      }
-    });
+    // Only move stars if player has speed - stop completely when speed is 0
+    if (speed > 0) {
+      this.stars.forEach(star => {
+        star.y += star.speed * (1 + speed * 0.02);
+        if (star.y > this.canvas.height) {
+          star.y = -10;
+          star.x = Math.random() * this.canvas.width;
+        }
+      });
+    }
   }
 
   drawRoadCanvas(speed) {
@@ -441,11 +512,13 @@ export class GraphicsEngine {
       ctx.globalAlpha = 1;
     }
 
-    // Animate road movement
-    this.roadOffset += speed * 0.3;
-    if (this.roadOffset > 40) this.roadOffset = 0;
+    // Animate road movement - only when car is moving
+    if (speed > 0) {
+      this.roadOffset += speed * 0.3;
+      if (this.roadOffset > 40) this.roadOffset = 0;
+    }
 
-    // Road surface (centered, takes 60% of width)
+    // Road surface (centered, takes 60% of width) - TOP DOWN VIEW
     const roadWidth = width * 0.6;
     const roadLeft = (width - roadWidth) / 2;
     const roadRight = roadLeft + roadWidth;
@@ -453,7 +526,7 @@ export class GraphicsEngine {
     ctx.fillStyle = 'rgba(26, 26, 46, 0.8)';
     ctx.fillRect(roadLeft, 0, roadWidth, height);
 
-    // Lane dividers (animated dashed lines)
+    // Lane dividers (animated dashed lines) - TOP DOWN VIEW
     const dashLength = 30;
     const gapLength = 20;
 
@@ -521,7 +594,7 @@ export class GraphicsEngine {
 
     ctx.globalAlpha = 1;
 
-    // Road boundaries
+    // Road boundaries - TOP DOWN VIEW (straight lines)
     ctx.strokeStyle = '#ff0066';
     ctx.lineWidth = 4;
     ctx.beginPath();
@@ -652,7 +725,7 @@ export class GraphicsEngine {
     ctx.save();
     ctx.translate(x, y);
 
-    // Car body
+    // Car body - TOP DOWN VIEW
     ctx.fillStyle = color || '#00ffff';
     ctx.globalAlpha = 0.9;
     ctx.beginPath();

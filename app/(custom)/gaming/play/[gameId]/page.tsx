@@ -7,7 +7,7 @@ import { AuthModal } from "@/components/auth/AuthModal"
 
 export default function GamePlayerPage({ params }: { params: { gameId: string } }) {
   const router = useRouter();
-  const [hasStarted, setHasStarted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(true); // Auto-start game, skip intermediate screen
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);

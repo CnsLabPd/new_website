@@ -36,7 +36,13 @@ try {
       // Get level number from URL
       const urlParams = new URLSearchParams(window.location.search);
       const level = parseInt(urlParams.get('level')) || 2;
-      const levelNumber = level === 1 ? 11 : 12; // Map to actual level numbers
+      // Map URL level to actual level numbers:
+      // URL level 1 -> Level 11 (Free Highway 2-lane)
+      // URL level 2 -> Level 12 (Free Highway 3-lane)
+      // URL level 3 -> Level 13 (Highway Cruiser 2-lane with traffic)
+      // URL level 4 -> Level 14 (City Rush 3-lane with traffic)
+      // URL level 5 -> Level 15 (Speed Demon 4-lane with traffic)
+      const levelNumber = 10 + level; // Simple mapping: 1->11, 2->12, 3->13, 4->14, 5->15
 
       // Initialize leaderboard manager
       const leaderboardManager = new LeaderboardManager(levelNumber);

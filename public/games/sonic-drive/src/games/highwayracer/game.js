@@ -36,18 +36,36 @@ export class Game {
     const urlParams = new URLSearchParams(window.location.search);
     this.gameLevel = parseInt(urlParams.get('level')) || 2; // Default to level 2 (3-lane)
 
-    // Set number of lanes based on level
+    // Set number of lanes and game mode based on level
     if (this.gameLevel === 1) {
-      this.numLanes = 2; // Level 1: 2 lanes
+      this.numLanes = 2; // Level 1: 2 lanes, free mode
+      this.isFreeMode = true;
+      this.lives = Infinity; // Infinite lives in free mode
     } else if (this.gameLevel === 2) {
-      this.numLanes = 3; // Level 2: 3 lanes
+      this.numLanes = 3; // Level 2: 3 lanes, free mode
+      this.isFreeMode = true;
+      this.lives = Infinity; // Infinite lives in free mode
     } else if (this.gameLevel === 3) {
-      this.numLanes = 4; // Level 3: 4 lanes
+      this.numLanes = 2; // Level 3: 2 lanes with traffic
+      this.isFreeMode = false;
+      this.lives = 5; // 5 lives for challenge levels
+    } else if (this.gameLevel === 4) {
+      this.numLanes = 3; // Level 4: 3 lanes with traffic
+      this.isFreeMode = false;
+      this.lives = 5; // 5 lives for challenge levels
+    } else if (this.gameLevel === 5) {
+      this.numLanes = 4; // Level 5: 4 lanes with traffic
+      this.isFreeMode = false;
+      this.lives = 5; // 5 lives for challenge levels
     } else {
       this.numLanes = 3; // Default: 3 lanes
+      this.isFreeMode = false;
+      this.lives = 5;
     }
 
-    console.log(`🎮 [RACING GAME] Highway Racer - Level ${this.gameLevel} (${this.numLanes} lanes)`);
+    this.maxLives = this.lives; // Store initial lives for display
+
+    console.log(`🎮 [RACING GAME] Highway Racer - Level ${this.gameLevel} (${this.numLanes} lanes, ${this.isFreeMode ? 'Free Mode' : 'Challenge Mode with ' + this.lives + ' lives'})`);
 
     // Initialize with default lane positions (will be updated after layout completes)
     if (this.numLanes === 2) {
@@ -78,10 +96,18 @@ export class Game {
     this.gearDisplay = document.getElementById('gearDisplay');
     this.rpmDisplay = document.getElementById('rpmDisplay');
     this.difficultyDisplay = document.getElementById('difficultyDisplay');
+    this.livesDisplay = document.getElementById('livesDisplay');
+    this.livesPanel = document.getElementById('livesPanel');
     this.startBtn = document.getElementById('startBtn');
     this.exitBtn = document.getElementById('exitBtn');
     this.gameOverDiv = document.getElementById('gameOver');
     this.finalScoreSpan = document.getElementById('finalScore');
+
+    // Show lives panel only in challenge modes (not free mode)
+    if (!this.isFreeMode && this.livesPanel) {
+      this.livesPanel.style.display = 'block';
+      this.updateLivesDisplay();
+    }
 
     // REMOVED Matter.js - not needed for simple position-based movement
     // Using lightweight object-based vehicle tracking instead
@@ -91,7 +117,7 @@ export class Game {
     this.MIN_SPEED = 0;
     this.ACCEL_RATE = 1.2;
     this.DECEL_RATE = 1.8;
-    this.BRAKE_RATE = 3.0;
+    this.BRAKE_RATE = 8.0; // Increased from 3.0 to stop much faster
     this.DRAG = 0.3;
     // LANE_POSITIONS now set at top of constructor and updated by resizeCanvas()
 
@@ -144,10 +170,11 @@ export class Game {
     };
 
     // Player car - simple position object (no physics engine needed)
+    // Position car lower on screen (y=550) for better visibility of incoming traffic
     this.playerCar = {
       position: {
         x: this.LANE_POSITIONS[1], // Center lane
-        y: 480
+        y: 550  // Moved lower from 480 to 550
       },
       width: 40,
       height: 70
@@ -453,6 +480,12 @@ export class Game {
   updateControlsDisplay() {
     const controlsDiv = document.querySelector('.controls');
 
+    // Check if controlsDiv exists before updating
+    if (!controlsDiv) {
+      console.log('⚠️ Controls display element not found, skipping update');
+      return;
+    }
+
     if (this.controlMode === 'gesture') {
       controlsDiv.innerHTML = `
         <h3>Gesture Controls (3-Lane Highway)</h3>
@@ -688,10 +721,10 @@ export class Game {
     this.trafficVehicles = [];
 
     // Reset player position
+    this.playerCar.position.y = 550; // Lower position for better visibility
     this.playerCar.position.x = this.LANE_POSITIONS[this.currentLane];
-    this.playerCar.position.y = 480;
 
-    console.log(`✅ Player car positioned at x=${this.LANE_POSITIONS[this.currentLane]}, y=480`);
+    console.log(`✅ Player car positioned at x=${this.LANE_POSITIONS[this.currentLane]}, y=550`);
     console.log(`✅ Canvas size: ${this.canvas.width}x${this.canvas.height}`);
 
     // Set initial lane name based on number of lanes
@@ -750,6 +783,54 @@ export class Game {
     }
 
     this.gameLoop();
+  }
+
+  updateLivesDisplay() {
+    if (!this.livesDisplay) return;
+
+    // Show hearts for current lives
+    if (this.lives === Infinity) {
+      this.livesDisplay.textContent = '∞';
+    } else {
+      const hearts = '❤️'.repeat(Math.max(0, this.lives));
+      const emptyHearts = '🖤'.repeat(Math.max(0, this.maxLives - this.lives));
+      this.livesDisplay.textContent = hearts + emptyHearts;
+    }
+  }
+
+  handleCollision(vehicle) {
+    console.log('💥 COLLISION detected!');
+
+    // Play collision sound
+    this.audioEngine.playCollisionSound();
+
+    // Remove the collided vehicle
+    const index = this.trafficVehicles.indexOf(vehicle);
+    if (index > -1) {
+      this.trafficVehicles.splice(index, 1);
+    }
+
+    // Reduce life
+    if (this.lives !== Infinity) {
+      this.lives--;
+      console.log(`❤️ Lives remaining: ${this.lives}`);
+      this.updateLivesDisplay();
+
+      // Check if game over
+      if (this.lives <= 0) {
+        console.log('💀 No lives remaining - Game Over!');
+        this.gameOver();
+      } else {
+        // Brief invincibility period - slow down the player car
+        console.log(`⚠️ Life lost! ${this.lives} lives remaining`);
+        this.playerSpeed = Math.max(this.playerSpeed * 0.5, 30); // Slow down to 50% or minimum 30
+
+        // Visual feedback - flash the screen (can be enhanced with graphics later)
+        if (this.graphicsEngine) {
+          // TODO: Add screen flash effect
+        }
+      }
+    }
   }
 
   async gameOver() {
@@ -976,7 +1057,7 @@ export class Game {
     this.currentLane = newLane;
     const targetX = this.LANE_POSITIONS[this.currentLane];
 
-    // Update player position directly (no physics engine)
+    // Update player position directly
     this.playerCar.position.x = targetX;
 
     // Get lane names based on number of lanes
@@ -1180,11 +1261,19 @@ export class Game {
       // Accelerate
       this.playerSpeed = Math.min(this.playerSpeed + this.ACCEL_RATE, this.MAX_SPEED);
     } else if (this.keys.down) {
-      // Brake
-      this.playerSpeed = Math.max(this.playerSpeed - this.BRAKE_RATE, this.MIN_SPEED);
+      // Brake - stops IMMEDIATELY and completely
+      this.playerSpeed = Math.max(this.playerSpeed - this.BRAKE_RATE, 0);
+      // Force stop at very low speeds (no creeping)
+      if (this.playerSpeed < 2) {
+        this.playerSpeed = 0;
+      }
     } else {
-      // Natural deceleration (drag)
-      this.playerSpeed = Math.max(this.playerSpeed - this.DRAG, this.MIN_SPEED);
+      // Natural deceleration (drag) - also stops at 0
+      this.playerSpeed = Math.max(this.playerSpeed - this.DRAG, 0);
+      // Force stop at very low speeds
+      if (this.playerSpeed < 0.5) {
+        this.playerSpeed = 0;
+      }
     }
 
     // Track max speed
@@ -1192,11 +1281,13 @@ export class Game {
       this.maxSpeed = this.playerSpeed;
     }
 
-    // KEEP PLAYER CAR FIXED AT y=480 (only x changes with lane switching)
-    this.playerCar.position.y = 480;
+    // KEEP PLAYER CAR FIXED AT y=550 (only x changes with lane switching)
+    // Lower position for better visibility of incoming traffic
+    this.playerCar.position.y = 550;
 
     // Move traffic vehicles down (they come toward the player)
-    const moveSpeed = 2 + this.playerSpeed * 0.05;
+    // ONLY move if player has speed - no base movement when stopped
+    const moveSpeed = this.playerSpeed * 0.05;
     for (let i = 0; i < this.trafficVehicles.length; i++) {
       const vehicle = this.trafficVehicles[i];
       vehicle.position.y += moveSpeed;
@@ -1219,32 +1310,35 @@ export class Game {
     const difficulty = this.calculateDifficulty();
 
     // Spawn new vehicles based on dynamic spawn interval and max cars
-    this.spawnTimer += 16;
-    this.guaranteedEscapeTimer += 16;
+    // SKIP SPAWNING IN FREE MODE
+    if (!this.isFreeMode) {
+      this.spawnTimer += 16;
+      this.guaranteedEscapeTimer += 16;
 
-    if (this.spawnTimer >= difficulty.currentSpawnInterval) {
-      // Only spawn if we haven't reached the max cars limit
-      if (this.trafficVehicles.length < difficulty.currentMaxCars) {
-        // SMART SPAWN: Check if we should guarantee an escape route
-        const shouldGuaranteeEscape = this.guaranteedEscapeTimer >= this.ESCAPE_GUARANTEE_INTERVAL;
+      if (this.spawnTimer >= difficulty.currentSpawnInterval) {
+        // Only spawn if we haven't reached the max cars limit
+        if (this.trafficVehicles.length < difficulty.currentMaxCars) {
+          // SMART SPAWN: Check if we should guarantee an escape route
+          const shouldGuaranteeEscape = this.guaranteedEscapeTimer >= this.ESCAPE_GUARANTEE_INTERVAL;
 
-        if (shouldGuaranteeEscape) {
-          // Force spawn with escape route guarantee
-          this.spawnWithEscapeGuarantee();
-          this.guaranteedEscapeTimer = 0; // Reset timer
-          console.log(`✅ ESCAPE ROUTE GUARANTEED - spawning safe pattern`);
-        } else {
-          // Normal smart spawn
-          this.spawnTrafficVehicle();
+          if (shouldGuaranteeEscape) {
+            // Force spawn with escape route guarantee
+            this.spawnWithEscapeGuarantee();
+            this.guaranteedEscapeTimer = 0; // Reset timer
+            console.log(`✅ ESCAPE ROUTE GUARANTEED - spawning safe pattern`);
+          } else {
+            // Normal smart spawn
+            this.spawnTrafficVehicle();
+          }
+
+          // Log difficulty changes
+          if (this.lastLoggedDifficulty !== difficulty.difficultyLevel) {
+            this.lastLoggedDifficulty = difficulty.difficultyLevel;
+            console.log(`📈 DIFFICULTY INCREASED! Level ${difficulty.difficultyLevel} | Spawn: ${difficulty.currentSpawnInterval}ms | Max Cars: ${difficulty.currentMaxCars}`);
+          }
         }
-
-        // Log difficulty changes
-        if (this.lastLoggedDifficulty !== difficulty.difficultyLevel) {
-          this.lastLoggedDifficulty = difficulty.difficultyLevel;
-          console.log(`📈 DIFFICULTY INCREASED! Level ${difficulty.difficultyLevel} | Spawn: ${difficulty.currentSpawnInterval}ms | Max Cars: ${difficulty.currentMaxCars}`);
-        }
+        this.spawnTimer = 0;
       }
-      this.spawnTimer = 0;
     }
 
     // Check collisions - end game immediately on hit
@@ -1282,7 +1376,7 @@ export class Game {
 
       // Cars are 40x70, so collision when centers are within 80 pixels
       if (distanceSquared < collisionThresholdSquared) {
-        this.gameOver();
+        this.handleCollision(vehicle);
         return; // Stop processing immediately
       }
     }

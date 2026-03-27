@@ -294,7 +294,7 @@
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
         const zoomLevel = document.getElementById('zoomLevel');
-        let currentZoom = 1; // 100%
+        let currentZoom = 1.5; // 150% (default zoom)
 
         // Initialize
         init();
@@ -440,6 +440,8 @@
                     defaultInfo.style.display = 'none';
                     spellingName.textContent = `Spelling: ${currentName}`;
                     letterProgress.textContent = `0/${currentName.length} letters done`;
+                    // Set current letter to first letter of the name
+                    currentLetter = currentName[0];
                     // Show reference image for current letter
                     updateReferenceImage(currentLetter);
                     // Show name display in the reference image container
@@ -660,8 +662,8 @@
             if (currentMode === 'training' || currentMode === 'name') {
                 referenceImage.src = `../assets/images/Alphabets/${letter}.jpg`;
                 referenceImageContainer.classList.remove('hidden');
-                // Reset zoom when changing letter
-                currentZoom = 1;
+                // Reset zoom to default (150%) when changing letter
+                currentZoom = 1.5;
                 updateZoom();
             } else {
                 referenceImageContainer.classList.add('hidden');
