@@ -17,8 +17,9 @@ class Level7 {
                 balloonBehavior: "moving", // Balloons move slowly
                 positions: "edge-spawn", // NEW: Spawn from edges and float inward
                 balloonCount: 1,
-                timeLimit: 240, // 4 minutes (more time!)
-                balloonsToComplete: 10, // Reduced from 12 to 10
+                timeLimit: 120, // 2 minutes
+                balloonsToComplete: 9999, // No balloon limit - time-based completion
+                timeBasedCompletion: true, // Level completes when time runs out (not game over)
 
                 // Movement settings - START SLOW
                 movementEnabled: true,
@@ -60,9 +61,9 @@ class Level7 {
                 bombFreezeDuration: 3000 // 3 seconds
             },
 
-            instructions: "Welcome to Level 6 - the ultimate challenge! A BOMB floats on screen. Listen: the balloon beeps from one side, the bomb ticks from the OPPOSITE side. Start SLOW - both move gently. Each balloon you pop makes them slightly faster. The bomb FREEZES for 3 seconds when you pop a balloon - use that time wisely! You can do this!",
+            instructions: "Welcome to Level 2! You have 2 minutes to pop as many balloons as you can while avoiding the BOMB! Listen: the balloon beeps from one side, the bomb ticks from the OPPOSITE side. Start SLOW - both move gently. Each balloon you pop makes them slightly faster. The bomb FREEZES for 3 seconds when you pop a balloon - use that time wisely! Pop as many as you can in 2 minutes!",
 
-            completionMessage: "INCREDIBLE! You've mastered the most difficult level! You can track targets while avoiding danger. You are a true Audio Balloon Pop champion!"
+            completionMessage: "Excellent! Time's up! You've completed your 2-minute bomb dodging challenge!"
         };
     }
 

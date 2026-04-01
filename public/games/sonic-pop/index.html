@@ -3258,13 +3258,125 @@
 
                 console.log(`✅ All ${count} balloons spawned successfully!`);
 
-                // Spawn bomb if this level has bombs (Level 9)
-                if (currentLevel.config.hasBomb && currentLevel.config.bombEnabled && this.bombs.length === 0) {
-                    // Spawn bomb at a random position
-                    const centerBalloon = this.balloons[Math.floor(this.balloons.length / 2)];
-                    this.spawnBomb(centerBalloon.position.x, centerBalloon.position.y);
-                    console.log('💣 Bomb spawned for multi-balloon level');
+                // Spawn bombs if this level has bombs
+                if (currentLevel.config.hasBomb && currentLevel.config.bombEnabled) {
+                    const bombCount = currentLevel.config.bombCount || 1;
+                    for (let i = 0; i < bombCount; i++) {
+                        this.spawnSingleBomb();
+                    }
+                    console.log(`💣 ${bombCount} bomb(s) spawned for level`);
                 }
+            }
+
+            spawnSingleBalloon() {
+                const currentLevel = this.levelManager.getCurrentLevel();
+                if (!currentLevel) return;
+
+                // Generate random position across entire screen
+                const margin = 80; // Keep away from edges
+                const x = margin + Math.random() * (this.canvas.width - margin * 2);
+                const y = margin + Math.random() * (this.canvas.height - margin * 2);
+                const z = Math.random(); // Depth from 0 (front) to 1 (back)
+                const baseSize = 60 + Math.random() * 30;
+                const size = baseSize * this.gameSettings.balloonSize;
+
+                const balloon = Matter.Bodies.circle(x, y, size, {
+                    restitution: 0.9,
+                    friction: 0.001,
+                    frictionAir: 0.005,
+                    density: 0.0005,
+                    render: {
+                        fillStyle: ['#FF00FF', '#00FFFF', '#00FF00', '#FF4500', '#FFFF00', '#FF1493'][Math.floor(Math.random() * 6)],
+                        strokeStyle: '#fff',
+                        lineWidth: 2
+                    },
+                    isStatic: false
+                });
+
+                // Store balloon data
+                balloon.customData = {
+                    depth: z,
+                    size3D: size * (0.5 + z * 0.5),
+                    direction: 'random',
+                    isStatic: false,
+                    balloonId: this.balloons.length
+                };
+
+                // Apply movement forces
+                if (currentLevel.config.movementEnabled) {
+                    const speedMultiplier = currentLevel.config.balloonSpeed;
+                    const rangeMultiplier = currentLevel.config.movementRange;
+
+                    const forceX = (Math.random() - 0.5) * 0.008 * speedMultiplier * rangeMultiplier;
+                    const forceY = Math.random() * 0.003 * speedMultiplier;
+                    Matter.Body.applyForce(balloon, balloon.position, { x: forceX, y: forceY });
+
+                    // Add movement data
+                    balloon.customData.floatForceX = (Math.random() - 0.5) * 0.002 * speedMultiplier * rangeMultiplier;
+                    balloon.customData.floatForceY = (Math.random() * 0.001 + 0.0005) * speedMultiplier;
+                    balloon.customData.driftTimer = 0;
+                    balloon.customData.driftDirection = Math.random() * Math.PI * 2;
+                    balloon.customData.depthSpeed = (Math.random() - 0.5) * 0.01 * speedMultiplier;
+                }
+
+                Matter.World.add(this.world, balloon);
+                this.balloons.push(balloon);
+
+                console.log(`🎈 Single balloon respawned at (${x.toFixed(0)}, ${y.toFixed(0)})`);
+            }
+
+            spawnSingleBomb() {
+                const currentLevel = this.levelManager.getCurrentLevel();
+                if (!currentLevel || !currentLevel.config.hasBomb) return;
+
+                // Generate random position across entire screen
+                const margin = 80;
+                const bx = margin + Math.random() * (this.canvas.width - margin * 2);
+                const by = margin + Math.random() * (this.canvas.height - margin * 2);
+                const z = Math.random();
+
+                const bombSize = 50 * this.gameSettings.balloonSize;
+
+                const bomb = Matter.Bodies.circle(bx, by, bombSize, {
+                    restitution: 0.9,
+                    friction: 0.001,
+                    frictionAir: 0.005,
+                    density: 0.0005,
+                    render: {
+                        fillStyle: '#2D3436', // Dark bomb
+                        strokeStyle: '#FF0000',
+                        lineWidth: 3
+                    },
+                    isStatic: false
+                });
+
+                // Store bomb data
+                bomb.customData = {
+                    depth: z,
+                    size3D: bombSize * (0.5 + z * 0.5),
+                    direction: 'random',
+                    isBomb: true
+                };
+
+                // Apply movement forces
+                const speedMultiplier = currentLevel.config.bombSpeed || 0.3;
+                const rangeMultiplier = currentLevel.config.bombMovementRange || 40;
+
+                const forceX = (Math.random() - 0.5) * 0.008 * speedMultiplier * rangeMultiplier;
+                const forceY = Math.random() * 0.003 * speedMultiplier;
+                Matter.Body.applyForce(bomb, bomb.position, { x: forceX, y: forceY });
+
+                // Add movement data
+                bomb.customData.floatForceX = (Math.random() - 0.5) * 0.002 * speedMultiplier * rangeMultiplier;
+                bomb.customData.floatForceY = (Math.random() * 0.001 + 0.0005) * speedMultiplier;
+                bomb.customData.driftTimer = 0;
+                bomb.customData.driftDirection = Math.random() * Math.PI * 2;
+                bomb.customData.depthSpeed = (Math.random() - 0.5) * 0.01 * speedMultiplier;
+
+                Matter.World.add(this.world, bomb);
+                this.bombs.push(bomb);
+
+                console.log(`💣 Single bomb respawned at (${bx.toFixed(0)}, ${by.toFixed(0)})`);
             }
 
             spawnBomb(balloonX, balloonY) {
@@ -3420,8 +3532,11 @@
             checkBalloonCollision() {
                 if (!this.handPosition) return;
 
-                // Check balloon hits
-                this.balloons.forEach((balloon, index) => {
+                // Check balloon hits - iterate backwards to avoid index issues when removing items
+                for (let index = this.balloons.length - 1; index >= 0; index--) {
+                    const balloon = this.balloons[index];
+                    if (!balloon) continue;
+
                     const distance2D = this.calculateDistance(
                         this.handPosition.x,
                         this.handPosition.y,
@@ -3444,7 +3559,7 @@
                     if (distance2D <= hitRadius) {
                         this.popBalloon(index);
                     }
-                });
+                }
 
                 // Check bomb hits (Level 6)
                 this.bombs.forEach((bomb, index) => {
@@ -3480,7 +3595,12 @@
                 if (index >= this.balloons.length) return;
 
                 const balloon = this.balloons[index];
-                console.log('💥 Balloon popped!');
+
+                // Safety check: ensure balloon exists and hasn't been marked for removal
+                if (!balloon || balloon.isBeingRemoved) return;
+
+                // Mark balloon as being removed to prevent double-popping
+                balloon.isBeingRemoved = true;
 
                 // Remove balloon from physics world
                 Matter.World.remove(this.world, balloon);
@@ -3534,8 +3654,16 @@
                     // Speech removed - keeping only spatial audio
                     // this.speakMessage(message);
 
-                    // Only spawn new balloon if NOT in multi-balloon mode
-                    if (!currentLevel.config.spawnAllAtOnce) {
+                    // Respawn logic for balloon
+                    if (currentLevel.config.respawnOnPop) {
+                        // Respawn balloon immediately at new random location
+                        setTimeout(() => {
+                            if (this.gameState === 'playing') {
+                                this.spawnSingleBalloon();
+                            }
+                        }, 100); // Small delay for visual feedback
+                    } else if (!currentLevel.config.spawnAllAtOnce) {
+                        // Original single balloon spawn logic (for levels 1 & 2)
                         setTimeout(() => {
                             if (this.gameState === 'playing') {
                                 this.spawnBalloon();
@@ -3676,13 +3804,15 @@
                         return;
                     }
 
-                    // Respawn bomb after delay
-                    setTimeout(() => {
-                        if (this.gameState === 'playing' && currentLevel.config.hasBomb && this.balloons.length > 0) {
-                            const firstBalloon = this.balloons[0];
-                            this.spawnBomb(firstBalloon.position.x, firstBalloon.position.y);
-                        }
-                    }, 2000);
+                    // Respawn bomb after freeze duration if respawn enabled
+                    if (currentLevel.config.bombRespawnOnHit) {
+                        const freezeDuration = currentLevel.config.bombFreezeDuration || 2000;
+                        setTimeout(() => {
+                            if (this.gameState === 'playing') {
+                                this.spawnSingleBomb();
+                            }
+                        }, freezeDuration);
+                    }
 
                 } else {
                     // Regular penalty system (Level 7)
@@ -3716,15 +3846,17 @@
                     // Speech removed - keeping only spatial audio
                     // this.speakMessage(message);
                     this.showMessage(`💣 Oops! -${Math.abs(penalty)} Points`, 3000);
-                }
 
-                // Respawn bomb after delay (it stays throughout the level)
-                setTimeout(() => {
-                    if (this.gameState === 'playing' && currentLevel.config.hasBomb && this.balloons.length > 0) {
-                        const balloon = this.balloons[0];
-                        this.spawnBomb(balloon.position.x, balloon.position.y);
+                    // Respawn bomb after freeze duration if respawn enabled
+                    if (currentLevel.config.bombRespawnOnHit) {
+                        const freezeDuration = currentLevel.config.bombFreezeDuration || 2000;
+                        setTimeout(() => {
+                            if (this.gameState === 'playing') {
+                                this.spawnSingleBomb();
+                            }
+                        }, freezeDuration);
                     }
-                }, 2000);
+                }
             }
 
             completeLevel() {
@@ -4578,6 +4710,13 @@
                         return;
                     }
 
+                    // Time-based levels (Levels 1 & 2): Complete when time runs out
+                    if (currentLevel && currentLevel.config.timeBasedCompletion && this.timeLeft <= 0) {
+                        this.completeLevel();
+                        return;
+                    }
+
+                    // Regular levels: Game over when time runs out
                     if (this.timeLeft <= 0) {
                         this.gameOver();
                     } else if (this.timeLeft <= 10) {
@@ -5540,7 +5679,13 @@
                 // Update progress
                 const currentLevel = this.levelManager.getCurrentLevel();
                 if (currentLevel) {
-                    const progressText = `${this.levelBalloonsPopped}/${currentLevel.config.balloonsToComplete}`;
+                    // For time-based levels, show only balloons popped (not /9999)
+                    let progressText;
+                    if (currentLevel.config.timeBasedCompletion) {
+                        progressText = `${this.levelBalloonsPopped}`;
+                    } else {
+                        progressText = `${this.levelBalloonsPopped}/${currentLevel.config.balloonsToComplete}`;
+                    }
                     document.getElementById('progressValue').textContent = progressText;
                 }
 
@@ -6262,7 +6407,15 @@
 
                 const difficultyClass = `difficulty-${levelData.difficulty.toLowerCase()}`;
 
-                const goalText = levelData.config.balloonsToComplete ? `${levelData.config.balloonsToComplete} ` + (levelData.config.balloonsToComplete === 1 ? 'balloon' : 'balloons') : 'Free play';
+                // For time-based levels, show different goal text
+                let goalText;
+                if (levelData.config.timeBasedCompletion) {
+                    goalText = 'Pop as many as you can!';
+                } else if (levelData.config.balloonsToComplete && levelData.config.balloonsToComplete < 9999) {
+                    goalText = `${levelData.config.balloonsToComplete} ` + (levelData.config.balloonsToComplete === 1 ? 'balloon' : 'balloons');
+                } else {
+                    goalText = 'Free play';
+                }
                 const timeText = levelData.config.timeLimit ? `${levelData.config.timeLimit} seconds` : 'Unlimited';
                 let pointsText;
                 if (levelData.config.pointsPerBalloon !== undefined) {

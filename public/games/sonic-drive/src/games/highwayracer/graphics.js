@@ -749,6 +749,108 @@ export class GraphicsEngine {
     ctx.restore();
   }
 
+  /**
+   * Draw finish line with checkered flag pattern
+   * @param {number} y - Y position of finish line (relative to screen)
+   * @param {number} roadWidth - Width of the road
+   * @param {number} roadLeft - Left edge of road
+   */
+  drawFinishLineCanvas(y, roadWidth, roadLeft) {
+    const ctx = this.ctx;
+
+    // Only draw if finish line is visible on screen
+    if (y < -100 || y > this.canvas.height + 100) return;
+
+    ctx.save();
+
+    // Draw checkered pattern across the road
+    const squareSize = 40;
+    const numSquaresH = Math.ceil(roadWidth / squareSize);
+    const numSquaresV = 3; // 3 rows of checkers
+
+    for (let row = 0; row < numSquaresV; row++) {
+      for (let col = 0; col < numSquaresH; col++) {
+        // Alternate black and white
+        const isBlack = (row + col) % 2 === 0;
+        ctx.fillStyle = isBlack ? '#000000' : '#FFFFFF';
+
+        const x = roadLeft + col * squareSize;
+        const squareY = y - (numSquaresV * squareSize / 2) + row * squareSize;
+
+        ctx.fillRect(x, squareY, squareSize, squareSize);
+      }
+    }
+
+    // Draw glowing border around finish line
+    ctx.strokeStyle = '#00ff88';
+    ctx.lineWidth = 4;
+    ctx.shadowColor = '#00ff88';
+    ctx.shadowBlur = 20;
+    ctx.strokeRect(
+      roadLeft,
+      y - (numSquaresV * squareSize / 2),
+      roadWidth,
+      numSquaresV * squareSize
+    );
+    ctx.shadowBlur = 0;
+
+    // Draw "FINISH" text above the line
+    ctx.font = 'bold 48px Arial';
+    ctx.fillStyle = '#FFD700'; // Gold color
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 3;
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#FFD700';
+    ctx.shadowBlur = 15;
+
+    const textY = y - (numSquaresV * squareSize / 2) - 30;
+    ctx.strokeText('FINISH', roadLeft + roadWidth / 2, textY);
+    ctx.fillText('FINISH', roadLeft + roadWidth / 2, textY);
+
+    // Draw checkered flags on both sides
+    this.drawCheckeredFlag(roadLeft - 80, y - 60);
+    this.drawCheckeredFlag(roadLeft + roadWidth + 40, y - 60);
+
+    ctx.restore();
+  }
+
+  /**
+   * Draw a small checkered racing flag
+   * @param {number} x - X position
+   * @param {number} y - Y position
+   */
+  drawCheckeredFlag(x, y) {
+    const ctx = this.ctx;
+
+    ctx.save();
+
+    // Flag pole
+    ctx.fillStyle = '#888888';
+    ctx.fillRect(x, y, 4, 120);
+
+    // Flag (waving effect)
+    const flagWidth = 60;
+    const flagHeight = 40;
+    const squareSize = 10;
+
+    // Draw checkered pattern
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 6; col++) {
+        const isBlack = (row + col) % 2 === 0;
+        ctx.fillStyle = isBlack ? '#000000' : '#FFFFFF';
+
+        // Add slight wave effect
+        const wave = Math.sin((col / 6) * Math.PI) * 3;
+        const flagX = x + 4 + col * squareSize;
+        const flagY = y + row * squareSize + wave;
+
+        ctx.fillRect(flagX, flagY, squareSize, squareSize);
+      }
+    }
+
+    ctx.restore();
+  }
+
   createSpeedLinesCanvas(speed) {
     if (speed <= 30) return;
 

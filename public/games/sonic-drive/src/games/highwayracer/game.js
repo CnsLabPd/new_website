@@ -16,9 +16,26 @@ console.log('🏁 [RACING GAME] graphics.js imported');
 const gestureModule = await import(`./gestureController.js?v=${timestamp}`);
 console.log('🏁 [RACING GAME] gestureController.js imported');
 
+const customModelGestureModule = await import(`./customModelGestureController.js?v=${timestamp}`);
+console.log('🏁 [RACING GAME] customModelGestureController.js imported');
+
+// Analytics modules
+const analyticsModule = await import(`./analyticsCollector.js?v=${timestamp}`);
+console.log('🏁 [RACING GAME] analyticsCollector.js imported');
+
+const supabaseModule = await import(`./supabaseClient.js?v=${timestamp}`);
+console.log('🏁 [RACING GAME] supabaseClient.js imported');
+
+const reportModule = await import(`./analyticsReportGenerator.js?v=${timestamp}`);
+console.log('🏁 [RACING GAME] analyticsReportGenerator.js imported');
+
 const AudioEngine = audioModule.AudioEngine;
 const GraphicsEngine = graphicsModule.GraphicsEngine;
 const GestureController = gestureModule.GestureController;
+const CustomModelGestureController = customModelGestureModule.CustomModelGestureController;
+const AnalyticsCollector = analyticsModule.AnalyticsCollector;
+const { saveGameSession, getOrCreateUserProfile, initSupabase } = supabaseModule;
+const { generateAnalyticsReport } = reportModule;
 
 console.log('🏁 [RACING GAME] All modules imported successfully');
 
@@ -38,34 +55,50 @@ export class Game {
 
     // Set number of lanes and game mode based on level
     if (this.gameLevel === 1) {
-      this.numLanes = 2; // Level 1: 2 lanes, free mode
+      this.numLanes = 2; // Level 1: 2 lanes, NO traffic
       this.isFreeMode = true;
-      this.lives = Infinity; // Infinite lives in free mode
+      this.lives = Infinity; // Infinite lives in practice mode
+      this.targetDistance = 500; // Goal: 500 meters
+      this.hasTraffic = false; // NO traffic spawning
     } else if (this.gameLevel === 2) {
-      this.numLanes = 3; // Level 2: 3 lanes, free mode
+      this.numLanes = 3; // Level 2: 3 lanes, NO traffic
       this.isFreeMode = true;
-      this.lives = Infinity; // Infinite lives in free mode
+      this.lives = Infinity; // Infinite lives in practice mode
+      this.targetDistance = 500; // Goal: 500 meters
+      this.hasTraffic = false; // NO traffic spawning
     } else if (this.gameLevel === 3) {
-      this.numLanes = 2; // Level 3: 2 lanes with traffic
+      this.numLanes = 2; // Level 3: 2 lanes with traffic (EASY)
       this.isFreeMode = false;
-      this.lives = 5; // 5 lives for challenge levels
+      this.lives = 2; // 2 lives
+      this.targetDistance = 500; // Goal: 500 meters
+      this.hasTraffic = true; // Traffic spawning enabled
     } else if (this.gameLevel === 4) {
-      this.numLanes = 3; // Level 4: 3 lanes with traffic
+      this.numLanes = 3; // Level 4: 3 lanes with traffic (MEDIUM)
       this.isFreeMode = false;
-      this.lives = 5; // 5 lives for challenge levels
+      this.lives = 5; // 5 lives
+      this.targetDistance = 2000; // Goal: 2000 meters
+      this.hasTraffic = true; // Traffic spawning enabled
     } else if (this.gameLevel === 5) {
-      this.numLanes = 4; // Level 5: 4 lanes with traffic
+      this.numLanes = 4; // Level 5: 4 lanes with traffic (HARD)
       this.isFreeMode = false;
-      this.lives = 5; // 5 lives for challenge levels
+      this.lives = 5; // 5 lives
+      this.targetDistance = 2000; // Goal: 2000 meters
+      this.hasTraffic = true; // Traffic spawning enabled
     } else {
       this.numLanes = 3; // Default: 3 lanes
       this.isFreeMode = false;
       this.lives = 5;
+      this.targetDistance = 1000;
+      this.hasTraffic = true;
     }
 
     this.maxLives = this.lives; // Store initial lives for display
+    this.levelCompleted = false; // Flag for level completion
+    this.finishLineY = null; // Y position of finish line on screen (updated each frame)
 
-    console.log(`🎮 [RACING GAME] Highway Racer - Level ${this.gameLevel} (${this.numLanes} lanes, ${this.isFreeMode ? 'Free Mode' : 'Challenge Mode with ' + this.lives + ' lives'})`);
+    console.log(`🎮 [RACING GAME] Highway Racer - Level ${this.gameLevel}`);
+    console.log(`   └─ ${this.numLanes} lanes, ${this.hasTraffic ? 'WITH traffic' : 'NO traffic'}`);
+    console.log(`   └─ Target: ${this.targetDistance}m, Lives: ${this.lives === Infinity ? '∞' : this.lives}`);
 
     // Initialize with default lane positions (will be updated after layout completes)
     if (this.numLanes === 2) {
@@ -112,13 +145,36 @@ export class Game {
     // REMOVED Matter.js - not needed for simple position-based movement
     // Using lightweight object-based vehicle tracking instead
 
-    // Game constants
-    this.MAX_SPEED = 180; // 75% of previous value (240 * 0.75 = 180)
+    // Game constants - REALISTIC GEAR-BASED PHYSICS MODEL
+    this.MAX_SPEED = 180; // Maximum speed in km/h (game units)
     this.MIN_SPEED = 0;
-    this.ACCEL_RATE = 1.2;
-    this.DECEL_RATE = 1.8;
-    this.BRAKE_RATE = 8.0; // Increased from 3.0 to stop much faster
-    this.DRAG = 0.3;
+
+    // Realistic gear-based physics parameters (inspired by racing games)
+    this.ENGINE_MAX_TORQUE = 400; // Maximum engine torque (Nm)
+    this.ENGINE_MAX_RPM = 9000;   // Redline RPM
+    this.ENGINE_IDLE_RPM = 1000;  // Idle RPM
+    this.VEHICLE_MASS = 1200;     // Vehicle mass in kg
+
+    // Gear ratios - each gear has different torque multiplication
+    // Lower gears = more torque, faster acceleration, lower top speed
+    // Higher gears = less torque, slower acceleration, higher top speed
+    this.GEAR_RATIOS = [3.5, 2.2, 1.5, 1.1, 0.85, 0.68]; // 6-speed gearbox
+    this.FINAL_DRIVE = 3.73; // Differential ratio
+
+    // Gear shift points (km/h) - matches audio engine
+    this.GEAR_SPEED_MAX = [40, 70, 105, 145, 190, 240];
+    this.GEAR_SPEED_MIN = [0, 30, 60, 95, 135, 180];
+
+    // Resistance forces
+    this.DRAG_COEFFICIENT = 0.012; // Air resistance (quadratic with speed)
+    this.ROLLING_RESISTANCE = 0.06; // Rolling resistance (linear with speed)
+    this.BRAKE_FORCE = 4.5; // Braking force - gentle and gradual
+
+    // Current gear state
+    this.currentGear = 1;
+    this.currentRPM = 1000;
+    this.shiftCooldown = 0;
+
     // LANE_POSITIONS now set at top of constructor and updated by resizeCanvas()
 
     // Progressive difficulty settings - MORE AGGRESSIVE
@@ -132,6 +188,9 @@ export class Game {
     this.lastSpawnedLane = -1;       // Track last spawned lane to avoid clustering
     this.guaranteedEscapeTimer = 0;  // Timer to guarantee escape routes
     this.ESCAPE_GUARANTEE_INTERVAL = 5000; // Guarantee escape route every 5 seconds
+
+    // ONE-CAR-AT-A-TIME: Track if current car has passed the player (for challenge modes only)
+    this.currentCarHasPassedPlayer = true; // Start true so first car can spawn immediately
 
     // Game state
     this.gameRunning = false;
@@ -191,12 +250,24 @@ export class Game {
     // Control mode ('keyboard' or 'gesture')
     this.controlMode = null;
 
-    // Gesture controller
+    // Gesture controller settings
+    this.USE_CUSTOM_MODELS = true; // Set to true to use custom trained models
     this.gestureController = null;
+
+    // Analytics
+    this.analytics = null;
+    this.userRoles = [];
+    this.analyticsEnabled = false;
 
     // Setup input handlers
     this.setupInputHandlers();
     this.setupControlModeSelection();
+
+    // Show role selection modal immediately on page load
+    // Use setTimeout to ensure DOM is ready
+    setTimeout(() => {
+      this.showRoleSelectionModal();
+    }, 100);
   }
 
   resizeCanvas() {
@@ -261,6 +332,81 @@ export class Game {
     // Connect graphics animation to game state
     this.graphics.animate = () => this.renderWithPixi();
     console.log('✅ Graphics engine initialized');
+  }
+
+  /**
+   * Calculate engine torque based on RPM (torque curve)
+   * Racing games use torque curves where peak torque is in mid-range RPM
+   * @param {number} rpm - Current engine RPM
+   * @returns {number} - Engine torque (Nm)
+   */
+  calculateEngineTorque(rpm) {
+    // Realistic torque curve: peaks around 4500-5500 RPM, drops at low and high RPM
+    // This creates the characteristic "power band" of a performance engine
+    const peakRPM = 5000;
+    const rpmRatio = rpm / peakRPM;
+
+    // Torque curve formula (bell-shaped curve)
+    // Maximum torque at peak RPM, ~70% at idle and redline
+    let torqueMultiplier;
+    if (rpm < peakRPM) {
+      // Rising torque from idle to peak
+      torqueMultiplier = 0.7 + 0.3 * (rpmRatio);
+    } else {
+      // Falling torque from peak to redline
+      torqueMultiplier = 1.0 - 0.3 * Math.pow((rpm - peakRPM) / (this.ENGINE_MAX_RPM - peakRPM), 2);
+    }
+
+    return this.ENGINE_MAX_TORQUE * Math.max(0.5, torqueMultiplier);
+  }
+
+  /**
+   * Calculate RPM based on current speed and gear
+   * @param {number} speed - Current speed (km/h)
+   * @param {number} gear - Current gear (1-6)
+   * @returns {number} - Engine RPM
+   */
+  calculateRPM(speed, gear) {
+    const gearIndex = gear - 1;
+    const gearRatio = this.GEAR_RATIOS[gearIndex];
+
+    // RPM formula: speed * gear_ratio * final_drive + idle
+    // This gives realistic RPM values that increase with speed and decrease with higher gears
+    const rpm = this.ENGINE_IDLE_RPM + (speed * gearRatio * this.FINAL_DRIVE * 10);
+
+    return Math.min(rpm, this.ENGINE_MAX_RPM);
+  }
+
+  /**
+   * Automatic gear shifting based on speed and RPM
+   * @param {number} speed - Current speed (km/h)
+   */
+  autoGearShift(speed) {
+    if (this.shiftCooldown > 0) {
+      this.shiftCooldown -= 0.016; // Decrease cooldown
+      return;
+    }
+
+    const gearIndex = this.currentGear - 1;
+
+    // Upshift when reaching gear max speed (while accelerating)
+    if (this.currentGear < 6 && speed > this.GEAR_SPEED_MAX[gearIndex] && this.keys.up) {
+      console.log(`⬆️ [GAME] SHIFT UP: Gear ${this.currentGear} → ${this.currentGear + 1} at ${Math.round(speed)} km/h, RPM: ${Math.round(this.currentRPM)}`);
+      this.currentGear++;
+      this.shiftCooldown = 0.5; // 500ms cooldown between shifts
+
+      // Reset RPM for new gear (drops after shift)
+      this.currentRPM *= 0.7; // RPM drops ~30% after upshift
+    }
+    // Downshift when falling below gear min speed (engine braking)
+    else if (this.currentGear > 1 && speed < this.GEAR_SPEED_MIN[gearIndex]) {
+      console.log(`⬇️ [GAME] SHIFT DOWN: Gear ${this.currentGear} → ${this.currentGear - 1} at ${Math.round(speed)} km/h, RPM: ${Math.round(this.currentRPM)}`);
+      this.currentGear--;
+      this.shiftCooldown = 0.5;
+
+      // RPM increases after downshift
+      this.currentRPM *= 1.3; // RPM increases ~30% after downshift
+    }
   }
 
   /**
@@ -342,6 +488,110 @@ export class Game {
     });
   }
 
+  /**
+   * Show role selection modal (always shown on page load)
+   */
+  showRoleSelectionModal() {
+    // Show modal EVERY TIME (don't check localStorage)
+    const modal = document.getElementById('roleSelectionModal');
+    if (!modal) return;
+
+    modal.style.display = 'flex';
+
+    // Load previously selected roles to pre-check boxes (for convenience)
+    const savedRoles = localStorage.getItem('sonic_drive_user_roles');
+    let previousRoles = [];
+    if (savedRoles && savedRoles !== '[]') {
+      previousRoles = JSON.parse(savedRoles);
+      console.log('📊 Previously selected roles:', previousRoles);
+    }
+
+    // Role card selection
+    const roleCards = document.querySelectorAll('.role-card:not(.disabled)');
+    const confirmBtn = document.getElementById('confirmRolesBtn');
+    const skipBtn = document.getElementById('skipRolesBtn');
+    const blindCheck = document.getElementById('checkBlind');
+    const adhdCheck = document.getElementById('checkADHD');
+
+    // Pre-check boxes based on previous selection (for convenience)
+    if (previousRoles.includes('blind')) {
+      blindCheck.checked = true;
+      document.getElementById('roleBlind').classList.add('selected');
+    }
+    if (previousRoles.includes('adhd')) {
+      adhdCheck.checked = true;
+      document.getElementById('roleADHD').classList.add('selected');
+    }
+    // Enable confirm button if any was previously selected
+    if (previousRoles.length > 0) {
+      confirmBtn.disabled = false;
+    }
+
+    // Card click handlers
+    roleCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (card.classList.contains('disabled')) return;
+
+        const role = card.dataset.role;
+        const checkbox = card.querySelector('input[type="checkbox"]');
+
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    // Checkbox change handlers
+    const updateUI = () => {
+      // Update card styling
+      roleCards.forEach(card => {
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+
+      // Enable/disable confirm button
+      const anySelected = blindCheck.checked || adhdCheck.checked;
+      confirmBtn.disabled = !anySelected;
+    };
+
+    blindCheck.addEventListener('change', updateUI);
+    adhdCheck.addEventListener('change', updateUI);
+
+    // Confirm button
+    confirmBtn.addEventListener('click', async () => {
+      this.userRoles = [];
+      if (blindCheck.checked) this.userRoles.push('blind');
+      if (adhdCheck.checked) this.userRoles.push('adhd');
+
+      localStorage.setItem('sonic_drive_user_roles', JSON.stringify(this.userRoles));
+      this.analyticsEnabled = true;
+
+      // Create user profile in database
+      const userId = localStorage.getItem('sonic_drive_user_id') ||
+                     `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('sonic_drive_user_id', userId);
+
+      await getOrCreateUserProfile(userId, this.userRoles);
+
+      modal.style.display = 'none';
+      console.log('✅ Analytics enabled:', this.userRoles);
+    });
+
+    // Skip button
+    skipBtn.addEventListener('click', () => {
+      this.userRoles = [];
+      this.analyticsEnabled = false;
+      localStorage.setItem('sonic_drive_user_roles', JSON.stringify([]));
+      modal.style.display = 'none';
+      console.log('⏭️ Analytics skipped');
+    });
+  }
+
   async selectControlMode(mode) {
     console.log(`🎮 Control mode selected: ${mode}`);
 
@@ -358,14 +608,42 @@ export class Game {
         // Clean up any existing gesture controller first
         if (this.gestureController) {
           console.log('🧹 Cleaning up old gesture controller');
-          this.gestureController.stop();
-          this.gestureController.hideWebcam();
+          if (this.gestureController.stop) this.gestureController.stop();
+          if (this.gestureController.hideWebcam) this.gestureController.hideWebcam();
+          if (this.gestureController.cleanup) this.gestureController.cleanup();
         }
 
-        // Initialize gesture controller
-        console.log('🔧 Creating new gesture controller');
-        this.gestureController = new GestureController();
-        await this.gestureController.init();
+        // Choose gesture controller based on USE_CUSTOM_MODELS flag
+        if (this.USE_CUSTOM_MODELS) {
+          console.log('🤖 Creating CUSTOM MODEL gesture controller');
+          this.gestureController = new CustomModelGestureController();
+
+          // Load dual models (absolute path from game root)
+          const leftModelPath = '/games/sonic-drive/assets/control%20models/left_hand_controls_sonic_drive.json';
+          const rightModelPath = '/games/sonic-drive/assets/control%20models/right_hand_controls_sonic_drive.json';
+
+          console.log('📦 Loading custom models...');
+          await this.gestureController.loadDualModels(leftModelPath, rightModelPath);
+          console.log('✅ Custom models loaded');
+
+          // Initialize MediaPipe
+          await this.gestureController.init();
+          console.log('✅ MediaPipe initialized');
+
+          // Show webcam overlay
+          if (this.gestureController.showWebcam) {
+            this.gestureController.showWebcam();
+          }
+        } else {
+          console.log('🔧 Creating STANDARD gesture controller');
+          this.gestureController = new GestureController();
+          await this.gestureController.init();
+
+          // Show webcam overlay
+          if (this.gestureController.showWebcam) {
+            this.gestureController.showWebcam();
+          }
+        }
 
         // Setup gesture callbacks
         console.log('🔗 Setting up gesture callbacks');
@@ -378,9 +656,6 @@ export class Game {
           onAccelerate: !!this.gestureController.onAccelerate,
           onDecelerate: !!this.gestureController.onDecelerate
         });
-
-        // Show webcam overlay
-        this.gestureController.showWebcam();
 
         console.log('✅ Gesture mode activated');
       } catch (error) {
@@ -672,6 +947,15 @@ export class Game {
 
   startGame() {
     console.log('🎮 ======= GAME STARTING =======');
+
+    // Initialize analytics if enabled
+    if (this.analyticsEnabled && this.userRoles.length > 0) {
+      initSupabase(); // Initialize Supabase
+      this.analytics = new AnalyticsCollector(this.userRoles);
+      this.analytics.onSessionStart(this.gameLevel, this.controlMode || 'keyboard');
+      console.log('📊 Analytics tracking started');
+    }
+
     this.audioEngine.init();
 
     // Apply audio enabled/disabled state
@@ -700,6 +984,9 @@ export class Game {
     this.distance = 0;
     this.playerSpeed = 0;
     this.maxSpeed = 0;
+    this.currentGear = 1; // Start in first gear
+    this.currentRPM = this.ENGINE_IDLE_RPM;
+    this.shiftCooldown = 0;
     // Set starting lane based on number of lanes
     if (this.numLanes === 2) {
       this.currentLane = 0; // LEFT lane
@@ -717,14 +1004,17 @@ export class Game {
     this.lastSpawnedLane = -1;
     this.guaranteedEscapeTimer = 0;
 
+    // Reset one-car-at-a-time flag (challenge modes only)
+    this.currentCarHasPassedPlayer = true;
+
     // Clear traffic
     this.trafficVehicles = [];
 
-    // Reset player position
-    this.playerCar.position.y = 550; // Lower position for better visibility
+    // Reset player position - position at 75% down the screen for better view of incoming traffic
+    this.playerCar.position.y = this.canvas.height * 0.75;
     this.playerCar.position.x = this.LANE_POSITIONS[this.currentLane];
 
-    console.log(`✅ Player car positioned at x=${this.LANE_POSITIONS[this.currentLane]}, y=550`);
+    console.log(`✅ Player car positioned at x=${this.LANE_POSITIONS[this.currentLane]}, y=${this.playerCar.position.y}`);
     console.log(`✅ Canvas size: ${this.canvas.width}x${this.canvas.height}`);
 
     // Set initial lane name based on number of lanes
@@ -801,6 +1091,11 @@ export class Game {
   handleCollision(vehicle) {
     console.log('💥 COLLISION detected!');
 
+    // Track collision in analytics
+    if (this.analytics) {
+      this.analytics.onCollision(this.playerCar.position, vehicle.position);
+    }
+
     // Play collision sound
     this.audioEngine.playCollisionSound();
 
@@ -833,6 +1128,69 @@ export class Game {
     }
   }
 
+  async levelComplete() {
+    console.log('🏁 LEVEL COMPLETE called - gameRunning:', this.gameRunning);
+    if (!this.gameRunning) {
+      console.log('⚠️ Game already stopped, returning');
+      return; // Prevent multiple calls
+    }
+
+    console.log('🎉 Stopping game - LEVEL COMPLETED!');
+    this.gameRunning = false;
+    this.playerSpeed = 0; // Stop the car immediately
+
+    // Play success sound
+    console.log('🎉 [LEVEL COMPLETE] Playing reward sound');
+    if (this.audioEngine) {
+      this.audioEngine.playRewardSound();
+    }
+    this.audioEngine.fadeOut();
+
+    // Tell parent page to RESTART background music
+    console.log('🎵 [LEVEL COMPLETE] Sending message to parent to RESTART background music');
+    if (window.parent !== window) {
+      window.parent.postMessage({ action: 'startBackgroundMusic' }, '*');
+    }
+
+    // Pause gesture processing
+    if (this.gestureController) {
+      this.gestureController.pause();
+    }
+
+    // Hide old game over div
+    this.gameOverDiv.classList.remove('show');
+    this.startBtn.textContent = 'Start New Game (Space)';
+
+    // Handle analytics if enabled - save in background but show game over screen
+    if (this.analytics) {
+      try {
+        // End analytics session
+        const sessionData = await this.analytics.endSession();
+        sessionData.level_completed = true; // Mark as completed
+
+        // Save to database
+        const result = await saveGameSession(sessionData);
+
+        if (result.success) {
+          console.log('✅ Session saved to database:', result.sessionId);
+        } else {
+          console.error('❌ Failed to save session:', result.error);
+        }
+
+        // Store session data for later viewing
+        this.lastSessionData = sessionData;
+      } catch (error) {
+        console.error('❌ Error handling analytics:', error);
+        this.lastSessionData = null;
+      }
+    }
+
+    // Always show level complete screen (with analytics button if enabled)
+    console.log('📺 About to call showLevelCompleteScreen()...');
+    await this.showLevelCompleteScreen();
+    console.log('✅ showLevelCompleteScreen() completed');
+  }
+
   async gameOver() {
     console.log('💥 GAME OVER called - gameRunning:', this.gameRunning);
     if (!this.gameRunning) {
@@ -863,7 +1221,31 @@ export class Game {
     this.gameOverDiv.classList.remove('show');
     this.startBtn.textContent = 'Start New Game (Space)';
 
-    // Show new game over overlay
+    // Handle analytics if enabled - save in background but show game over screen
+    if (this.analytics) {
+      try {
+        // End analytics session
+        const sessionData = await this.analytics.endSession();
+        sessionData.level_completed = false; // Mark as failed
+
+        // Save to database
+        const result = await saveGameSession(sessionData);
+
+        if (result.success) {
+          console.log('✅ Session saved to database:', result.sessionId);
+        } else {
+          console.error('❌ Failed to save session:', result.error);
+        }
+
+        // Store session data for later viewing
+        this.lastSessionData = sessionData;
+      } catch (error) {
+        console.error('❌ Error handling analytics:', error);
+        this.lastSessionData = null;
+      }
+    }
+
+    // Always show game over overlay (with analytics button if enabled)
     console.log('📺 About to call showGameOverScreen()...');
     await this.showGameOverScreen();
     console.log('✅ showGameOverScreen() completed');
@@ -878,6 +1260,7 @@ export class Game {
     const saveBtn = document.getElementById('gameOverSaveBtn');
     const saveStatus = document.getElementById('gameOverSaveStatus');
     const nextBtn = document.getElementById('gameOverNextBtn');
+    const viewAnalyticsBtn = document.getElementById('viewAnalyticsBtn');
 
     if (!overlay) {
       console.error('❌ Game over overlay not found!');
@@ -888,6 +1271,18 @@ export class Game {
     if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
     if (distanceEl) distanceEl.textContent = Math.round(this.distance) + 'm';
     if (maxSpeedEl) maxSpeedEl.textContent = Math.round(this.maxSpeed);
+
+    // Show/hide analytics button based on whether analytics is enabled
+    if (viewAnalyticsBtn) {
+      if (this.analyticsEnabled && this.lastSessionData) {
+        viewAnalyticsBtn.style.display = 'inline-block';
+        viewAnalyticsBtn.onclick = () => {
+          this.showAnalyticsReport(this.lastSessionData);
+        };
+      } else {
+        viewAnalyticsBtn.style.display = 'none';
+      }
+    }
 
     // Show overlay IMMEDIATELY - don't wait for async operations
     overlay.style.display = 'flex';
@@ -954,10 +1349,76 @@ export class Game {
     console.log('✅ showGameOverScreen() complete');
   }
 
+  async showLevelCompleteScreen() {
+    const overlay = document.getElementById('gameOverOverlay');
+    const scoreEl = document.getElementById('gameOverScore');
+    const distanceEl = document.getElementById('gameOverDistance');
+    const maxSpeedEl = document.getElementById('gameOverMaxSpeed');
+    const nextBtn = document.getElementById('gameOverNextBtn');
+    const viewAnalyticsBtn = document.getElementById('viewAnalyticsBtn');
+
+    if (!overlay) {
+      console.error('❌ Game over overlay not found!');
+      return;
+    }
+
+    // Update the title to show LEVEL COMPLETE
+    const titleEl = overlay.querySelector('.game-over-title');
+    if (titleEl) {
+      titleEl.textContent = `🏁 LEVEL ${this.gameLevel} COMPLETE! 🎉`;
+      titleEl.style.color = '#00ff88'; // Green for success
+    }
+
+    // Update stats
+    if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
+    if (distanceEl) distanceEl.textContent = Math.round(this.distance) + 'm / ' + this.targetDistance + 'm';
+    if (maxSpeedEl) maxSpeedEl.textContent = Math.round(this.maxSpeed);
+
+    // Show/hide analytics button based on whether analytics is enabled
+    if (viewAnalyticsBtn) {
+      if (this.analyticsEnabled && this.lastSessionData) {
+        viewAnalyticsBtn.style.display = 'inline-block';
+        viewAnalyticsBtn.onclick = () => {
+          this.showAnalyticsReport(this.lastSessionData);
+        };
+      } else {
+        viewAnalyticsBtn.style.display = 'none';
+      }
+    }
+
+    // Show overlay IMMEDIATELY
+    overlay.style.display = 'flex';
+    overlay.classList.add('show');
+
+    // Handle next level button
+    if (nextBtn) {
+      if (this.gameLevel < 5) {
+        // Can go to next level
+        nextBtn.disabled = false;
+        nextBtn.textContent = `➡️ Level ${this.gameLevel + 1}`;
+        nextBtn.title = `Go to Level ${this.gameLevel + 1}`;
+      } else {
+        // Already on final level
+        nextBtn.disabled = true;
+        nextBtn.textContent = '🏆 All Levels Complete!';
+        nextBtn.title = 'You completed all levels!';
+      }
+    }
+
+    console.log('✅ showLevelCompleteScreen() complete');
+  }
+
   hideGameOverScreen() {
     const overlay = document.getElementById('gameOverOverlay');
     overlay.style.display = 'none';
     overlay.classList.remove('show');
+
+    // Reset title back to game over
+    const titleEl = overlay.querySelector('.game-over-title');
+    if (titleEl) {
+      titleEl.textContent = '💥 GAME OVER! 💥';
+      titleEl.style.color = ''; // Reset color
+    }
   }
 
   gameOverGoHome() {
@@ -1025,10 +1486,10 @@ export class Game {
   }
 
   gameOverNextLevel() {
-    console.log('➡️ Game Over - Going to Next Level');
+    console.log('➡️ Going to Next Level from Level', this.gameLevel);
 
-    if (this.gameLevel === 1) {
-      // Go to level 2 (3-lane)
+    if (this.gameLevel < 5) {
+      // Go to next level
       this.hideGameOverScreen();
 
       // Stop audio and gesture controller
@@ -1038,11 +1499,76 @@ export class Game {
         this.gestureController.hideWebcam();
       }
 
-      // Navigate to level 2
-      window.location.href = 'index.html?level=2';
+      // Navigate to next level
+      const nextLevel = this.gameLevel + 1;
+      console.log(`🚀 Navigating to Level ${nextLevel}`);
+      window.location.href = `index.html?level=${nextLevel}`;
     } else {
-      alert('You are already on the highest level!');
+      alert('🏆 Congratulations! You have completed all levels!');
     }
+  }
+
+  /**
+   * Show analytics report modal
+   */
+  showAnalyticsReport(sessionData) {
+    const modal = document.getElementById('analyticsModal');
+    const content = document.getElementById('analyticsContent');
+
+    if (!modal || !content) {
+      console.error('Analytics modal not found');
+      return;
+    }
+
+    // Generate report HTML
+    const reportHTML = generateAnalyticsReport(sessionData, this.userRoles);
+    content.innerHTML = reportHTML;
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Button handlers
+    const closeBtn = document.getElementById('closeAnalyticsBtn');
+    const playAgainBtn = document.getElementById('playAgainBtn');
+    const downloadBtn = document.getElementById('downloadReportBtn');
+
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        modal.style.display = 'none';
+      };
+    }
+
+    if (playAgainBtn) {
+      playAgainBtn.onclick = () => {
+        modal.style.display = 'none';
+        setTimeout(() => {
+          this.startGame(); // Restart game
+        }, 300);
+      };
+    }
+
+    if (downloadBtn) {
+      downloadBtn.onclick = () => {
+        this.downloadAnalyticsReport(sessionData);
+      };
+    }
+  }
+
+  /**
+   * Download analytics report as JSON
+   */
+  downloadAnalyticsReport(sessionData) {
+    const dataStr = JSON.stringify(sessionData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `sonic-drive-analytics-${Date.now()}.json`;
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+
+    console.log('📥 Analytics report downloaded');
   }
 
   switchLane(newLane) {
@@ -1054,11 +1580,17 @@ export class Game {
       return;
     }
 
+    const oldLane = this.currentLane;
     this.currentLane = newLane;
     const targetX = this.LANE_POSITIONS[this.currentLane];
 
     // Update player position directly
     this.playerCar.position.x = targetX;
+
+    // Track lane change in analytics
+    if (this.analytics) {
+      this.analytics.onLaneChange(oldLane, newLane, this.playerCar.position, this.trafficVehicles);
+    }
 
     // Get lane names based on number of lanes
     let laneNames;
@@ -1242,37 +1774,112 @@ export class Game {
     // In gesture mode, reset acceleration/deceleration inputs each frame
     // They will be set again by gesture callbacks if gestures are active
     if (this.controlMode === 'gesture' && this.gestureController) {
-      // Check if pointing gestures are still active
-      const rightPointing = this.gestureController.handStates.right.isPointing;
-      const leftPointing = this.gestureController.handStates.left.isPointing;
-      const rightThumbsUp = this.gestureController.handStates.right.thumbsUp;
-      const leftThumbsUp = this.gestureController.handStates.left.thumbsUp;
+      if (this.USE_CUSTOM_MODELS) {
+        // Custom models: check if index finger gesture is active
+        const rightGesture = this.gestureController.handStates.right.gesture;
+        const leftGesture = this.gestureController.handStates.left.gesture;
 
-      if (!rightPointing && !rightThumbsUp) {
-        this.keys.up = false;
-      }
-      if (!leftPointing && !leftThumbsUp) {
-        this.keys.down = false;
+        if (rightGesture !== 'right hand index') {
+          this.keys.up = false;
+        }
+        if (leftGesture !== 'left hand index') {
+          this.keys.down = false;
+        }
+      } else {
+        // Standard controller: check pointing/thumbs up gestures
+        const rightPointing = this.gestureController.handStates.right.isPointing;
+        const leftPointing = this.gestureController.handStates.left.isPointing;
+        const rightThumbsUp = this.gestureController.handStates.right.thumbsUp;
+        const leftThumbsUp = this.gestureController.handStates.left.thumbsUp;
+
+        if (!rightPointing && !rightThumbsUp) {
+          this.keys.up = false;
+        }
+        if (!leftPointing && !leftThumbsUp) {
+          this.keys.down = false;
+        }
       }
     }
 
-    // Handle acceleration/deceleration based on input
+    // ========================================
+    // REALISTIC GEAR-BASED RACING PHYSICS
+    // ========================================
+    // This system simulates how real cars accelerate differently in each gear
+    // - Low gears: High torque multiplication, strong acceleration, limited top speed
+    // - High gears: Low torque multiplication, weak acceleration, high top speed
+
+    const currentSpeed = this.playerSpeed;
+
+    // Calculate current RPM based on speed and gear
+    this.currentRPM = this.calculateRPM(currentSpeed, this.currentGear);
+
+    // Get engine torque at current RPM (follows realistic torque curve)
+    const engineTorque = this.calculateEngineTorque(this.currentRPM);
+
+    // Multiply by gear ratio and final drive to get wheel torque
+    const gearRatio = this.GEAR_RATIOS[this.currentGear - 1];
+    const wheelTorque = engineTorque * gearRatio * this.FINAL_DRIVE;
+
+    // Calculate resistance forces
+    const airDragForce = this.DRAG_COEFFICIENT * currentSpeed * currentSpeed;
+    const rollingResistance = this.ROLLING_RESISTANCE * currentSpeed;
+    const totalResistance = airDragForce + rollingResistance;
+
     if (this.keys.up && !this.keys.down) {
-      // Accelerate
-      this.playerSpeed = Math.min(this.playerSpeed + this.ACCEL_RATE, this.MAX_SPEED);
-    } else if (this.keys.down) {
-      // Brake - stops IMMEDIATELY and completely
-      this.playerSpeed = Math.max(this.playerSpeed - this.BRAKE_RATE, 0);
-      // Force stop at very low speeds (no creeping)
-      if (this.playerSpeed < 2) {
-        this.playerSpeed = 0;
+      // ===== ACCELERATION MODE =====
+      // Calculate net driving force (torque converted to force)
+      // Wheel torque / wheel radius = force at ground
+      const drivingForce = wheelTorque * 0.15; // 0.15 is an approximate conversion factor
+
+      // Net force = Driving force - Resistance
+      const netForce = drivingForce - totalResistance;
+
+      // Acceleration = Force / Mass (Newton's 2nd law: F = ma)
+      const acceleration = netForce / this.VEHICLE_MASS;
+
+      // Update speed
+      this.playerSpeed = Math.max(0, Math.min(currentSpeed + acceleration, this.MAX_SPEED));
+
+      // Automatic gear shifting
+      this.autoGearShift(this.playerSpeed);
+
+      // Prevent going over redline in current gear
+      if (this.currentRPM >= this.ENGINE_MAX_RPM * 0.98) {
+        // Rev limiter - cut power near redline
+        this.playerSpeed = Math.min(this.playerSpeed, currentSpeed + 0.1);
       }
+
+    } else if (this.keys.down) {
+      // ===== BRAKING MODE =====
+      // Gradual braking that feels natural
+      const brakingDeceleration = this.BRAKE_FORCE + (totalResistance / this.VEHICLE_MASS);
+      this.playerSpeed = Math.max(currentSpeed - brakingDeceleration, 0);
+
+      // Automatic downshift during braking
+      this.autoGearShift(this.playerSpeed);
+
+      // Smooth stop at very low speeds (no sudden jump to 0)
+      // Only force stop if speed is extremely low (< 0.3 km/h)
+      if (this.playerSpeed < 0.3) {
+        this.playerSpeed = 0;
+        this.currentGear = 1; // Back to first gear when stopped
+      }
+
     } else {
-      // Natural deceleration (drag) - also stops at 0
-      this.playerSpeed = Math.max(this.playerSpeed - this.DRAG, 0);
-      // Force stop at very low speeds
+      // ===== COASTING MODE (ENGINE BRAKING) =====
+      // Natural deceleration from resistance forces + engine braking
+      const engineBraking = gearRatio * 0.3; // Lower gears provide more engine braking
+      const coastingDeceleration = (totalResistance + engineBraking) / this.VEHICLE_MASS;
+
+      this.playerSpeed = Math.max(currentSpeed - coastingDeceleration, 0);
+
+      // Automatic downshift when coasting
+      this.autoGearShift(this.playerSpeed);
+
+      // Complete stop at very low speeds
       if (this.playerSpeed < 0.5) {
         this.playerSpeed = 0;
+        this.currentGear = 1; // Back to first gear when stopped
       }
     }
 
@@ -1281,9 +1888,9 @@ export class Game {
       this.maxSpeed = this.playerSpeed;
     }
 
-    // KEEP PLAYER CAR FIXED AT y=550 (only x changes with lane switching)
-    // Lower position for better visibility of incoming traffic
-    this.playerCar.position.y = 550;
+    // KEEP PLAYER CAR FIXED (only x changes with lane switching)
+    // Position at 75% down screen for better visibility of incoming traffic
+    this.playerCar.position.y = this.canvas.height * 0.75;
 
     // Move traffic vehicles down (they come toward the player)
     // ONLY move if player has speed - no base movement when stopped
@@ -1299,6 +1906,12 @@ export class Game {
       if (vehicle.position.y > this.canvas.height + 100) {
         this.trafficVehicles.splice(i, 1);
         this.score += 10;
+
+        // Track successful dodge in analytics
+        if (this.analytics) {
+          this.analytics.onSuccessfulDodge(vehicle.position);
+        }
+
         // Play reward sound for successfully dodging the car
         if (this.audioEngine) {
           this.audioEngine.playRewardSound();
@@ -1310,31 +1923,53 @@ export class Game {
     const difficulty = this.calculateDifficulty();
 
     // Spawn new vehicles based on dynamic spawn interval and max cars
-    // SKIP SPAWNING IN FREE MODE
-    if (!this.isFreeMode) {
+    // ONLY SPAWN IF hasTraffic is true (Levels 3, 4, 5)
+    if (this.hasTraffic && !this.isFreeMode) {
+      // ONE CAR AT A TIME - TOTAL ACROSS ALL LANES
+      // Only ONE car should exist on the entire road at any given time
+
+      // Spawn timer logic
       this.spawnTimer += 16;
-      this.guaranteedEscapeTimer += 16;
 
       if (this.spawnTimer >= difficulty.currentSpawnInterval) {
-        // Only spawn if we haven't reached the max cars limit
-        if (this.trafficVehicles.length < difficulty.currentMaxCars) {
-          // SMART SPAWN: Check if we should guarantee an escape route
-          const shouldGuaranteeEscape = this.guaranteedEscapeTimer >= this.ESCAPE_GUARANTEE_INTERVAL;
+        // Only spawn if NO cars exist on the road
+        if (this.trafficVehicles.length === 0) {
+          // Spawn a new car in a random lane
+          const randomLane = Math.floor(Math.random() * this.numLanes);
+          const x = this.LANE_POSITIONS[randomLane];
+          // Spawn car just above screen (horn will trigger when Y reaches 0)
+          const y = -100;
 
-          if (shouldGuaranteeEscape) {
-            // Force spawn with escape route guarantee
-            this.spawnWithEscapeGuarantee();
-            this.guaranteedEscapeTimer = 0; // Reset timer
-            console.log(`✅ ESCAPE ROUTE GUARANTEED - spawning safe pattern`);
-          } else {
-            // Normal smart spawn
-            this.spawnTrafficVehicle();
+          const vehicle = {
+            position: { x, y },
+            width: 40,
+            height: 70,
+            lane: randomLane
+          };
+
+          this.trafficVehicles.push(vehicle);
+
+          // Track car spawn in analytics
+          if (this.analytics) {
+            this.analytics.onCarSpawn(vehicle.position, vehicle.lane);
           }
+
+          // Get lane name for logging
+          let laneNames;
+          if (this.numLanes === 2) {
+            laneNames = ['LEFT', 'RIGHT'];
+          } else if (this.numLanes === 3) {
+            laneNames = ['LEFT', 'CENTER', 'RIGHT'];
+          } else if (this.numLanes === 4) {
+            laneNames = ['LANE 1', 'LANE 2', 'LANE 3', 'LANE 4'];
+          }
+
+          console.log(`🚙 ONE-CAR SPAWN: ${laneNames[randomLane]} lane (Total cars: ${this.trafficVehicles.length})`);
 
           // Log difficulty changes
           if (this.lastLoggedDifficulty !== difficulty.difficultyLevel) {
             this.lastLoggedDifficulty = difficulty.difficultyLevel;
-            console.log(`📈 DIFFICULTY INCREASED! Level ${difficulty.difficultyLevel} | Spawn: ${difficulty.currentSpawnInterval}ms | Max Cars: ${difficulty.currentMaxCars}`);
+            console.log(`📈 DIFFICULTY INCREASED! Level ${difficulty.difficultyLevel} | Spawn: ${difficulty.currentSpawnInterval}ms`);
           }
         }
         this.spawnTimer = 0;
@@ -1347,13 +1982,13 @@ export class Game {
     const playerX = this.playerCar.position.x;
     const playerY = this.playerCar.position.y;
 
-    // Update proximity warnings (OPTIMIZED - only check nearby vehicles)
-    // Filter vehicles to only those in front of player and nearby
+    // Update proximity warnings - pass ALL vehicles ahead of player
+    // Don't filter by distance, let audioEngine decide when to play horn
     const nearbyVehicles = [];
     for (let i = 0; i < this.trafficVehicles.length; i++) {
       const vehicle = this.trafficVehicles[i];
-      // Only check vehicles in front (lower Y) and within 300px range
-      if (vehicle.position.y < playerY && (playerY - vehicle.position.y) < 300) {
+      // Only check vehicles in front (lower Y), no distance limit
+      if (vehicle.position.y < playerY) {
         nearbyVehicles.push(vehicle);
       }
     }
@@ -1383,6 +2018,31 @@ export class Game {
 
     // Update distance
     this.distance += this.playerSpeed * 0.016;
+
+    // Calculate finish line position on screen
+    // The finish line is at targetDistance meters
+    // Player is at playerCar.position.y (fixed at 75% of screen)
+    // Calculate how far away finish line is from player in meters
+    const distanceToFinish = this.targetDistance - this.distance;
+
+    // Convert distance to screen position
+    // Scale: 1 meter = 1 pixel roughly (can adjust for visibility)
+    // Finish line moves up as player approaches it
+    // Use this.playerCar.position.y directly (playerY already declared above)
+    this.finishLineY = this.playerCar.position.y - distanceToFinish;
+
+    // Check if level is completed (reached target distance)
+    if (!this.levelCompleted && this.distance >= this.targetDistance) {
+      this.levelCompleted = true;
+      console.log(`🏁 LEVEL ${this.gameLevel} COMPLETED! Distance: ${Math.round(this.distance)}m / ${this.targetDistance}m`);
+      this.levelComplete();
+      return; // Stop further updates
+    }
+
+    // Update score in analytics continuously
+    if (this.analytics) {
+      this.analytics.onScoreUpdate(this.score, this.distance);
+    }
   }
 
   updateGame(deltaTime = 16) {
@@ -1391,7 +2051,8 @@ export class Game {
     // No physics engine - just update game state
     this.updatePhysics();
 
-    // Update audio
+    // Update audio - pass current gear to audio engine
+    this.audioEngine.gear = this.currentGear; // Sync gear with audio
     this.audioEngine.update(this.playerSpeed, this.currentLane, this.keys.up);
 
     // Update graphics
@@ -1422,7 +2083,7 @@ export class Game {
     }
 
     // Gear display with shift animation
-    const currentGear = this.audioEngine.gear;
+    const currentGear = this.currentGear; // Use game's gear, not audio engine's
     if (this.lastGear !== currentGear) {
       this.lastGear = currentGear;
       this.gearDisplay.textContent = currentGear;
@@ -1471,6 +2132,13 @@ export class Game {
         this.playerSpeed,
         this.isShifting
       );
+
+      // Draw finish line (if close enough to be visible)
+      if (this.finishLineY !== null && this.finishLineY > -200 && this.finishLineY < this.canvas.height + 200) {
+        const roadWidth = this.canvas.width * 0.6;
+        const roadLeft = (this.canvas.width - roadWidth) / 2;
+        this.graphics.drawFinishLineCanvas(this.finishLineY, roadWidth, roadLeft);
+      }
 
       // Draw traffic vehicles
       const colors = ['#00ffff', '#ff00ff', '#ffff00', '#00ff00'];

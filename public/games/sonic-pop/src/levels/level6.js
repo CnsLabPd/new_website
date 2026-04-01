@@ -17,8 +17,9 @@ class Level6 {
                 balloonBehavior: "moving", // Balloons move slowly
                 positions: "random",
                 balloonCount: 1,
-                timeLimit: 180, // 3 minutes
-                balloonsToComplete: 15,
+                timeLimit: 120, // 2 minutes
+                balloonsToComplete: 9999, // No balloon limit - time-based completion
+                timeBasedCompletion: true, // Level completes when time runs out (not game over)
 
                 // Movement settings
                 movementEnabled: true,
@@ -35,9 +36,9 @@ class Level6 {
                 timeBonus: true
             },
 
-            instructions: "Welcome to Level 5! Now the real challenge begins. Balloons will MOVE slowly across the screen. Listen to the 3D audio beeps - they update as the balloon moves. Track the sound, follow it with your hand, and pop the balloon! The beep speed tells you how close you are. Good luck, hunter!",
+            instructions: "Welcome to Level 1! You have 2 minutes to pop as many moving balloons as you can! Balloons will MOVE slowly across the screen. Listen to the 3D audio beeps - they update as the balloon moves. Track the sound, follow it with your hand, and pop the balloon! The beep speed tells you how close you are. Pop as many as you can!",
 
-            completionMessage: "Incredible! You've proven yourself as a true Floating Hunter! You can track and catch moving targets!"
+            completionMessage: "Great job! Time's up! You've completed your 2-minute challenge!"
         };
     }
 

@@ -19,7 +19,8 @@ export class GestureController {
         thumbsDown: false,
         isPointing: false, // NEW: pointing gesture (index finger extended)
         detected: false,
-        lastDetectionTime: 0
+        lastDetectionTime: 0,
+        lastLaneShiftTime: 0 // NEW: Track when lane shift was triggered
       },
       right: {
         isOpen: false,
@@ -28,9 +29,14 @@ export class GestureController {
         thumbsDown: false,
         isPointing: false, // NEW: pointing gesture (index finger extended)
         detected: false,
-        lastDetectionTime: 0
+        lastDetectionTime: 0,
+        lastLaneShiftTime: 0 // NEW: Track when lane shift was triggered
       }
     };
+
+    // Gesture cooldown settings
+    this.LANE_SHIFT_COOLDOWN = 800; // ms - prevent multiple lane shifts in quick succession
+    this.BRAKE_ACCEL_BLOCK_AFTER_SHIFT = 500; // ms - block brake/accel after lane shift
 
     // Callbacks for game control
     this.onLaneShiftLeft = null;
@@ -353,43 +359,56 @@ export class GestureController {
    */
   analyzeGestures(landmarks, hand) {
     const state = this.handStates[hand];
+    const currentTime = Date.now();
 
     // Store previous state
     state.wasOpen = state.isOpen;
 
-    // Detect open hand (fully extended palm)
-    state.isOpen = this.isHandOpen(landmarks);
-
-    // Detect pointing gesture (index finger extended)
+    // PRIORITY 1: Detect specific gestures first (these override open hand)
+    // Detect pointing gesture (index finger extended, others closed)
     state.isPointing = this.isPointing(landmarks);
 
-    // Detect thumbs up and thumbs down (kept for compatibility)
+    // Detect thumbs up and thumbs down
     state.thumbsUp = this.isThumbsUp(landmarks);
     state.thumbsDown = this.isThumbsDown(landmarks);
 
-    // Debug logging (only log state changes)
-    // if (state.isOpen !== state.wasOpen) {
-    //   console.log(`${hand} hand: ${state.wasOpen ? 'OPEN' : 'CLOSED'} → ${state.isOpen ? 'OPEN' : 'CLOSED'}`);
-    // }
+    // PRIORITY 2: Detect open hand ONLY if no specific gesture is active
+    // This prevents pointing gestures from triggering lane shifts
+    const hasSpecificGesture = state.isPointing || state.thumbsUp || state.thumbsDown;
+
+    if (hasSpecificGesture) {
+      // If doing a specific gesture, force hand to NOT be considered "open"
+      state.isOpen = false;
+    } else {
+      // Only check for open hand if no specific gesture is detected
+      state.isOpen = this.isHandOpen(landmarks);
+    }
 
     // Don't trigger callbacks if paused
     if (this.isPaused) return;
 
+    // Check cooldowns
+    const timeSinceLastShift = currentTime - state.lastLaneShiftTime;
+    const canShiftLane = timeSinceLastShift > this.LANE_SHIFT_COOLDOWN;
+    const canBrakeAccel = timeSinceLastShift > this.BRAKE_ACCEL_BLOCK_AFTER_SHIFT;
+
     // EDGE DETECTION: closed → open transition triggers lane shift
-    if (state.isOpen && !state.wasOpen) {
+    // This will ONLY trigger if hand is truly open (not pointing or thumbs up)
+    if (state.isOpen && !state.wasOpen && canShiftLane) {
       // Hand just opened - trigger lane shift
-      // console.log(`🎯 ${hand} hand: TRANSITION DETECTED (closed → open)`);
+      console.log(`🎯 ${hand} hand: LANE SHIFT (closed → open)`);
+      state.lastLaneShiftTime = currentTime; // Record shift time
 
       if (hand === 'left') {
         if (this.onLaneShiftLeft) {
-          // console.log('👈 Left hand opened - calling onLaneShiftLeft callback');
+          console.log('👈 Left hand opened - shifting LEFT lane');
           this.onLaneShiftLeft();
         } else {
           console.log('⚠️ onLaneShiftLeft callback is not set!');
         }
       } else if (hand === 'right') {
         if (this.onLaneShiftRight) {
-          // console.log('👉 Right hand opened - calling onLaneShiftRight callback');
+          console.log('👉 Right hand opened - shifting RIGHT lane');
           this.onLaneShiftRight();
         } else {
           console.log('⚠️ onLaneShiftRight callback is not set!');
@@ -398,20 +417,23 @@ export class GestureController {
     }
 
     // CONTINUOUS: pointing or thumbs up for acceleration/deceleration
+    // BLOCKED for 500ms after lane shift to prevent accidental triggers
     // Right hand pointing/thumbs up = Accelerate
     // Left hand pointing/thumbs up = Decelerate
-    if (hand === 'right' && (state.isPointing || state.thumbsUp) && this.onAccelerate) {
-      // if (state.isPointing) {
-      //   // Only log occasionally to avoid spam
-      //   if (Math.random() < 0.05) console.log('☝️ RIGHT pointing - accelerating');
-      // }
-      this.onAccelerate();
-    } else if (hand === 'left' && (state.isPointing || state.thumbsUp) && this.onDecelerate) {
-      // if (state.isPointing) {
-      //   // Only log occasionally to avoid spam
-      //   if (Math.random() < 0.05) console.log('☝️ LEFT pointing - decelerating');
-      // }
-      this.onDecelerate();
+    if (canBrakeAccel) {
+      if (hand === 'right' && (state.isPointing || state.thumbsUp) && this.onAccelerate) {
+        if (state.isPointing) {
+          // Only log occasionally to avoid spam
+          if (Math.random() < 0.02) console.log('☝️ RIGHT pointing - accelerating');
+        }
+        this.onAccelerate();
+      } else if (hand === 'left' && (state.isPointing || state.thumbsUp) && this.onDecelerate) {
+        if (state.isPointing) {
+          // Only log occasionally to avoid spam
+          if (Math.random() < 0.02) console.log('☝️ LEFT pointing - decelerating');
+        }
+        this.onDecelerate();
+      }
     }
   }
 
@@ -458,37 +480,54 @@ export class GestureController {
 
   /**
    * Detect pointing gesture (index finger extended, others closed)
-   * This is much more reliable than thumbs up!
+   * STRICT detection to avoid confusion with open hand
    */
   isPointing(landmarks) {
     // Get key landmarks
     const wrist = landmarks[0];
     const thumbTip = landmarks[4];
+    const thumbMCP = landmarks[2];
     const indexTip = landmarks[8];
     const indexPIP = landmarks[6];
     const indexMCP = landmarks[5];
     const middleTip = landmarks[12];
     const middlePIP = landmarks[10];
+    const middleMCP = landmarks[9];
     const ringTip = landmarks[16];
     const ringPIP = landmarks[14];
+    const ringMCP = landmarks[13];
     const pinkyTip = landmarks[20];
     const pinkyPIP = landmarks[18];
+    const pinkyMCP = landmarks[17];
 
-    // Index finger should be extended (tip farther from wrist than PIP)
+    // Index finger MUST be clearly extended (tip farther from wrist than PIP)
     const indexDist = this.getDistance(indexTip, wrist);
     const indexPIPDist = this.getDistance(indexPIP, wrist);
-    const indexExtended = indexDist > indexPIPDist * 1.15; // Index must be clearly extended
+    const indexExtended = indexDist > indexPIPDist * 1.2; // Stricter threshold
 
-    // Other fingers should be curled
-    const middleCurled = middleTip.y > middlePIP.y - 0.02;
-    const ringCurled = ringTip.y > ringPIP.y - 0.02;
-    const pinkyCurled = pinkyTip.y > pinkyPIP.y - 0.02;
+    // Index finger should also be pointing UP (tip above MCP joint)
+    const indexPointingUp = indexTip.y < indexMCP.y - 0.05;
 
-    // At least 2 out of 3 other fingers should be curled
-    const curledCount = [middleCurled, ringCurled, pinkyCurled].filter(Boolean).length;
-    const othersCurled = curledCount >= 2;
+    // Other fingers MUST be clearly curled (stricter detection)
+    // Finger is curled if tip is NOT significantly farther from wrist than MCP
+    const middleDist = this.getDistance(middleTip, wrist);
+    const middleMCPDist = this.getDistance(middleMCP, wrist);
+    const middleCurled = middleDist < middleMCPDist * 1.15; // Must be clearly curled
 
-    const isPointing = indexExtended && othersCurled;
+    const ringDist = this.getDistance(ringTip, wrist);
+    const ringMCPDist = this.getDistance(ringMCP, wrist);
+    const ringCurled = ringDist < ringMCPDist * 1.15;
+
+    const pinkyDist = this.getDistance(pinkyTip, wrist);
+    const pinkyMCPDist = this.getDistance(pinkyMCP, wrist);
+    const pinkyCurled = pinkyDist < pinkyMCPDist * 1.15;
+
+    // ALL three other fingers (middle, ring, pinky) must be curled
+    const allOthersCurled = middleCurled && ringCurled && pinkyCurled;
+
+    // Thumb can be extended or not (don't check thumb to allow natural pointing)
+
+    const isPointing = indexExtended && indexPointingUp && allOthersCurled;
 
     return isPointing;
   }

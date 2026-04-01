@@ -7,15 +7,11 @@ export class AudioEngine {
     this.audioCtx = null;
     this.engineNodes = {};
     this.windNodes = {};
-    this.warningNodes = {
-      beepOsc: null,
-      beepGain: null,
-      beepPanner: null,
-      vehicleOsc: null,
-      vehicleGain: null,
-      vehiclePanner: null,
-      vehicleFilter: null
-    };
+
+    // NEW: Per-car horn system with stereo panning
+    this.carHorns = new Map(); // Map of vehicle ID -> horn audio instance
+    this.hornAudioBuffer = null; // Preloaded horn audio buffer
+    this.hornPath = '/games/sonic-drive/assets/audio/horn.mp3';
 
     // Engine parameters - IMPROVED for realistic V8 supercar sound
     this.currentRPM = 1000;
@@ -44,7 +40,7 @@ export class AudioEngine {
     this.lastWarningUpdate = 0;
   }
 
-  init() {
+  async init() {
     if (this.audioCtx) return;
 
     const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
@@ -54,8 +50,11 @@ export class AudioEngine {
     this.setupEngineNodes(noiseBuffer);
     this.setupWindNodes(noiseBuffer);
 
-    // Fade in engine
-    this.engineNodes.masterGain.gain.setTargetAtTime(0.55, this.audioCtx.currentTime, 0.5);
+    // Load horn audio
+    await this.loadHornAudio();
+
+    // Fade in engine at very low volume (8%)
+    this.engineNodes.masterGain.gain.setTargetAtTime(0.08, this.audioCtx.currentTime, 0.5);
   }
 
   createNoiseBuffer() {
@@ -87,39 +86,39 @@ export class AudioEngine {
     nodes.compressor.attack.value = 0.001;   // Faster attack
     nodes.compressor.release.value = 0.15;
 
-    // Fundamental frequency - IMPROVED: Richer tone
+    // Fundamental frequency - DRASTICALLY REDUCED
     nodes.fundamental = ctx.createOscillator();
     nodes.fundamental.type = "sawtooth";
     nodes.fundamentalGain = ctx.createGain();
-    nodes.fundamentalGain.gain.value = 0.5;  // Increased from 0.45
+    nodes.fundamentalGain.gain.value = 0.05;  // Reduced by 10x (was 0.5)
     nodes.fundamental.connect(nodes.fundamentalGain);
 
     // 2nd harmonic - IMPROVED
     nodes.harmonic2 = ctx.createOscillator();
     nodes.harmonic2.type = "triangle";
     nodes.harmonic2Gain = ctx.createGain();
-    nodes.harmonic2Gain.gain.value = 0.32;   // Increased from 0.28
+    nodes.harmonic2Gain.gain.value = 0.032;   // Reduced by 10x
     nodes.harmonic2.connect(nodes.harmonic2Gain);
 
     // 3rd harmonic - V8 character
     nodes.harmonic3 = ctx.createOscillator();
     nodes.harmonic3.type = "sine";
     nodes.harmonic3Gain = ctx.createGain();
-    nodes.harmonic3Gain.gain.value = 0.22;   // Increased from 0.18
+    nodes.harmonic3Gain.gain.value = 0.022;   // Reduced by 10x
     nodes.harmonic3.connect(nodes.harmonic3Gain);
 
     // 4th harmonic - Aggression
     nodes.harmonic4 = ctx.createOscillator();
     nodes.harmonic4.type = "square";
     nodes.harmonic4Gain = ctx.createGain();
-    nodes.harmonic4Gain.gain.value = 0.15;   // Increased from 0.12
+    nodes.harmonic4Gain.gain.value = 0.015;   // Reduced by 10x
     nodes.harmonic4.connect(nodes.harmonic4Gain);
 
     // NEW: 5th harmonic for extra richness (V8 characteristic)
     nodes.harmonic5 = ctx.createOscillator();
     nodes.harmonic5.type = "sine";
     nodes.harmonic5Gain = ctx.createGain();
-    nodes.harmonic5Gain.gain.value = 0.08;
+    nodes.harmonic5Gain.gain.value = 0.008;  // Reduced by 10x
     nodes.harmonic5.connect(nodes.harmonic5Gain);
 
     // Combustion noise - IMPROVED: More aggressive
@@ -131,7 +130,7 @@ export class AudioEngine {
     nodes.combustionFilter.frequency.value = 600;  // Lower for deeper
     nodes.combustionFilter.Q.value = 0.8;           // Sharper
     nodes.combustionGain = ctx.createGain();
-    nodes.combustionGain.gain.value = 0.2;         // Increased from 0.15
+    nodes.combustionGain.gain.value = 0.02;         // Reduced by 10x
     nodes.combustionNoise.connect(nodes.combustionFilter);
     nodes.combustionFilter.connect(nodes.combustionGain);
 
@@ -144,7 +143,7 @@ export class AudioEngine {
     nodes.intakeFilter.frequency.value = 2500;     // Higher for turbo whistle
     nodes.intakeFilter.Q.value = 3.0;               // Sharper resonance
     nodes.intakeGain = ctx.createGain();
-    nodes.intakeGain.gain.value = 0.12;            // Increased from 0.08
+    nodes.intakeGain.gain.value = 0.012;            // Reduced by 10x
     nodes.intakeNoise.connect(nodes.intakeFilter);
     nodes.intakeFilter.connect(nodes.intakeGain);
 
@@ -240,63 +239,18 @@ export class AudioEngine {
     wind.rightGain.connect(wind.rightPanner);
     wind.rightPanner.connect(ctx.destination);
     wind.rightNoise.start();
-
-    // Setup continuous proximity warning oscillator
-    this.setupProximityWarning();
   }
 
-  setupProximityWarning() {
-    const ctx = this.audioCtx;
-    const warning = this.warningNodes;
-
-    console.log('🔊 Setting up proximity warning system...');
-
-    // ========================================
-    // INCOMING VEHICLE ENGINE SOUND
-    // ========================================
-    // Create a lower-pitched engine sound for incoming vehicles
-    warning.vehicleOsc = ctx.createOscillator();
-    warning.vehicleOsc.type = "sawtooth"; // Aggressive engine-like sound
-    warning.vehicleOsc.frequency.value = 150; // Low rumble
-
-    warning.vehicleFilter = ctx.createBiquadFilter();
-    warning.vehicleFilter.type = "lowpass";
-    warning.vehicleFilter.frequency.value = 800;
-    warning.vehicleFilter.Q.value = 2;
-
-    warning.vehicleGain = ctx.createGain();
-    warning.vehicleGain.gain.value = 0; // Start silent
-
-    warning.vehiclePanner = ctx.createStereoPanner();
-    warning.vehiclePanner.pan.value = 0;
-
-    warning.vehicleOsc.connect(warning.vehicleFilter);
-    warning.vehicleFilter.connect(warning.vehicleGain);
-    warning.vehicleGain.connect(warning.vehiclePanner);
-    warning.vehiclePanner.connect(ctx.destination);
-
-    warning.vehicleOsc.start();
-    console.log('✅ Vehicle engine sound initialized');
-
-    // ========================================
-    // BEEPING ALARM SOUND
-    // ========================================
-    warning.beepOsc = ctx.createOscillator();
-    warning.beepOsc.type = "sine";
-    warning.beepOsc.frequency.value = 800;
-
-    warning.beepGain = ctx.createGain();
-    warning.beepGain.gain.value = 0; // Start silent
-
-    warning.beepPanner = ctx.createStereoPanner();
-    warning.beepPanner.pan.value = 0;
-
-    warning.beepOsc.connect(warning.beepGain);
-    warning.beepGain.connect(warning.beepPanner);
-    warning.beepPanner.connect(ctx.destination);
-
-    warning.beepOsc.start();
-    console.log('✅ Beeping alarm initialized');
+  async loadHornAudio() {
+    console.log('🔊 Loading horn audio...');
+    try {
+      const response = await fetch(this.hornPath);
+      const arrayBuffer = await response.arrayBuffer();
+      this.hornAudioBuffer = await this.audioCtx.decodeAudioData(arrayBuffer);
+      console.log('✅ Horn audio loaded successfully');
+    } catch (error) {
+      console.error('❌ Failed to load horn audio:', error);
+    }
   }
 
   autoShift(speed) {
@@ -367,8 +321,8 @@ export class AudioEngine {
       this.shiftCooldown -= 0.016; // Assumes 60fps
     }
 
-    // Auto shift based on speed
-    this.autoShift(speed);
+    // NOTE: Gear shifting is now controlled by game.js, not here
+    // this.autoShift(speed); // DISABLED - game controls gear shifting
 
     // Calculate target RPM using gear ratios - IMPROVED
     const gearIndex = Math.max(0, this.gear - 1);
@@ -414,25 +368,25 @@ export class AudioEngine {
     this.engineNodes.harmonic4.frequency.setTargetAtTime(engineOrderHz * 4, now, 0.04);
     this.engineNodes.harmonic5.frequency.setTargetAtTime(engineOrderHz * 5, now, 0.04);  // NEW
 
-    // Adjust harmonic gains - IMPROVED: More dynamic
+    // Adjust harmonic gains - DRASTICALLY REDUCED (divide by 10)
     const rpmFactor = (this.currentRPM - this.MIN_RPM) / (this.MAX_RPM - this.MIN_RPM);
-    this.engineNodes.harmonic2Gain.gain.setTargetAtTime(0.32 + rpmFactor * 0.18, now, 0.1);
-    this.engineNodes.harmonic3Gain.gain.setTargetAtTime(0.22 + rpmFactor * 0.12, now, 0.1);
-    this.engineNodes.harmonic4Gain.gain.setTargetAtTime(0.15 + rpmFactor * 0.10, now, 0.1);
-    this.engineNodes.harmonic5Gain.gain.setTargetAtTime(0.08 + rpmFactor * 0.06, now, 0.1);  // NEW
+    this.engineNodes.harmonic2Gain.gain.setTargetAtTime(0.032 + rpmFactor * 0.018, now, 0.1);
+    this.engineNodes.harmonic3Gain.gain.setTargetAtTime(0.022 + rpmFactor * 0.012, now, 0.1);
+    this.engineNodes.harmonic4Gain.gain.setTargetAtTime(0.015 + rpmFactor * 0.010, now, 0.1);
+    this.engineNodes.harmonic5Gain.gain.setTargetAtTime(0.008 + rpmFactor * 0.006, now, 0.1);
 
-    // Combustion noise - IMPROVED: More aggressive
-    const combustionLevel = 0.15 + this.engineLoad * 0.4 + rpmFactor * 0.25;
+    // Combustion noise - DRASTICALLY REDUCED (divide by 10)
+    const combustionLevel = 0.015 + this.engineLoad * 0.04 + rpmFactor * 0.025;
     this.engineNodes.combustionGain.gain.setTargetAtTime(combustionLevel, now, 0.15);
     this.engineNodes.combustionFilter.frequency.setTargetAtTime(600 + rpmFactor * 1800, now, 0.12);
 
-    // Intake noise - IMPROVED: More pronounced
-    const intakeLevel = this.throttle * 0.18 * (1 + rpmFactor * 1.0);
+    // Intake noise - DRASTICALLY REDUCED (divide by 10)
+    const intakeLevel = this.throttle * 0.018 * (1 + rpmFactor * 1.0);
     this.engineNodes.intakeGain.gain.setTargetAtTime(intakeLevel, now, 0.08);
     this.engineNodes.intakeFilter.frequency.setTargetAtTime(2200 + this.throttle * 1800, now, 0.1);
 
-    // NEW: Turbo whine - audible when spooling
-    const turboLevel = this.turboSpooling * 0.15;
+    // Turbo whine - DRASTICALLY REDUCED (divide by 10)
+    const turboLevel = this.turboSpooling * 0.015;
     this.engineNodes.turboGain.gain.setTargetAtTime(turboLevel, now, 0.12);
     this.engineNodes.turboFilter.frequency.setTargetAtTime(3500 + this.turboSpooling * 2500, now, 0.08);
 
@@ -486,188 +440,113 @@ export class AudioEngine {
     }
   }
 
-  updateProximityWarnings(playerCar, trafficVehicles, currentLane, lanePositions, numLanes = 3) {
-    // Store numLanes for use in other methods
-    this.numLanes = numLanes;
-    if (!this.audioCtx || !this.warningNodes.vehicleOsc) {
-      console.warn('⚠️ Audio context or warning nodes not initialized');
+    updateProximityWarnings(playerCar, trafficVehicles, currentLane, lanePositions, numLanes = 3) {
+    if (!this.audioCtx || !this.hornAudioBuffer) {
       return;
     }
 
     const now = this.audioCtx.currentTime;
-    const warning = this.warningNodes;
-
-    // Use actual lane positions from game (dynamically calculated based on screen size)
-    const playerLaneX = lanePositions[currentLane];
     const playerY = playerCar.position.y;
+    const playerLaneX = lanePositions[currentLane];
 
-    // Find the closest vehicle in the current lane
-    let closestDistance = Infinity;
-    let foundVehicleInLane = false;
-    let closestVehicle = null;
+    // Track which vehicles are currently visible
+    const activeVehicleIds = new Set();
+    let hasActiveHorns = false;
 
-    const laneNames = ['LEFT', 'CENTER', 'RIGHT'];
-    // console.log(`🚗 Checking ${trafficVehicles.length} vehicles | Player lane: ${laneNames[currentLane]} (x=${playerLaneX.toFixed(1)}) | Player Y: ${Math.round(playerY)}`);
-
+    // Process each oncoming vehicle
     trafficVehicles.forEach((vehicle, idx) => {
-      // Distance: NEGATIVE = vehicle is AHEAD (above player), POSITIVE = vehicle is BEHIND (below player)
-      const distance = playerY - vehicle.position.y;
-      const laneDiff = Math.abs(vehicle.position.x - playerLaneX);
+      const vehicleId = `car_${idx}`;
+      const distance = playerY - vehicle.position.y; // Positive = vehicle ahead
 
-      // console.log(`  Vehicle ${idx}: x=${Math.round(vehicle.position.x)}, y=${Math.round(vehicle.position.y)}, distance=${Math.round(distance)}, laneDiff=${Math.round(laneDiff)}`);
+      // Play horn when car is visible (Y >= 0)
+      // Continue playing even after it passes, with decreasing volume
+      if (vehicle.position.y >= 0) {
+        activeVehicleIds.add(vehicleId);
 
-      // Only check vehicles ahead in same lane (distance > 0 means vehicle is above/ahead of player)
-      if (distance > 0 && distance < 600 && laneDiff < 50) {
-        foundVehicleInLane = true;
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestVehicle = vehicle;
+        // Calculate stereo panning based on RELATIVE position
+        // If car is to the LEFT of player → pan LEFT
+        // If car is to the RIGHT of player → pan RIGHT
+        // If car is in SAME lane as player → pan CENTER
+        const relativeLaneX = vehicle.position.x - playerLaneX;
+
+        // Map relative position to pan value (-1 to +1)
+        // Assuming lane width is ~200px
+        let panValue;
+        if (Math.abs(relativeLaneX) < 50) {
+          // Same lane as player
+          panValue = 0;
+        } else if (relativeLaneX < 0) {
+          // Car is to the left
+          panValue = Math.max(-1, relativeLaneX / 200);
+        } else {
+          // Car is to the right
+          panValue = Math.min(1, relativeLaneX / 200);
         }
+
+        // 🎵 REALISTIC 3D AUDIO with distance-based volume
+        // Volume is LOW when car is far, LOUD when close, then fades as it passes
+
+        // Calculate distance from player (3D distance using Pythagorean theorem)
+        const distanceY = Math.abs(playerY - vehicle.position.y);
+        const distanceX = Math.abs(relativeLaneX);
+        const totalDistance = Math.sqrt(distanceY * distanceY + distanceX * distanceX);
+
+        // Distance-based volume calculation with realistic falloff
+        // - When car first appears (far away): ~0.2 volume (quiet)
+        // - As car approaches: volume increases gradually
+        // - When car is closest (~50px): ~2.5 volume (VERY loud)
+        // - As car passes behind: volume decreases rapidly
+        // - When car is far behind: volume approaches 0
+
+        const maxDistance = 700;  // Distance where volume is minimum (far away)
+        const minDistance = 50;   // Distance where volume is maximum (very close)
+        const behindPenalty = vehicle.position.y > playerY ? 1.5 : 1.0; // Fade faster when behind
+
+        let volume;
+        if (totalDistance >= maxDistance) {
+          volume = 0.15; // Very quiet when far
+        } else if (totalDistance <= minDistance) {
+          volume = 2.5; // Very loud when extremely close
+        } else {
+          // Smooth exponential falloff for realistic sound propagation
+          const normalizedDistance = (totalDistance - minDistance) / (maxDistance - minDistance);
+          // Using inverse square law approximation for sound
+          const falloff = Math.pow(1 - normalizedDistance, 2);
+          volume = 0.15 + (falloff * 2.35); // 0.15 to 2.5
+
+          // Apply behind penalty - sound fades faster when car passes
+          volume = volume / behindPenalty;
+        }
+
+        // Ensure volume stays within reasonable bounds
+        volume = Math.max(0.1, Math.min(2.5, volume));
+
+        // Create or update horn for this vehicle
+        if (!this.carHorns.has(vehicleId)) {
+          this.createHornForVehicle(vehicleId, panValue, volume);
+        } else {
+          this.updateHornForVehicle(vehicleId, panValue, volume, now);
+        }
+
+        hasActiveHorns = true;
       }
     });
 
-    // ========================================
-    // SMART WARNING SYSTEM - CHECK ESCAPE ROUTES
-    // ========================================
-    let hasEscapeRoute = false;
-
-    if (foundVehicleInLane && closestDistance < 350) {
-      // Only check escape routes when vehicle is close enough to matter
-      // console.log(`⚠️ Vehicle detected at ${Math.round(closestDistance)}px - checking escape routes...`);
-
-      // Calculate urgency to determine how strict to be with blocking detection
-      const urgency = Math.max(0, 1 - closestDistance / 350);
-
-      // IMPROVED: Dynamically adjust safety margin based on urgency
-      // Far away = larger margin (more cautious)
-      // Very close = smaller margin (more lenient, need to warn NOW)
-      const dynamicSafetyMargin = 50 + (1 - urgency) * 100; // 50-150px based on urgency
-
-      // console.log(`  Urgency: ${urgency.toFixed(2)}, Safety margin: ${Math.round(dynamicSafetyMargin)}px`);
-
-      // Check all adjacent lanes for blocking vehicles
-      for (let lane = 0; lane < numLanes; lane++) {
-        if (lane === currentLane) continue; // Skip current lane
-
-        const adjacentLaneX = lanePositions[lane];
-        let laneIsBlocked = false;
-
-        // Check if any vehicle in this lane would block the switch
-        for (let vehicle of trafficVehicles) {
-          const laneDiff = Math.abs(vehicle.position.x - adjacentLaneX);
-          const verticalDistance = vehicle.position.y - playerY; // Positive = behind, Negative = ahead
-          const verticalDiff = Math.abs(verticalDistance);
-
-          // CRITICAL FIX: Only consider cars as blocking if they are:
-          // 1. In the adjacent lane (laneDiff < 50)
-          // 2. AHEAD of player or very close behind (within dynamic safety margin)
-          // 3. Cars far behind (verticalDistance > 100) don't block!
-
-          const isInLane = laneDiff < 50;
-          const isInBlockingZone = verticalDiff < dynamicSafetyMargin;
-          const isBehindAndFar = verticalDistance > 80; // Car is >80px behind player = safe
-
-          if (isInLane && isInBlockingZone && !isBehindAndFar) {
-            laneIsBlocked = true;
-            // const position = verticalDistance < 0 ? 'AHEAD' : 'BEHIND';
-            // console.log(`  ❌ ${laneNames[lane]} lane BLOCKED: Car ${position} at y=${Math.round(vehicle.position.y)} (${Math.round(verticalDiff)}px from player)`);
-            break;
-          }
-        }
-
-        if (!laneIsBlocked) {
-          hasEscapeRoute = true;
-          // console.log(`  ✅ ${laneNames[lane]} lane is CLEAR - safe escape route!`);
-        }
+    // Stop horns for vehicles that are no longer visible
+    for (const [vehicleId, hornData] of this.carHorns.entries()) {
+      if (!activeVehicleIds.has(vehicleId)) {
+        this.stopHornForVehicle(vehicleId, now);
       }
-
-      if (!hasEscapeRoute) {
-        // console.log(`🚫 NO ESCAPE ROUTE - suppressing warnings until a lane clears`);
-      }
-    } else if (foundVehicleInLane) {
-      // Vehicle is far away (>350px), always allow warnings
-      hasEscapeRoute = true;
-      // console.log(`✅ Vehicle far away (${Math.round(closestDistance)}px) - warnings allowed`);
     }
 
-    // ========================================
-    // PLAY WARNINGS ONLY IF ESCAPE ROUTE EXISTS
-    // ========================================
-    if (foundVehicleInLane && hasEscapeRoute) {
-      // Calculate urgency based on distance (0 = far, 1 = very close)
-      const urgency = Math.max(0, 1 - closestDistance / 600);
-
-      // console.log(`🚨 WARNING ACTIVE! Distance: ${Math.round(closestDistance)}px, Urgency: ${urgency.toFixed(2)}`);
-
-      // ========================================
-      // INCOMING VEHICLE ENGINE SOUND
-      // ========================================
-      // Engine gets louder and higher pitched as vehicle approaches
-      const vehicleVolume = 0.1 + urgency * 0.4; // 0.1 to 0.5
-      warning.vehicleGain.gain.setTargetAtTime(vehicleVolume, now, 0.15);
-
-      // Engine frequency rises with approach (150-250 Hz)
-      const engineFreq = 150 + urgency * 100;
-      warning.vehicleOsc.frequency.setTargetAtTime(engineFreq, now, 0.1);
-
-      // Filter opens up as vehicle gets closer
-      const filterFreq = 600 + urgency * 800; // 600-1400 Hz
-      warning.vehicleFilter.frequency.setTargetAtTime(filterFreq, now, 0.1);
-
-      // console.log(`  🔊 Vehicle Sound: volume=${vehicleVolume.toFixed(2)}, freq=${Math.round(engineFreq)}Hz`);
-
-      // ========================================
-      // BEEPING ALARM SOUND
-      // ========================================
-      // Beeping gets louder and faster when very close
-      if (urgency > 0.3) { // Only beep when vehicle is closer
-        const beepVolume = (urgency - 0.3) * 0.6; // 0 to 0.42
-
-        // Create pulsing beep effect - faster when closer
-        const pulseSpeed = 3 + urgency * 10; // 3-13 Hz
-        const pulseValue = Math.abs(Math.sin(now * pulseSpeed * Math.PI));
-        warning.beepGain.gain.setTargetAtTime(beepVolume * pulseValue, now, 0.02);
-
-        // Beep frequency rises with urgency (800-1400 Hz)
-        const beepFreq = 800 + urgency * 600;
-        warning.beepOsc.frequency.setTargetAtTime(beepFreq, now, 0.05);
-
-        // console.log(`  📢 Beep Alarm: volume=${(beepVolume * pulseValue).toFixed(2)}, freq=${Math.round(beepFreq)}Hz, pulse=${pulseSpeed.toFixed(1)}Hz`);
-      } else {
-        // No beeping when far away
-        warning.beepGain.gain.setTargetAtTime(0, now, 0.1);
-        // console.log(`  🔇 Beep off (urgency < 0.3)`);
-      }
-
-      // ========================================
-      // STEREO POSITIONING
-      // 2-lane: LEFT=-1.0, RIGHT=1.0 (full stereo separation)
-      // 3-lane: LEFT=-0.7, CENTER=0, RIGHT=0.7
-      // 4-lane: LANE1=-1.0 (full left), LANE2=-0.5 (half left), LANE3=0.5 (half right), LANE4=1.0 (full right)
-      // ========================================
-      let panValue;
-      if (numLanes === 2) {
-        panValue = currentLane === 0 ? -1.0 : 1.0;
-      } else if (numLanes === 3) {
-        panValue = currentLane === 0 ? -0.7 : currentLane === 1 ? 0 : 0.7;
-      } else if (numLanes === 4) {
-        if (currentLane === 0) panValue = -1.0;       // Lane 1: full left
-        else if (currentLane === 1) panValue = -0.5;  // Lane 2: half left
-        else if (currentLane === 2) panValue = 0.5;   // Lane 3: half right
-        else panValue = 1.0;                          // Lane 4: full right
-      } else {
-        panValue = 0; // Default: center
-      }
-      warning.vehiclePanner.pan.setTargetAtTime(panValue, now, 0.1);
-      warning.beepPanner.pan.setTargetAtTime(panValue, now, 0.1);
-
+    // REDUCE PLAYER ENGINE VOLUME when horns are playing
+    // This makes horn warnings more prominent
+    if (hasActiveHorns) {
+      // Reduce engine to barely audible (2%)
+      this.engineNodes.masterGain.gain.setTargetAtTime(0.02, now, 0.15);
     } else {
-      // No vehicle in lane OR no escape route - fade out all warnings
-      // if (!foundVehicleInLane) {
-      //   console.log(`✅ No vehicle in lane - warnings off`);
-      // }
-      warning.vehicleGain.gain.setTargetAtTime(0, now, 0.2);
-      warning.beepGain.gain.setTargetAtTime(0, now, 0.2);
+      // Engine at very low volume even when no cars (8%)
+      this.engineNodes.masterGain.gain.setTargetAtTime(0.08, now, 0.3);
     }
   }
 
@@ -742,20 +621,82 @@ export class AudioEngine {
     this.windNodes.leftGain.gain.setTargetAtTime(0, now, 0.3);
     this.windNodes.rightGain.gain.setTargetAtTime(0, now, 0.3);
 
-    // STOP PROXIMITY WARNING SOUNDS (THIS WAS MISSING!)
-    if (this.warningNodes.vehicleGain) {
-      this.warningNodes.vehicleGain.gain.setTargetAtTime(0, now, 0.1);
-      console.log('🔇 [AUDIO] Stopped proximity vehicle siren');
+    // Stop all car horns
+    for (const [vehicleId] of this.carHorns.entries()) {
+      this.stopHornForVehicle(vehicleId, now);
     }
-    if (this.warningNodes.beepGain) {
-      this.warningNodes.beepGain.gain.setTargetAtTime(0, now, 0.1);
-      console.log('🔇 [AUDIO] Stopped proximity beep sound');
-    }
+    console.log('🔇 [AUDIO] Stopped all car horns');
   }
 
   fadeIn() {
     if (!this.audioCtx) return;
     const now = this.audioCtx.currentTime;
-    this.engineNodes.masterGain.gain.setTargetAtTime(0.55, now, 0.5);
+    this.engineNodes.masterGain.gain.setTargetAtTime(0.08, now, 0.5);
+  }
+
+  /**
+   * Create a new horn audio instance for a vehicle
+   */
+  createHornForVehicle(vehicleId, panValue, volume) {
+    if (!this.hornAudioBuffer) return;
+
+    const source = this.audioCtx.createBufferSource();
+    source.buffer = this.hornAudioBuffer;
+    source.loop = true;
+
+    const gainNode = this.audioCtx.createGain();
+    gainNode.gain.value = volume;
+
+    const pannerNode = this.audioCtx.createStereoPanner();
+    pannerNode.pan.value = panValue;
+
+    source.connect(gainNode);
+    gainNode.connect(pannerNode);
+    pannerNode.connect(this.audioCtx.destination);
+
+    source.start(this.audioCtx.currentTime);
+
+    this.carHorns.set(vehicleId, {
+      source,
+      gainNode,
+      pannerNode
+    });
+
+    console.log(`🔊 Created horn for ${vehicleId}: pan=${panValue.toFixed(2)}, volume=${volume.toFixed(2)}`);
+  }
+
+  /**
+   * Update existing horn's pan and volume
+   */
+  updateHornForVehicle(vehicleId, panValue, volume, now) {
+    const hornData = this.carHorns.get(vehicleId);
+    if (!hornData) return;
+
+    hornData.gainNode.gain.setTargetAtTime(volume, now, 0.1);
+    hornData.pannerNode.pan.setTargetAtTime(panValue, now, 0.1);
+  }
+
+  /**
+   * Stop and remove horn for a vehicle
+   */
+  stopHornForVehicle(vehicleId, now) {
+    const hornData = this.carHorns.get(vehicleId);
+    if (!hornData) return;
+
+    // Fade out
+    hornData.gainNode.gain.setTargetAtTime(0, now, 0.2);
+
+    // Stop and cleanup after fade
+    setTimeout(() => {
+      if (hornData.source) {
+        hornData.source.stop();
+        hornData.source.disconnect();
+      }
+      if (hornData.gainNode) hornData.gainNode.disconnect();
+      if (hornData.pannerNode) hornData.pannerNode.disconnect();
+      this.carHorns.delete(vehicleId);
+    }, 300);
+
+    console.log(`🔇 Stopped horn for ${vehicleId}`);
   }
 }

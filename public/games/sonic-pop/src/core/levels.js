@@ -23,14 +23,15 @@ class LevelManager {
         return {
             1: {
                 name: "Floating Hunter",
-                description: "The real challenge begins! Hunt moving balloons that float across the screen. Use all your skills!",
+                description: "2-minute challenge! Pop as many moving balloons as you can!",
                 difficulty: "Challenge",
                 config: {
                     balloonBehavior: "moving", // Balloons move slowly
                     positions: "random",
                     balloonCount: 1,
-                    timeLimit: 180, // 3 minutes
-                    balloonsToComplete: 15,
+                    timeLimit: 120, // 2 minutes
+                    balloonsToComplete: 9999, // No balloon limit - time-based completion
+                    timeBasedCompletion: true, // Level completes when time runs out (not game over)
 
                     // Movement settings
                     movementEnabled: true,
@@ -47,21 +48,22 @@ class LevelManager {
                     timeBonus: true
                 },
 
-                instructions: "Welcome to Level 1! Balloons will MOVE slowly across the screen. Listen to the 3D audio beeps - they update as the balloon moves. Track the sound, follow it with your hand, and pop the balloon! The beep speed tells you how close you are. Good luck, hunter!",
+                instructions: "Welcome to Level 1! You have 2 minutes to pop as many moving balloons as you can! Balloons will MOVE slowly across the screen. Listen to the 3D audio beeps - they update as the balloon moves. Track the sound, follow it with your hand, and pop the balloon! The beep speed tells you how close you are. Pop as many as you can!",
 
-                completionMessage: "Incredible! You've proven yourself as a true Floating Hunter! You can track and catch moving targets!"
+                completionMessage: "Great job! Time's up! You've completed your 2-minute challenge!"
             },
 
             2: {
                 name: "Bomb Dodger",
-                description: "Ultimate challenge! Pop balloons while avoiding the dangerous bomb that floats nearby. Progressive difficulty!",
+                description: "2-minute challenge! Pop as many balloons as you can while dodging the bomb!",
                 difficulty: "Expert",
                 config: {
                     balloonBehavior: "moving", // Balloons move slowly
                     positions: "edge-spawn", // NEW: Spawn from edges and float inward
                     balloonCount: 1,
-                    timeLimit: 240, // 4 minutes (more time!)
-                    balloonsToComplete: 10, // Reduced from 12 to 10
+                    timeLimit: 120, // 2 minutes
+                    balloonsToComplete: 9999, // No balloon limit - time-based completion
+                    timeBasedCompletion: true, // Level completes when time runs out (not game over)
 
                     // Movement settings - START SLOW
                     movementEnabled: true,
@@ -103,87 +105,42 @@ class LevelManager {
                     bombFreezeDuration: 3000 // 3 seconds
                 },
 
-                instructions: "Welcome to Level 2! A BOMB floats on screen. Listen: the balloon beeps from one side, the bomb ticks from the OPPOSITE side. Start SLOW - both move gently. Each balloon you pop makes them slightly faster. The bomb FREEZES for 3 seconds when you pop a balloon - use that time wisely! You can do this!",
+                instructions: "Welcome to Level 2! You have 2 minutes to pop as many balloons as you can while avoiding the BOMB! Listen: the balloon beeps from one side, the bomb ticks from the OPPOSITE side. Start SLOW - both move gently. Each balloon you pop makes them slightly faster. The bomb FREEZES for 3 seconds when you pop a balloon - use that time wisely! Pop as many as you can in 2 minutes!",
 
-                completionMessage: "INCREDIBLE! You've mastered the most difficult level! You can track targets while avoiding danger. You are a true Audio Balloon Pop champion!"
+                completionMessage: "Excellent! Time's up! You've completed your 2-minute bomb dodging challenge!"
             },
 
             3: {
                 name: "Multi-Balloon Rush",
-                description: "Speed challenge! 10 balloons spawn at once across the screen. Pop them all before time runs out!",
+                description: "2-minute challenge! Pop as many balloons as you can while avoiding the bomb!",
                 difficulty: "Challenge",
                 config: {
-                    balloonBehavior: "moving", // Balloons move slowly
-                    positions: "random-spread", // Spread across entire screen
-                    balloonCount: 10, // 10 balloons at once!
-                    timeLimit: 60, // 60 seconds
-                    balloonsToComplete: 10,
-
-                    // Movement settings
-                    movementEnabled: true,
-                    balloonSpeed: 0.5, // Slow movement
-                    movementRange: 50, // Movement radius in pixels
-
-                    // Multi-balloon settings
-                    spawnAllAtOnce: true, // Spawn all 10 at start
-                    spreadAcrossScreen: true, // Use entire screen area
-
-                    // Audio settings
-                    audioBeepSpeed: "normal",
-                    spatialAudioEnabled: true,
-                    spatialIntensity: 1.5,
-
-                    // No bombs in this level
-                    hasBomb: false,
-                    bombEnabled: false,
-
-                    // Scoring
-                    pointsPerBalloon: 200,
-                    timeBonus: true
-                },
-
-                instructions: "Welcome to Multi-Balloon Rush! This is a speed challenge. 10 balloons will spawn across the entire screen at once. They all move slowly. You have 60 seconds to pop all 10 balloons. Listen carefully to the 3D audio - each balloon beeps from its position. Track them one by one and pop them all! Good luck!",
-
-                completionMessage: "Amazing! You popped all 10 balloons! You've mastered multi-target tracking!"
-            },
-
-            4: {
-                name: "Bomb Field Challenge",
-                description: "Ultimate challenge! 10 balloons and 1 dangerous bomb. You have 4 lives - don't hit the bomb!",
-                difficulty: "Expert",
-                config: {
-                    balloonBehavior: "moving", // Balloons move slowly
-                    positions: "random-spread", // Spread across entire screen
-                    balloonCount: 10, // 10 balloons at once!
+                    balloonBehavior: "moving",
+                    positions: "random",
+                    balloonCount: 2, // 2 balloons on screen
                     timeLimit: 120, // 2 minutes
-                    balloonsToComplete: 10,
+                    balloonsToComplete: 9999, // No balloon limit - time-based completion
+                    timeBasedCompletion: true, // Level completes when time runs out
 
-                    // Movement settings
+                    // Movement settings - 50% slower than Level 1
                     movementEnabled: true,
-                    balloonSpeed: 0.5, // Slow movement
-                    movementRange: 50, // Movement radius in pixels
+                    balloonSpeed: 0.25, // 50% of 0.5
+                    movementRange: 50,
 
-                    // Multi-balloon settings
-                    spawnAllAtOnce: true, // Spawn all 10 at start
-                    spreadAcrossScreen: true, // Use entire screen area
+                    // Respawn settings
+                    respawnOnPop: true, // Balloons respawn after being popped
+                    spawnAllAtOnce: true, // Spawn initial 2 balloons at start
 
                     // Bomb settings
                     hasBomb: true,
                     bombEnabled: true,
-                    bombCount: 1,
-                    bombSpeed: 0.3, // Slower than balloons
+                    bombCount: 1, // 1 bomb
+                    bombSpeed: 0.15, // 50% slower
                     bombMovementRange: 40,
                     bombDangerRadius: 150,
-
-                    // Lives system (NEW!)
-                    hasLives: true,
-                    startingLives: 4, // Start with 4 lives
-                    loseLifeOnBombHit: true, // Lose 1 life when hitting bomb
-                    gameOverOnNoLives: true, // Game over when lives = 0
-
-                    // Bomb freeze feature
-                    bombFreezeOnHit: true, // Bomb freezes when balloon is popped
-                    bombFreezeDuration: 3000, // 3 seconds
+                    bombRespawnOnHit: true, // Bomb respawns after hit
+                    bombFreezeOnHit: true, // Freeze for 2 seconds before respawn
+                    bombFreezeDuration: 2000, // 2 seconds
 
                     // Audio settings
                     audioBeepSpeed: "normal",
@@ -192,17 +149,73 @@ class LevelManager {
                     bombAudioEnabled: true,
                     bombDangerSound: "ticking",
 
-                    // Scoring - NO PENALTY for bomb hits (only lose lives)
+                    // Scoring
+                    pointsPerBalloon: 200,
+                    timeBonus: true,
+                    bombPenalty: -100
+                },
+
+                instructions: "Welcome to Level 3! You have 2 minutes to pop as many balloons as you can! 2 balloons and 1 bomb are on screen. When you pop a balloon, it respawns at a new location. Hit the bomb and it freezes, then respawns elsewhere. Everything moves slower - focus and pop as many as you can!",
+
+                completionMessage: "Great job! Time's up! You've completed your 2-minute challenge!"
+            },
+
+            4: {
+                name: "Bomb Field Challenge",
+                description: "2-minute challenge! Pop as many balloons as you can while avoiding 2 bombs. You have 4 lives!",
+                difficulty: "Expert",
+                config: {
+                    balloonBehavior: "moving",
+                    positions: "random",
+                    balloonCount: 2, // 2 balloons on screen
+                    timeLimit: 120, // 2 minutes
+                    balloonsToComplete: 9999, // No balloon limit - time-based completion
+                    timeBasedCompletion: true, // Level completes when time runs out
+
+                    // Movement settings - 50% slower than Level 1
+                    movementEnabled: true,
+                    balloonSpeed: 0.25, // 50% of 0.5
+                    movementRange: 50,
+
+                    // Respawn settings
+                    respawnOnPop: true, // Balloons respawn after being popped
+                    spawnAllAtOnce: true, // Spawn initial 2 balloons at start
+
+                    // Bomb settings
+                    hasBomb: true,
+                    bombEnabled: true,
+                    bombCount: 2, // 2 bombs
+                    bombSpeed: 0.15, // 50% slower
+                    bombMovementRange: 40,
+                    bombDangerRadius: 150,
+                    bombRespawnOnHit: true, // Bombs respawn after hit
+                    bombFreezeOnHit: true, // Freeze for 2 seconds before respawn
+                    bombFreezeDuration: 2000, // 2 seconds
+
+                    // Lives system
+                    hasLives: true,
+                    startingLives: 4, // Start with 4 lives
+                    loseLifeOnBombHit: true, // Lose 1 life when hitting bomb
+                    gameOverOnNoLives: true, // Game over when lives = 0
+
+                    // Audio settings
+                    audioBeepSpeed: "normal",
+                    spatialAudioEnabled: true,
+                    spatialIntensity: 1.5,
+                    bombAudioEnabled: true,
+                    bombDangerSound: "ticking",
+
+                    // Scoring
                     pointsPerBalloon: 300,
                     timeBonus: true,
-                    bombPenalty: 0, // No points deduction!
+                    bombPenalty: 0, // No points deduction (only lose lives)
 
                     // Encouragement system
                     encouragementEnabled: true,
-                    encouragementInterval: 3 // Every 3 balloons
+                    encouragementInterval: 5 // Every 5 balloons
                 },
 
-                instructions: "Welcome to Bomb Field Challenge! 10 balloons and 1 bomb spawn across the screen. You have 4 lives. Pop all 10 balloons within 2 minutes. Each time you hit the bomb, you lose 1 life. Lose all 4 lives and it's game over! The bomb freezes for 3 seconds when you pop a balloon. Listen carefully: balloons beep, bombs tick. You can do this!",
+                instructions: "Welcome to Level 4! You have 2 minutes to pop as many balloons as you can with 4 lives! 2 balloons and 2 bombs are on screen. When you pop a balloon, it respawns at a new location. Hit a bomb and you lose 1 life - the bomb freezes, then respawns elsewhere. Everything moves slower - stay focused and pop as many as you can!",
 
                 completionMessage: "INCREDIBLE! You've conquered the Bomb Field Challenge! You are a true master of audio balloon popping!"
             }
