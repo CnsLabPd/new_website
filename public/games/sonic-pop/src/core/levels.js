@@ -29,7 +29,7 @@ class LevelManager {
                     balloonBehavior: "moving", // Balloons move slowly
                     positions: "random",
                     balloonCount: 1,
-                    timeLimit: 120, // 2 minutes
+                    timeLimit: 60, // 1 minute
                     balloonsToComplete: 9999, // No balloon limit - time-based completion
                     timeBasedCompletion: true, // Level completes when time runs out (not game over)
 
@@ -48,20 +48,20 @@ class LevelManager {
                     timeBonus: true
                 },
 
-                instructions: "Welcome to Level 1! You have 2 minutes to pop as many moving balloons as you can! Balloons will MOVE slowly across the screen. Listen to the 3D audio beeps - they update as the balloon moves. Track the sound, follow it with your hand, and pop the balloon! The beep speed tells you how close you are. Pop as many as you can!",
+                instructions: "Welcome to Level 1! You have 1 minute to pop as many moving balloons as you can! Balloons will MOVE slowly across the screen. Listen to the 3D audio beeps - they update as the balloon moves. Track the sound, follow it with your hand, and pop the balloon! The beep speed tells you how close you are. Pop as many as you can!",
 
-                completionMessage: "Great job! Time's up! You've completed your 2-minute challenge!"
+                completionMessage: "Great job! Time's up! You've completed your 1-minute challenge!"
             },
 
             2: {
                 name: "Bomb Dodger",
-                description: "2-minute challenge! Pop as many balloons as you can while dodging the bomb!",
+                description: "1-minute challenge! Pop as many balloons as you can while dodging the bomb!",
                 difficulty: "Expert",
                 config: {
                     balloonBehavior: "moving", // Balloons move slowly
                     positions: "edge-spawn", // NEW: Spawn from edges and float inward
                     balloonCount: 1,
-                    timeLimit: 120, // 2 minutes
+                    timeLimit: 60, // 1 minute
                     balloonsToComplete: 9999, // No balloon limit - time-based completion
                     timeBasedCompletion: true, // Level completes when time runs out (not game over)
 
@@ -105,9 +105,9 @@ class LevelManager {
                     bombFreezeDuration: 3000 // 3 seconds
                 },
 
-                instructions: "Welcome to Level 2! You have 2 minutes to pop as many balloons as you can while avoiding the BOMB! Listen: the balloon beeps from one side, the bomb ticks from the OPPOSITE side. Start SLOW - both move gently. Each balloon you pop makes them slightly faster. The bomb FREEZES for 3 seconds when you pop a balloon - use that time wisely! Pop as many as you can in 2 minutes!",
+                instructions: "Welcome to Level 2! You have 1 minute to pop as many balloons as you can while avoiding the BOMB! Listen: the balloon beeps from one side, the bomb ticks from the OPPOSITE side. Start SLOW - both move gently. Each balloon you pop makes them slightly faster. The bomb FREEZES for 3 seconds when you pop a balloon - use that time wisely! Pop as many as you can in 1 minute!",
 
-                completionMessage: "Excellent! Time's up! You've completed your 2-minute bomb dodging challenge!"
+                completionMessage: "Excellent! Time's up! You've completed your 1-minute bomb dodging challenge!"
             },
 
             3: {

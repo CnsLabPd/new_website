@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
     
     <!-- Matter.js Physics Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
@@ -25,6 +26,7 @@
 
     <!-- Authentication & Session Management (Neurogati) -->
     <script src="src/core/auth.js?v=20260221a"></script>
+    <script src="src/core/analytics.js?v=20260401a"></script>
 
     <!-- Level System -->
     <script src="src/core/levels.js?v=20260202a"></script>
@@ -650,7 +652,7 @@
 
         .completion-buttons {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-top: 40px;
         }
@@ -688,6 +690,200 @@
         .completion-btn.next {
             background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             color: white;
+        }
+        .completion-btn.save {
+            background: linear-gradient(135deg, #ffd200 0%, #ff9f1c 100%);
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        .completion-btn.save.is-saving {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .completion-btn.save .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            border: 2px solid rgba(0,0,0,0.3);
+            border-top-color: rgba(0,0,0,0.8);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .save-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 10002;
+        }
+
+        .save-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        .completion-btn.analytics {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .completion-btn.analytics::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%);
+            animation: analyticsGlow 2.2s ease-in-out infinite;
+        }
+
+        .completion-btn.analytics .new-pill {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #ff8a00;
+            color: #000;
+            font-weight: 700;
+            font-size: 0.65rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(255, 138, 0, 0.4);
+        }
+
+        @keyframes analyticsGlow {
+            0% { transform: scale(0.9); opacity: 0.4; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(0.9); opacity: 0.4; }
+        }
+
+        .analytics-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top, rgba(0, 198, 255, 0.12), rgba(0, 0, 0, 0.9));
+            z-index: 10001;
+            display: none;
+            overflow: auto;
+        }
+
+        .analytics-screen.active {
+            display: block;
+        }
+
+        .analytics-screen-content {
+            width: min(1000px, 92vw);
+            margin: 120px auto 80px;
+            background: rgba(18, 24, 38, 0.92);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+            padding: 28px;
+        }
+
+        .analytics-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .analytics-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .analytics-tab {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .analytics-tab.active {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-color: transparent;
+        }
+
+        .analytics-page {
+            display: none;
+        }
+
+        .analytics-page.active {
+            display: block;
+        }
+
+        .analytics-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .analytics-section {
+            background: rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .analytics-card {
+            background: rgba(0,0,0,0.25);
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .analytics-label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 6px;
+        }
+
+        .analytics-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .analytics-subtext {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
         }
 
         .completion-btn:disabled {
@@ -1852,6 +2048,9 @@
                 <div id="navLeft" style="display: contents;">
                     <!-- Back Button injected here -->
                 </div>
+                <button class="exit-btn" style="background: linear-gradient(135deg, #00c6ff, #0072ff);" onclick="game.showAnalytics()">
+                    Analytics ✨
+                </button>
                 <button class="exit-btn" onclick="window.top.location.href='https://www.neurogati.com/gamingcategories'">
                     Exit 🚪
                 </button>
@@ -1961,6 +2160,13 @@
                     <button class="completion-btn retry" onclick="game.completionRetry()">
                         🔄 Retry
                     </button>
+                    <button class="completion-btn save" id="completionSaveBtn" onclick="game.saveProgressAndAnalytics()">
+                        💾 Save Progress
+                    </button>
+                    <button class="completion-btn analytics new-feature" id="viewAnalyticsBtn" onclick="game.showAnalytics()" style="display:none;">
+                        ✨ View Analytics
+                        <span class="new-pill">NEW</span>
+                    </button>
                     <button class="completion-btn next" id="completionNextBtn" onclick="game.completionNextLevel()">
                         ➡️ Next Level
                     </button>
@@ -1990,6 +2196,33 @@
 
             <div class="leaderboard-modal-body" id="leaderboardModalBody">
                 <p style="text-align: center; color: #888;">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Screen -->
+    <div class="analytics-screen" id="analyticsScreen">
+        <nav class="game-navbar">
+            <div class="nav-brand">
+                <img src="assets/images/1.png" alt="Sonic Pop Logo" style="height: 60px; width: auto; margin-right: 15px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));">
+                <span>SONIC POP ANALYTICS</span>
+            </div>
+            <div class="nav-user">
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span id="analyticsUsernameDisplay">Player</span>
+                </div>
+                <button class="exit-btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="game.closeAnalyticsScreen()">
+                    Back ←
+                </button>
+            </div>
+        </nav>
+        <div class="analytics-screen-content">
+            <div class="analytics-modal-header">
+                <h2>📈 Performance Dashboard</h2>
+            </div>
+            <div class="analytics-modal-body" id="analyticsScreenBody">
+                <p style="text-align: center; color: #888;">Loading analytics...</p>
             </div>
         </div>
     </div>
@@ -2093,6 +2326,22 @@
                 this.hands = null;
                 this.camera = null;
                 this.isGestureInitialized = false;
+                this.holistic = null;
+                this.lastHolisticTs = 0;
+                this.analyticsSampleIntervalMs = 1000 / 15;
+
+                // Analytics (aggregated at 15 fps)
+                this.analytics = window.SonicPopAnalytics ? new window.SonicPopAnalytics() : null;
+
+                // Telemetry sampling for JSON download
+                this.telemetrySamples = [];
+                this.handTelemetry = [];
+                this.telemetrySampleIntervalMs = 1000 / 15;
+                this.lastTelemetryTs = 0;
+                this.levelStartPerf = null;
+                this.lastTelemetryScore = 0;
+                this.handDetected = false;
+                this.bombsHitCount = 0;
 
                 // All background images (will be loaded in init())
                 this.backgroundImages = [];
@@ -2384,6 +2633,7 @@
                     });
 
                     this.hands.onResults(this.onHandResults.bind(this));
+                    this.setupHolistic();
 
                     // Setup camera
                     const video = document.getElementById('cameraVideo');
@@ -2391,6 +2641,13 @@
                         onFrame: async () => {
                             if (this.hands && video.readyState >= 2) {
                                 await this.hands.send({ image: video });
+                            }
+                            if (this.holistic && video.readyState >= 2) {
+                                const now = performance.now();
+                                if (now - this.lastHolisticTs >= this.analyticsSampleIntervalMs) {
+                                    this.lastHolisticTs = now;
+                                    await this.holistic.send({ image: video });
+                                }
                             }
                         },
                         width: 640,
@@ -2407,10 +2664,48 @@
                 }
             }
 
+            setupHolistic() {
+                if (typeof Holistic === 'undefined') {
+                    console.warn('Holistic not available for analytics');
+                    return;
+                }
+
+                try {
+                    this.holistic = new Holistic({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`
+                    });
+
+                    this.holistic.setOptions({
+                        modelComplexity: 1,
+                        smoothLandmarks: true,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.5,
+                        refineFaceLandmarks: false
+                    });
+
+                    this.holistic.onResults(this.onHolisticResults.bind(this));
+                    console.log('✅ Holistic analytics initialized');
+                } catch (error) {
+                    console.warn('Failed to initialize Holistic:', error);
+                }
+            }
+
+            onHolisticResults(results) {
+                if (this.analytics && this.gameState === 'playing') {
+                    this.analytics.onHolisticResults(results);
+                }
+            }
+
             onHandResults(results) {
                 if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+                    this.handDetected = false;
                     this.hideHandIndicator();
                     return;
+                }
+
+                this.handDetected = true;
+                if (this.analytics && results.multiHandedness && results.multiHandedness[0]) {
+                    this.analytics.setHandedness(results.multiHandedness[0].label);
                 }
 
                 const landmarks = results.multiHandLandmarks[0];
@@ -2476,6 +2771,10 @@
                         x: this.handPosition.x + (target.x - this.handPosition.x) * smoothing,
                         y: this.handPosition.y + (target.y - this.handPosition.y) * smoothing
                     };
+                }
+
+                if (this.analytics) {
+                    this.analytics.setHandPosition(this.handPosition);
                 }
 
                 // === ADD HAND TRAIL EFFECT ===
@@ -2779,6 +3078,15 @@
 
                 this.gameState = 'playing';
 
+                // Reset telemetry sampling for this level
+                this.telemetrySamples = [];
+                this.handTelemetry = [];
+                this.lastTelemetryTs = 0;
+                this.levelStartPerf = performance.now();
+                this.lastTelemetryScore = this.score;
+                this.bombsHitCount = 0;
+                this.handDetected = false;
+
                 // Only reset score if starting fresh (not resuming)
                 if (this.levelBalloonsPopped === 0) {
                     this.score = 0;
@@ -2798,6 +3106,19 @@
 
                 // Set time from level config
                 this.timeLeft = currentLevel.config.timeLimit;
+
+                // Start analytics tracking for this level
+                if (this.analytics) {
+                    const currentUser = window.authManager ? window.authManager.getCurrentUser() : null;
+                    this.analytics.startSessionIfNeeded(currentUser ? currentUser.id : null);
+                    this.analytics.startLevel({
+                        levelNumber: this.levelManager.currentLevel,
+                        moduleNumber: this.levelManager.currentModule,
+                        userId: currentUser ? currentUser.id : null,
+                        canvasWidth: this.canvas.width,
+                        canvasHeight: this.canvas.height
+                    });
+                }
 
                 // Initialize lives system if level uses it
                 if (currentLevel.config.hasLives) {
@@ -3375,6 +3696,9 @@
 
                 Matter.World.add(this.world, bomb);
                 this.bombs.push(bomb);
+                if (this.analytics) {
+                    this.analytics.onBombShown(false);
+                }
 
                 console.log(`💣 Single bomb respawned at (${bx.toFixed(0)}, ${by.toFixed(0)})`);
             }
@@ -3477,6 +3801,9 @@
 
                 Matter.World.add(this.world, bomb);
                 this.bombs.push(bomb);
+                if (this.analytics) {
+                    this.analytics.onBombShown(false);
+                }
 
                 console.log(`✅ Bomb spawned at (${bx.toFixed(0)}, ${by.toFixed(0)})`);
             }
@@ -3771,6 +4098,10 @@
 
                 // Regular bomb hit (Level 7/9 - Bomb Dodger/Bomb Field Challenge)
                 console.log('💣 BOMB HIT!');
+                if (this.analytics) {
+                    this.analytics.onBombHit(false);
+                }
+                this.bombsHitCount += 1;
 
                 // Check if this level uses lives system (Level 9)
                 if (currentLevel.config.hasLives && currentLevel.config.loseLifeOnBombHit) {
@@ -3865,6 +4196,15 @@
                 const currentLevel = this.levelManager.getCurrentLevel();
                 this.gameState = 'levelComplete';
 
+                this.pendingSave = {
+                    score: this.score,
+                    completed: true,
+                    balloonsPopped: this.levelBalloonsPopped,
+                    timeLeft: this.timeLeft,
+                    endedAt: new Date()
+                };
+                this.setSaveUIState('ready');
+
                 // Stop timer and audio immediately
                 this.stopGameTimer();
                 this.stopAudioFeedback();
@@ -3887,16 +4227,6 @@
                 this.audioManager.playSound('levelUp');
                 this.audioManager.playSound('success');
 
-                // Save progress to server (non-blocking)
-                if (window.authManager && window.authManager.isLoggedIn()) {
-                    const levelNumber = this.levelManager.currentLevel;
-                    const moduleNumber = this.levelManager.currentModule;
-                    window.authManager.saveProgress(levelNumber, moduleNumber, this.score, true).then(() => {
-                        console.log(`💾 Level ${levelNumber} progress saved: Score ${this.score}, Completed: true`);
-                    }).catch(err => {
-                        console.error('Failed to save progress:', err);
-                    });
-                }
 
                 // Show completion screen with options
                 this.showCompletionScreen();
@@ -4223,6 +4553,15 @@
                 console.log('🏆 Game Complete!');
 
                 this.gameState = 'gameOver';
+
+                this.pendingSave = {
+                    score: this.score,
+                    completed: false,
+                    balloonsPopped: this.levelBalloonsPopped,
+                    timeLeft: this.timeLeft,
+                    endedAt: new Date()
+                };
+                this.setSaveUIState('ready');
                 this.stopGameTimer();
                 this.stopAudioFeedback();
 
@@ -4741,6 +5080,7 @@
             startGameLoop() {
                 const gameLoop = () => {
                     if (this.gameState === 'playing') {
+                        this.captureTelemetrySample();
                         this.updateBalloonPhysics();
                         Matter.Engine.update(this.engine);
                         this.render();
@@ -5580,6 +5920,15 @@
                 console.log('🎮 Game Over');
 
                 this.gameState = 'gameOver';
+
+                this.pendingSave = {
+                    score: this.score,
+                    completed: false,
+                    balloonsPopped: this.levelBalloonsPopped,
+                    timeLeft: this.timeLeft,
+                    endedAt: new Date()
+                };
+                this.setSaveUIState('ready');
                 this.stopGameTimer();
                 this.stopAudioFeedback();
                 this.audioManager.stopHandPositionAudio();
@@ -5600,19 +5949,599 @@
                 document.getElementById('startBtn').textContent = '🔄 Restart';
                 document.getElementById('pauseBtn').disabled = true;
 
-                // Save progress to server (not completed, but save high score)
-                if (window.authManager && window.authManager.isLoggedIn()) {
-                    const levelNumber = this.levelManager.currentLevel;
-                    const moduleNumber = this.levelManager.currentModule;
-                    window.authManager.saveProgress(levelNumber, moduleNumber, this.score, false).then(() => {
-                        console.log(`💾 Level ${levelNumber} progress saved: Score ${this.score}, Completed: false`);
-                    }).catch(err => {
-                        console.error('Failed to save progress:', err);
-                    });
-                }
 
                 // Show game over screen with options
                 this.showGameOverScreen();
+            }
+
+            async getAnalyticsUser(timeoutMs = 3000) {
+                if (window.authManager && window.authManager.isLoggedIn && window.authManager.isLoggedIn()) {
+                    return window.authManager.getCurrentUser();
+                }
+                if (window.NeurogatiAuth && window.NeurogatiAuth.initialized && window.NeurogatiAuth.isAuthenticated && window.NeurogatiAuth.isAuthenticated()) {
+                    return window.NeurogatiAuth.getCurrentUser();
+                }
+
+                return new Promise((resolve) => {
+                    let resolved = false;
+                    const finish = (user) => {
+                        if (resolved) return;
+                        resolved = true;
+                        cleanup();
+                        resolve(user || null);
+                    };
+
+                    const handler = (event) => {
+                        const user = event?.detail?.user || (window.authManager && window.authManager.getCurrentUser ? window.authManager.getCurrentUser() : null);
+                        finish(user);
+                    };
+
+                    const interval = setInterval(() => {
+                        if (window.authManager && window.authManager.isLoggedIn && window.authManager.isLoggedIn()) {
+                            finish(window.authManager.getCurrentUser());
+                            return;
+                        }
+                        if (window.NeurogatiAuth && window.NeurogatiAuth.initialized && window.NeurogatiAuth.isAuthenticated && window.NeurogatiAuth.isAuthenticated()) {
+                            finish(window.NeurogatiAuth.getCurrentUser());
+                        }
+                    }, 100);
+
+                    const timeout = setTimeout(() => finish(null), timeoutMs);
+
+                    const cleanup = () => {
+                        clearInterval(interval);
+                        clearTimeout(timeout);
+                        window.removeEventListener('auth:ready', handler);
+                    };
+
+                    window.addEventListener('auth:ready', handler, { once: true });
+                });
+            }
+            async showAnalytics() {
+                const screen = document.getElementById('analyticsScreen');
+                const body = document.getElementById('analyticsScreenBody');
+                if (!screen || !body) return;
+
+                if (!this.analytics && window.SonicPopAnalytics) {
+                    this.analytics = new window.SonicPopAnalytics();
+                }
+                if (this.analytics && !this.analytics.supabase) {
+                    try {
+                        if (window.supabase && window.supabase.createClient) {
+                            this.analytics.supabase = this.analytics.initSupabaseClient();
+                        } else if (window.supabase && window.supabase.from) {
+                            // Fallback if window.supabase is already a client instance
+                            this.analytics.supabase = window.supabase;
+                        }
+                        if (!this.analytics.supabase && window.supabase && window.supabase.createClient) {
+                            const url =
+                                window.NEUROGATI_SUPABASE_URL ||
+                                window.NEXT_PUBLIC_SUPABASE_URL ||
+                                'https://yourttiykfslostesqjp.supabase.co';
+                            const key =
+                                window.NEUROGATI_SUPABASE_ANON_KEY ||
+                                window.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+                                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvdXJ0dGl5a2ZzbG9zdGVzcWpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NzY1NjgsImV4cCI6MjA4NzE1MjU2OH0.R-spS9GY6AXA5cwytwW2KIxDd1F0ryqb84d8C_wwIGc';
+                            this.analytics.supabase = window.supabase.createClient(url, key, {
+                                auth: {
+                                    persistSession: false,
+                                    autoRefreshToken: false,
+                                    detectSessionInUrl: false,
+                                    storageKey: 'sonic-pop-analytics'
+                                }
+                            });
+                        }
+                        if (this.analytics.initAuthSession) {
+                            this.analytics.initAuthSession();
+                        }
+                    } catch (error) {
+                        console.warn('[ANALYTICS] Supabase init failed:', error);
+                    }
+                }
+                if (!this.analytics || !this.analytics.supabase) {
+                    console.warn('[ANALYTICS] Supabase client missing. window.supabase=', !!window.supabase, 'createClient=', !!(window.supabase && window.supabase.createClient));
+                    body.innerHTML = '<p style="text-align: center; color: #ff7777;">Analytics system unavailable.</p>';
+                    screen.classList.add('active');
+                    return;
+                }
+
+                body.innerHTML = '<p style="text-align: center; color: #888;">Loading analytics...</p>';
+                screen.classList.add('active');
+
+                const currentUser = await this.getAnalyticsUser();
+                const usernameDisplay = document.getElementById('analyticsUsernameDisplay');
+                if (usernameDisplay) {
+                    usernameDisplay.textContent = currentUser ? (currentUser.username || 'Player') : 'Player';
+                }
+
+                const levelCompletionOverlay = document.getElementById('levelCompletionOverlay');
+                const levelSelectionScreen = document.getElementById('levelSelectionScreen');
+                let openedFromHome = false;
+                if (levelCompletionOverlay && levelCompletionOverlay.classList.contains('show')) {
+                    this.analyticsReturnTarget = 'completion';
+                    levelCompletionOverlay.classList.remove('show');
+                } else if (levelSelectionScreen && levelSelectionScreen.classList.contains('active')) {
+                    this.analyticsReturnTarget = 'levelSelection';
+                    levelSelectionScreen.classList.remove('active');
+                    openedFromHome = true;
+                } else {
+                    this.analyticsReturnTarget = 'game';
+                }
+
+                const { sessionId, levelAttemptId } = this.analytics.getContext();
+                const supabase = this.analytics.supabase;
+                const levelNumber = this.levelManager ? this.levelManager.currentLevel : null;
+
+                console.log('[ANALYTICS] currentUser:', currentUser ? { id: currentUser.id, email: currentUser.email, username: currentUser.username } : null);
+                console.log('[ANALYTICS] levelNumber:', levelNumber, 'sessionId:', sessionId, 'levelAttemptId:', levelAttemptId);
+
+
+                try {
+                    let levelAttempt = null;
+                    if (levelAttemptId) {
+                        const levelAttemptResp = await supabase
+                            .from('sonic_pop_level_attempts')
+                            .select('*')
+                            .eq('id', levelAttemptId)
+                            .limit(1)
+                            .single();
+                        levelAttempt = levelAttemptResp.data || null;
+                        if (levelAttemptResp.error) {
+                            console.warn('[ANALYTICS] levelAttempt query error:', levelAttemptResp.error);
+                        }
+                    }
+
+                    const sessionResp = sessionId
+                        ? await supabase
+                            .from('sonic_pop_level_attempts')
+                            .select('*')
+                            .eq('session_id', sessionId)
+                            .order('started_at', { ascending: true })
+                        : { data: [] };
+
+                    const sessionAttempts = sessionResp.data || [];
+                    if (sessionResp.error) {
+                        console.warn('[ANALYTICS] session query error:', sessionResp.error);
+                    }                let history = [];
+                if (currentUser && currentUser.id) {
+                    let historyQuery = supabase
+                        .from('sonic_pop_level_attempts')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('started_at', { ascending: false })
+                        .limit(10);
+
+                    if (levelNumber && !openedFromHome) {
+                        historyQuery = historyQuery.eq('level_number', levelNumber);
+                    }
+
+                    const historyResp = await historyQuery;
+                    if (historyResp.error) {
+                        console.warn('[ANALYTICS] history query error:', historyResp.error);
+                    }
+                    history = historyResp.data || [];
+                }
+
+                if ((!history || history.length == 0) && sessionId) {
+                    const fallbackResp = await supabase
+                        .from('sonic_pop_level_attempts')
+                        .select('*')
+                        .eq('session_id', sessionId)
+                        .order('started_at', { ascending: false })
+                        .limit(10);
+                    if (fallbackResp.error) {
+                        console.warn('[ANALYTICS] session fallback query error:', fallbackResp.error);
+                    }
+                    history = fallbackResp.data || history;
+                }
+
+                                        if (!levelAttempt && history && history.length > 0) {
+                        levelAttempt = history[0];
+                    }
+this.analyticsBodyEl = body;
+                    this.analyticsLevelFilter = openedFromHome ? null : levelNumber;
+                    this.analyticsCache = {
+                        levelAttempt,
+                        sessionAttempts,
+                        history,
+                        hasUser: !!currentUser,
+                        levelNumber
+                    };
+                    this.updateAnalyticsView(this.analyticsLevelFilter);
+                } catch (error) {
+                    console.error('Analytics load failed:', error);
+                    body.innerHTML = '<p style="text-align: center; color: #ff7777;">Failed to load analytics.</p>';
+                }
+            }
+
+            updateAnalyticsView(levelFilter) {
+                if (!this.analyticsBodyEl || !this.analyticsCache) return;
+                this.analyticsLevelFilter = levelFilter || null;
+                this.analyticsBodyEl.innerHTML = this.renderAnalyticsFromCache(this.analyticsLevelFilter);
+                this.bindAnalyticsTabs();
+                this.bindAnalyticsLevelSelect();
+            }
+
+            bindAnalyticsLevelSelect() {
+                const select = document.getElementById('analyticsLevelSelect');
+                if (!select) return;
+
+                const current = this.analyticsLevelFilter;
+                select.value = current ? String(current) : 'all';
+
+                select.addEventListener('change', (e) => {
+                    const value = e.target.value;
+                    const nextFilter = value === 'all' ? null : Number(value);
+                    this.updateAnalyticsView(nextFilter);
+                });
+            }
+
+            bindAnalyticsTabs() {
+                const tabs = document.querySelectorAll('.analytics-tab');
+                const pages = document.querySelectorAll('.analytics-page');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const target = tab.getAttribute('data-tab');
+                        tabs.forEach(t => t.classList.remove('active'));
+                        pages.forEach(p => p.classList.remove('active'));
+                        tab.classList.add('active');
+                        const page = document.getElementById(`analytics-${target}`);
+                        if (page) page.classList.add('active');
+                    });
+                });
+            }
+
+            calculateRiskHitRate(row) {
+                if (!row) return null;
+                const bombsHit = Number(row.bombs_hit || 0);
+                const balloons = Number(row.balloons_popped || 0);
+                const denom = bombsHit + balloons;
+                if (denom === 0) return null;
+                return (bombsHit / denom) * 100;
+            }
+
+            renderAnalyticsFromCache(levelFilter) {
+                if (!this.analyticsCache) {
+                    return '<p style="text-align: center; color: #ffb347;">Analytics not available yet.</p>';
+                }
+
+                const { sessionAttempts: cacheSessionAttempts, history: allHistory, hasUser, levelNumber: cachedLevelNumber, levelAttempt: cachedLevelAttempt } = this.analyticsCache;
+                const history = levelFilter ? allHistory.filter(h => h.level_number === levelFilter) : allHistory;
+                let sessionAttempts = cacheSessionAttempts;
+                if ((!sessionAttempts || sessionAttempts.length === 0) && allHistory.length > 0) {
+                    const latestSessionId = allHistory[0].session_id;
+                    sessionAttempts = allHistory.filter(h => h.session_id === latestSessionId);
+                }
+
+                let levelAttempt = cachedLevelAttempt;
+                if (levelFilter) {
+                    levelAttempt = history.length ? history[0] : null;
+                } else if (!levelAttempt && history.length) {
+                    levelAttempt = history[0];
+                }
+
+                const effectiveLevelNumber = levelFilter || (levelAttempt ? levelAttempt.level_number : cachedLevelNumber);
+                const levels = Array.from(new Set(allHistory.map(h => h.level_number))).filter(Boolean).sort((a,b) => a-b);
+
+                return this.renderAnalyticsReport(levelAttempt, sessionAttempts, history, effectiveLevelNumber, hasUser, levels, levelFilter);
+            }
+
+            renderAnalyticsReport(levelAttempt, sessionAttempts, history, levelNumber, hasUser, levels = [], levelFilter = null) {
+                if (!levelAttempt && (!history || history.length === 0)) {
+                    const msg = hasUser
+                        ? 'Analytics not available yet. Play a level to generate analytics.'
+                        : 'Log in to view analytics history.';
+                    return `<p style="text-align: center; color: #ffb347;">${msg}</p>`;
+                }
+
+                const formatNum = (v, digits = 2) => (v === null || v === undefined) ? '—' : Number(v).toFixed(digits);
+                const formatPct = (v) => (v === null || v === undefined) ? '—' : `${Number(v).toFixed(1)}%`;
+
+                const sessionTotals = sessionAttempts.reduce((acc, row) => {
+                    acc.duration += row.duration_ms || 0;
+                    acc.score += row.score || 0;
+                    acc.count += 1;
+                    return acc;
+                }, { duration: 0, score: 0, count: 0 });
+
+                const sessionAvgScore = sessionTotals.count ? sessionTotals.score / sessionTotals.count : 0;
+
+                const historyAvgScore = history.length
+                    ? history.reduce((sum, row) => sum + (row.score || 0), 0) / history.length
+                    : null;
+
+                const bestScore = history.length
+                    ? Math.max(...history.map(row => row.score || 0))
+                    : null;
+
+                const levelTitle = levelNumber ? `Level ${this.getModuleRelativeLevel(levelNumber)}` : 'Level (Latest)';
+
+                return `
+                    <div class="analytics-tabs">
+                        <button class="analytics-tab active" data-tab="level">Level</button>
+                        <button class="analytics-tab" data-tab="session">Session</button>
+                        <button class="analytics-tab" data-tab="progress">Progress</button>
+                        <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.8rem; color: rgba(255,255,255,0.7);">Filter</span>
+                            <select id="analyticsLevelSelect" style="background: rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:6px 10px;">
+                                <option value="all">All Levels</option>
+                                ${levels.map(l => `<option value="${l}">Level ${this.getModuleRelativeLevel(l)}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="analytics-page active" id="analytics-level">
+                        <div class="analytics-section">
+                            <h3>${levelTitle} Performance</h3>
+                            <div class="analytics-grid">
+                                <div class="analytics-card">
+                                <div class="analytics-label">Risk Hit Rate</div>
+                                <div class="analytics-value">${levelAttempt ? formatPct(this.calculateRiskHitRate(levelAttempt)) : '—'}</div>
+                                <div class="analytics-subtext">Bomb hits / (bomb hits + balloon pops)</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Attention</div>
+                                    <div class="analytics-value">${levelAttempt ? formatPct(levelAttempt.attention_pct) : '—'}</div>
+                                    <div class="analytics-subtext">Facing screen</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Elbow Angle (mean)</div>
+                                    <div class="analytics-value">${levelAttempt ? `${formatNum(levelAttempt.elbow_angle_mean)}°` : '—'}</div>
+                                    <div class="analytics-subtext">${levelAttempt ? `Range ${formatNum(levelAttempt.elbow_angle_min)}°–${formatNum(levelAttempt.elbow_angle_max)}°` : 'No data'}</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Acceleration (mean)</div>
+                                    <div class="analytics-value">${levelAttempt ? formatNum(levelAttempt.accel_mean) : '—'}</div>
+                                    <div class="analytics-subtext">Std ${levelAttempt ? formatNum(levelAttempt.accel_std) : '—'}</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Jerk (mean)</div>
+                                    <div class="analytics-value">${levelAttempt ? formatNum(levelAttempt.jerk_mean) : '—'}</div>
+                                    <div class="analytics-subtext">Std ${levelAttempt ? formatNum(levelAttempt.jerk_std) : '—'}</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Handedness</div>
+                                    <div class="analytics-value">${levelAttempt ? (levelAttempt.handedness || '—') : '—'}</div>
+                                    <div class="analytics-subtext">Detected hand</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-page" id="analytics-session">
+                        <div class="analytics-section">
+                            <h3>Session Summary</h3>
+                            <div class="analytics-grid">
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Levels Played</div>
+                                    <div class="analytics-value">${sessionTotals.count}</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Total Session Time</div>
+                                    <div class="analytics-value">${Math.round(sessionTotals.duration / 1000)}s</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Avg Score (Session)</div>
+                                    <div class="analytics-value">${formatNum(sessionAvgScore, 0)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-page" id="analytics-progress">
+                        <div class="analytics-section">
+                            <h3>Progress Across Sessions (Last 10)</h3>
+                            <div class="analytics-grid">
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Attempts</div>
+                                    <div class="analytics-value">${history.length}</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Best Score</div>
+                                    <div class="analytics-value">${bestScore !== null ? bestScore : '—'}</div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-label">Avg Score</div>
+                                    <div class="analytics-value">${historyAvgScore !== null ? formatNum(historyAvgScore, 0) : '—'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            setSaveUIState(state) {
+                const saveBtn = document.getElementById('completionSaveBtn');
+                const viewBtn = document.getElementById('viewAnalyticsBtn');
+                if (!saveBtn || !viewBtn) return;
+
+                if (state === 'saving') {
+                    saveBtn.classList.add('is-saving');
+                    saveBtn.innerHTML = 'Saving <span class="spinner"></span>';
+                    viewBtn.style.display = 'none';
+                } else if (state === 'saved') {
+                    saveBtn.classList.remove('is-saving');
+                    saveBtn.innerHTML = '✅ Saved';
+                    saveBtn.disabled = true;
+                    viewBtn.style.display = 'inline-flex';
+                } else {
+                    saveBtn.classList.remove('is-saving');
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '💾 Save Progress';
+                    viewBtn.style.display = 'none';
+                }
+            }
+
+            showSaveToast(message) {
+                const toast = document.getElementById('saveToast');
+                if (!toast) return;
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            captureTelemetrySample() {
+                if (this.gameState !== 'playing' || !this.levelStartPerf) return;
+                const now = performance.now();
+                if (now - this.lastTelemetryTs < this.telemetrySampleIntervalMs) return;
+                this.lastTelemetryTs = now;
+
+                const t = Math.max(0, Math.round(now - this.levelStartPerf));
+                const scoreTotal = Number(this.score || 0);
+                const scoreDelta = scoreTotal - Number(this.lastTelemetryScore || 0);
+                this.lastTelemetryScore = scoreTotal;
+
+                const bombs = (this.bombs || []).map((bomb, idx) => ({
+                    id: bomb.customData && bomb.customData.bombId !== undefined ? bomb.customData.bombId : idx,
+                    position: {
+                        x: bomb.position.x,
+                        y: bomb.position.y,
+                        z: bomb.customData && typeof bomb.customData.depth === 'number' ? bomb.customData.depth : 0
+                    },
+                    is_active: 1
+                }));
+
+                const balloons = (this.balloons || []).map((balloon, idx) => ({
+                    id: balloon.customData && balloon.customData.balloonId !== undefined ? balloon.customData.balloonId : idx,
+                    position: {
+                        x: balloon.position.x,
+                        y: balloon.position.y,
+                        z: balloon.customData && typeof balloon.customData.depth === 'number' ? balloon.customData.depth : 0
+                    },
+                    is_active: 1
+                }));
+
+                this.telemetrySamples.push({
+                    t,
+                    bombs_hit_total: this.bombsHitCount,
+                    balloons_hit_total: this.levelBalloonsPopped,
+                    score_delta: scoreDelta,
+                    score_total: scoreTotal,
+                    bombs,
+                    balloons
+                });
+
+                this.handTelemetry.push({
+                    t,
+                    detected: !!this.handDetected,
+                    position: this.handPosition ? { x: this.handPosition.x, y: this.handPosition.y } : null
+                });
+            }
+
+            buildTelemetryJson() {
+                const trajectory = this.analytics ? this.analytics.getTrajectorySamples() : { samples: [] };
+                const handedness = this.analytics && this.analytics.handedness ? this.analytics.handedness : 'right';
+                const landmarkKeys = handedness === 'right'
+                    ? { shoulder: '12', elbow: '14', wrist: '16' }
+                    : { shoulder: '11', elbow: '13', wrist: '15' };
+
+                const landmarks = {
+                    [landmarkKeys.shoulder]: [],
+                    [landmarkKeys.elbow]: [],
+                    [landmarkKeys.wrist]: []
+                };
+
+                (trajectory.samples || []).forEach((sample) => {
+                    if (!sample) return;
+                    const t = Number(sample.t || 0);
+                    if (sample.s) {
+                        landmarks[landmarkKeys.shoulder].push({ x: sample.s[0], y: sample.s[1], z: 0, t });
+                    }
+                    if (sample.e) {
+                        landmarks[landmarkKeys.elbow].push({ x: sample.e[0], y: sample.e[1], z: 0, t });
+                    }
+                    if (sample.w) {
+                        landmarks[landmarkKeys.wrist].push({ x: sample.w[0], y: sample.w[1], z: 0, t });
+                    }
+                });
+
+                return {
+                    clinical_targets: [
+                        {
+                            domain: 'motor',
+                            body_part: 'hand',
+                            laterality: handedness,
+                            focus: 'dexterity'
+                        }
+                    ],
+                    kinematic_telemetry: {
+                        framework: 'mediapipe_holistic_v1',
+                        coord_space: trajectory.coord_space || 'normalized',
+                        sample_rate_hz: trajectory.sample_rate_hz || 15,
+                        landmark_aliases: {
+                            shoulder: landmarkKeys.shoulder,
+                            elbow: landmarkKeys.elbow,
+                            wrist: landmarkKeys.wrist
+                        },
+                        landmarks
+                    },
+                    environment_state: {
+                        timeline: this.telemetrySamples
+                    },
+                    interactable_objects: [
+                        {
+                            object_id: 'hand_primary',
+                            object_type: 'hand',
+                            timeline: this.handTelemetry
+                        }
+                    ]
+                };
+            }
+
+            downloadTelemetryJson(payload) {
+                try {
+                    const filename = `sonic_pop_telemetry_${this.analytics && this.analytics.levelAttemptId ? this.analytics.levelAttemptId : Date.now()}.json`;
+                    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch (error) {
+                    console.warn('Telemetry download failed:', error);
+                }
+            }
+
+            async saveProgressAndAnalytics() {
+                if (!this.pendingSave) return;
+                this.setSaveUIState('saving');
+
+                const levelNumber = this.levelManager.currentLevel;
+                const moduleNumber = this.levelManager.currentModule;
+                const { score, completed, balloonsPopped, timeLeft, endedAt } = this.pendingSave;
+
+                try {
+                    let progressOk = true;
+                    if (window.authManager && window.authManager.isLoggedIn()) {
+                        await window.authManager.saveProgress(levelNumber, moduleNumber, score, completed);
+                    }
+
+                    let analyticsOk = true;
+                    if (this.analytics) {
+                        analyticsOk = await this.analytics.finishLevel({
+                            score,
+                            completed,
+                            balloonsPopped,
+                            timeLeft,
+                            endedAt
+                        });
+                    }
+
+                    if (progressOk && analyticsOk) {
+                        const payload = this.buildTelemetryJson();
+                        this.downloadTelemetryJson(payload);
+                        this.setSaveUIState('saved');
+                        this.showSaveToast('✅ Data saved successfully');
+                    } else {
+                        throw new Error('Save incomplete');
+                    }
+                } catch (error) {
+                    console.error('Save failed:', error);
+                    this.setSaveUIState('ready');
+                    this.showSaveToast('⚠️ Save failed. Try again.');
+                }
             }
 
             showGameOverScreen() {
@@ -6951,6 +7880,27 @@
                 // this.speakMessage('Returning to level selection.');
                 this.resetToLevelSelection();
             }
+
+            hideAnalyticsModal() {
+                const analyticsScreen = document.getElementById('analyticsScreen');
+                if (analyticsScreen) analyticsScreen.classList.remove('active');
+            }
+
+            closeAnalyticsScreen() {
+                const analyticsScreen = document.getElementById('analyticsScreen');
+                if (analyticsScreen) analyticsScreen.classList.remove('active');
+
+                const levelCompletionOverlay = document.getElementById('levelCompletionOverlay');
+                const levelSelectionScreen = document.getElementById('levelSelectionScreen');
+
+                if (this.analyticsReturnTarget === 'completion' && levelCompletionOverlay) {
+                    levelCompletionOverlay.classList.add('show');
+                } else if (this.analyticsReturnTarget === 'levelSelection' && levelSelectionScreen) {
+                    levelSelectionScreen.classList.add('active');
+                }
+
+                this.analyticsReturnTarget = null;
+            }
         }
 
         // Initialize game when page loads
@@ -6985,6 +7935,15 @@
                 closeLeaderboardBtn.addEventListener('click', () => {
                     if (game && game.hideLeaderboard) {
                         game.hideLeaderboard();
+                    }
+                });
+            }
+
+            const analyticsScreen = document.getElementById('analyticsScreen');
+            if (analyticsScreen) {
+                analyticsScreen.addEventListener('click', (e) => {
+                    if (e.target === analyticsScreen && game && game.closeAnalyticsScreen) {
+                        game.closeAnalyticsScreen();
                     }
                 });
             }
@@ -7035,6 +7994,12 @@
         // Send periodic heartbeat to server to keep it alive
         // Server automatically shuts down after 10s of inactivity
         (function setupHeartbeat() {
+            const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+            if (isLocal) {
+                console.log('💓 Heartbeat disabled in local dev');
+                return;
+            }
+
             const HEARTBEAT_INTERVAL = 5000; // Send heartbeat every 5 seconds
             const HEARTBEAT_ENDPOINT = '/heartbeat';
 
