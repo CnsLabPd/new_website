@@ -3912,6 +3912,11 @@ if (!window.gestureSystem) {
                     holistic: null,
                     camera: null
                 };
+                this.kinematicSamples = [];
+                this.kinematicSampleIntervalMs = 1000 / 5;
+                this.lastKinematicTs = 0;
+                this.holisticBusy = false;
+                this.kinematicStartPerf = null;
 
                 this.init();
             }
@@ -5277,6 +5282,9 @@ if (!window.gestureSystem) {
 
                 // Reset painted regions for fresh start
                 this.paintedRegions = [];
+                this.kinematicSamples = [];
+                this.lastKinematicTs = 0;
+                this.kinematicStartPerf = performance.now();
 
                 // CLEAR LOADED DESIGN TRACKING: This is a fresh template, not a loaded design
                 this.currentLoadedDesign = null;
@@ -5558,6 +5566,24 @@ if (!window.gestureSystem) {
                     this.mediaPipeSetup.hands.onResults((results) => {
                         this.handleGestureResults(results, 'hands');
                     });
+
+                    if (typeof Holistic !== 'undefined') {
+                        this.mediaPipeSetup.holistic = new Holistic({
+                            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`
+                        });
+
+                        this.mediaPipeSetup.holistic.setOptions({
+                            modelComplexity: 0,
+                            smoothLandmarks: true,
+                            minDetectionConfidence: 0.5,
+                            minTrackingConfidence: 0.5,
+                            refineFaceLandmarks: false
+                        });
+
+                        this.mediaPipeSetup.holistic.onResults((results) => {
+                            this.handleHolisticResults(results);
+                        });
+                    }
                     
                     console.log('✅ MANDALA: MediaPipe initialized');
                     
@@ -5866,6 +5892,16 @@ if (!window.gestureSystem) {
                                 if (this.mediaPipeSetup.hands && video && video.readyState >= 2) {
                                     await this.mediaPipeSetup.hands.send({ image: video });
                                 }
+                                if (this.mediaPipeSetup.holistic && video && video.readyState >= 2) {
+                                    const now = performance.now();
+                                    if (!this.holisticBusy && now - this.lastKinematicTs >= this.kinematicSampleIntervalMs) {
+                                        this.lastKinematicTs = now;
+                                        this.holisticBusy = true;
+                                        this.mediaPipeSetup.holistic.send({ image: video })
+                                            .catch(() => {})
+                                            .finally(() => { this.holisticBusy = false; });
+                                    }
+                                }
                             },
                             width: 640,
                             height: 480
@@ -5998,6 +6034,37 @@ if (!window.gestureSystem) {
                     console.error('❌ CRITICAL ERROR in handleGestureResults:', error);
                     console.error('Stack trace:', error.stack);
                 }
+            }
+
+            handleHolisticResults(results) {
+                if (!results || !results.poseLandmarks || !this.kinematicStartPerf) return;
+                const pose = results.poseLandmarks;
+                const left = { shoulder: 11, elbow: 13, wrist: 15 };
+                const right = { shoulder: 12, elbow: 14, wrist: 16 };
+
+                const ls = pose[left.shoulder];
+                const le = pose[left.elbow];
+                const lw = pose[left.wrist];
+                const rs = pose[right.shoulder];
+                const re = pose[right.elbow];
+                const rw = pose[right.wrist];
+
+                if (!ls || !le || !lw || !rs || !re || !rw) return;
+
+                const video = document.getElementById('cameraVideo');
+                const videoWidth = video?.videoWidth || 640;
+                const videoHeight = video?.videoHeight || 480;
+
+                const t = Math.max(0, Math.round(performance.now() - this.kinematicStartPerf));
+                this.kinematicSamples.push({
+                    t,
+                    l_s: [ls.x * videoWidth, ls.y * videoHeight],
+                    l_e: [le.x * videoWidth, le.y * videoHeight],
+                    l_w: [lw.x * videoWidth, lw.y * videoHeight],
+                    r_s: [rs.x * videoWidth, rs.y * videoHeight],
+                    r_e: [re.x * videoWidth, re.y * videoHeight],
+                    r_w: [rw.x * videoWidth, rw.y * videoHeight]
+                });
             }
 
             // New function: Process gesture for a specific player (now async)
@@ -10134,6 +10201,8 @@ if (!window.gestureSystem) {
                     
                     if (savedId) {
                         console.log('✅ MANDALA: Design saved with ID:', savedId);
+                        const telemetryPayload = this.buildTelemetryJson(savedId, customFileName);
+                        this.downloadTelemetryJson(telemetryPayload);
 
                         // Show appropriate success message based on save action
                         if (saveAction === 'update') {
@@ -10234,6 +10303,81 @@ if (!window.gestureSystem) {
                 } catch (error) {
                     console.error('❌ MANDALA: Download failed:', error);
                     this.showMessage('Failed to download: ' + error.message, 'error');
+                }
+            }
+
+            buildTelemetryJson(savedId, designName) {
+                const landmarks = {
+                    "11": [],
+                    "13": [],
+                    "15": [],
+                    "12": [],
+                    "14": [],
+                    "16": []
+                };
+
+                this.kinematicSamples.forEach((sample) => {
+                    if (sample.l_s) landmarks["11"].push({ x: sample.l_s[0], y: sample.l_s[1], z: 0, t: sample.t });
+                    if (sample.l_e) landmarks["13"].push({ x: sample.l_e[0], y: sample.l_e[1], z: 0, t: sample.t });
+                    if (sample.l_w) landmarks["15"].push({ x: sample.l_w[0], y: sample.l_w[1], z: 0, t: sample.t });
+                    if (sample.r_s) landmarks["12"].push({ x: sample.r_s[0], y: sample.r_s[1], z: 0, t: sample.t });
+                    if (sample.r_e) landmarks["14"].push({ x: sample.r_e[0], y: sample.r_e[1], z: 0, t: sample.t });
+                    if (sample.r_w) landmarks["16"].push({ x: sample.r_w[0], y: sample.r_w[1], z: 0, t: sample.t });
+                });
+
+                return {
+                    session_meta: {
+                        session_id: savedId || null,
+                        template_id: this.selectedTemplate?.id || null,
+                        template_name: designName || this.selectedTemplate?.name || null
+                    },
+                    clinical_targets: [
+                        {
+                            domain: "motor",
+                            body_part: "hand",
+                            laterality: "both",
+                            focus: "fine_motor"
+                        }
+                    ],
+                    kinematic_telemetry: {
+                        framework: "mediapipe_holistic_v1",
+                        coord_space: "camera_pixels",
+                        sample_rate_hz: 5,
+                        frame_size: {
+                            width: document.getElementById('cameraVideo')?.videoWidth || 640,
+                            height: document.getElementById('cameraVideo')?.videoHeight || 480
+                        },
+                        landmark_aliases: {
+                            left_shoulder: "11",
+                            left_elbow: "13",
+                            left_wrist: "15",
+                            right_shoulder: "12",
+                            right_elbow: "14",
+                            right_wrist: "16"
+                        },
+                        landmarks
+                    },
+                    environment_state: {
+                        timeline: []
+                    },
+                    interactable_objects: []
+                };
+            }
+
+            downloadTelemetryJson(payload) {
+                if (!payload) return;
+                try {
+                    const filename = `mandala-telemetry-${Date.now()}.json`;
+                    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    console.log('📥 MANDALA: Telemetry JSON downloaded');
+                } catch (error) {
+                    console.error('❌ MANDALA: Telemetry download failed:', error);
                 }
             }
             

@@ -6465,8 +6465,12 @@ this.analyticsBodyEl = body;
                     ],
                     kinematic_telemetry: {
                         framework: 'mediapipe_holistic_v1',
-                        coord_space: trajectory.coord_space || 'normalized',
+                        coord_space: trajectory.coord_space || 'camera_pixels',
                         sample_rate_hz: trajectory.sample_rate_hz || 15,
+                        frame_size: {
+                            width: this.analytics?.canvasWidth || this.canvas?.width || null,
+                            height: this.analytics?.canvasHeight || this.canvas?.height || null
+                        },
                         landmark_aliases: {
                             shoulder: landmarkKeys.shoulder,
                             elbow: landmarkKeys.elbow,

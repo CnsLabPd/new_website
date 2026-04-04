@@ -18,6 +18,8 @@ export class GestureController {
         thumbsUp: false,
         thumbsDown: false,
         isPointing: false, // NEW: pointing gesture (index finger extended)
+        gesture: null,
+        previousGesture: null,
         detected: false,
         lastDetectionTime: 0,
         lastLaneShiftTime: 0 // NEW: Track when lane shift was triggered
@@ -28,6 +30,8 @@ export class GestureController {
         thumbsUp: false,
         thumbsDown: false,
         isPointing: false, // NEW: pointing gesture (index finger extended)
+        gesture: null,
+        previousGesture: null,
         detected: false,
         lastDetectionTime: 0,
         lastLaneShiftTime: 0 // NEW: Track when lane shift was triggered
@@ -45,6 +49,7 @@ export class GestureController {
     this.onDecelerate = null;
     this.onHandsLost = null;
     this.onHandsDetected = null;
+    this.onGestureEvent = null;
 
     // Detection timing
     this.HAND_LOST_TIMEOUT = 500; // ms - time before considering hands lost
@@ -363,6 +368,7 @@ export class GestureController {
 
     // Store previous state
     state.wasOpen = state.isOpen;
+    state.previousGesture = state.gesture;
 
     // PRIORITY 1: Detect specific gestures first (these override open hand)
     // Detect pointing gesture (index finger extended, others closed)
@@ -384,6 +390,21 @@ export class GestureController {
       state.isOpen = this.isHandOpen(landmarks);
     }
 
+    if (state.isPointing) state.gesture = 'pointing';
+    else if (state.thumbsUp) state.gesture = 'thumbs_up';
+    else if (state.thumbsDown) state.gesture = 'thumbs_down';
+    else if (state.isOpen) state.gesture = 'open';
+    else state.gesture = 'closed';
+
+    if (this.onGestureEvent && state.gesture !== state.previousGesture) {
+      this.onGestureEvent({
+        hand,
+        gesture: state.gesture,
+        confidence: 1,
+        timestamp_ms: currentTime
+      });
+    }
+
     // Don't trigger callbacks if paused
     if (this.isPaused) return;
 
@@ -402,14 +423,14 @@ export class GestureController {
       if (hand === 'left') {
         if (this.onLaneShiftLeft) {
           console.log('👈 Left hand opened - shifting LEFT lane');
-          this.onLaneShiftLeft();
+          this.onLaneShiftLeft({ hand, gesture: 'open', confidence: 1 });
         } else {
           console.log('⚠️ onLaneShiftLeft callback is not set!');
         }
       } else if (hand === 'right') {
         if (this.onLaneShiftRight) {
           console.log('👉 Right hand opened - shifting RIGHT lane');
-          this.onLaneShiftRight();
+          this.onLaneShiftRight({ hand, gesture: 'open', confidence: 1 });
         } else {
           console.log('⚠️ onLaneShiftRight callback is not set!');
         }

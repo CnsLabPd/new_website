@@ -386,7 +386,7 @@ class SonicPopAnalytics {
         return {
             samples: this.trajectorySamples || [],
             sample_rate_hz: 15,
-            coord_space: 'normalized',
+            coord_space: 'camera_pixels',
             handedness: this.handedness || null,
             canvas_width: this.canvasWidth || null,
             canvas_height: this.canvasHeight || null
@@ -414,11 +414,13 @@ class SonicPopAnalytics {
         if (!s || !e || !w) return;
 
         const t = Math.max(0, Math.round(nowMs - this.levelStartPerf));
+        const width = this.canvasWidth || 1;
+        const height = this.canvasHeight || 1;
         this.trajectorySamples.push({
             t,
-            w: [w.x, w.y],
-            e: [e.x, e.y],
-            s: [s.x, s.y]
+            w: [w.x * width, w.y * height],
+            e: [e.x * width, e.y * height],
+            s: [s.x * width, s.y * height]
         });
     }
 

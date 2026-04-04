@@ -23,6 +23,7 @@ export class CustomModelGestureController {
       left: {
         gesture: null,
         previousGesture: null, // Track previous gesture for transition detection
+        confidence: null,
         confidence: 0,
         detected: false,
         lastDetectionTime: 0,
@@ -32,6 +33,7 @@ export class CustomModelGestureController {
       right: {
         gesture: null,
         previousGesture: null, // Track previous gesture for transition detection
+        confidence: null,
         confidence: 0,
         detected: false,
         lastDetectionTime: 0,
@@ -47,6 +49,7 @@ export class CustomModelGestureController {
     this.onDecelerate = null;
     this.onHandsLost = null;
     this.onHandsDetected = null;
+    this.onGestureEvent = null;
 
     // Detection timing
     this.HAND_LOST_TIMEOUT = 500; // ms
@@ -529,6 +532,15 @@ export class CustomModelGestureController {
         // Log prediction
         console.log(`🔮 Predicted gesture: ${result.gesture} (confidence: ${(result.confidence * 100).toFixed(1)}%)`);
 
+        if (this.onGestureEvent && state.gesture !== state.previousGesture) {
+          this.onGestureEvent({
+            hand,
+            gesture: result.gesture,
+            confidence: result.confidence,
+            timestamp_ms: Date.now()
+          });
+        }
+
         // Trigger game actions based on gesture
         this.handleGesture(hand, result.gesture, result.confidence);
       }
@@ -580,7 +592,7 @@ export class CustomModelGestureController {
       if (justOpenedHand && this.onLaneShiftLeft) {
         console.log(`👈 LEFT LANE SHIFT (openCount: ${state.openCount}, confidence: ${(confidence * 100).toFixed(1)}%)`);
         state.lastActionTime = currentTime;
-        this.onLaneShiftLeft();
+        this.onLaneShiftLeft({ hand, gesture, confidence });
       }
       // BRAKE: Continuous while index finger is pointing
       else if (gesture === 'left hand index' && this.onDecelerate) {
@@ -595,7 +607,7 @@ export class CustomModelGestureController {
       if (justOpenedHand && this.onLaneShiftRight) {
         console.log(`👉 RIGHT LANE SHIFT (openCount: ${state.openCount}, confidence: ${(confidence * 100).toFixed(1)}%)`);
         state.lastActionTime = currentTime;
-        this.onLaneShiftRight();
+        this.onLaneShiftRight({ hand, gesture, confidence });
       }
       // ACCELERATE: Continuous while index finger is pointing
       else if (gesture === 'right hand index' && this.onAccelerate) {

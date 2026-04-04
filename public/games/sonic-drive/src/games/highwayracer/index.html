@@ -191,6 +191,9 @@
         <button class="btn btn-primary" id="viewAnalyticsBtn" style="display: none; padding: 12px 30px; font-size: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s;">
           📊 View Analytics & Progress
         </button>
+        <button class="btn btn-secondary" id="gameOverTelemetryBtn" style="display: none; margin-top: 12px;">
+          📥 Download Telemetry
+        </button>
       </div>
 
       <!-- Save Score Button (if not saved) -->
@@ -263,6 +266,7 @@
         <button class="btn btn-primary" id="playAgainBtn">Play Again</button>
         <button class="btn btn-secondary" id="viewProgressBtn">View Progress</button>
         <button class="btn btn-secondary" id="downloadReportBtn">Download Report</button>
+        <button class="btn btn-secondary" id="downloadTelemetryBtn">Download Telemetry</button>
       </div>
     </div>
   </div>
@@ -282,6 +286,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
 
   <!-- Main game module (with cache busting) -->
   <script type="module">

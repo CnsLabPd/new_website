@@ -259,6 +259,23 @@ export class Game {
     this.userRoles = [];
     this.analyticsEnabled = false;
 
+    // Telemetry collection (15 fps)
+    this.telemetrySamples = [];
+    this.gestureEvents = { left: [], right: [] };
+    this.laneChangeEvents = [];
+    this.kinematicSamples = [];
+    this.telemetrySampleIntervalMs = 1000 / 5;
+    this.lastTelemetryTs = 0;
+    this.levelStartPerf = null;
+    this.lastScoreSample = 0;
+
+    // Holistic (pose) tracking for kinematic telemetry
+    this.holistic = null;
+    this.holisticBusy = false;
+    this.lastHolisticTs = 0;
+    this.holisticSampleIntervalMs = 1000 / 5;
+    this.holisticHandedness = null;
+
     // Setup input handlers
     this.setupInputHandlers();
     this.setupControlModeSelection();
@@ -649,6 +666,11 @@ export class Game {
         console.log('🔗 Setting up gesture callbacks');
         this.setupGestureCallbacks();
 
+        // Initialize holistic pose tracking for kinematic telemetry
+        if (this.analyticsEnabled && this.userRoles.length > 0) {
+          this.initHolisticIfNeeded();
+        }
+
         // Verify callbacks are set
         console.log('✔️ Callbacks check:', {
           onLaneShiftLeft: !!this.gestureController.onLaneShiftLeft,
@@ -694,11 +716,11 @@ export class Game {
     if (!this.gestureController) return;
 
     // Lane shift callbacks with edge detection
-    this.gestureController.onLaneShiftLeft = () => {
+    this.gestureController.onLaneShiftLeft = (meta = {}) => {
       console.log(`🎮 Left shift callback: gameRunning=${this.gameRunning}, currentLane=${this.currentLane}`);
       if (this.gameRunning && this.currentLane > 0) {
         console.log(`✅ Shifting left from lane ${this.currentLane} to ${this.currentLane - 1}`);
-        this.switchLane(this.currentLane - 1);
+        this.switchLane(this.currentLane - 1, { source: 'gesture', ...meta });
       } else if (!this.gameRunning) {
         console.log('❌ Game not running - cannot shift');
       } else {
@@ -706,11 +728,11 @@ export class Game {
       }
     };
 
-    this.gestureController.onLaneShiftRight = () => {
+    this.gestureController.onLaneShiftRight = (meta = {}) => {
       console.log(`🎮 Right shift callback: gameRunning=${this.gameRunning}, currentLane=${this.currentLane}`);
       if (this.gameRunning && this.currentLane < this.numLanes - 1) {
         console.log(`✅ Shifting right from lane ${this.currentLane} to ${this.currentLane + 1}`);
-        this.switchLane(this.currentLane + 1);
+        this.switchLane(this.currentLane + 1, { source: 'gesture', ...meta });
       } else if (!this.gameRunning) {
         console.log('❌ Game not running - cannot shift');
       } else {
@@ -749,6 +771,10 @@ export class Game {
         console.log('▶️ Auto-resuming game');
         this.resumeGame();
       }
+    };
+
+    this.gestureController.onGestureEvent = (event) => {
+      this.recordGestureEvent(event);
     };
   }
 
@@ -831,10 +857,10 @@ export class Game {
         this.keys.down = true;
       } else if (e.code === 'ArrowLeft' && this.gameRunning) {
         e.preventDefault();
-        this.switchLane(Math.max(0, this.currentLane - 1));
+        this.switchLane(Math.max(0, this.currentLane - 1), { source: 'keyboard' });
       } else if (e.code === 'ArrowRight' && this.gameRunning) {
         e.preventDefault();
-        this.switchLane(Math.min(this.numLanes - 1, this.currentLane + 1));
+        this.switchLane(Math.min(this.numLanes - 1, this.currentLane + 1), { source: 'keyboard' });
       }
     });
 
@@ -948,6 +974,13 @@ export class Game {
   startGame() {
     console.log('🎮 ======= GAME STARTING =======');
 
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+
+    this.clearSessionCache();
+
     // Initialize analytics if enabled
     if (this.analyticsEnabled && this.userRoles.length > 0) {
       initSupabase(); // Initialize Supabase
@@ -984,6 +1017,8 @@ export class Game {
     this.distance = 0;
     this.playerSpeed = 0;
     this.maxSpeed = 0;
+    this.levelCompleted = false;
+    this.finishLineY = null;
     this.currentGear = 1; // Start in first gear
     this.currentRPM = this.ENGINE_IDLE_RPM;
     this.shiftCooldown = 0;
@@ -999,6 +1034,9 @@ export class Game {
     }
     this.spawnTimer = 0;
     this.lastLoggedDifficulty = 0;
+    this.lastFrameTime = performance.now();
+    this.frameCount = 0;
+    this.lastDOMUpdateFrame = 0;
 
     // Reset smart traffic management
     this.lastSpawnedLane = -1;
@@ -1034,6 +1072,7 @@ export class Game {
       this.gestureController.resume();
     }
 
+    this.resetTelemetry();
     this.gameLoop();
   }
 
@@ -1179,6 +1218,8 @@ export class Game {
 
         // Store session data for later viewing
         this.lastSessionData = sessionData;
+
+        // Telemetry JSON is available via Download Telemetry button
       } catch (error) {
         console.error('❌ Error handling analytics:', error);
         this.lastSessionData = null;
@@ -1239,6 +1280,8 @@ export class Game {
 
         // Store session data for later viewing
         this.lastSessionData = sessionData;
+
+        // Telemetry JSON is available via Download Telemetry button
       } catch (error) {
         console.error('❌ Error handling analytics:', error);
         this.lastSessionData = null;
@@ -1281,6 +1324,19 @@ export class Game {
         };
       } else {
         viewAnalyticsBtn.style.display = 'none';
+      }
+    }
+
+    const telemetryBtn = document.getElementById('gameOverTelemetryBtn');
+    if (telemetryBtn) {
+      if (this.analyticsEnabled && this.lastSessionData) {
+        telemetryBtn.style.display = 'inline-block';
+        telemetryBtn.onclick = () => {
+          const payload = this.buildTelemetryJson(this.lastSessionData);
+          this.downloadTelemetryJson(payload);
+        };
+      } else {
+        telemetryBtn.style.display = 'none';
       }
     }
 
@@ -1383,6 +1439,19 @@ export class Game {
         };
       } else {
         viewAnalyticsBtn.style.display = 'none';
+      }
+    }
+
+    const telemetryBtn = document.getElementById('gameOverTelemetryBtn');
+    if (telemetryBtn) {
+      if (this.analyticsEnabled && this.lastSessionData) {
+        telemetryBtn.style.display = 'inline-block';
+        telemetryBtn.onclick = () => {
+          const payload = this.buildTelemetryJson(this.lastSessionData);
+          this.downloadTelemetryJson(payload);
+        };
+      } else {
+        telemetryBtn.style.display = 'none';
       }
     }
 
@@ -1531,6 +1600,7 @@ export class Game {
     const closeBtn = document.getElementById('closeAnalyticsBtn');
     const playAgainBtn = document.getElementById('playAgainBtn');
     const downloadBtn = document.getElementById('downloadReportBtn');
+    const downloadTelemetryBtn = document.getElementById('downloadTelemetryBtn');
 
     if (closeBtn) {
       closeBtn.onclick = () => {
@@ -1552,6 +1622,13 @@ export class Game {
         this.downloadAnalyticsReport(sessionData);
       };
     }
+
+    if (downloadTelemetryBtn) {
+      downloadTelemetryBtn.onclick = () => {
+        const telemetryPayload = this.buildTelemetryJson(sessionData);
+        this.downloadTelemetryJson(telemetryPayload);
+      };
+    }
   }
 
   /**
@@ -1571,7 +1648,268 @@ export class Game {
     console.log('📥 Analytics report downloaded');
   }
 
-  switchLane(newLane) {
+  resetTelemetry() {
+    this.telemetrySamples = [];
+    this.gestureEvents = { left: [], right: [] };
+    this.laneChangeEvents = [];
+    this.kinematicSamples = [];
+    this.lastTelemetryTs = 0;
+    this.lastHolisticTs = 0;
+    this.levelStartPerf = performance.now();
+    this.lastScoreSample = this.score;
+    this.holisticHandedness = null;
+  }
+
+  recordGestureEvent(event) {
+    if (!event || !this.levelStartPerf) return;
+    const hand = event.hand === 'left' || event.hand === 'right' ? event.hand : null;
+    if (!hand) return;
+    const now = performance.now();
+    const t = Math.max(0, Math.round(now - this.levelStartPerf));
+    this.gestureEvents[hand].push({
+      t,
+      gesture: event.gesture || 'unknown',
+      confidence: event.confidence ?? null,
+      latency_ms: event.latency_ms ?? null
+    });
+    this.holisticHandedness = hand;
+  }
+
+  recordLaneChange({ from_lane, to_lane, trigger }) {
+    if (!this.levelStartPerf) return;
+    const t = Math.max(0, Math.round(performance.now() - this.levelStartPerf));
+    this.laneChangeEvents.push({
+      t,
+      from_lane,
+      to_lane,
+      trigger: trigger || { source: 'unknown' }
+    });
+  }
+
+  captureTelemetrySample() {
+    if (!this.gameRunning || !this.levelStartPerf) return;
+    const now = performance.now();
+    if (now - this.lastTelemetryTs < this.telemetrySampleIntervalMs) return;
+    this.lastTelemetryTs = now;
+
+    const t = Math.max(0, Math.round(now - this.levelStartPerf));
+    const scoreTotal = Number(this.score || 0);
+    const scoreDelta = scoreTotal - Number(this.lastScoreSample || 0);
+    this.lastScoreSample = scoreTotal;
+
+    const livesLeft = this.lives === Infinity ? null : this.lives;
+    const livesUsed = this.lives === Infinity ? 0 : Math.max(0, (this.maxLives || 0) - (this.lives || 0));
+    const distanceLeft = Math.max(0, (this.targetDistance || 0) - (this.distance || 0));
+
+    const traffic = (this.trafficVehicles || [])
+      .map((vehicle) => {
+        const distanceAhead = this.playerCar.position.y - vehicle.position.y;
+        return {
+          lane: vehicle.lane,
+          distance_ahead: Math.round(distanceAhead),
+          position: {
+            x: vehicle.position.x,
+            y: vehicle.position.y
+          },
+          is_active: 1
+        };
+      })
+      .filter((vehicle) => vehicle.distance_ahead >= 0);
+
+    this.telemetrySamples.push({
+      t,
+      lane: this.currentLane,
+      speed: this.playerSpeed,
+      distance: this.distance,
+      distance_left: distanceLeft,
+      score_delta: scoreDelta,
+      score_total: scoreTotal,
+      lives_used: livesUsed,
+      lives_left: livesLeft,
+      traffic
+    });
+  }
+
+  initHolisticIfNeeded() {
+    if (this.holistic || typeof Holistic === 'undefined') return;
+    try {
+      this.holistic = new Holistic({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`
+      });
+
+      this.holistic.setOptions({
+        modelComplexity: 0,
+        smoothLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+        refineFaceLandmarks: false
+      });
+
+      this.holistic.onResults((results) => this.onHolisticResults(results));
+      console.log('✅ Holistic initialized for Sonic Drive telemetry');
+    } catch (error) {
+      console.warn('Failed to initialize Holistic:', error);
+    }
+  }
+
+  captureHolisticFrame() {
+    if (!this.holistic || this.holisticBusy) return;
+    if (!this.analyticsEnabled || this.userRoles.length === 0) return;
+    if (this.controlMode !== 'gesture' || !this.gestureController) return;
+    const video = this.gestureController.videoElement;
+    if (!video || video.readyState < 2) return;
+    const now = performance.now();
+    if (now - this.lastHolisticTs < this.holisticSampleIntervalMs) return;
+    this.lastHolisticTs = now;
+
+    this.holisticBusy = true;
+    this.holistic.send({ image: video })
+      .catch(() => {})
+      .finally(() => { this.holisticBusy = false; });
+  }
+
+  onHolisticResults(results) {
+    if (!results || !results.poseLandmarks || !this.levelStartPerf) return;
+
+    const left = { shoulder: 11, elbow: 13, wrist: 15 };
+    const right = { shoulder: 12, elbow: 14, wrist: 16 };
+
+    const ls = results.poseLandmarks[left.shoulder];
+    const le = results.poseLandmarks[left.elbow];
+    const lw = results.poseLandmarks[left.wrist];
+    const rs = results.poseLandmarks[right.shoulder];
+    const re = results.poseLandmarks[right.elbow];
+    const rw = results.poseLandmarks[right.wrist];
+
+    if (!ls || !le || !lw || !rs || !re || !rw) return;
+
+    const video = this.gestureController?.videoElement;
+    const videoWidth = video?.videoWidth || 640;
+    const videoHeight = video?.videoHeight || 480;
+
+    const t = Math.max(0, Math.round(performance.now() - this.levelStartPerf));
+    this.kinematicSamples.push({
+      t,
+      l_s: [ls.x * videoWidth, ls.y * videoHeight],
+      l_e: [le.x * videoWidth, le.y * videoHeight],
+      l_w: [lw.x * videoWidth, lw.y * videoHeight],
+      r_s: [rs.x * videoWidth, rs.y * videoHeight],
+      r_e: [re.x * videoWidth, re.y * videoHeight],
+      r_w: [rw.x * videoWidth, rw.y * videoHeight]
+    });
+  }
+
+  buildTelemetryJson(sessionData = {}) {
+    const landmarks = {
+      "11": [],
+      "13": [],
+      "15": [],
+      "12": [],
+      "14": [],
+      "16": []
+    };
+
+    this.kinematicSamples.forEach((sample) => {
+      if (sample.l_s) landmarks["11"].push({ x: sample.l_s[0], y: sample.l_s[1], z: 0, t: sample.t });
+      if (sample.l_e) landmarks["13"].push({ x: sample.l_e[0], y: sample.l_e[1], z: 0, t: sample.t });
+      if (sample.l_w) landmarks["15"].push({ x: sample.l_w[0], y: sample.l_w[1], z: 0, t: sample.t });
+      if (sample.r_s) landmarks["12"].push({ x: sample.r_s[0], y: sample.r_s[1], z: 0, t: sample.t });
+      if (sample.r_e) landmarks["14"].push({ x: sample.r_e[0], y: sample.r_e[1], z: 0, t: sample.t });
+      if (sample.r_w) landmarks["16"].push({ x: sample.r_w[0], y: sample.r_w[1], z: 0, t: sample.t });
+    });
+
+    return {
+      session_meta: {
+        session_id: sessionData.session_id || null,
+        level: this.gameLevel,
+        lanes: this.numLanes,
+        control_mode: this.controlMode || 'keyboard'
+      },
+      clinical_targets: [
+        {
+          domain: 'motor',
+          body_part: 'hand',
+          laterality: 'both',
+          focus: 'fine_motor'
+        }
+      ],
+      kinematic_telemetry: {
+        framework: 'mediapipe_holistic_v1',
+        coord_space: 'camera_pixels',
+        sample_rate_hz: 5,
+        frame_size: {
+          width: this.gestureController?.videoElement?.videoWidth || 640,
+          height: this.gestureController?.videoElement?.videoHeight || 480
+        },
+        landmark_aliases: {
+          left_shoulder: "11",
+          left_elbow: "13",
+          left_wrist: "15",
+          right_shoulder: "12",
+          right_elbow: "14",
+          right_wrist: "16"
+        },
+        landmarks
+      },
+      environment_state: {
+        timeline: this.telemetrySamples
+      },
+      interactable_objects: [
+        {
+          object_id: 'left_hand',
+          object_type: 'hand',
+          timeline: this.gestureEvents.left
+        },
+        {
+          object_id: 'right_hand',
+          object_type: 'hand',
+          timeline: this.gestureEvents.right
+        },
+        {
+          object_id: 'lane_changes',
+          object_type: 'action',
+          timeline: this.laneChangeEvents
+        }
+      ]
+    };
+  }
+
+  downloadTelemetryJson(payload) {
+    if (!payload) return;
+    try {
+      const filename = `sonic-drive-telemetry-${Date.now()}.json`;
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', url);
+      linkElement.setAttribute('download', filename);
+      linkElement.click();
+      URL.revokeObjectURL(url);
+      console.log('📥 Telemetry JSON downloaded');
+    } catch (error) {
+      console.warn('Telemetry download failed:', error);
+    }
+  }
+
+  clearSessionCache() {
+    this.telemetrySamples = [];
+    this.gestureEvents = { left: [], right: [] };
+    this.laneChangeEvents = [];
+    this.kinematicSamples = [];
+    this.lastTelemetryTs = 0;
+    this.lastHolisticTs = 0;
+    this.lastScoreSample = this.score;
+
+    // Clear traffic and associated horns
+    if (this.audioEngine && this.audioEngine.carHorns) {
+      for (const vehicleId of this.audioEngine.carHorns.keys()) {
+        this.audioEngine.stopHornForVehicle(vehicleId, this.audioEngine.audioCtx?.currentTime || 0);
+      }
+    }
+    this.trafficVehicles = [];
+  }
+
+  switchLane(newLane, triggerMeta = {}) {
     if (this.currentLane === newLane || !this.gameRunning) return;
 
     // Validate lane bounds to prevent going outside the road
@@ -1591,6 +1929,12 @@ export class Game {
     if (this.analytics) {
       this.analytics.onLaneChange(oldLane, newLane, this.playerCar.position, this.trafficVehicles);
     }
+
+    this.recordLaneChange({
+      from_lane: oldLane,
+      to_lane: newLane,
+      trigger: triggerMeta
+    });
 
     // Get lane names based on number of lanes
     let laneNames;
@@ -2050,6 +2394,11 @@ export class Game {
 
     // No physics engine - just update game state
     this.updatePhysics();
+
+    if (this.analyticsEnabled && this.userRoles.length > 0) {
+      this.captureTelemetrySample();
+      this.captureHolisticFrame();
+    }
 
     // Update audio - pass current gear to audio engine
     this.audioEngine.gear = this.currentGear; // Sync gear with audio
