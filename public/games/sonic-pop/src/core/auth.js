@@ -1,12 +1,12 @@
 /**
  * Authentication and Session Management
- * NOW USING NEUROGATI GAME SDK
- * Handles user authentication and progress tracking via Supabase
+ * SIMPLE GAME LOGIN SYSTEM
+ * Handles user authentication and progress tracking via simple username/email
  */
 
 class AuthManager {
     constructor() {
-        this.auth = window.NeurogatiAuth;
+        this.gameUser = null;
         this.gameAPI = null;
         this.progress = [];
         this.initialized = false;
@@ -14,36 +14,32 @@ class AuthManager {
 
     /**
      * Initialize the game API
-     * Call this after NeurogatiAuth is ready
      */
     async init() {
         if (this.initialized) return;
 
-        // Wait for NeurogatiAuth to be ready
-        if (!this.auth || !this.auth.initialized) {
-            console.log('⏳ Waiting for NeurogatiAuth to initialize...');
-            await new Promise(resolve => {
-                const checkAuth = setInterval(() => {
-                    if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
-                        clearInterval(checkAuth);
-                        this.auth = window.NeurogatiAuth;
-                        resolve();
-                    }
-                }, 100);
-            });
+        // Get user from sessionStorage
+        const storedUser = sessionStorage.getItem('neurogati_game_user');
+        if (storedUser) {
+            try {
+                this.gameUser = JSON.parse(storedUser);
+                console.log('✅ Game user loaded:', this.gameUser.username);
+            } catch (e) {
+                console.error('❌ Error parsing game user:', e);
+            }
         }
 
         // Initialize Balloon Racing API
         this.gameAPI = new BalloonRacingAPI('sonic-pop');
         this.initialized = true;
-        console.log('✅ AuthManager initialized with Neurogati SDK');
+        console.log('✅ AuthManager initialized with simple login');
     }
 
     /**
      * Check if user is logged in
      */
     isLoggedIn() {
-        return this.auth && this.auth.isAuthenticated();
+        return this.gameUser !== null;
     }
 
     /**
@@ -52,12 +48,11 @@ class AuthManager {
     getCurrentUser() {
         if (!this.isLoggedIn()) return null;
 
-        const user = this.auth.getCurrentUser();
         // Return in format expected by game code
         return {
-            id: user.id,
-            username: this.auth.getUserName(),
-            email: this.auth.getUserEmail()
+            id: this.gameUser.email, // Use email as ID for now
+            username: this.gameUser.username,
+            email: this.gameUser.email
         };
     }
 
@@ -164,32 +159,17 @@ class AuthManager {
 window.authManager = new AuthManager();
 
 /**
- * Initialize auth (without forcing login - parent page handles that)
+ * Initialize auth (simple game login system)
  */
 async function initAuth() {
-    // Wait for NeurogatiAuth to initialize
-    if (!window.NeurogatiAuth || !window.NeurogatiAuth.initialized) {
-        console.log('⏳ Waiting for NeurogatiAuth...');
-        await new Promise(resolve => {
-            const checkAuth = setInterval(() => {
-                if (window.NeurogatiAuth && window.NeurogatiAuth.initialized) {
-                    clearInterval(checkAuth);
-                    resolve();
-                }
-            }, 100);
-        });
-    }
-
     // Initialize authManager
     await window.authManager.init();
 
-    // Check if user is logged in (but don't force redirect - parent page handles that)
+    // Check if user is logged in
     if (window.authManager.isLoggedIn()) {
         const user = window.authManager.getCurrentUser();
-        console.log(`✅ Authenticated as: ${user.username}`);
-        console.log('👤 Full user object:', user);
-        console.log('📧 Email:', window.NeurogatiAuth.getUserEmail());
-        console.log('🏷️ getUserName() returns:', window.NeurogatiAuth.getUserName());
+        console.log(`✅ Game user authenticated: ${user.username}`);
+        console.log('📧 Email:', user.email);
 
         // Load progress
         await window.authManager.loadProgress();

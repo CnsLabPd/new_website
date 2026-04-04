@@ -747,6 +747,17 @@
             color: white;
         }
 
+        .completion-btn.db-json {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            border-color: #11998e;
+            color: white;
+        }
+
+        .completion-btn.db-json:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+        }
+
         .completion-btn.analytics::after {
             content: '';
             position: absolute;
@@ -2162,6 +2173,9 @@
                     </button>
                     <button class="completion-btn save" id="completionSaveBtn" onclick="game.saveProgressAndAnalytics()">
                         💾 Save Progress
+                    </button>
+                    <button class="completion-btn db-json" id="downloadDbJsonBtn" onclick="game.downloadDatabaseJson()">
+                        📥 Download DB Data
                     </button>
                     <button class="completion-btn analytics new-feature" id="viewAnalyticsBtn" onclick="game.showAnalytics()" style="display:none;">
                         ✨ View Analytics
@@ -6505,6 +6519,149 @@ this.analyticsBodyEl = body;
                     URL.revokeObjectURL(url);
                 } catch (error) {
                     console.warn('Telemetry download failed:', error);
+                }
+            }
+
+            buildDatabaseJson() {
+                if (!this.pendingSave || !this.analytics) {
+                    console.warn('No pending save data or analytics available');
+                    return null;
+                }
+
+                const levelNumber = this.levelManager.currentLevel;
+                const moduleNumber = this.levelManager.currentModule;
+                const { score, completed, balloonsPopped, timeLeft, endedAt } = this.pendingSave;
+
+                // Get user info from simple game login
+                const gameUser = sessionStorage.getItem('neurogati_game_user');
+                let username = 'Guest';
+                let email = null;
+
+                if (gameUser) {
+                    try {
+                        const user = JSON.parse(gameUser);
+                        username = user.username;
+                        email = user.email;
+                    } catch (e) {
+                        console.error('Error parsing game user:', e);
+                    }
+                }
+
+                // Calculate duration
+                const levelStartedAt = this.analytics.levelStartedAt;
+                const levelEndedAt = endedAt || new Date();
+                const durationMs = levelEndedAt - levelStartedAt;
+
+                // Calculate bomb stats
+                const bombsAvoided = Math.max(0, this.analytics.bombsShown - this.analytics.bombsHit);
+                const totalImpacts = (this.analytics.bombsHit || 0) + (balloonsPopped || 0);
+                const riskAvoidanceRate = totalImpacts > 0
+                    ? (this.analytics.bombsHit / totalImpacts) * 100
+                    : null;
+
+                // Get analytics stats
+                const elbow = this.analytics.elbowStats.toSummary(true);
+                const accel = this.analytics.accelStats.toSummary(false);
+                const jerk = this.analytics.jerkStats.toSummary(false);
+
+                const attentionPct = this.analytics.attentionSamples > 0
+                    ? (this.analytics.attentionFacingSamples / this.analytics.attentionSamples) * 100
+                    : null;
+
+                // Build the database JSON format
+                const dbData = {
+                    // Metadata
+                    metadata: {
+                        game: 'sonic-pop',
+                        version: '1.0',
+                        exported_at: new Date().toISOString(),
+                        level_attempt_id: this.analytics.levelAttemptId,
+                        session_id: this.analytics.sessionId
+                    },
+
+                    // User info (from simple game login)
+                    user: {
+                        username: username,
+                        email: email,
+                        user_id: null  // No user_id for simple login
+                    },
+
+                    // Game progress data (saved to game_progress table)
+                    game_progress: {
+                        game_slug: 'sonic-pop',
+                        level_number: levelNumber,
+                        module_number: moduleNumber,
+                        high_score: score,
+                        completed: completed,
+                        last_played: levelEndedAt.toISOString()
+                    },
+
+                    // Score history data (saved to game_score_history table)
+                    score_history: {
+                        game_slug: 'sonic-pop',
+                        level_number: levelNumber,
+                        score: score,
+                        completed: completed,
+                        created_at: levelEndedAt.toISOString()
+                    },
+
+                    // Analytics data (saved to sonic_pop_level_attempts table)
+                    level_analytics: {
+                        level_number: levelNumber,
+                        module_number: moduleNumber,
+                        started_at: levelStartedAt.toISOString(),
+                        ended_at: levelEndedAt.toISOString(),
+                        duration_ms: durationMs,
+                        score: score,
+                        completed: completed,
+                        balloons_popped: balloonsPopped,
+                        bombs_shown: this.analytics.bombsShown,
+                        bombs_hit: this.analytics.bombsHit,
+                        bombs_avoided: bombsAvoided,
+                        risk_avoidance_rate: riskAvoidanceRate,
+                        elbow_angle_mean: elbow.mean,
+                        elbow_angle_var: elbow.var,
+                        elbow_angle_std: elbow.std,
+                        elbow_angle_min: elbow.min,
+                        elbow_angle_max: elbow.max,
+                        accel_mean: accel.mean,
+                        accel_var: accel.var,
+                        accel_std: accel.std,
+                        jerk_mean: jerk.mean,
+                        jerk_var: jerk.var,
+                        jerk_std: jerk.std,
+                        attention_pct: attentionPct,
+                        handedness: this.analytics.handedness
+                    }
+                };
+
+                return dbData;
+            }
+
+            downloadDatabaseJson() {
+                try {
+                    const dbData = this.buildDatabaseJson();
+
+                    if (!dbData) {
+                        this.showSaveToast('⚠️ No data available to download');
+                        return;
+                    }
+
+                    const filename = `sonic_pop_db_data_${dbData.metadata.level_attempt_id}_${Date.now()}.json`;
+                    const blob = new Blob([JSON.stringify(dbData, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    this.showSaveToast('✅ Database JSON downloaded');
+                } catch (error) {
+                    console.error('Database JSON download failed:', error);
+                    this.showSaveToast('❌ Download failed');
                 }
             }
 

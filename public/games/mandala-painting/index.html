@@ -178,14 +178,21 @@
     </div>
 
     <script>
-        // Auto-redirect to game (parent page handles auth)
+        // Auto-redirect to game (simple game login system)
         async function initGame() {
-            // Wait for NeurogatiAuth to initialize
-            while (!window.NeurogatiAuth || !window.NeurogatiAuth.initialized) {
-                await new Promise(resolve => setTimeout(resolve, 100));
+            // Check for simple game login
+            const gameUser = sessionStorage.getItem('neurogati_game_user');
+
+            if (gameUser) {
+                try {
+                    const user = JSON.parse(gameUser);
+                    console.log('🎨 Mandala Painting: Game user found:', user.username);
+                } catch (e) {
+                    console.error('Error parsing game user:', e);
+                }
             }
 
-            console.log('🎨 Mandala Painting: Auth ready, redirecting to game...');
+            console.log('🎨 Mandala Painting: Redirecting to game...');
 
             // Wait a moment for splash screen, then redirect
             setTimeout(() => {

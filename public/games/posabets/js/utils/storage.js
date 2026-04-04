@@ -84,12 +84,26 @@ export class Storage {
     }
 
     static isAuthenticated() {
-        // Check Neurogati Auth first
-        if (window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+        // Check simple game login first
+        const gameUser = this.getGameUser();
+        if (gameUser) {
             return true;
         }
         // Fallback to localStorage for guest mode
         return !!this.getCurrentUser();
+    }
+
+    // Simple game login methods
+    static getGameUser() {
+        try {
+            const storedUser = sessionStorage.getItem('neurogati_game_user');
+            if (storedUser) {
+                return JSON.parse(storedUser);
+            }
+        } catch (e) {
+            console.error('Error getting game user:', e);
+        }
+        return null;
     }
 
     // Player-specific methods
@@ -98,12 +112,19 @@ export class Storage {
     }
 
     static getPlayerName() {
-        // Use Neurogati user name if available
-        if (window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
-            return window.NeurogatiAuth.getUserName() || 'Player';
+        // Use simple game login if available
+        const gameUser = this.getGameUser();
+        if (gameUser) {
+            return gameUser.username || 'Player';
         }
         // Fallback to localStorage
         return this.getCurrentUser() || this.load(StorageKeys.PLAYER_NAME, '');
+    }
+
+    static getPlayerEmail() {
+        // Get email from simple game login
+        const gameUser = this.getGameUser();
+        return gameUser ? gameUser.email : '';
     }
 
     static getUserProgressKey() {
@@ -148,7 +169,7 @@ export class Storage {
         this.saveProgress(progress);
 
         // Sync to API if available
-        if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+        if (window.PosabetsAPI && this.isAuthenticated()) {
             const api = new window.PosabetsAPI();
             await api.markLetterComplete(letter, stars);
         }
@@ -167,7 +188,7 @@ export class Storage {
         this.saveProgress(progress);
 
         // Sync to API if available
-        if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+        if (window.PosabetsAPI && this.isAuthenticated()) {
             const api = new window.PosabetsAPI();
             await api.markWordComplete(word, stars);
         }
@@ -194,7 +215,7 @@ export class Storage {
         this.saveProgress(progress);
 
         // Sync to API if available (name mode may not have API endpoint yet)
-        if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+        if (window.PosabetsAPI && this.isAuthenticated()) {
             const api = new window.PosabetsAPI();
             if (api.markNameComplete) {
                 await api.markNameComplete(name, stars);
@@ -212,7 +233,7 @@ export class Storage {
             this.saveProgress(progress);
 
             // Sync to API if available
-            if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+            if (window.PosabetsAPI && this.isAuthenticated()) {
                 const api = new window.PosabetsAPI();
                 await api.addBadge(badgeId);
             }
@@ -238,7 +259,7 @@ export class Storage {
         this.saveProgress(progress);
 
         // Sync to API if available
-        if (window.PosabetsAPI && window.NeurogatiAuth && window.NeurogatiAuth.isAuthenticated()) {
+        if (window.PosabetsAPI && this.isAuthenticated()) {
             const api = new window.PosabetsAPI();
             await api.updateStreak(isCorrect);
         }

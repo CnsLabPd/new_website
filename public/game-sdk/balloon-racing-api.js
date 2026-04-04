@@ -3,14 +3,45 @@
  * API helper for Sonic Pop and Sonic Drive (Sonic Racer) games
  *
  * Usage:
- * <script src="https://neurogati.com/game-sdk/neurogati-auth.js"></script>
  * <script src="https://neurogati.com/game-sdk/balloon-racing-api.js"></script>
  */
 
 class BalloonRacingAPI {
   constructor(gameSlug) {
     this.gameSlug = gameSlug; // 'sonic-pop' or 'sonic-drive'
-    this.auth = window.NeurogatiAuth;
+    this.gameUser = null;
+    this.supabaseClient = null;
+    this._initSupabase();
+    this._loadGameUser();
+  }
+
+  /**
+   * Initialize Supabase client
+   * @private
+   */
+  _initSupabase() {
+    // Use the global Supabase client from the parent page
+    if (window.parent && window.parent.createSupabaseClient) {
+      this.supabaseClient = window.parent.createSupabaseClient();
+    } else {
+      console.warn('⚠️ Supabase client not available from parent window');
+    }
+  }
+
+  /**
+   * Load game user from sessionStorage
+   * @private
+   */
+  _loadGameUser() {
+    try {
+      const storedUser = sessionStorage.getItem('neurogati_game_user');
+      if (storedUser) {
+        this.gameUser = JSON.parse(storedUser);
+        console.log('✅ Game user loaded for API:', this.gameUser.username);
+      }
+    } catch (e) {
+      console.error('❌ Error loading game user:', e);
+    }
   }
 
   /**
@@ -18,9 +49,25 @@ class BalloonRacingAPI {
    * @private
    */
   _ensureAuth() {
-    if (!this.auth.isAuthenticated()) {
+    if (!this.gameUser) {
       throw new Error('User not authenticated');
     }
+  }
+
+  /**
+   * Get user identifier (using email as unique identifier)
+   * @private
+   */
+  _getUserIdentifier() {
+    return this.gameUser ? this.gameUser.email : null;
+  }
+
+  /**
+   * Get username
+   * @private
+   */
+  _getUsername() {
+    return this.gameUser ? this.gameUser.username : 'Guest';
   }
 
   /**
@@ -34,15 +81,21 @@ class BalloonRacingAPI {
   async saveScore(levelNumber, moduleNumber, score, completed = false) {
     this._ensureAuth();
 
-    const userId = this.auth.getUserId();
-    const supabase = this.auth.getClient();
+    if (!this.supabaseClient) {
+      console.warn('⚠️ Cannot save score: Supabase client not available');
+      return { success: false, error: 'Database not available' };
+    }
+
+    const userIdentifier = this._getUserIdentifier(); // email
+    const username = this._getUsername();
 
     try {
       // 1. Save to history (all attempts)
-      const { error: historyError } = await supabase
+      const { error: historyError } = await this.supabaseClient
         .from('game_score_history')
         .insert({
-          user_id: userId,
+          user_id: null, // No user_id for simple login
+          username: username, // Store username directly
           game_slug: this.gameSlug,
           level_number: levelNumber,
           score: score,
@@ -51,11 +104,11 @@ class BalloonRacingAPI {
 
       if (historyError) throw historyError;
 
-      // 2. Get current progress
-      const { data: currentProgress } = await supabase
+      // 2. Get current progress (using username instead of user_id)
+      const { data: currentProgress } = await this.supabaseClient
         .from('game_progress')
         .select('high_score')
-        .eq('user_id', userId)
+        .eq('username', username)
         .eq('game_slug', this.gameSlug)
         .eq('level_number', levelNumber)
         .single();
@@ -64,10 +117,11 @@ class BalloonRacingAPI {
       const isNewHighScore = !currentProgress || score > currentProgress.high_score;
       const highScore = isNewHighScore ? score : currentProgress.high_score;
 
-      const { error: progressError } = await supabase
+      const { error: progressError } = await this.supabaseClient
         .from('game_progress')
         .upsert({
-          user_id: userId,
+          user_id: null, // No user_id for simple login
+          username: username, // Store username directly
           game_slug: this.gameSlug,
           level_number: levelNumber,
           module_number: moduleNumber,
@@ -75,7 +129,7 @@ class BalloonRacingAPI {
           completed: completed,
           last_played: new Date().toISOString()
         }, {
-          onConflict: 'user_id,game_slug,level_number'
+          onConflict: 'username,game_slug,level_number' // Changed from user_id to username
         });
 
       if (progressError) throw progressError;
@@ -104,14 +158,18 @@ class BalloonRacingAPI {
   async getAllProgress() {
     this._ensureAuth();
 
-    const userId = this.auth.getUserId();
-    const supabase = this.auth.getClient();
+    if (!this.supabaseClient) {
+      console.warn('⚠️ Cannot get progress: Supabase client not available');
+      return [];
+    }
+
+    const username = this._getUsername();
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await this.supabaseClient
         .from('game_progress')
         .select('*')
-        .eq('user_id', userId)
+        .eq('username', username)
         .eq('game_slug', this.gameSlug)
         .order('module_number', { ascending: true })
         .order('level_number', { ascending: true });
@@ -133,14 +191,18 @@ class BalloonRacingAPI {
   async getLevelProgress(levelNumber) {
     this._ensureAuth();
 
-    const userId = this.auth.getUserId();
-    const supabase = this.auth.getClient();
+    if (!this.supabaseClient) {
+      console.warn('⚠️ Cannot get level progress: Supabase client not available');
+      return null;
+    }
+
+    const username = this._getUsername();
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await this.supabaseClient
         .from('game_progress')
         .select('*')
-        .eq('user_id', userId)
+        .eq('username', username)
         .eq('game_slug', this.gameSlug)
         .eq('level_number', levelNumber)
         .single();
@@ -161,16 +223,19 @@ class BalloonRacingAPI {
    * @returns {Promise<Array>} Array of leaderboard entries
    */
   async getLeaderboard(levelNumber, limit = 10) {
-    const supabase = this.auth.getClient();
+    if (!this.supabaseClient) {
+      console.warn('⚠️ Cannot get leaderboard: Supabase client not available');
+      return [];
+    }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await this.supabaseClient
         .from('game_progress')
         .select(`
           high_score,
           completed,
           last_played,
-          user_id
+          username
         `)
         .eq('game_slug', this.gameSlug)
         .eq('level_number', levelNumber)
@@ -179,18 +244,7 @@ class BalloonRacingAPI {
 
       if (error) throw error;
 
-      // Get user emails for leaderboard
-      const enrichedData = await Promise.all(
-        (data || []).map(async (entry) => {
-          const { data: { user } } = await supabase.auth.admin.getUserById(entry.user_id);
-          return {
-            ...entry,
-            username: user?.user_metadata?.full_name || user?.email || 'Anonymous'
-          };
-        })
-      );
-
-      return enrichedData;
+      return data || [];
     } catch (error) {
       console.error('❌ Error getting leaderboard:', error);
       return [];
@@ -206,17 +260,21 @@ class BalloonRacingAPI {
   async getScoreHistory(levelNumber, limit = 50) {
     this._ensureAuth();
 
-    const userId = this.auth.getUserId();
-    const supabase = this.auth.getClient();
+    if (!this.supabaseClient) {
+      console.warn('⚠️ Cannot get score history: Supabase client not available');
+      return [];
+    }
+
+    const username = this._getUsername();
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await this.supabaseClient
         .from('game_score_history')
         .select('*')
-        .eq('user_id', userId)
+        .eq('username', username)
         .eq('game_slug', this.gameSlug)
         .eq('level_number', levelNumber)
-        .order('played_at', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(limit);
 
       if (error) throw error;
