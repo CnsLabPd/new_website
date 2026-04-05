@@ -6468,7 +6468,34 @@ this.analyticsBodyEl = body;
                     }
                 });
 
+                // Get user info from simple game login
+                const gameUser = sessionStorage.getItem('neurogati_game_user');
+                let username = 'Guest';
+                let email = null;
+
+                if (gameUser) {
+                    try {
+                        const user = JSON.parse(gameUser);
+                        username = user.username;
+                        email = user.email;
+                    } catch (e) {
+                        console.error('Error parsing game user:', e);
+                    }
+                }
+
                 return {
+                    metadata: {
+                        game_id: 'sonic_pop',
+                        client_type: 'web_browser',
+                        timestamp_start: this.analytics?.levelStartedAt?.toISOString() || new Date().toISOString(),
+                        timestamp_end: new Date().toISOString(),
+                        level_number: this.levelManager?.currentLevel || null,
+                        module_number: this.levelManager?.currentModule || null,
+                        session_id: this.analytics?.sessionId || null,
+                        level_attempt_id: this.analytics?.levelAttemptId || null,
+                        user_id: email,
+                        username: username
+                    },
                     clinical_targets: [
                         {
                             domain: 'motor',
@@ -6665,6 +6692,35 @@ this.analyticsBodyEl = body;
                 }
             }
 
+            async uploadTelemetryToS3(telemetryPayload) {
+                const API_URL = 'https://w92nwfz91c.execute-api.ap-south-1.amazonaws.com';
+
+                try {
+                    console.log('📤 Uploading telemetry to S3...');
+
+                    const response = await fetch(`${API_URL}/v1/telemetry/ingest`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(telemetryPayload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('✅ Telemetry uploaded to S3 successfully:', result);
+                        return { success: true, data: result };
+                    } else {
+                        const errorText = await response.text();
+                        console.error('❌ S3 upload failed:', response.status, errorText);
+                        return { success: false, error: `Upload failed: ${response.status}` };
+                    }
+                } catch (error) {
+                    console.error('❌ S3 upload error:', error);
+                    return { success: false, error: error.message };
+                }
+            }
+
             async saveProgressAndAnalytics() {
                 if (!this.pendingSave) return;
                 this.setSaveUIState('saving');
@@ -6693,8 +6749,17 @@ this.analyticsBodyEl = body;
                     if (progressOk && analyticsOk) {
                         const payload = this.buildTelemetryJson();
                         this.downloadTelemetryJson(payload);
+
+                        // Upload to S3 in background
+                        this.uploadTelemetryToS3(payload).then(result => {
+                            if (result.success) {
+                                this.showSaveToast('✅ Data saved successfully (uploaded to cloud)');
+                            } else {
+                                this.showSaveToast(`⚠️ Data saved locally, but cloud upload failed: ${result.error}`);
+                            }
+                        });
+
                         this.setSaveUIState('saved');
-                        this.showSaveToast('✅ Data saved successfully');
                     } else {
                         throw new Error('Save incomplete');
                     }
