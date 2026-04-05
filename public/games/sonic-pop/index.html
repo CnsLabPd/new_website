@@ -6725,44 +6725,25 @@ this.analyticsBodyEl = body;
                 if (!this.pendingSave) return;
                 this.setSaveUIState('saving');
 
-                const levelNumber = this.levelManager.currentLevel;
-                const moduleNumber = this.levelManager.currentModule;
-                const { score, completed, balloonsPopped, timeLeft, endedAt } = this.pendingSave;
-
                 try {
-                    let progressOk = true;
-                    if (window.authManager && window.authManager.isLoggedIn()) {
-                        await window.authManager.saveProgress(levelNumber, moduleNumber, score, completed);
-                    }
+                    // Skip Supabase saves - only save telemetry to S3
+                    console.log('📤 Preparing telemetry for S3 upload...');
 
-                    let analyticsOk = true;
-                    if (this.analytics) {
-                        analyticsOk = await this.analytics.finishLevel({
-                            score,
-                            completed,
-                            balloonsPopped,
-                            timeLeft,
-                            endedAt
-                        });
-                    }
+                    const payload = this.buildTelemetryJson();
 
-                    if (progressOk && analyticsOk) {
-                        const payload = this.buildTelemetryJson();
-                        this.downloadTelemetryJson(payload);
+                    // Download JSON locally
+                    this.downloadTelemetryJson(payload);
 
-                        // Upload to S3 in background
-                        this.uploadTelemetryToS3(payload).then(result => {
-                            if (result.success) {
-                                this.showSaveToast('✅ Data saved successfully (uploaded to cloud)');
-                            } else {
-                                this.showSaveToast(`⚠️ Data saved locally, but cloud upload failed: ${result.error}`);
-                            }
-                        });
+                    // Upload to S3 in background
+                    this.uploadTelemetryToS3(payload).then(result => {
+                        if (result.success) {
+                            this.showSaveToast('✅ Telemetry uploaded to cloud successfully');
+                        } else {
+                            this.showSaveToast(`⚠️ Cloud upload failed: ${result.error}`);
+                        }
+                    });
 
-                        this.setSaveUIState('saved');
-                    } else {
-                        throw new Error('Save incomplete');
-                    }
+                    this.setSaveUIState('saved');
                 } catch (error) {
                     console.error('Save failed:', error);
                     this.setSaveUIState('ready');
