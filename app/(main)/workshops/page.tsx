@@ -116,6 +116,17 @@ const testimonials = [
     text: "Delighted to share the success of our 5-day Computational Neuroscience workshop at IIT Madras (March 27-31, 2026). The enthusiasm and engagement from participants was incredible as we explored neural modeling, brain dynamics, and practical implementations. Grateful to all attendees for making this such a meaningful learning experience.",
     linkedinUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7444662168760950784/",
     workshop: "Computational Neuroscience Workshop - IIT Madras"
+  },
+  {
+    id: "testimonial-3",
+    name: "Shruti Tripathi",
+    role: "Workshop Participant",
+    organization: "Brain Modelling Workshop",
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQF2x_52t0fytw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1686745018356?e=2147483647&v=beta&t=9-AVUlJC-eP5RAsiK-3OP4v4KKM1fwjX4JFuQuzqNik",
+    workshopImage: "/testimonials/testimonial3_Shurti_Tripathi.jpeg",
+    text: "I recently completed an immersive workshop on Brain Modelling organised by the Computational Neuroscience Lab, IIT Madras, and Neurogati, where I explored the fascinating intersection of neuroscience and AI. From studying neuronal signaling models to gaining hands-on experience with PyTorch and neural oscillations, it was an enriching journey into how computational models can help decode complex brain functions. Excited to build further on this!",
+    linkedinUrl: "https://www.linkedin.com/posts/shrutitripathi3_computationalneuroscience-ai-deeplearning-activity-7446424925051203584-FVP2",
+    workshop: "Workshop on Brain Modeling"
   }
 ]
 
@@ -271,10 +282,12 @@ export default function WorkshopsPage() {
             <div className="h-1.5 w-20 bg-blue-600 mt-4"></div>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
-            {testimonials.map((testimonial) => (
-              <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-            ))}
+          <div className="overflow-x-auto pb-4 -mx-4 px-4">
+            <div className="flex gap-6 min-w-max">
+              {testimonials.map((testimonial) => (
+                <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -339,10 +352,10 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
   const initials = testimonial.name.split(' ').map((n: string) => n[0]).join('')
 
   return (
-    <Card className="relative flex flex-col overflow-hidden border-2 border-border bg-card hover:shadow-xl transition-all">
+    <Card className="relative flex flex-col overflow-hidden border-2 border-border bg-card hover:shadow-xl transition-all w-[400px] flex-shrink-0">
       {/* Workshop Image */}
       {testimonial.workshopImage && (
-        <div className="w-full h-48 overflow-hidden bg-muted">
+        <div className="w-full h-32 overflow-hidden bg-muted">
           <img
             src={testimonial.workshopImage}
             alt={`${testimonial.workshop} content`}
@@ -351,44 +364,44 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
         </div>
       )}
 
-      <CardContent className="p-8">
-        <div className="flex items-start gap-6 mb-6">
+      <CardContent className="p-5">
+        <div className="flex items-start gap-4 mb-4">
           {/* Avatar */}
           <div className="flex-shrink-0">
             {testimonial.image ? (
               <img
                 src={testimonial.image}
                 alt={testimonial.name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-blue-500"
+                className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
               />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center border-2 border-blue-500">
-                <span className="text-white font-black text-xl">{initials}</span>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center border-2 border-blue-500">
+                <span className="text-white font-black text-lg">{initials}</span>
               </div>
             )}
           </div>
 
           {/* Info */}
           <div className="flex-grow">
-            <h3 className="text-xl font-black tracking-tight mb-1">{testimonial.name}</h3>
-            <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
+            <h3 className="text-lg font-black tracking-tight mb-1">{testimonial.name}</h3>
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">
               {testimonial.role}
             </p>
             <p className="text-xs text-muted-foreground">{testimonial.organization}</p>
           </div>
 
-          <Quote className="h-8 w-8 text-blue-500/20 flex-shrink-0" />
+          <Quote className="h-6 w-6 text-blue-500/20 flex-shrink-0" />
         </div>
 
         {/* Testimonial Text */}
-        <div className="mb-6">
-          <p className="text-[17px] text-foreground/90 leading-relaxed font-medium italic">
+        <div className="mb-4">
+          <p className="text-sm text-foreground/90 leading-relaxed font-medium italic line-clamp-5">
             "{testimonial.text}"
           </p>
         </div>
 
         {/* Workshop Badge */}
-        <div className="flex items-center justify-between pt-4 border-t border-border/50">
+        <div className="flex items-center justify-between pt-3 border-t border-border/50">
           <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
             {testimonial.workshop}
           </span>
