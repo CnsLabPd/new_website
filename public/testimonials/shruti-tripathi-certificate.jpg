@@ -1,0 +1,145 @@
+import boto3
+import requests
+import json
+import uuid
+import time
+
+# ==========================================
+# CONFIGURATION - PASTE YOUR CDK OUTPUTS HERE
+# ==========================================
+API_URL = "https://w92nwfz91c.execute-api.ap-south-1.amazonaws.com" # No trailing slash
+USER_POOL_ID = "ap-south-1_aywuq7ZuL"
+CLIENT_ID = "45p4bkk9nqihjn58asgt53gj59"
+
+# Test User Details
+TEST_EMAIL = f"patient_{uuid.uuid4().hex[:6]}@neurogati-test.com"
+TEST_PASSWORD = "Password123!"
+
+# Initialize AWS Cognito Client
+cognito = boto3.client('cognito-idp', region_name='ap-south-1')
+
+def run_integration_test():
+    print(f"--- Neurogati E2E Integration Test ---")
+    print(f"Targeting API: {API_URL}\n")
+
+    # ---------------------------------------------------------
+    # 1. ADMIN SETUP: Create User & Set Password
+    # ---------------------------------------------------------
+    print(f"[1/6] Creating test patient: {TEST_EMAIL}...")
+    try:
+        cognito.admin_create_user(
+            UserPoolId=USER_POOL_ID,
+            Username=TEST_EMAIL,
+            UserAttributes=[{'Name': 'email', 'Value': TEST_EMAIL}],
+            MessageAction='SUPPRESS' # Don't actually send an email
+        )
+        cognito.admin_set_user_password(
+            UserPoolId=USER_POOL_ID,
+            Username=TEST_EMAIL,
+            Password=TEST_PASSWORD,
+            Permanent=True
+        )
+        print("✅ User created and verified.")
+    except Exception as e:
+        print(f"❌ Failed to create user: {e}")
+        return
+
+    # ---------------------------------------------------------
+    # 2. REACT CLIENT: Login & Get JWT
+    # ---------------------------------------------------------
+    print("\n[2/6] Logging in to Cognito to get JWT...")
+    auth_response = cognito.admin_initiate_auth(
+        UserPoolId=USER_POOL_ID,
+        ClientId=CLIENT_ID,
+        AuthFlow='ADMIN_NO_SRP_AUTH',
+        AuthParameters={'USERNAME': TEST_EMAIL, 'PASSWORD': TEST_PASSWORD}
+    )
+    jwt_token = auth_response['AuthenticationResult']['IdToken']
+    print("✅ JWT Acquired.")
+
+    # ---------------------------------------------------------
+    # 3. REACT CLIENT: Request Unity Launch Token
+    # ---------------------------------------------------------
+    print("\n[3/6] React requesting Desktop Launch Token...")
+    headers = {"Authorization": f"Bearer {jwt_token}"}
+    payload = {"game_id": "darts_therapy_v1"}
+    
+    res = requests.post(f"{API_URL}/v1/auth/launch-token", headers=headers, json=payload)
+    res.raise_for_status()
+    custom_token = res.json()['token']
+    print(f"✅ Custom Token Acquired: {custom_token}")
+
+    # ---------------------------------------------------------
+    # 4. UNITY CLIENT: Boot up & Verify Token
+    # ---------------------------------------------------------
+    print("\n[4/6] Unity Booting - Verifying Token...")
+    unity_headers = {"Authorization": f"Bearer {custom_token}"}
+    res = requests.get(f"{API_URL}/v1/auth/verify", headers=unity_headers)
+    
+    if res.status_code == 200:
+        print("✅ Token Verified. Unity unlocks game.")
+    else:
+        print(f"❌ Token Verification Failed: {res.status_code}")
+        return
+
+    # ---------------------------------------------------------
+    # 5. UNITY CLIENT: Game Over - Ingest Telemetry
+    # ---------------------------------------------------------
+    print("\n[5/6] Game Complete. Unity uploading telemetry...")
+    
+    # Mocking the exact DATA_SCHEMA.md
+    mock_telemetry = {
+        "metadata": {
+            "game_id": "darts_therapy_v1",
+            "client_type": "unity_desktop",
+            "timestamp_start": "2026-03-31T10:00:00Z",
+            "timestamp_end": "2026-03-31T10:15:00Z"
+        },
+        "clinical_targets": [{"domain": "motor", "body_part": "hand", "laterality": "right"}],
+        "environment_state": {
+            "score_log": [
+                {"t": 1500, "delta": 10},
+                {"t": 3200, "delta": 15}
+            ]
+        }
+    }
+
+    res = requests.post(f"{API_URL}/v1/telemetry/ingest", headers=unity_headers, json=mock_telemetry)
+    
+    if res.status_code == 200:
+        print("✅ Telemetry ingested successfully.")
+        print(f"   Response: {res.json()}")
+    else:
+        print(f"❌ Ingest Failed: {res.status_code} - {res.text}")
+        return
+
+    # Verify Burn-After-Read Security
+    print("   [Security Check] Verifying token was burned...")
+    res_burned = requests.get(f"{API_URL}/v1/auth/verify", headers=unity_headers)
+    if res_burned.status_code == 401:
+        print("   ✅ Security Check Passed: Token successfully destroyed.")
+    else:
+        print("   ❌ Security Check Failed: Token is still active!")
+
+    # ---------------------------------------------------------
+    # 6. REACT CLIENT: Fetch Dashboard Stats
+    # ---------------------------------------------------------
+    print("\n[6/6] React fetching patient dashboard stats...")
+    time.sleep(1) # Give DynamoDB a microsecond to settle
+    
+    res = requests.get(f"{API_URL}/v1/telemetry/stats", headers=headers)
+    if res.status_code == 200:
+        stats = res.json()
+        print("✅ Stats retrieved successfully:")
+        print(json.dumps(stats, indent=2))
+        
+        # Validation
+        if len(stats['sessions']) > 0 and stats['sessions'][0]['total_score'] == 25:
+            print("\n🎉 END-TO-END TEST PASSED! The architecture is fully functional.")
+        else:
+            print("\n⚠️ Stats retrieved, but math calculation seems incorrect.")
+    else:
+        print(f"❌ Failed to fetch stats: {res.status_code} - {res.text}")
+
+if __name__ == "__main__":
+    run_integration_test()
