@@ -28,6 +28,7 @@ const navLinks = [
   // { href: "/careers", label: "Careers" },
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
+  { href: "https://neurokatha.wordpress.com/", label:"Blog" },
   { href: "/contact", label: "Contact" },
 ]
 
