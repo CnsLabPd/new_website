@@ -11,10 +11,11 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const navigationSections = [
   { id: "overview", label: "Overview" },
-  { id: "theme", label: "Theme" },
+  { id: "theme", label: "About" },
   { id: "highlights", label: "Program Highlights" },
   { id: "structure", label: "Program Structure" },
   { id: "audience", label: "Who Should Attend" },
+  { id: "registration", label: "Registration & Fees" },
   { id: "abstracts", label: "Call for Abstracts" },
   { id: "committee", label: "Scientific Committee" },
   { id: "speakers", label: "Speakers" },
@@ -80,7 +81,7 @@ export default function SummerSchool2026Page() {
             <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm font-bold">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-blue-500" />
-                <span>June 15-25, 2026</span>
+                <span>June 15-26, 2026</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-blue-500" />
@@ -129,9 +130,9 @@ export default function SummerSchool2026Page() {
 
           {/* MAIN CONTENT */}
           <div className="flex-1 max-w-4xl">
-            {/* THEME SECTION */}
+            {/* ABOUT SECTION */}
             <section id="theme" className="mb-20 scroll-mt-24">
-              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Theme</h2>
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">About</h2>
               <div className="h-1.5 w-20 bg-blue-600 mb-8"></div>
 
               <Card className="border-2 border-blue-500/30 bg-blue-500/[0.02]">
@@ -304,6 +305,65 @@ export default function SummerSchool2026Page() {
                       <span>Professionals interested in neurotechnology</span>
                     </li>
                   </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* REGISTRATION AND FEE STRUCTURE */}
+            <section id="registration" className="mb-20 scroll-mt-24">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Registration and Fee Structure</h2>
+              <div className="h-1.5 w-20 bg-blue-600 mb-8"></div>
+
+              <Card className="border-2 border-blue-500/30 bg-blue-500/[0.02]">
+                <CardContent className="p-8">
+                  <p className="text-xl font-bold text-blue-500 mb-8 text-center">
+                    Registrations will open soon
+                  </p>
+
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-black mb-6">Fee Structure</h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-2 border-border">
+                        <thead>
+                          <tr className="bg-blue-500/10">
+                            <th className="border border-border px-6 py-4 text-left font-black">Tier</th>
+                            <th className="border border-border px-6 py-4 text-left font-black">Fee (INR)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="hover:bg-muted/50 transition-colors">
+                            <td className="border border-border px-6 py-4 font-bold">Talks alone</td>
+                            <td className="border border-border px-6 py-4">2,500</td>
+                          </tr>
+                          <tr className="hover:bg-muted/50 transition-colors">
+                            <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(charge for each)</span></td>
+                            <td className="border border-border px-6 py-4">2,000</td>
+                          </tr>
+                          <tr className="hover:bg-muted/50 transition-colors">
+                            <td className="border border-border px-6 py-4 font-bold">Poster</td>
+                            <td className="border border-border px-6 py-4">1,500</td>
+                          </tr>
+                          <tr className="hover:bg-muted/50 transition-colors">
+                            <td className="border border-border px-6 py-4 font-bold">Talk + Hands-on</td>
+                            <td className="border border-border px-6 py-4">4,000</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div className="bg-background border-2 border-border rounded-lg p-6 mb-4">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      <strong className="text-foreground">Note:</strong> Certificate will reflect tier chosen
+                    </p>
+                  </div>
+
+                  <div className="bg-blue-500/5 border-2 border-blue-500/30 rounded-lg p-6">
+                    <p className="font-bold text-foreground mb-2">What are Hands-on sessions?</p>
+                    <p className="text-foreground/80">
+                      Hands-on sessions are coding sessions where participants will get hands-on experience working with models discussed during the lectures.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </section>
