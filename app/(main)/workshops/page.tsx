@@ -11,6 +11,18 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
+    id: "summer-school-2026",
+    status: "Upcoming",
+    title: "Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology",
+    date: "June 15-25, 2026",
+    duration: "10 days",
+    participants: "Applications Open",
+    type: "Online (Live + Interactive)",
+    pricing: "Registration details coming soon",
+    description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: April 30th, 2026.",
+    registrationLink: "/contact"
+  },
+  {
     id: "comp-neuro-training-3",
     status: "Past",
     title: "Workshop on Brain Modeling",
