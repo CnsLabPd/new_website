@@ -376,7 +376,7 @@ export default function SummerSchool2026Page() {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-500">•</span>
-                        <span>General CNN</span>
+                        <span>Modelling Vision using Convolutional Neural Networks</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-500">•</span>
