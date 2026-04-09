@@ -92,12 +92,9 @@ export default function SummerSchool2026Page() {
               </div>
             </div>
 
-            <DynamicMagneticButton>
-              <Link href="/contact" className={GRADIENT_BUTTON_CLASS}>
-                Apply Now
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </DynamicMagneticButton>
+            <p className="text-xl font-bold text-blue-500">
+              Registrations Opening Soon
+            </p>
           </div>
         </div>
       </section>
@@ -330,35 +327,47 @@ export default function SummerSchool2026Page() {
                     <ul className="grid md:grid-cols-2 gap-2 text-foreground/80">
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>Neural dynamics and brain oscillations</span>
+                        <span>Biophysical Models/Single Neuron Modeling</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>Computational models of sensory motor function and cognition</span>
+                        <span>Sensory Systems</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>Disease models</span>
+                        <span>Motor Systems</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>EEG and neural signal analysis</span>
+                        <span>Brain Dynamics</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>AI and machine learning in neuroscience</span>
+                        <span>Spatial Navigation</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>Brain–computer interfaces (BCI)</span>
+                        <span>Memory</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>Neurotechnology and instrumentation</span>
+                        <span>Reward Systems and Decision Making</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-pink-500">•</span>
-                        <span>Neurorehabilitation and clinical applications</span>
+                        <span>BCI</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-pink-500">•</span>
+                        <span>Clinical Neuroscience</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-pink-500">•</span>
+                        <span>Neurodegenerative Disorders</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-pink-500">•</span>
+                        <span>Neuropsychology</span>
                       </li>
                     </ul>
                   </div>
@@ -401,20 +410,6 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Srikanth Ramaswamy</p>
-                        <p className="text-sm text-muted-foreground">Newcastle University, UK</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Vignesh Muralidharan</p>
-                        <p className="text-sm text-muted-foreground">IIT Jodhpur, India</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
-                      <div>
                         <p className="font-bold">Dr. Pragathi Balasubramani</p>
                         <p className="text-sm text-muted-foreground">IIT Kanpur, India</p>
                       </div>
@@ -429,15 +424,29 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Aasif Sheikh</p>
-                        <p className="text-sm text-muted-foreground">Case Western Reserve University, USA</p>
+                        <p className="font-bold">Dr. Risto Ilmoniemi</p>
+                        <p className="text-sm text-muted-foreground">Aalto University, Finland</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Risto Ilmoniemi</p>
-                        <p className="text-sm text-muted-foreground">Aalto University, Finland</p>
+                        <p className="font-bold">Dr. Vignesh Muralidharan</p>
+                        <p className="text-sm text-muted-foreground">IIT Jodhpur, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Srikanth Ramaswamy</p>
+                        <p className="text-sm text-muted-foreground">Newcastle University, UK</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Aasif Sheikh</p>
+                        <p className="text-sm text-muted-foreground">Case Western Reserve University, USA</p>
                       </div>
                     </div>
                   </div>
@@ -456,90 +465,6 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Vignan Muddapu</p>
-                        <p className="text-sm text-muted-foreground">Azim Premji University</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Parul Verma</p>
-                        <p className="text-sm text-muted-foreground">IIT Madras, India</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Ryan Philips</p>
-                        <p className="text-sm text-muted-foreground">Azim Premji University, India</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Alekhya Mandeli</p>
-                        <p className="text-sm text-muted-foreground">University of Sheffield, UK</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Gangadhar Garipelli</p>
-                        <p className="text-sm text-muted-foreground">MindMaze, Switzerland</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Pratik Mutha</p>
-                        <p className="text-sm text-muted-foreground">IIT Gandhinagar, India</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Bankim Chander</p>
-                        <p className="text-sm text-muted-foreground">BrainPortal Technologies, Germany</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Dipanjan Roy</p>
-                        <p className="text-sm text-muted-foreground">IIT Jodhpur, India</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Risto Iliomeni</p>
-                        <p className="text-sm text-muted-foreground">Aalto University, Finland</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Avinash Singh</p>
-                        <p className="text-sm text-muted-foreground">UTS, Sydney</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Srikanth Ramaswamy</p>
-                        <p className="text-sm text-muted-foreground">University of Newcastle upon Tyne, UK</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Suhita Nadkarni</p>
-                        <p className="text-sm text-muted-foreground">IISER, Pune</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
                         <p className="font-bold">Dr. SP Arun</p>
                         <p className="text-sm text-muted-foreground">IISc, Bangalore</p>
                       </div>
@@ -554,29 +479,15 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Aasef Sheikh</p>
-                        <p className="text-sm text-muted-foreground">Case Western Reserve University, USA</p>
+                        <p className="font-bold">Dr. Bankim Chander</p>
+                        <p className="text-sm text-muted-foreground">BrainPortal Technologies, Germany</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Aditya Murthy</p>
-                        <p className="text-sm text-muted-foreground">IISc, Bangalore</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Sylaja PN</p>
-                        <p className="text-sm text-muted-foreground">SCTIMST, Thiruvananthapuram</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Swetha Kumari</p>
-                        <p className="text-sm text-muted-foreground">Deloitte, Bangalore</p>
+                        <p className="font-bold">Dr. Gangadhar Garipelli</p>
+                        <p className="text-sm text-muted-foreground">MindMaze, Switzerland</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
@@ -589,8 +500,106 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
+                        <p className="font-bold">Dr. Risto Iliomeni</p>
+                        <p className="text-sm text-muted-foreground">Aalto University, Finland</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Swetha Kumari</p>
+                        <p className="text-sm text-muted-foreground">Deloitte, Bangalore</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Alekhya Mandeli</p>
+                        <p className="text-sm text-muted-foreground">University of Sheffield, UK</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Vignan Muddapu</p>
+                        <p className="text-sm text-muted-foreground">Azim Premji University</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
                         <p className="font-bold">Dr. Vignesh Muralidharan</p>
                         <p className="text-sm text-muted-foreground">IIT Jodhpur</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Aditya Murthy</p>
+                        <p className="text-sm text-muted-foreground">IISc, Bangalore</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Pratik Mutha</p>
+                        <p className="text-sm text-muted-foreground">IIT Gandhinagar, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Suhita Nadkarni</p>
+                        <p className="text-sm text-muted-foreground">IISER, Pune</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Ryan Philips</p>
+                        <p className="text-sm text-muted-foreground">Azim Premji University, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Sylaja PN</p>
+                        <p className="text-sm text-muted-foreground">SCTIMST, Thiruvananthapuram</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Srikanth Ramaswamy</p>
+                        <p className="text-sm text-muted-foreground">University of Newcastle upon Tyne, UK</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Dipanjan Roy</p>
+                        <p className="text-sm text-muted-foreground">IIT Jodhpur, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Aasef Sheikh</p>
+                        <p className="text-sm text-muted-foreground">Case Western Reserve University, USA</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Avinash Singh</p>
+                        <p className="text-sm text-muted-foreground">UTS, Sydney</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Parul Verma</p>
+                        <p className="text-sm text-muted-foreground">IIT Madras, India</p>
                       </div>
                     </div>
                   </div>
@@ -608,23 +617,9 @@ export default function SummerSchool2026Page() {
                     Don't miss this opportunity to learn from world-class experts and advance your knowledge in computational neuroscience and neurotechnology.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-                    <DynamicMagneticButton>
-                      <Link href="/contact" className={GRADIENT_BUTTON_CLASS}>
-                        Apply Now
-                        <ArrowRight className="h-5 w-5" />
-                      </Link>
-                    </DynamicMagneticButton>
-
-                    <a
-                      href="/Blue And White Geometeric Training Program Seminar Poster.pdf"
-                      target="_blank"
-                      className="px-10 py-2 border-2 border-border font-semibold rounded-full inline-flex items-center justify-center gap-2 whitespace-nowrap text-base hover:border-blue-500 transition-colors"
-                    >
-                      Download Poster
-                      <ArrowRight className="h-5 w-5" />
-                    </a>
-                  </div>
+                  <p className="text-xl font-bold text-blue-500 mb-8">
+                    Registrations Opening Soon
+                  </p>
 
                   <div className="pt-8 border-t border-border/50">
                     <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Contact</p>
