@@ -14,7 +14,7 @@ const workshops = [
     id: "summer-school-2026",
     status: "Upcoming",
     title: "Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology",
-    date: "June 15-25, 2026",
+    date: "June 15-26, 2026",
     duration: "10 days",
     participants: "Applications Open",
     type: "Online (Live + Interactive)",
@@ -36,7 +36,7 @@ const workshops = [
   },
   {
     id: "comp-neuro-training-1",
-    status: "Past",
+    status: "Ongoing",
     title: "5-Month Research Training Program in Computational Neuroscience",
     date: "January 01st - May 31st, 2026",
     duration: "20 weeks (Phase 01: 10w | Phase 02: 10w)",
@@ -144,12 +144,13 @@ const testimonials = [
 
 export default function WorkshopsPage() {
   const [activeSection, setActiveSection] = useState("upcoming")
-  const upcomingWorkshops = workshops.filter(ws => ws.status === 'Upcoming' || ws.status === 'Ongoing');
+  const upcomingWorkshops = workshops.filter(ws => ws.status === 'Upcoming');
+  const ongoingWorkshops = workshops.filter(ws => ws.status === 'Ongoing');
   const pastWorkshops = workshops.filter(ws => ws.status === 'Past');
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['upcoming', 'past', 'testimonials']
+      const sections = ['upcoming', 'ongoing', 'past', 'testimonials']
       const scrollPosition = window.scrollY + 200
 
       for (const sectionId of sections) {
@@ -209,6 +210,16 @@ export default function WorkshopsPage() {
               }`}
             >
               Upcoming
+            </button>
+            <button
+              onClick={() => scrollToSection("ongoing")}
+              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
+                activeSection === "ongoing"
+                  ? "bg-blue-600 text-white"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70"
+              }`}
+            >
+              Ongoing
             </button>
             <button
               onClick={() => scrollToSection("past")}
@@ -274,7 +285,36 @@ export default function WorkshopsPage() {
           )}
         </div>
 
-        {/* 3. PAST WORKSHOPS */}
+        {/* 3. ONGOING WORKSHOPS */}
+        <div id="ongoing" className="mb-24 scroll-mt-24">
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Ongoing Workshops</h2>
+            <div className="h-1.5 w-20 bg-green-600 mt-4"></div>
+          </div>
+
+          {ongoingWorkshops.length > 0 ? (
+            <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+              {ongoingWorkshops.map((ws) => (
+                <WorkshopCard key={ws.id} ws={ws} isUpcoming={true} />
+              ))}
+            </div>
+          ) : (
+            <Card className="relative flex flex-col overflow-hidden border-2 border-green-500/30 bg-green-500/[0.02]">
+              <CardContent className="py-16 text-center">
+                <div className="max-w-2xl mx-auto">
+                  <div className="mb-6">
+                    <Hourglass className="h-16 w-16 mx-auto text-green-500/50" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-4">
+                    No Ongoing Workshops
+                  </h3>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* 4. PAST WORKSHOPS */}
         <div id="past" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground/50">Past Workshops</h2>
@@ -287,7 +327,7 @@ export default function WorkshopsPage() {
           </div>
         </div>
 
-        {/* 4. TESTIMONIALS */}
+        {/* 5. TESTIMONIALS */}
         <div id="testimonials" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Testimonials</h2>
