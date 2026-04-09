@@ -102,29 +102,32 @@ export default function SummerSchool2026Page() {
       </section>
 
       {/* MAIN CONTENT WITH SIDEBAR */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
         <div className="flex gap-12">
-          {/* LEFT SIDEBAR NAVIGATION */}
+          {/* LEFT SIDEBAR NAVIGATION - Space Placeholder */}
           <aside className="hidden lg:block w-64 flex-shrink-0">
-            <nav className="sticky top-24 space-y-2 max-h-[calc(100vh-120px)] overflow-y-auto">
-              <p className="text-xs font-black uppercase tracking-wider text-muted-foreground mb-4 px-4">
-                On This Page
-              </p>
-              {navigationSections.map((section) => (
-                <button
-                  key={section.id}
-                  onClick={() => scrollToSection(section.id)}
-                  className={`w-full text-left px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                    activeSection === section.id
-                      ? "bg-blue-500 text-white"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
-                >
-                  {section.label}
-                </button>
-              ))}
-            </nav>
+            {/* This div reserves space in the layout */}
           </aside>
+
+          {/* FIXED SIDEBAR - Frozen in place */}
+          <nav className="hidden lg:block fixed left-8 top-32 w-64 space-y-2 max-h-[calc(100vh-150px)] overflow-y-auto">
+            <p className="text-xs font-black uppercase tracking-wider text-muted-foreground mb-4 px-4">
+              On This Page
+            </p>
+            {navigationSections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollToSection(section.id)}
+                className={`w-full text-left px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                  activeSection === section.id
+                    ? "bg-blue-500 text-white"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                {section.label}
+              </button>
+            ))}
+          </nav>
 
           {/* MAIN CONTENT */}
           <div className="flex-1 max-w-4xl">
