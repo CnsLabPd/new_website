@@ -104,28 +104,26 @@ export default function SummerSchool2026Page() {
       {/* MAIN CONTENT WITH SIDEBAR */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex gap-12">
-          {/* LEFT SIDEBAR NAVIGATION - Fixed */}
+          {/* LEFT SIDEBAR NAVIGATION */}
           <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="fixed w-64">
-              <nav className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-4">
-                <p className="text-xs font-black uppercase tracking-wider text-muted-foreground mb-4 px-4">
-                  On This Page
-                </p>
-                {navigationSections.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => scrollToSection(section.id)}
-                    className={`w-full text-left px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                      activeSection === section.id
-                        ? "bg-blue-500 text-white"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
-                  >
-                    {section.label}
-                  </button>
-                ))}
-              </nav>
-            </div>
+            <nav className="sticky top-24 space-y-2 max-h-[calc(100vh-120px)] overflow-y-auto">
+              <p className="text-xs font-black uppercase tracking-wider text-muted-foreground mb-4 px-4">
+                On This Page
+              </p>
+              {navigationSections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() => scrollToSection(section.id)}
+                  className={`w-full text-left px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                    activeSection === section.id
+                      ? "bg-blue-500 text-white"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  {section.label}
+                </button>
+              ))}
+            </nav>
           </aside>
 
           {/* MAIN CONTENT */}
