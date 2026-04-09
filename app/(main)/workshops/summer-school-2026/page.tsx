@@ -26,7 +26,8 @@ export default function SummerSchool2026Page() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200
+      const OFFSET = 150
+      const scrollPosition = window.scrollY + OFFSET
 
       for (const section of navigationSections) {
         const element = document.getElementById(section.id)
@@ -47,10 +48,10 @@ export default function SummerSchool2026Page() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      const offset = 100
+      const OFFSET = 150
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
       window.scrollTo({
-        top: elementPosition - offset,
+        top: elementPosition - OFFSET,
         behavior: 'smooth'
       })
     }
