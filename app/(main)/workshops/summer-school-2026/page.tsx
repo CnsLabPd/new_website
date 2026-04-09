@@ -400,9 +400,20 @@ export default function SummerSchool2026Page() {
                       </li>
                     </ul>
 
-                    <p className="text-sm text-muted-foreground mt-4">
-                      <strong className="text-foreground">Pricing:</strong> 400 INR per session or 2,000 INR for all sessions
-                    </p>
+                    <div className="mt-4 p-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 border-2 border-green-500/30 rounded-lg">
+                      <p className="text-sm font-bold text-foreground mb-2">
+                        💰 Special Bundle Pricing
+                      </p>
+                      <p className="text-foreground/80 text-sm mb-1">
+                        <strong className="text-foreground">Individual:</strong> 400 INR per session
+                      </p>
+                      <p className="text-foreground/80 text-sm mb-2">
+                        <strong className="text-foreground">All Sessions Bundle:</strong> 2,000 INR
+                      </p>
+                      <p className="text-green-600 dark:text-green-400 font-bold text-sm">
+                        ✓ Save 800 INR when you choose all sessions! (Regular price: 2,800 INR)
+                      </p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
