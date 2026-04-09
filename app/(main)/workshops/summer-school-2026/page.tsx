@@ -336,7 +336,11 @@ export default function SummerSchool2026Page() {
                             <td className="border border-border px-6 py-4">2,500</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
-                            <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(charge for each)</span></td>
+                            <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(per session)</span></td>
+                            <td className="border border-border px-6 py-4">400</td>
+                          </tr>
+                          <tr className="hover:bg-muted/50 transition-colors">
+                            <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(all sessions)</span></td>
                             <td className="border border-border px-6 py-4">2,000</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
@@ -359,9 +363,45 @@ export default function SummerSchool2026Page() {
                   </div>
 
                   <div className="bg-blue-500/5 border-2 border-blue-500/30 rounded-lg p-6">
-                    <p className="font-bold text-foreground mb-2">What are Hands-on sessions?</p>
-                    <p className="text-foreground/80">
+                    <p className="font-bold text-foreground mb-4">What are Hands-on sessions?</p>
+                    <p className="text-foreground/80 mb-4">
                       Hands-on sessions are coding sessions where participants will get hands-on experience working with models discussed during the lectures.
+                    </p>
+
+                    <p className="font-bold text-foreground mb-3">Available Hands-on Topics:</p>
+                    <ul className="space-y-2 text-foreground/80">
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>Neuron Simulator Training</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>General CNN</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>CNN in Motor Systems</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>Brain Dynamics Modeling using DONN</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>DNNs for Hippocampus - Spatial Cells</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>EEG Processing</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500">•</span>
+                        <span>BG Model for DBS</span>
+                      </li>
+                    </ul>
+
+                    <p className="text-sm text-muted-foreground mt-4">
+                      <strong className="text-foreground">Pricing:</strong> 400 INR per session or 2,000 INR for all sessions
                     </p>
                   </div>
                 </CardContent>
