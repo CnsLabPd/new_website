@@ -376,11 +376,7 @@ export default function SummerSchool2026Page() {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-500">•</span>
-                        <span>Modelling Vision using Convolutional Neural Networks</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>Modelling Motor function using Deep Neural Networks</span>
+                        <span>Modelling Visio Motor Function using Convolutional Neural Networks</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-500">•</span>
@@ -411,7 +407,7 @@ export default function SummerSchool2026Page() {
                         <strong className="text-foreground">All Sessions Bundle:</strong> 2,000 INR
                       </p>
                       <p className="text-green-600 dark:text-green-400 font-bold text-sm">
-                        ✓ Save 800 INR when you choose all sessions! (Regular price: 2,800 INR)
+                        ✓ Save 400 INR when you choose all sessions! (Regular price: 2,400 INR)
                       </p>
                     </div>
                   </div>
