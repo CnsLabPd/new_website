@@ -4,14 +4,20 @@ import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Gamepad2, User, Mail, ArrowRight } from "lucide-react"
 
+const HARDCODED_USERNAME = "manoj"
+const HARDCODED_EMAIL = "sakamanojkumar18@gmail.com"
+
 export default function GameLoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const gameId = searchParams.get('game') || ''
+  const isSonicPop = gameId === "sonic-pop"
 
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState(isSonicPop ? HARDCODED_USERNAME : "")
+  const [email, setEmail] = useState(isSonicPop ? HARDCODED_EMAIL : "")
   const [errors, setErrors] = useState({ username: "", email: "" })
+  const [submitError, setSubmitError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const validateForm = () => {
     const newErrors = { username: "", email: "" }
@@ -34,15 +40,51 @@ export default function GameLoginPage() {
     return isValid
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) return
+
+    setSubmitError("")
+    setIsSubmitting(true)
+
+    let launchToken: string | null = null
+    let tokenExpiresAt: number | null = null
+
+    if (isSonicPop) {
+      try {
+        const tokenResponse = await fetch("/api/sonic-pop/launch-token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username.trim(),
+            email: email.trim(),
+          }),
+        })
+
+        if (!tokenResponse.ok) {
+          throw new Error("Could not initialize AWS launch token")
+        }
+
+        const tokenData = await tokenResponse.json()
+        launchToken = tokenData.token ?? null
+        tokenExpiresAt = tokenData.expiresAt ?? null
+      } catch (error) {
+        console.error("Failed to initialize Sonic Pop launch token:", error)
+        setSubmitError("Could not prepare AWS telemetry upload. Try again.")
+        setIsSubmitting(false)
+        return
+      }
+    }
 
     // Store credentials in sessionStorage (temporary for this session only)
     const gameCredentials = {
       username: username.trim(),
       email: email.trim(),
+      launchToken,
+      tokenExpiresAt,
       timestamp: Date.now()
     }
 
@@ -54,6 +96,8 @@ export default function GameLoginPage() {
     } else {
       router.push('/gamingcategories')
     }
+
+    setIsSubmitting(false)
   }
 
   const gameName = gameId ? gameId.replace(/-/g, ' ').toUpperCase() : 'GAME'
@@ -90,6 +134,7 @@ export default function GameLoginPage() {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                readOnly={isSonicPop}
                 className="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="Enter your username"
               />
@@ -111,6 +156,7 @@ export default function GameLoginPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                readOnly={isSonicPop}
                 className="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="Enter your email"
               />
@@ -120,12 +166,17 @@ export default function GameLoginPage() {
             )}
           </div>
 
+          {submitError && (
+            <p className="text-sm text-red-400">{submitError}</p>
+          )}
+
           {/* Submit Button */}
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-black text-lg uppercase tracking-wider py-4 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
           >
-            Start Playing
+            {isSubmitting ? "Preparing Session..." : "Start Playing"}
             <ArrowRight className="h-5 w-5" />
           </button>
         </form>
@@ -133,7 +184,7 @@ export default function GameLoginPage() {
         {/* Footer Note */}
         <div className="mt-8 text-center">
           <p className="text-xs text-slate-500 uppercase tracking-wider">
-            Your details are used only for saving game progress
+            {isSonicPop ? "Preconfigured test user for AWS telemetry upload" : "Your details are used only for saving game progress"}
           </p>
         </div>
       </div>

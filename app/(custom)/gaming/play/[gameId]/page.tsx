@@ -1,8 +1,17 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { X, Gamepad2, PlayCircle, Headphones, ChevronDown, Lock } from "lucide-react"
+import { X, Gamepad2, PlayCircle, Headphones, ChevronDown, BarChart3 } from "lucide-react"
 import { createClient } from "@/lib/supabase"
+
+const RESULTS_STATE_KEY = "sonic-pop-results-state"
+const POLL_INTERVAL_MS = 2000
+const MAX_POLL_ATTEMPTS = 12
+
+type AnalyticsStatus = {
+  sessionId: string
+  status: "processing" | "ready"
+}
 
 export default function GamePlayerPage({ params }: { params: { gameId: string } }) {
   const router = useRouter();
@@ -10,6 +19,12 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [analyticsStatus, setAnalyticsStatus] = useState<AnalyticsStatus | null>(null);
+
+  const persistAnalyticsState = (nextState: AnalyticsStatus) => {
+    setAnalyticsStatus(nextState);
+    localStorage.setItem(RESULTS_STATE_KEY, JSON.stringify(nextState));
+  };
 
   // Check for simple game login
   useEffect(() => {
@@ -51,6 +66,77 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const raw = localStorage.getItem(RESULTS_STATE_KEY)
+      if (raw) {
+        setAnalyticsStatus(JSON.parse(raw))
+      }
+    } catch (error) {
+      console.error("Failed to restore Sonic Pop analytics status:", error)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (params.gameId !== "sonic-pop") return
+
+    let cancelled = false
+
+    const pollAnalytics = async (sessionId: string, attempt = 1) => {
+      try {
+        const response = await fetch(
+          `/api/sonic-pop/results?sessionId=${encodeURIComponent(sessionId)}`,
+          { cache: "no-store" }
+        )
+
+        if (cancelled) return
+
+        if (response.status === 202) {
+          persistAnalyticsState({ sessionId, status: "processing" })
+          if (attempt < MAX_POLL_ATTEMPTS) {
+            window.setTimeout(() => {
+              if (!cancelled) {
+                pollAnalytics(sessionId, attempt + 1)
+              }
+            }, POLL_INTERVAL_MS)
+          }
+          return
+        }
+
+        if (response.ok) {
+          persistAnalyticsState({ sessionId, status: "ready" })
+          return
+        }
+
+        console.error(`Failed to poll analytics for session ${sessionId}: ${response.status}`)
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to poll Sonic Pop analytics:", error)
+        }
+      }
+    }
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return
+      const payload = event.data
+      if (
+        params.gameId === "sonic-pop" &&
+        payload?.type === "sonic-pop:analytics-uploaded" &&
+        payload?.sessionId
+      ) {
+        persistAnalyticsState({ sessionId: payload.sessionId, status: "processing" })
+        pollAnalytics(payload.sessionId)
+      }
+    }
+
+    window.addEventListener("message", handleMessage)
+    return () => {
+      cancelled = true
+      window.removeEventListener("message", handleMessage)
+    }
+  }, [params.gameId])
 
   const gameRegistry: Record<string, string> = {
     "sonic-drive": "/games/sonic-drive/index.html", // Sonic Racer - served from public/games/sonic-drive/
@@ -116,6 +202,45 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
           <X className="h-4 w-4 inline mr-1" /> Exit
         </button>
       </div>
+
+      {params.gameId === "sonic-pop" && analyticsStatus && (
+        <div className="fixed top-20 right-4 z-[70] max-w-sm rounded-2xl border border-cyan-400/25 bg-slate-950/95 px-4 py-4 text-white shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 rounded-xl bg-cyan-400/15 p-2 text-cyan-300">
+              <BarChart3 className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">
+                Analytics
+              </p>
+              <p className="mt-1 text-sm text-slate-200">
+                {analyticsStatus.status === "ready"
+                  ? "Your analytics are ready. Use the Analytics button in the game top panel to view them."
+                  : "Telemetry uploaded. Your analytics are being prepared now."}
+              </p>
+              {analyticsStatus.status === "ready" && (
+                <button
+                  onClick={() =>
+                    router.push(
+                      `/gaming/play/sonic-pop/results?sessionId=${encodeURIComponent(analyticsStatus.sessionId)}`
+                    )
+                  }
+                  className="mt-3 inline-flex items-center rounded-xl bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950"
+                >
+                  Open Analytics
+                </button>
+              )}
+            </div>
+            <button
+              onClick={() => setAnalyticsStatus(null)}
+              className="text-slate-500 hover:text-white"
+              aria-label="Dismiss analytics notification"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* TOGGLE BUTTON - Always visible */}
       <button

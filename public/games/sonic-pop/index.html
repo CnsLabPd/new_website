@@ -2059,7 +2059,7 @@
                 <div id="navLeft" style="display: contents;">
                     <!-- Back Button injected here -->
                 </div>
-                <button class="exit-btn" style="background: linear-gradient(135deg, #00c6ff, #0072ff);" onclick="game.showAnalytics()">
+                <button class="exit-btn" id="navbarAnalyticsBtn" style="background: linear-gradient(135deg, #00c6ff, #0072ff);" onclick="game.showAnalytics()">
                     Analytics ✨
                 </button>
                 <button class="exit-btn" onclick="window.top.location.href='https://www.neurogati.com/gamingcategories'">
@@ -6016,6 +6016,16 @@
                 const body = document.getElementById('analyticsScreenBody');
                 if (!screen || !body) return;
 
+                const latestResultsState = this.getLatestResultsState();
+                if (latestResultsState && latestResultsState.status === 'ready' && latestResultsState.sessionId) {
+                    window.top.location.href = `/gaming/play/sonic-pop/results?sessionId=${encodeURIComponent(latestResultsState.sessionId)}`;
+                    return;
+                }
+
+                if (latestResultsState && latestResultsState.status === 'processing') {
+                    this.showSaveToast('⏳ Your analytics are still processing...');
+                }
+
                 if (!this.analytics && window.SonicPopAnalytics) {
                     this.analytics = new window.SonicPopAnalytics();
                 }
@@ -6692,18 +6702,61 @@ this.analyticsBodyEl = body;
                 }
             }
 
-            async uploadTelemetryToS3(telemetryPayload) {
-                const API_URL = 'https://w92nwfz91c.execute-api.ap-south-1.amazonaws.com';
+            getGameUser() {
+                const gameUserRaw = sessionStorage.getItem('neurogati_game_user');
 
+                if (!gameUserRaw) {
+                    throw new Error('No game user found in session storage');
+                }
+
+                try {
+                    return JSON.parse(gameUserRaw);
+                } catch (error) {
+                    throw new Error('Invalid game user session');
+                }
+            }
+
+            getLatestResultsState() {
+                try {
+                    const raw = localStorage.getItem('sonic-pop-results-state');
+                    return raw ? JSON.parse(raw) : null;
+                } catch (error) {
+                    console.warn('Failed to read Sonic Pop results state:', error);
+                    return null;
+                }
+            }
+
+            updateAnalyticsButtons() {
+                const resultsState = this.getLatestResultsState();
+                const isReady = resultsState && resultsState.status === 'ready' && resultsState.sessionId;
+                const buttonText = isReady ? 'Analytics Ready ✨' : 'Analytics ✨';
+
+                const navbarButton = document.getElementById('navbarAnalyticsBtn');
+                if (navbarButton) {
+                    navbarButton.textContent = buttonText;
+                }
+
+                const completionButton = document.getElementById('viewAnalyticsBtn');
+                if (completionButton) {
+                    completionButton.innerHTML = isReady ? '✨ View Ready Analytics' : '✨ View Analytics';
+                }
+            }
+
+            async uploadTelemetryToS3(telemetryPayload) {
                 try {
                     console.log('📤 Uploading telemetry to S3...');
 
-                    const response = await fetch(`${API_URL}/v1/telemetry/ingest`, {
+                    const gameUser = this.getGameUser();
+                    const response = await fetch('/api/sonic-pop/ingest', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(telemetryPayload)
+                        body: JSON.stringify({
+                            username: gameUser.username,
+                            email: gameUser.email,
+                            telemetryPayload
+                        })
                     });
 
                     if (response.ok) {
@@ -6738,6 +6791,12 @@ this.analyticsBodyEl = body;
                     this.uploadTelemetryToS3(payload).then(result => {
                         if (result.success) {
                             this.showSaveToast('✅ Telemetry uploaded to cloud successfully');
+                            if (window.parent && payload && payload.metadata && payload.metadata.session_id) {
+                                window.parent.postMessage({
+                                    type: 'sonic-pop:analytics-uploaded',
+                                    sessionId: payload.metadata.session_id
+                                }, window.location.origin);
+                            }
                         } else {
                             this.showSaveToast(`⚠️ Cloud upload failed: ${result.error}`);
                         }
@@ -8114,6 +8173,9 @@ this.analyticsBodyEl = body;
         let game;
         window.addEventListener('load', () => {
             game = new AudioBalloonGame();
+            if (game && game.updateAnalyticsButtons) {
+                game.updateAnalyticsButtons();
+            }
 
             // Add event listener for closing external game overlay
             const closeBtn = document.getElementById('closeExternalGame');
@@ -8155,6 +8217,12 @@ this.analyticsBodyEl = body;
                 });
             }
 
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'sonic-pop-results-state' && game && game.updateAnalyticsButtons) {
+                    game.updateAnalyticsButtons();
+                }
+            });
+
             // Close leaderboard modal when clicking outside of it
             const leaderboardModal = document.getElementById('leaderboardModal');
             if (leaderboardModal) {
@@ -8189,6 +8257,9 @@ this.analyticsBodyEl = body;
             // Refresh level cards to show high scores
             if (window.game && window.game.showLevelSelection) {
                 window.game.showLevelSelection();
+            }
+            if (window.game && window.game.updateAnalyticsButtons) {
+                window.game.updateAnalyticsButtons();
             }
         });
 
