@@ -20,7 +20,7 @@ const workshops = [
     type: "Online (Live + Interactive)",
     pricing: "Registration details coming soon",
     description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: April 30th, 2026.",
-    registrationLink: "/contact"
+    registrationLink: "/workshops/summer-school-2026"
   },
   {
     id: "comp-neuro-training-3",
@@ -350,7 +350,7 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
               href={ws.registrationLink}
               className={isUpcoming ? GRADIENT_BUTTON_CLASS : "w-full px-8 py-2 border-2 border-border font-bold rounded-full inline-flex items-center justify-center gap-2 text-base"}
             >
-              {isUpcoming ? 'Apply Now' : 'View Archive'}
+              {isUpcoming ? 'Learn More' : 'View Archive'}
               <ArrowRight className="h-5 w-5" />
             </Link>
           </DynamicMagneticButton>
