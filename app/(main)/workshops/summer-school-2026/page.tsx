@@ -392,11 +392,11 @@ export default function SummerSchool2026Page() {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-500">•</span>
-                        <span>EEG Processing</span>
+                        <span>EEG Classification using AI</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-500">•</span>
-                        <span>BG Model for DBS</span>
+                        <span>Modelling Deep Brain Stimulation for Parkinson's Disease</span>
                       </li>
                     </ul>
 
