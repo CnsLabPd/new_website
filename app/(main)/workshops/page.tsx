@@ -19,7 +19,7 @@ const workshops = [
     participants: "Limited seats",
     type: "Online (Live + Interactive, US-friendly timings)",
     description: "A 2-week intensive program for motivated high school students (Grades 8-12) interested in brain science, AI, and mathematical modeling. Learn how neurons compute, foundations of neural networks, brain signal analysis, and computational models of neurological disorders. Features live interactive sessions led by IIT faculty, certificate of completion, and pathway to Phase II research programs. Selection-based admission.",
-    registrationLink: "/researchprogram"
+    registrationLink: "/workshops/research-program-phase-1"
   },
   {
     id: "summer-school-2026",
