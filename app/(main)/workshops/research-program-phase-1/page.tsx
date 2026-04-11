@@ -93,16 +93,19 @@ export default function ResearchProgramPhase1Page() {
               </div>
             </div>
 
-            <p className="text-xl font-bold text-green-500 mb-4">
+            <p className="text-xl font-bold text-green-500 mb-6">
               Limited Seats • Selection-Based Admission
             </p>
 
-            <DynamicMagneticButton>
-              <Link href="/contact" className={GRADIENT_BUTTON_CLASS}>
-                Apply Now
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </DynamicMagneticButton>
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-lg font-bold text-foreground">
+                To apply, write to
+              </p>
+              <a href="mailto:workshops@neurogati.com" className="flex items-center gap-2 hover:text-blue-500 transition-colors group">
+                <Mail className="h-5 w-5 text-blue-500 group-hover:scale-110 transition-transform" />
+                <span className="font-bold text-xl text-blue-500">workshops@neurogati.com</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -281,26 +284,19 @@ export default function ResearchProgramPhase1Page() {
             <section id="contact" className="mb-20 scroll-mt-24">
               <Card className="border-2 border-blue-500/50 bg-gradient-to-br from-blue-500/10 via-violet-500/10 to-background">
                 <CardContent className="p-12 text-center">
-                  <h2 className="text-3xl md:text-4xl font-black tracking-tighter mb-6">Ready to Apply?</h2>
-                  <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
+                  <h2 className="text-3xl md:text-4xl font-black tracking-tighter mb-6">Interested in Applying?</h2>
+                  <p className="text-lg text-foreground/80 mb-6 max-w-2xl mx-auto">
                     Join a cohort of motivated students exploring the intersection of brain science, AI, and computational modeling.
                   </p>
 
-                  <DynamicMagneticButton>
-                    <Link href="/contact" className={GRADIENT_BUTTON_CLASS}>
-                      Apply Now
-                      <ArrowRight className="h-5 w-5" />
-                    </Link>
-                  </DynamicMagneticButton>
-
-                  <div className="pt-8 border-t border-border/50 mt-8">
-                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">For Information</p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-foreground">
-                      <a href="mailto:workshops@neurogati.com" className="flex items-center gap-2 hover:text-blue-500 transition-colors">
-                        <Mail className="h-5 w-5" />
-                        <span className="font-bold">workshops@neurogati.com</span>
-                      </a>
-                    </div>
+                  <div className="flex flex-col items-center gap-4">
+                    <p className="text-xl font-bold text-foreground">
+                      Write to us at
+                    </p>
+                    <a href="mailto:workshops@neurogati.com" className="flex items-center gap-3 hover:text-blue-500 transition-colors group">
+                      <Mail className="h-6 w-6 text-blue-500 group-hover:scale-110 transition-transform" />
+                      <span className="font-bold text-2xl text-blue-500">workshops@neurogati.com</span>
+                    </a>
                   </div>
                 </CardContent>
               </Card>
