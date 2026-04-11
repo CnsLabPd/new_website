@@ -11,6 +11,18 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
+    id: "summer-research-phase-1",
+    status: "Upcoming",
+    title: "Computational Neuroscience Research Program (Phase I)",
+    date: "June 1-15, 2026",
+    duration: "2 weeks",
+    participants: "Limited seats",
+    type: "Online (Live + Interactive, US-friendly timings)",
+    pricing: "Registration details coming soon",
+    description: "A 2-week intensive program for motivated high school students (Grades 8-12) interested in brain science, AI, and mathematical modeling. Learn how neurons compute, foundations of neural networks, brain signal analysis, and computational models of neurological disorders. Features live interactive sessions led by IIT faculty, certificate of completion, and pathway to Phase II research programs. Selection-based admission.",
+    registrationLink: "/researchprogram"
+  },
+  {
     id: "summer-school-2026",
     status: "Upcoming",
     title: "Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology",
