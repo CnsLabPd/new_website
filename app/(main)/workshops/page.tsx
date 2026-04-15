@@ -11,6 +11,17 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
+    id: "brain_modeling_for_medicos",
+    status: "Upcoming",
+    title: "Workshop on Brain Modeling for Medicos",
+    date: "May 18-24, 2026",
+    duration: "7 days",
+    participants: "Limited seats",
+    type: "Online (Live + Interactive, US-friendly timings)",
+    description: "A 7-day online workshop for medicos on brain modeling with a clinical perspective moving from Neurons to Disease Models. Selection-based admission.",
+    registrationLink: "/brain_modeling_for_medicos"
+  },
+  {
     id: "summer-research-phase-1",
     status: "Upcoming",
     title: "Computational Neuroscience Research Program (Phase I)",
