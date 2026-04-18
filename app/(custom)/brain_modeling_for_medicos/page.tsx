@@ -155,7 +155,7 @@ export default function BrainModelingMedicosPage() {
 
         <div>
           <h2 className="text-3xl font-black">Fee</h2>
-          <div className="mt-6 text-2xl font-bold text-blue-300">₹3000</div>
+          <div className="mt-6 text-2xl font-bold text-blue-300">₹2500</div>
           <p className="text-slate-400">All students</p>
         </div>
 
