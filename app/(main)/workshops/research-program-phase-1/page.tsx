@@ -64,7 +64,7 @@ export default function ResearchProgramPhase1Page() {
               Applications Now Open
             </div>
             <h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-              Summer 2026 Research Program
+              Summer Research Training Program
             </h1>
             <p className="text-2xl md:text-3xl font-bold text-foreground mb-8">
               Computational Neuroscience (Phase I)
@@ -277,6 +277,17 @@ export default function ResearchProgramPhase1Page() {
                     </p>
                   </CardContent>
                 </Card>
+
+                <Card className="border-2 border-border">
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-black mb-3">Fee Structure</h3>
+                    <p className="text-foreground/80">
+                      ₹15,000 for Indian students <br />
+                      $200 for international students
+                    </p>
+                  </CardContent>
+                </Card>
+                
               </div>
             </section>
 
