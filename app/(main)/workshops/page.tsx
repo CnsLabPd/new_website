@@ -24,7 +24,7 @@ const workshops = [
   {
     id: "summer-research-phase-1",
     status: "Upcoming",
-    title: "Computational Neuroscience Research Program (Phase I)",
+    title: "Summer Research Training Program (Phase I)",
     date: "June 1-15, 2026",
     duration: "2 weeks",
     participants: "Limited seats",
