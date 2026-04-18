@@ -14,6 +14,7 @@ const navigationSections = [
   { id: "learning", label: "What You'll Learn" },
   { id: "features", label: "Program Features" },
   { id: "audience", label: "Who Should Apply" },
+  { id: "fees", label: "Fee Structure" },
   { id: "additional", label: "Additional Info" },
   { id: "contact", label: "Contact" },
 ]
@@ -245,6 +246,27 @@ export default function ResearchProgramPhase1Page() {
               </Card>
             </section>
 
+            {/* FEE STRUCTURE */}
+            <section id="fees" className="mb-20 scroll-mt-24">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">
+                Fee Structure
+              </h2>
+              <div className="h-1.5 w-20 bg-blue-600 mb-8"></div>
+            
+              <Card className="border-2 border-blue-500/30 bg-blue-500/[0.02]">
+                <CardContent className="p-8">
+                  <div className="space-y-4 text-lg font-medium">
+                    <p>
+                      <span className="font-bold">Indian Students:</span> ₹15,000
+                    </p>
+                    <p>
+                      <span className="font-bold">International Students:</span> $200
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
             {/* ADDITIONAL INFORMATION */}
             <section id="additional" className="mb-20 scroll-mt-24">
               <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Additional Information</h2>
@@ -274,16 +296,6 @@ export default function ResearchProgramPhase1Page() {
                     <h3 className="text-xl font-black mb-3">College Application Boost</h3>
                     <p className="text-foreground/80">
                       Ideal for students preparing for competitive college applications with STEM research exposure.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-2 border-border">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-black mb-3">Fee Structure</h3>
-                    <p className="text-foreground/80">
-                      ₹15,000 for Indian students <br />
-                      $200 for international students
                     </p>
                   </CardContent>
                 </Card>
