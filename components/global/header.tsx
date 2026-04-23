@@ -23,6 +23,7 @@ const navLinks = [
   { href: "/products", label: "Apps" },
   { href: "/gamingcategories", label: "Games" },
   { href: "/workshops", label: "Workshops" },
+  { href: "/advisory", label: "Advisory" },
   { href: "/modelling", label: "Modelling" },
   { href: "/team", label: "Team" },
   // { href: "/careers", label: "Careers" },
