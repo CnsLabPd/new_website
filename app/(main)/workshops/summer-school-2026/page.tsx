@@ -510,7 +510,7 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Frederick Alexander</p>
+                        <p className="font-bold">Dr. Frédéric Alexandre</p>
                         <p className="text-sm text-muted-foreground">INRIA, France</p>
                       </div>
                     </div>
