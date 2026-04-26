@@ -796,13 +796,15 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Muhammad</p>
+                        <p className="font-bold">Dr. Muhammad Parvaz</p>
+                        <p className="text-sm text-muted-foreground">Icahn School of Medicine at Mount Sinai, USA</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Ananth</p>
+                        <p className="font-bold">Dr. Anantha Ramkrishnan</p>
+                        <p className="text-sm text-muted-foreground">Icahn School of Medicine at Mount Sinai, USA</p>
                       </div>
                     </div>
                   </div>
