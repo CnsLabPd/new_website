@@ -747,20 +747,6 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Muhammad</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
-                        <p className="font-bold">Dr. Ananth</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
                         <p className="font-bold">Dr. Santhosh Sethuramanujam</p>
                         <p className="text-sm text-muted-foreground">IIT Madras, India</p>
                       </div>
@@ -805,6 +791,18 @@ export default function SummerSchool2026Page() {
                       <div>
                         <p className="font-bold">Dr. Karthik Raghavendran</p>
                         <p className="text-sm text-muted-foreground">Neurostellar, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Muhammad</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Ananth</p>
                       </div>
                     </div>
                   </div>
