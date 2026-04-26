@@ -713,35 +713,35 @@ export default function SummerSchool2026Page() {
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
                         <p className="font-bold">Dr. Bapiraju</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
+                        <p className="text-sm text-muted-foreground">IIIT Hyderabad, India</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
                         <p className="font-bold">Dr. Shyam Diwakar</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
+                        <p className="text-sm text-muted-foreground">Amrita Vishwa Vidyapeetham, India</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
                         <p className="font-bold">Dr. Mohan Raghavan</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
+                        <p className="text-sm text-muted-foreground">IIT Hyderabad, India</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
                         <p className="font-bold">Dr. Fabien Wagner</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
+                        <p className="text-sm text-muted-foreground">University of Bordeaux, France</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
                         <p className="font-bold">Dr. Amelie Aussel</p>
-                        <p className="text-sm text-muted-foreground">TBA</p>
+                        <p className="text-sm text-muted-foreground">Inria, France</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
