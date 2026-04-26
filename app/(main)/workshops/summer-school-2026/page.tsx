@@ -758,6 +758,55 @@ export default function SummerSchool2026Page() {
                         <p className="text-sm text-muted-foreground">TBA</p>
                       </div>
                     </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Santhosh Sethuramanujam</p>
+                        <p className="text-sm text-muted-foreground">IIT Madras, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Meenakshi Asokan</p>
+                        <p className="text-sm text-muted-foreground">Princeton University, US</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Sharba Bandyopadhyay</p>
+                        <p className="text-sm text-muted-foreground">IIT Kharagpur, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Karthik Soman</p>
+                        <p className="text-sm text-muted-foreground">Data Scientist at SAP labs, US</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Sachin Deshmukh</p>
+                        <p className="text-sm text-muted-foreground">Shiv Nadar Institution of Eminence, India</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Lakshmi Narasimhan</p>
+                        <p className="text-sm text-muted-foreground">SRMC</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <p className="font-bold">Dr. Karthik Raghavendran</p>
+                        <p className="text-sm text-muted-foreground">Neurostellar, India</p>
+                      </div>
+                    </div>
                   </div>
                   <p className="text-center text-muted-foreground mt-8 font-bold">...and many more!</p>
                 </CardContent>
