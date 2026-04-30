@@ -6,7 +6,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motio
 
 const workshopConfig = {
   active: true,
-  message: "Registrations Opening Soon for 'Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology' - June 15-26, 2026",
+  message: "Registrations Open for 'Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology' - June 15-26, 2026",
   link: "/workshops/summer-school-2026",
 };
 
