@@ -93,9 +93,17 @@ export default function SummerSchool2026Page() {
               </div>
             </div>
 
-            <p className="text-xl font-bold text-blue-500">
-              Registrations Opening Soon
-            </p>
+            <div className="mt-8">
+              <a
+                href="https://forms.gle/a74fkKYq5wS2FpuY7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 text-white font-bold rounded-full hover:scale-105 transition-all text-lg"
+              >
+                Registrations Open
+                <ArrowRight className="h-5 w-5" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -316,9 +324,17 @@ export default function SummerSchool2026Page() {
 
               <Card className="border-2 border-blue-500/30 bg-blue-500/[0.02]">
                 <CardContent className="p-8">
-                  <p className="text-xl font-bold text-blue-500 mb-8 text-center">
-                    Registrations will open soon
-                  </p>
+                  <div className="text-center mb-8">
+                    <a
+                      href="https://forms.gle/a74fkKYq5wS2FpuY7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-600 transition-all hover:scale-105 text-lg"
+                    >
+                      Registrations Open - Register Now
+                      <ArrowRight className="h-5 w-5" />
+                    </a>
+                  </div>
 
                   <div className="mb-8">
                     <h3 className="text-2xl font-black mb-6">Fee Structure</h3>
@@ -333,7 +349,7 @@ export default function SummerSchool2026Page() {
                         <tbody>
                           <tr className="hover:bg-muted/50 transition-colors">
                             <td className="border border-border px-6 py-4 font-bold">Talks alone</td>
-                            <td className="border border-border px-6 py-4">2,500</td>
+                            <td className="border border-border px-6 py-4">1,500</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
                             <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(all sessions)</span></td>
@@ -799,9 +815,17 @@ export default function SummerSchool2026Page() {
                     Don't miss this opportunity to learn from world-class experts and advance your knowledge in computational neuroscience and neurotechnology.
                   </p>
 
-                  <p className="text-xl font-bold text-blue-500 mb-8">
-                    Registrations Opening Soon
-                  </p>
+                  <div className="mb-8">
+                    <a
+                      href="https://forms.gle/a74fkKYq5wS2FpuY7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-600 transition-all hover:scale-105 text-lg"
+                    >
+                      Register Now
+                      <ArrowRight className="h-5 w-5" />
+                    </a>
+                  </div>
 
                   <div className="pt-8 border-t border-border/50">
                     <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Contact</p>
