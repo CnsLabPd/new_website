@@ -336,19 +336,11 @@ export default function SummerSchool2026Page() {
                             <td className="border border-border px-6 py-4">2,500</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
-                            <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(per session)</span></td>
-                            <td className="border border-border px-6 py-4">400</td>
-                          </tr>
-                          <tr className="hover:bg-muted/50 transition-colors">
                             <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(all sessions)</span></td>
                             <td className="border border-border px-6 py-4">2,000</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
-                            <td className="border border-border px-6 py-4 font-bold">Poster</td>
-                            <td className="border border-border px-6 py-4">1,500</td>
-                          </tr>
-                          <tr className="hover:bg-muted/50 transition-colors">
-                            <td className="border border-border px-6 py-4 font-bold">Talk + Hands-on</td>
+                            <td className="border border-border px-6 py-4 font-bold">Talks + Hands-on <span className="text-sm text-muted-foreground font-normal">(save 500 INR)</span></td>
                             <td className="border border-border px-6 py-4">4,000</td>
                           </tr>
                         </tbody>
@@ -371,45 +363,30 @@ export default function SummerSchool2026Page() {
                     <p className="font-bold text-foreground mb-3">Available Hands-on Topics:</p>
                     <ul className="space-y-2 text-foreground/80">
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>Neuron Simulator Training</span>
+                        <span className="text-blue-500">1.</span>
+                        <span>Overview and how to use Neuro Simulator to model single neurons</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>Modelling Visio Motor Function using Convolutional Neural Networks</span>
+                        <span className="text-blue-500">2.</span>
+                        <span>Understanding Convolutional Neural Networks and how to use them to model sensory and motor systems in the brain</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>Brain Dynamics Modeling using DONN</span>
+                        <span className="text-blue-500">3.</span>
+                        <span>Using Deep Oscillatory Neural Networks to model Brain Dynamics</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>DNNs for Hippocampus - Spatial Cells</span>
+                        <span className="text-blue-500">4.</span>
+                        <span>Using Deep Neural Networks to model the spatial cells of the Hippocampus</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>EEG Classification using AI</span>
+                        <span className="text-blue-500">5.</span>
+                        <span>Using Python-based modules and libraries to pre process EEG data</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
-                        <span>Modelling Deep Brain Stimulation for Parkinson's Disease</span>
+                        <span className="text-blue-500">6.</span>
+                        <span>Modelling the Basal Ganglia System for Deep Brain Stimulation in Parkinson's Disease</span>
                       </li>
                     </ul>
-
-                    <div className="mt-4 p-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 border-2 border-green-500/30 rounded-lg">
-                      <p className="text-sm font-bold text-foreground mb-2">
-                        💰 Special Bundle Pricing
-                      </p>
-                      <p className="text-foreground/80 text-sm mb-1">
-                        <strong className="text-foreground">Individual:</strong> 400 INR per session
-                      </p>
-                      <p className="text-foreground/80 text-sm mb-2">
-                        <strong className="text-foreground">All Sessions Bundle:</strong> 2,000 INR
-                      </p>
-                      <p className="text-green-600 dark:text-green-400 font-bold text-sm">
-                        ✓ Save 400 INR when you choose all sessions! (Regular price: 2,400 INR)
-                      </p>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -481,7 +458,7 @@ export default function SummerSchool2026Page() {
 
                   <div className="bg-pink-500 text-white rounded-lg p-6 text-center mb-6">
                     <p className="text-sm font-black uppercase tracking-wider mb-2">Abstract Submission Deadline</p>
-                    <p className="text-3xl font-black">April 30th, 2026</p>
+                    <p className="text-3xl font-black">May 10th, 2026</p>
                   </div>
 
                   <div className="text-center">
