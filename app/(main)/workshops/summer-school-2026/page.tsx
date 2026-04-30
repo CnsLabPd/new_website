@@ -343,7 +343,7 @@ export default function SummerSchool2026Page() {
                         <thead>
                           <tr className="bg-blue-500/10">
                             <th className="border border-border px-6 py-4 text-left font-black">Tier</th>
-                            <th className="border border-border px-6 py-4 text-left font-black">Fee (INR)</th>
+                            <th className="border border-border px-6 py-4 text-left font-black">Fee (INR, exclusive of GST)</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -367,6 +367,9 @@ export default function SummerSchool2026Page() {
                   <div className="bg-background border-2 border-border rounded-lg p-6 mb-4">
                     <p className="text-sm text-muted-foreground mb-2">
                       <strong className="text-foreground">Note:</strong> Certificate will reflect tier chosen
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      <strong className="text-foreground">Pricing:</strong> All fees are exclusive of GST
                     </p>
                   </div>
 
