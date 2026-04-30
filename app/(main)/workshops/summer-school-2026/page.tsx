@@ -349,7 +349,7 @@ export default function SummerSchool2026Page() {
                         <tbody>
                           <tr className="hover:bg-muted/50 transition-colors">
                             <td className="border border-border px-6 py-4 font-bold">Talks alone</td>
-                            <td className="border border-border px-6 py-4">1,500</td>
+                            <td className="border border-border px-6 py-4">2,500</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
                             <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(all sessions)</span></td>
