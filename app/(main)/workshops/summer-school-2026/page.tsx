@@ -800,7 +800,8 @@ export default function SummerSchool2026Page() {
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
                         <p className="font-bold">Dr. Anantha Ramakrishnan</p>
-                        <p className="text-sm text-muted-foreground">Sr Director, Optum United Health Group; Icahn School of Medicine at Mount Sinai, USA</p>
+                        <p className="text-sm text-muted-foreground">Sr Director, Optum United Health Group</p>
+                        <p className="text-sm text-muted-foreground">Icahn School of Medicine at Mount Sinai, USA</p>
                       </div>
                     </div>
                   </div>
