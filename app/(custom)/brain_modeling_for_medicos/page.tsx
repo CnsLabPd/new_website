@@ -147,7 +147,7 @@ export default function BrainModelingMedicosPage() {
         <div>
           <h2 className="text-3xl font-black">Important Dates</h2>
           <div className="mt-6 space-y-4">
-            <div>Application Deadline – April 30</div>
+            <div>Application Deadline – May 9</div>
             <div>Selection – May 2</div>
             <div>Payment – May 15</div>
           </div>
