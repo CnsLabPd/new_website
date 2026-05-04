@@ -18,7 +18,7 @@ const workshops = [
     duration: "7 days",
     participants: "Limited seats",
     type: "Online (Live + Interactive, US-friendly timings)",
-    description: "A 7-day online workshop for medicos on brain modeling with a clinical perspective moving from Neurons to Disease Models. Selection-based admission. Application deadline: May 9, 2026.",
+    description: "A 7-day online workshop for medicos on brain modeling with a clinical perspective moving from Neurons to Disease Models. Selection-based admission. Application deadline: May 10, 2026.",
     registrationLink: "/brain_modeling_for_medicos"
   },
   {
