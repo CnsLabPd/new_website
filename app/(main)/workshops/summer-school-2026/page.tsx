@@ -764,13 +764,6 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Karthik Soman</p>
-                        <p className="text-sm text-muted-foreground">Data Scientist at SAP labs, US</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
-                      <div>
                         <p className="font-bold">Dr. Sachin Deshmukh</p>
                         <p className="text-sm text-muted-foreground">Shiv Nadar Institution of Eminence, India</p>
                       </div>
