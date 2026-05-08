@@ -36,7 +36,7 @@ const workshops = [
     id: "summer-school-2026",
     status: "Upcoming",
     title: "Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology",
-    date: "June 15-26, 2026",
+    date: "June 15-25, 2026",
     duration: "10 days",
     participants: "Applications Open",
     type: "Online (Live + Interactive)",

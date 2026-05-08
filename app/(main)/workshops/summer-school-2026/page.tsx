@@ -81,7 +81,7 @@ export default function SummerSchool2026Page() {
             <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm font-bold">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-blue-500" />
-                <span>June 15-26, 2026</span>
+                <span>June 15-25, 2026</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-blue-500" />
