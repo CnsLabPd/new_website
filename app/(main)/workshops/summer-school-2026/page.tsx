@@ -477,7 +477,7 @@ export default function SummerSchool2026Page() {
 
                   <div className="bg-pink-500 text-white rounded-lg p-6 text-center mb-6">
                     <p className="text-sm font-black uppercase tracking-wider mb-2">Abstract Submission Deadline</p>
-                    <p className="text-3xl font-black">May 10th, 2026</p>
+                    <p className="text-3xl font-black">May 20th, 2026</p>
                   </div>
 
                   <div className="text-center">

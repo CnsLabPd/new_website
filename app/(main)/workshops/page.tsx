@@ -41,7 +41,7 @@ const workshops = [
     participants: "Applications Open",
     type: "Online (Live + Interactive)",
     pricing: "Registration details coming soon",
-    description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: May 10th, 2026.",
+    description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: May 20th, 2026.",
     registrationLink: "/workshops/summer-school-2026"
   },
   {
