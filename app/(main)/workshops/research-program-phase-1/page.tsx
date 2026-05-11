@@ -98,13 +98,15 @@ export default function ResearchProgramPhase1Page() {
               Limited Seats • Selection-Based Admission
             </p>
 
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-lg font-bold text-foreground">
-                To apply, write to
-              </p>
-              <a href="mailto:workshops@neurogati.com" className="flex items-center gap-2 hover:text-blue-500 transition-colors group">
-                <Mail className="h-5 w-5 text-blue-500 group-hover:scale-110 transition-transform" />
-                <span className="font-bold text-xl text-blue-500">workshops@neurogati.com</span>
+            <div className="mt-8">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfvo490y1gY_gTR-1xPyD1OoppGKImaSa5G__jAMECF9qNOYA/viewform?fbzx=2003796143340254064"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 text-white font-bold rounded-full hover:scale-105 transition-all text-lg"
+              >
+                Apply Now
+                <ArrowRight className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -307,19 +309,31 @@ export default function ResearchProgramPhase1Page() {
             <section id="contact" className="mb-20 scroll-mt-24">
               <Card className="border-2 border-blue-500/50 bg-gradient-to-br from-blue-500/10 via-violet-500/10 to-background">
                 <CardContent className="p-12 text-center">
-                  <h2 className="text-3xl md:text-4xl font-black tracking-tighter mb-6">Interested in Applying?</h2>
-                  <p className="text-lg text-foreground/80 mb-6 max-w-2xl mx-auto">
+                  <h2 className="text-3xl md:text-4xl font-black tracking-tighter mb-6">Ready to Join?</h2>
+                  <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
                     Join a cohort of motivated students exploring the intersection of brain science, AI, and computational modeling.
                   </p>
 
-                  <div className="flex flex-col items-center gap-4">
-                    <p className="text-xl font-bold text-foreground">
-                      Write to us at
-                    </p>
-                    <a href="mailto:workshops@neurogati.com" className="flex items-center gap-3 hover:text-blue-500 transition-colors group">
-                      <Mail className="h-6 w-6 text-blue-500 group-hover:scale-110 transition-transform" />
-                      <span className="font-bold text-2xl text-blue-500">workshops@neurogati.com</span>
+                  <div className="mb-8">
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSfvo490y1gY_gTR-1xPyD1OoppGKImaSa5G__jAMECF9qNOYA/viewform?fbzx=2003796143340254064"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-600 transition-all hover:scale-105 text-lg"
+                    >
+                      Apply Now
+                      <ArrowRight className="h-5 w-5" />
                     </a>
+                  </div>
+
+                  <div className="pt-8 border-t border-border/50">
+                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Questions?</p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-foreground">
+                      <a href="mailto:workshops@neurogati.com" className="flex items-center gap-2 hover:text-blue-500 transition-colors">
+                        <Mail className="h-5 w-5" />
+                        <span className="font-bold">workshops@neurogati.com</span>
+                      </a>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
