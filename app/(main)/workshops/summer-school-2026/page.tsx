@@ -71,7 +71,7 @@ export default function SummerSchool2026Page() {
               Neurogati Summer School 2026
             </h1>
             <p className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-              From Neural Dynamics to Neurotechnology
+              Your entry portal into Neurotechnology, Brain-AI and the future of neuroscience.
             </p>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed mb-8">
               A 10-day intensive program designed to introduce participants to the principles of neural modeling, brain dynamics, and data-driven neuroscience.
@@ -477,7 +477,7 @@ export default function SummerSchool2026Page() {
 
                   <div className="bg-pink-500 text-white rounded-lg p-6 text-center mb-6">
                     <p className="text-sm font-black uppercase tracking-wider mb-2">Abstract Submission Deadline</p>
-                    <p className="text-3xl font-black">May 20th, 2026</p>
+                    <p className="text-3xl font-black">May 25th, 2026</p>
                   </div>
 
                   <div className="text-center">

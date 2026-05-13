@@ -35,13 +35,13 @@ const workshops = [
   {
     id: "summer-school-2026",
     status: "Upcoming",
-    title: "Neurogati Summer School 2026: From Neural Dynamics to Neurotechnology",
+    title: "Neurogati Summer School 2026: Your entry portal into Neurotechnology, Brain-AI and the future of neuroscience.",
     date: "June 15-25, 2026",
     duration: "10 days",
     participants: "Applications Open",
     type: "Online (Live + Interactive)",
     pricing: "Registrations Open",
-    description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: May 20th, 2026.",
+    description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: May 25th, 2026.",
     registrationLink: "/workshops/summer-school-2026"
   },
   {
@@ -161,6 +161,17 @@ const testimonials = [
     text: "I recently completed an immersive workshop on Brain Modelling organised by the Computational Neuroscience Lab, IIT Madras, and Neurogati, where I explored the fascinating intersection of neuroscience and AI. From studying neuronal signaling models to gaining hands-on experience with PyTorch and neural oscillations, it was an enriching journey into how computational models can help decode complex brain functions. Excited to build further on this!",
     linkedinUrl: "https://www.linkedin.com/posts/shrutitripathi3_computationalneuroscience-ai-deeplearning-activity-7446424925051203584-FVP2",
     workshop: "Workshop on Brain Modeling"
+  },
+  {
+    id: "testimonial-4",
+    name: "Spandan Chavan",
+    role: "Workshop Participant",
+    organization: "MIT ADT University",
+    image: "",
+    workshopImage: "/testimonials/testimonialspandan.jpeg",
+    text: "Attended the 3-day workshop on AI Applications in EEG at IIT Madras. The workshop covered fascinating topics including EEG signal processing, brain activity analysis, emotional recognition via neural data, and AI applications in neuro-engineering and healthcare. It was incredible to explore the intersection of AI, Neuroscience, Cognitive Computing, Biomedical Engineering, and Brain-Computer Interfaces with experts from IISc Bangalore, IIT Jodhpur, IIT Madras, IIT BHU, and NIT Trichy.",
+    linkedinUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7460052886547521536/",
+    workshop: "AI Applications in EEG - IIT Madras"
   }
 ]
 
@@ -433,7 +444,7 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
           <img
             src={testimonial.workshopImage}
             alt={`${testimonial.workshop} content`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
         </div>
       )}
