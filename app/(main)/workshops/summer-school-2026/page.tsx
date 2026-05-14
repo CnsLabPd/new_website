@@ -19,6 +19,7 @@ const navigationSections = [
   { id: "abstracts", label: "Call for Abstracts" },
   { id: "committee", label: "Scientific Committee" },
   { id: "speakers", label: "Speakers" },
+  { id: "schedule", label: "Schedule" },
   { id: "contact", label: "Contact" },
 ]
 
@@ -840,6 +841,158 @@ export default function SummerSchool2026Page() {
                     </div>
                   </div>
                   <p className="text-center text-muted-foreground mt-8 font-bold">...and many more!</p>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* TENTATIVE SCHEDULE */}
+            <section id="schedule" className="mb-20 scroll-mt-24">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Tentative Schedule</h2>
+              <div className="h-1.5 w-20 bg-blue-600 mb-8"></div>
+
+              <Card className="border-2 border-border">
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-gradient-to-r from-blue-500 to-violet-500 text-white">
+                          <th className="px-6 py-4 text-left font-black border-r border-white/20">Date</th>
+                          <th className="px-6 py-4 text-left font-black border-r border-white/20">Main Theme</th>
+                          <th className="px-6 py-4 text-left font-black">Speakers</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">15/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Sensory systems</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Santhosh Sethuramanujam</li>
+                              <li>• SP Arun</li>
+                              <li>• Meenakshi</li>
+                              <li>• Sharba Bandyopadhyay</li>
+                              <li>• Sundari/Vignesh</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">16/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Motor Function</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Pratik</li>
+                              <li>• Shyam Diwakar</li>
+                              <li>• Mohan Raghavan</li>
+                              <li>• Sundari</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">17/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Brain Dynamics</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Parul Verma</li>
+                              <li>• Bapiraju</li>
+                              <li>• Dipanjan</li>
+                              <li>• Anirban/Sayan</li>
+                              <li>• Risto Iliomeni</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">18/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">OculoMotor System</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Aasef</li>
+                              <li>• Aditya Murthy</li>
+                              <li>• Swetha</li>
+                              <li>• Fatema</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">19/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Biophysical Models</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Vignan</li>
+                              <li>• Srikanth Ramaswamy</li>
+                              <li>• Suhita Nadkarni</li>
+                              <li>• Vignan/Sandeep</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">20/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Basal Ganglia</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• VSC</li>
+                              <li>• Pragathi</li>
+                              <li>• Vignesh</li>
+                              <li>• Charitha</li>
+                              <li>• Sandeep</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">22/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Reward systems and Decision Making</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Alekhya Mandali</li>
+                              <li>• Ryan</li>
+                              <li>• Muhammad</li>
+                              <li>• Ananth</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">23/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Hippocampus</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Karthik Soman</li>
+                              <li>• Fabien Wagner</li>
+                              <li>• Amelie Aussel</li>
+                              <li>• Yoga</li>
+                              <li>• Vignan+Sandeep</li>
+                              <li>• Sachin Deshmukh</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">24/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">Clinical Neuroscience</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Dr. Lakshmi Narasimhan, SRMC</li>
+                              <li>• Dr. Sylaja PN, SCTIMST</li>
+                              <li>• Madhu</li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr className="hover:bg-blue-500/5 transition-colors">
+                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">25/06/2026</td>
+                          <td className="px-6 py-4 font-bold border-r border-border">BCI and Startups</td>
+                          <td className="px-6 py-4">
+                            <ul className="space-y-1">
+                              <li>• Gangadhar</li>
+                              <li>• Karthik Raghavendran</li>
+                              <li>• Bankim Chander</li>
+                              <li>• Avinash Singh</li>
+                              <li>• BCI companies</li>
+                            </ul>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="bg-muted/30 px-6 py-4 text-sm text-muted-foreground italic border-t border-border">
+                    <strong>Note:</strong> This is a tentative schedule and may be subject to changes. June 21, 2026 is a break day.
+                  </div>
                 </CardContent>
               </Card>
             </section>
