@@ -867,11 +867,11 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Sensory systems</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Santhosh Sethuramanujam</li>
-                              <li>• SP Arun</li>
-                              <li>• Meenakshi</li>
-                              <li>• Sharba Bandyopadhyay</li>
-                              <li>• Sundari/Vignesh</li>
+                              <li>• Dr. Santhosh Sethuramanujam</li>
+                              <li>• Dr. SP Arun</li>
+                              <li>• Dr. Meenakshi Asokan</li>
+                              <li>• Dr. Sharba Bandyopadhyay</li>
+                              <li>• Dr. Sundari / Vignesh</li>
                             </ul>
                           </td>
                         </tr>
@@ -880,10 +880,10 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Motor Function</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Pratik</li>
-                              <li>• Shyam Diwakar</li>
-                              <li>• Mohan Raghavan</li>
-                              <li>• Sundari</li>
+                              <li>• Dr. Pratik Mutha</li>
+                              <li>• Dr. Shyam Diwakar</li>
+                              <li>• Dr. Mohan Raghavan</li>
+                              <li>• Dr. Sundari</li>
                             </ul>
                           </td>
                         </tr>
@@ -892,11 +892,11 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Brain Dynamics</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Parul Verma</li>
-                              <li>• Bapiraju</li>
-                              <li>• Dipanjan</li>
-                              <li>• Anirban/Sayan</li>
-                              <li>• Risto Iliomeni</li>
+                              <li>• Dr. Parul Verma</li>
+                              <li>• Dr. Bapiraju</li>
+                              <li>• Dr. Dipanjan Roy</li>
+                              <li>• Anirban / Dr. Sayan</li>
+                              <li>• Dr. Risto Iliomeni</li>
                             </ul>
                           </td>
                         </tr>
@@ -905,10 +905,10 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">OculoMotor System</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Aasef</li>
-                              <li>• Aditya Murthy</li>
-                              <li>• Swetha</li>
-                              <li>• Fatema</li>
+                              <li>• Dr. Aasef Sheikh</li>
+                              <li>• Dr. Aditya Murthy</li>
+                              <li>• Dr. Swetha Kumari</li>
+                              <li>• Dr. Fatema Ghasia</li>
                             </ul>
                           </td>
                         </tr>
@@ -917,10 +917,10 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Biophysical Models</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Vignan</li>
-                              <li>• Srikanth Ramaswamy</li>
-                              <li>• Suhita Nadkarni</li>
-                              <li>• Vignan/Sandeep</li>
+                              <li>• Dr. Vignan Muddapu</li>
+                              <li>• Dr. Srikanth Ramaswamy</li>
+                              <li>• Dr. Suhita Nadkarni</li>
+                              <li>• Dr. Vignan Muddapu / Dr. Sandeep</li>
                             </ul>
                           </td>
                         </tr>
@@ -929,11 +929,11 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Basal Ganglia</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• VSC</li>
-                              <li>• Pragathi</li>
-                              <li>• Vignesh</li>
+                              <li>• Dr. V. Srinivasa Chakravarthy</li>
+                              <li>• Dr. Pragati Balasubramani</li>
+                              <li>• Dr. Vignesh Muralidharan</li>
                               <li>• Charitha</li>
-                              <li>• Sandeep</li>
+                              <li>• Dr. Sandeep</li>
                             </ul>
                           </td>
                         </tr>
@@ -942,10 +942,10 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Reward systems and Decision Making</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Alekhya Mandali</li>
-                              <li>• Ryan</li>
-                              <li>• Muhammad</li>
-                              <li>• Ananth</li>
+                              <li>• Dr. Alekhya Mandeli</li>
+                              <li>• Dr. Ryan Philips</li>
+                              <li>• Dr. Muhammad Parvaz</li>
+                              <li>• Dr. Anantha Ramakrishnan</li>
                             </ul>
                           </td>
                         </tr>
@@ -954,12 +954,10 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Hippocampus</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Karthik Soman</li>
-                              <li>• Fabien Wagner</li>
-                              <li>• Amelie Aussel</li>
-                              <li>• Yoga</li>
-                              <li>• Vignan+Sandeep</li>
-                              <li>• Sachin Deshmukh</li>
+                              <li>• Dr. Fabien Wagner</li>
+                              <li>• Dr. Amelie Aussel</li>
+                              <li>• Dr. Vignan Muddapu + Dr. Sandeep</li>
+                              <li>• Dr. Sachin Deshmukh</li>
                             </ul>
                           </td>
                         </tr>
@@ -968,9 +966,9 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">Clinical Neuroscience</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Dr. Lakshmi Narasimhan, SRMC</li>
-                              <li>• Dr. Sylaja PN, SCTIMST</li>
-                              <li>• Madhu</li>
+                              <li>• Dr. Lakshmi Narasimhan (SRMC)</li>
+                              <li>• Dr. Sylaja PN (SCTIMST)</li>
+                              <li>• Madhuvanthi Muliya</li>
                             </ul>
                           </td>
                         </tr>
@@ -979,10 +977,10 @@ export default function SummerSchool2026Page() {
                           <td className="px-6 py-4 font-bold border-r border-border">BCI and Startups</td>
                           <td className="px-6 py-4">
                             <ul className="space-y-1">
-                              <li>• Gangadhar</li>
-                              <li>• Karthik Raghavendran</li>
-                              <li>• Bankim Chander</li>
-                              <li>• Avinash Singh</li>
+                              <li>• Dr. Gangadhar Garipelli</li>
+                              <li>• Dr. Karthik Raghavendran</li>
+                              <li>• Dr. Bankim Chander</li>
+                              <li>• Dr. Avinash Singh</li>
                               <li>• BCI companies</li>
                             </ul>
                           </td>
