@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, MapPin, Users, ArrowRight, Clock, Mail, GraduationCap, Brain, Lightbulb, Award, ChevronRight } from "lucide-react"
+import { Calendar, MapPin, Users, ArrowRight, Clock, Mail, GraduationCap, Brain, Lightbulb, Award, ChevronRight, Quote } from "lucide-react"
 import { DynamicMagneticButton } from "@/utils/DynamicMagneticButton"
 
 const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 px-10 font-semibold text-white py-2 rounded-full inline-flex items-center justify-center gap-2 whitespace-nowrap text-base"
@@ -16,6 +16,7 @@ const navigationSections = [
   { id: "audience", label: "Who Should Apply" },
   { id: "fees", label: "Fee Structure" },
   { id: "additional", label: "Additional Info" },
+  { id: "testimonials", label: "Testimonials" },
   { id: "contact", label: "Contact" },
 ]
 
@@ -303,6 +304,29 @@ export default function ResearchProgramPhase1Page() {
                 </Card>
                 
               </div>
+            </section>
+
+            {/* TESTIMONIALS */}
+            <section id="testimonials" className="mb-20 scroll-mt-24">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Testimonials</h2>
+              <div className="h-1.5 w-20 bg-blue-600 mb-8"></div>
+
+              <Card className="border-2 border-blue-500/30 bg-blue-500/[0.02]">
+                <CardContent className="p-8">
+                  <div className="flex items-start gap-4 mb-6">
+                    <Quote className="h-8 w-8 text-blue-500 flex-shrink-0" />
+                    <div className="flex-grow">
+                      <p className="text-lg text-foreground/90 leading-relaxed mb-6 italic">
+                        "My daughter participated in Neurogati's Computational Neuroscience Research Program, Phase 1, and found it to be an excellent introduction to an exciting and opportunity-rich field. She was especially impressed by Dr. Chakravarthy and his PhD students, who taught the material with clarity, patience, and deep expertise. The instructors made sure students understood the concepts, while the homework assignments encouraged genuine curiosity and exploration. My daughter often went beyond the required work to experiment further with the models introduced in class. I am very grateful for the quality of instruction and the thoughtful structure of the program. I would highly recommend Neurogati's program to students who are interested in neuroscience, computation, or research and want to build a strong foundation in computational neuroscience."
+                      </p>
+                      <div className="border-t border-border/50 pt-4">
+                        <p className="font-black text-lg">Srinivas Jallepalli</p>
+                        <p className="text-sm text-muted-foreground font-bold">Parent, Austin, TX (for his daughter Akhila)</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </section>
 
             {/* CONTACT & CTA */}
