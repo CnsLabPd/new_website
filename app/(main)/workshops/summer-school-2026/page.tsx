@@ -347,20 +347,41 @@ export default function SummerSchool2026Page() {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="hover:bg-muted/50 transition-colors">
-                            <td className="border border-border px-6 py-4 font-bold">Talks alone</td>
+                          <tr className="hover:bg-muted/50 transition-colors bg-blue-500/5">
+                            <td className="border border-border px-6 py-4">
+                              <p className="font-bold mb-1">Talks alone</p>
+                              <p className="text-sm text-green-600 font-semibold">✓ Includes 1 free poster presentation (₹1,500 value) if abstract is selected</p>
+                            </td>
                             <td className="border border-border px-6 py-4">2,500</td>
                           </tr>
                           <tr className="hover:bg-muted/50 transition-colors">
                             <td className="border border-border px-6 py-4 font-bold">Hands-on <span className="text-sm text-muted-foreground font-normal">(all sessions)</span></td>
                             <td className="border border-border px-6 py-4">2,000</td>
                           </tr>
-                          <tr className="hover:bg-muted/50 transition-colors">
-                            <td className="border border-border px-6 py-4 font-bold">Talks + Hands-on <span className="text-sm text-muted-foreground font-normal">(save 500 INR)</span></td>
+                          <tr className="hover:bg-muted/50 transition-colors bg-blue-500/5">
+                            <td className="border border-border px-6 py-4">
+                              <p className="font-bold mb-1">Talks + Hands-on <span className="text-sm text-muted-foreground font-normal">(save 500 INR)</span></p>
+                              <p className="text-sm text-green-600 font-semibold">✓ Includes 1 free poster presentation (₹1,500 value) if abstract is selected</p>
+                            </td>
                             <td className="border border-border px-6 py-4">4,000</td>
                           </tr>
                         </tbody>
                       </table>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-500/10 border-2 border-green-500/30 rounded-lg p-6 mb-6">
+                    <div className="flex items-start gap-3">
+                      <div className="text-green-600 text-2xl">🎁</div>
+                      <div>
+                        <p className="font-black text-foreground mb-2">Special Offer for Talk Registrants!</p>
+                        <p className="text-foreground/90">
+                          Participants registered for <strong>"Talks alone"</strong> or <strong>"Talks + Hands-on"</strong> receive <strong>1 complimentary poster presentation slot</strong> (worth ₹1,500) if their abstract is selected.
+                        </p>
+                        <p className="text-sm text-foreground/80 mt-2">
+                          If you submit multiple abstracts and more than one gets selected, the presentation fee applies only from the second presentation onwards.
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -478,6 +499,26 @@ export default function SummerSchool2026Page() {
                   <div className="bg-pink-500 text-white rounded-lg p-6 text-center mb-6">
                     <p className="text-sm font-black uppercase tracking-wider mb-2">Abstract Submission Deadline</p>
                     <p className="text-3xl font-black">May 25th, 2026</p>
+                  </div>
+
+                  <div className="bg-background border-2 border-border rounded-lg p-6 mb-6">
+                    <p className="font-bold text-foreground mb-3">Presentation Fee Structure:</p>
+                    <ul className="space-y-2 text-foreground/80 mb-4">
+                      <li className="flex items-start gap-2">
+                        <span className="text-pink-500">•</span>
+                        <span><strong>Abstract submission:</strong> Free for all participants</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-pink-500">•</span>
+                        <span><strong>Poster presentation fee (if selected):</strong> ₹1,500</span>
+                      </li>
+                    </ul>
+                    <div className="bg-green-500/10 border-2 border-green-500/30 rounded-lg p-4">
+                      <p className="text-sm font-bold text-green-700 mb-1">✓ Special Waiver for Talk Registrants</p>
+                      <p className="text-sm text-foreground/90">
+                        Participants registered for "Talks alone" or "Talks + Hands-on" receive <strong>1 free poster presentation</strong> if their abstract is selected (₹1,500 value waived).
+                      </p>
+                    </div>
                   </div>
 
                   <div className="text-center">
