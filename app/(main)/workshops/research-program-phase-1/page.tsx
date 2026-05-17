@@ -66,13 +66,13 @@ export default function ResearchProgramPhase1Page() {
               Applications Now Open
             </div>
             <h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-              Summer Research Training Program
+              AI + BRAIN SCIENCE SUMMER PROGRAM
             </h1>
             <p className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-              Computational Neuroscience (Phase I)
+              For High School Students (Grades 8–12)
             </p>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed mb-8">
-              A 2-week intensive designed for motivated high school students interested in brain science, AI, and mathematical modeling.
+              Explore how AI is used to study the brain, analyze EEG signals, and understand brain disorders.
             </p>
 
             {/* Quick Info */}
