@@ -38,7 +38,6 @@ export default function BrainModelingMedicosPage() {
             <a href="#overview">Overview</a>
             <a href="#schedule">Schedule</a>
             <a href="#why">Why Attend</a>
-            <a href="#fees">Fees</a>
           </nav>
 
           <Button asChild className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold rounded-full px-6">
@@ -141,24 +140,17 @@ export default function BrainModelingMedicosPage() {
         </div>
       </section>
 
-      {/* FEES */}
-      <section id="fees" className="container mx-auto px-6 py-20 grid md:grid-cols-2 gap-10">
-
-        <div>
-          <h2 className="text-3xl font-black">Important Dates</h2>
-          <div className="mt-6 space-y-4">
-            <div>Application Deadline – May 10, 2026</div>
-            <div>Selection Results – May 13, 2026</div>
-            <div>Fee Payment Deadline – May 15, 2026</div>
-          </div>
+      {/* IMPORTANT DATES */}
+      <section id="dates" className="container mx-auto px-6 py-20 max-w-2xl">
+        <h2 className="text-3xl font-black text-center mb-10">Important Dates</h2>
+        <div className="space-y-4">
+          <Card className="p-6">
+            <div className="text-lg">Application Deadline – May 10, 2026</div>
+          </Card>
+          <Card className="p-6">
+            <div className="text-lg">Selection Results – May 13, 2026</div>
+          </Card>
         </div>
-
-        <div>
-          <h2 className="text-3xl font-black">Fee</h2>
-          <div className="mt-6 text-2xl font-bold text-blue-300">₹1,500 (exclusive of GST)</div>
-          <p className="text-slate-400">All students</p>
-        </div>
-
       </section>
 
       {/* CTA */}
