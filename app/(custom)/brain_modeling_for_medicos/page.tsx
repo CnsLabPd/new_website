@@ -40,9 +40,9 @@ export default function BrainModelingMedicosPage() {
             <a href="#why">Why Attend</a>
           </nav>
 
-          <Button asChild className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold rounded-full px-6">
-            <a href="https://forms.gle/mU8udhpJgUEBNm36A" target="_blank" rel="noopener noreferrer" target="_blank">Apply Now</a>
-          </Button>
+          <Badge className="bg-gray-500 text-white px-4 py-2">
+            Workshop Completed
+          </Badge>
         </div>
       </header>
 
@@ -142,26 +142,25 @@ export default function BrainModelingMedicosPage() {
 
       {/* IMPORTANT DATES */}
       <section id="dates" className="container mx-auto px-6 py-20 max-w-2xl">
-        <h2 className="text-3xl font-black text-center mb-10">Important Dates</h2>
+        <h2 className="text-3xl font-black text-center mb-10">Workshop Information</h2>
         <div className="space-y-4">
           <Card className="p-6">
-            <div className="text-lg">Application Deadline – May 10, 2026</div>
+            <div className="text-lg">Workshop Dates – May 18-24, 2026</div>
           </Card>
           <Card className="p-6">
-            <div className="text-lg">Selection Results – May 13, 2026</div>
+            <div className="text-lg">Status – Completed</div>
           </Card>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CONTACT */}
       <section className="text-center py-20">
-        <h2 className="text-3xl font-black mb-6">Join the Workshop</h2>
+        <h2 className="text-3xl font-black mb-6">Workshop Completed</h2>
 
-        <Button asChild size="lg">
-          <a href="https://forms.gle/mU8udhpJgUEBNm36A" target="_blank" rel="noopener noreferrer">Apply Now <ArrowRight className="ml-2" /></a>
-        </Button>
+        <Badge className="mb-6 bg-gray-500 text-white px-6 py-2">This workshop has concluded</Badge>
 
-        <p className="mt-6 text-slate-400 flex justify-center gap-2">
+        <p className="mt-6 text-slate-400">For information about future workshops:</p>
+        <p className="mt-2 text-slate-400 flex justify-center gap-2">
           <Mail /> workshops@neurogati.com
         </p>
       </section>
