@@ -87,7 +87,7 @@ export default function ResearchProgramPhase1Page() {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-blue-500" />
-                <span>2 Weeks</span>
+                <span>10:30 - 11:30 AM CT</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-blue-500" />
