@@ -77,30 +77,6 @@ const experts = [
     color: "green",
     linkedin: "https://www.linkedin.com/in/manaswini-sundaresan/",
     mailto: "mailto:sakamanojkumar18@gmail.com"
-  },
-  {
-    name: "Mr. Prabhakar",
-    specialties: ["Game Development", "VR Development"],
-    image: "/placeholder.svg?height=250&width=250&text=Manaswini+S",
-    color: "amber",
-    linkedin: "https://www.linkedin.com/in/praba-in/",
-    mailto: "mailto:shreelekha.bs@students.iiserpune.ac.in"
-  },
-    {
-    name: "Ms. Subhadra",
-    specialties: ["Game Development", "VR Development", ],
-    image: "/placeholder.svg?height=250&width=250&text=Shrinivas+S",
-    color: "amber",
-    linkedin: "https://www.linkedin.com/in/shrinivassesadri/",
-    mailto: "mailto:shrini1908@gmail.com"
-  },
-  {
-    name: "Mr. Balaraj Begari",
-    specialties: ["Application Development", "Machine Learning"],
-    image: "/placeholder.svg?height=250&width=250&text=Manaswini+S",
-    color: "blue",
-    linkedin: "https://www.linkedin.com/in/balaraj-begari/",
-    mailto: "mailto:bbalaraj613@gmail.com"
   }
 ]
 
