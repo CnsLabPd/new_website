@@ -23,7 +23,7 @@ const workshops = [
   },
   {
     id: "summer-research-phase-1",
-    status: "Upcoming",
+    status: "Ongoing",
     title: "AI + BRAIN SCIENCE SUMMER PROGRAM",
     date: "June 1-15, 2026",
     duration: "2 weeks",
