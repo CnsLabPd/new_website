@@ -77,6 +77,30 @@ const experts = [
     color: "green",
     linkedin: "https://www.linkedin.com/in/manaswini-sundaresan/",
     mailto: "mailto:sakamanojkumar18@gmail.com"
+  },
+  {
+    name: "Mr. Kavin",
+    specialties: ["Game Development", "Unity", "Blender"],
+    image: "/placeholder.svg?height=250&width=250&text=Kavin",
+    color: "amber",
+    linkedin: "",
+    mailto: ""
+  },
+  {
+    name: "Mr. Madhav",
+    specialties: ["CP Rehabilitation", "Computer Vision"],
+    image: "/placeholder.svg?height=250&width=250&text=Madhav",
+    color: "violet",
+    linkedin: "",
+    mailto: ""
+  },
+  {
+    name: "Mr. Shrinivas Sheshadri",
+    specialties: ["App Development", "Cloud Engineering"],
+    image: "/placeholder.svg?height=250&width=250&text=Shrinivas+S",
+    color: "blue",
+    linkedin: "",
+    mailto: ""
   }
 ]
 
