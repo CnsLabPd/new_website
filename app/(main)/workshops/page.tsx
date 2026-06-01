@@ -128,6 +128,97 @@ const workshops = [
 
 ]
 
+const medicosTestimonials = [
+  {
+    id: "medicos-1",
+    name: "Manish Mohapatra",
+    role: "MSc in Neuropsychology",
+    organization: "Christ University",
+    image: "",
+    workshopImage: "",
+    text: "The Neurogati Workshop on Brain Modelling was one of the most intellectually stimulating experiences I have had as a neuropsychology student. Coming from a clinical background, I had always understood the brain through behaviour and assessment. This workshop gave me a completely different lens - one that is mathematical, computational, and deeply illuminating. What I appreciated most was how the content moved seamlessly from foundational neuroscience to actual modelling frameworks without losing clarity. The sessions on dynamical systems and disease modelling, particularly the Basal Ganglia and Parkinson's, were genuinely eye-opening. It helped me see how computational tools can bridge the gap between what we observe clinically and what is actually happening at a circuit level. The workshop pushed me to think differently about my own research and opened a direction I am now actively pursuing. I would recommend it to any student in neuroscience, psychology, or medicine who wants to understand the brain not just as a structure, but as a system.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-2",
+    name: "K. Tejaswi Sanjana",
+    role: "MBBS student",
+    organization: "Government Medical College Sangareddy",
+    image: "",
+    workshopImage: "",
+    text: "Attending Brain Modeling for Medicos as a fourth-year MBBS student was genuinely eye-opening. Prof. Chakravarthy has a rare ability to make equations feel like medicine - by the end of Day 1, I was already thinking about patients differently. Every speaker - Charitha, Vignesh, Sindhu, and Aditya - brought their own clarity and enthusiasm, and what I appreciated most was that no question went unanswered. Whether it was about the quadratic term in the Izhikevich model or why backpropagation fails on spiking neurons, every doubt was addressed thoughtfully and completely. This workshop gave me a new language to understand the brain not just anatomically, but computationally. I came in knowing neurons. I leave knowing how to model them. That shift in perspective is something no textbook gave me in four years of medical school.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-3",
+    name: "Riya Pravinkumar Thakkar",
+    role: "BSc Neuroscience",
+    organization: "Parul Institute of Allied and Healthcare Sciences",
+    image: "",
+    workshopImage: "",
+    text: "This workshop helped me understand what the field of computational neuroscience is really about and what researchers actually do in this field. It played a major role in my own career path, as I realised how much I enjoy computational methods for explaining neuroscience. Learning the maths behind dopamine secretion, how inputs from the D1 and D2 pathways relate to exploration and exploitation, and how these ideas connect to decision-making was very valuable. Relating this to the difficulties faced by Parkinson's Disease patients also helped me understand the clinical relevance. The workshop helped me gain confidence as a student from a biological background entering a tech-based field. I loved that we were given links to codes and graphs to understand the concepts on our own, and I appreciate that recordings were provided so we could revise and make notes at our own pace.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-4",
+    name: "K. Sreeja Shivani",
+    role: "MBBS student",
+    organization: "Government Medical College Sangareddy",
+    image: "",
+    workshopImage: "",
+    text: "As a medical student, I found the workshop highly informative and engaging. I gained valuable insights into computational neuroscience and brain modeling, topics that are rarely explored in depth during medical training. The sessions were well structured and easy to follow, even for beginners. I particularly appreciated how complex concepts were connected to real-world medical applications. The workshop broadened my perspective on the intersection of medicine, neuroscience, and artificial intelligence, and motivated me to explore the field further.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-5",
+    name: "Ashmi Rahiman",
+    role: "MBBS student",
+    organization: "Sri Lakshmi Narayana Institute of Medical Science",
+    image: "",
+    workshopImage: "",
+    text: "The workshop gave me exposure, a basic foundation, and curiosity to learn more. This orientation is important for all scholars who love brain science. I enjoyed it a lot and I am conveying my gratitude to the Neurogati team, our Professor, and all the speakers who took us through the learning journey by clarifying every small doubt with patience. Happy to be a part of this event as a collaborator and a participant as well. Looking forward to more such events - this was intellectual fun.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-6",
+    name: "Pratika Mishra",
+    role: "Engineering student",
+    organization: "IITM",
+    image: "",
+    workshopImage: "",
+    text: "The workshop facilitated a soft landing into the field of computational neuroscience and deep learning. It was extremely helpful in revising the fundamentals and provided a better understanding of why neural networks are named as such. The explanations were easy to understand and helped connect Artificial Neural Networks to Natural Neural Networks. Overall, the workshop helped bridge mathematical modelling with biological systems and motivated me to explore research opportunities in brain-inspired computing and neural modeling in greater depth. It was a highly enriching and transformative learning experience.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-7",
+    name: "Subashiny Kaliaperumal",
+    role: "Professional Technologist",
+    organization: "MYPMGENIE",
+    image: "",
+    workshopImage: "",
+    text: "The general concept of mathematical neuroscience itself was a mind-blowing and fascinating experience for me personally. All the knowledge sharers made great effort in the deliberate explanation of each day's session impressively. Thank you for this chance.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  },
+  {
+    id: "medicos-8",
+    name: "Dr. Susmita Das",
+    role: "Assistant Professor",
+    organization: "Narula Institute of Technology",
+    image: "",
+    workshopImage: "",
+    text: "The workshop explained the process from basic to advanced concepts in an understandable manner. The computational approach was especially valuable.",
+    linkedinUrl: "",
+    workshop: "Brain Modeling for Medicos"
+  }
+]
+
 const testimonials = [
   {
     id: "testimonial-1",
@@ -383,6 +474,22 @@ export default function WorkshopsPage() {
               {testimonials.map((testimonial) => (
                 <TestimonialCard key={testimonial.id} testimonial={testimonial} />
               ))}
+            </div>
+          </div>
+
+          {/* Brain Modeling for Medicos Testimonials */}
+          <div id="medicos-testimonials" className="mt-16 scroll-mt-24">
+            <div className="mb-10">
+              <h3 className="text-2xl md:text-4xl font-black tracking-tighter">Brain Modeling for Medicos Testimonials</h3>
+              <div className="h-1 w-16 bg-violet-600 mt-4"></div>
+            </div>
+
+            <div className="overflow-x-auto pb-4 -mx-4 px-4">
+              <div className="flex gap-6 min-w-max">
+                {medicosTestimonials.map((testimonial) => (
+                  <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+                ))}
+              </div>
             </div>
           </div>
         </div>

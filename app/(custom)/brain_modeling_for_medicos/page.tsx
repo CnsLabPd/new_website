@@ -165,6 +165,17 @@ export default function BrainModelingMedicosPage() {
         </p>
       </section>
 
+      {/* TESTIMONIALS BUTTON */}
+      <section className="text-center pb-20">
+        <h3 className="text-2xl font-bold mb-6">What Participants Say</h3>
+        <Link href="/workshops#medicos-testimonials">
+          <Button className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 text-black hover:opacity-90 px-8 py-3 text-lg font-bold">
+            View Testimonials
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        </Link>
+      </section>
+
     </div>
   )
 }
