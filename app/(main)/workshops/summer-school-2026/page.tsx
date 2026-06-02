@@ -845,154 +845,505 @@ export default function SummerSchool2026Page() {
               </Card>
             </section>
 
-            {/* TENTATIVE SCHEDULE */}
+            {/* DETAILED SCHEDULE */}
             <section id="schedule" className="mb-20 scroll-mt-24">
-              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Tentative Schedule</h2>
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6">Daily Lecture Programme</h2>
               <div className="h-1.5 w-20 bg-blue-600 mb-8"></div>
 
-              <Card className="border-2 border-border">
-                <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="bg-gradient-to-r from-blue-500 to-violet-500 text-white">
-                          <th className="px-6 py-4 text-left font-black border-r border-white/20">Date</th>
-                          <th className="px-6 py-4 text-left font-black border-r border-white/20">Main Theme</th>
-                          <th className="px-6 py-4 text-left font-black">Speakers</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">15/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Sensory systems</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Santhosh Sethuramanujam</li>
-                              <li>• Dr. SP Arun</li>
-                              <li>• Dr. Meenakshi Asokan</li>
-                              <li>• Dr. Sharba Bandyopadhyay</li>
-                              <li>• Dr. Sundari / Vignesh</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">16/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Motor Function</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Pratik Mutha</li>
-                              <li>• Dr. Shyam Diwakar</li>
-                              <li>• Dr. Mohan Raghavan</li>
-                              <li>• Dr. Sundari</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">17/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Brain Dynamics</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Parul Verma</li>
-                              <li>• Dr. Bapiraju</li>
-                              <li>• Dr. Dipanjan Roy</li>
-                              <li>• Anirban / Dr. Sayan</li>
-                              <li>• Dr. Risto Iliomeni</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">18/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">OculoMotor System</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Aasef Sheikh</li>
-                              <li>• Dr. Aditya Murthy</li>
-                              <li>• Dr. Swetha Kumari</li>
-                              <li>• Dr. Fatema Ghasia</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">19/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Biophysical Models</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Vignan Muddapu</li>
-                              <li>• Dr. Srikanth Ramaswamy</li>
-                              <li>• Dr. Suhita Nadkarni</li>
-                              <li>• Dr. Vignan Muddapu / Dr. Sandeep</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">20/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Basal Ganglia</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. V. Srinivasa Chakravarthy</li>
-                              <li>• Dr. Pragati Balasubramani</li>
-                              <li>• Dr. Vignesh Muralidharan</li>
-                              <li>• Charitha</li>
-                              <li>• Dr. Sandeep</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">22/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Reward systems and Decision Making</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Alekhya Mandeli</li>
-                              <li>• Dr. Ryan Philips</li>
-                              <li>• Dr. Muhammad Parvaz</li>
-                              <li>• Dr. Anantha Ramakrishnan</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">23/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Hippocampus</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Fabien Wagner</li>
-                              <li>• Dr. Amelie Aussel</li>
-                              <li>• Dr. Vignan Muddapu + Dr. Sandeep</li>
-                              <li>• Dr. Sachin Deshmukh</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="border-b border-border hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">24/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">Clinical Neuroscience</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Lakshmi Narasimhan (SRMC)</li>
-                              <li>• Dr. Sylaja PN (SCTIMST)</li>
-                              <li>• Madhuvanthi Muliya</li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr className="hover:bg-blue-500/5 transition-colors">
-                          <td className="px-6 py-4 font-bold whitespace-nowrap border-r border-border">25/06/2026</td>
-                          <td className="px-6 py-4 font-bold border-r border-border">BCI and Startups</td>
-                          <td className="px-6 py-4">
-                            <ul className="space-y-1">
-                              <li>• Dr. Gangadhar Garipelli</li>
-                              <li>• Dr. Karthik Raghavendran</li>
-                              <li>• Dr. Bankim Chander</li>
-                              <li>• Dr. Avinash Singh</li>
-                              <li>• BCI companies</li>
-                            </ul>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+              <div className="mb-8 text-center">
+                <p className="text-sm font-black uppercase tracking-wider text-muted-foreground mb-2">Programme Dates</p>
+                <p className="text-2xl font-black text-foreground">15-25 June 2026 • 10 Days • Online & Live Interactive</p>
+              </div>
+
+              {/* Daily Programme Cards */}
+              <div className="grid gap-6 mb-12">
+                {/* Day 1 - June 15 */}
+                <Card className="border-2 border-orange-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">15</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 01 • Monday</p>
+                          <h3 className="text-2xl font-black">Sensory Systems</h3>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-muted/30 px-6 py-4 text-sm text-muted-foreground italic border-t border-border">
-                    <strong>Note:</strong> This is a tentative schedule and may be subject to changes. June 21, 2026 is a break day.
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Meenakshi Asokan</span><span className="text-sm text-muted-foreground">4:00-5:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">6:00-7:30 PM</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Session</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Santhosh Sethuramanujam</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 2 - June 16 */}
+                <Card className="border-2 border-blue-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">16</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 02 • Tuesday</p>
+                          <h3 className="text-2xl font-black">Motor Function</h3>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Shyam Diwakar</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Prof. Pratik Mutha</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Additional Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Mohan Raghavan</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 3 - June 17 */}
+                <Card className="border-2 border-violet-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-violet-500 to-violet-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">17</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 03 • Wednesday</p>
+                          <h3 className="text-2xl font-black">Brain Dynamics</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Bapi Raju</span><span className="text-sm text-muted-foreground">11:30 AM-12:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Dipanjan Roy</span><span className="text-sm text-muted-foreground">3:00-4:30 PM</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">4:00-5:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Risto Ilmoniemi</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 4 - June 18 */}
+                <Card className="border-2 border-cyan-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">18</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 04 • Thursday</p>
+                          <h3 className="text-2xl font-black">Oculomotor System</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Aditya Murthy</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Aasef Sheikh</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Dr. Swetha Kumari</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Fatema Ghasia</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 5 - June 19 */}
+                <Card className="border-2 border-pink-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">19</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 05 • Friday</p>
+                          <h3 className="text-2xl font-black">Biophysical Models</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Suhita Nadkarni</span><span className="text-sm text-muted-foreground">3:00-4:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Vignyanadam Muddapu</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Session</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Srikanth Ramaswamy</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 6 - June 20 */}
+                <Card className="border-2 border-purple-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">20</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 06 • Saturday</p>
+                          <h3 className="text-2xl font-black">Basal Ganglia</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. V. S. Chakravarthy</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Prof. Vignan Muralidharan</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">12:00-1:00 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Sandeep</span><span className="text-sm text-muted-foreground">5:00-7:00 PM</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Break Day Notice */}
+                <Card className="border-2 border-gray-300 bg-gray-50/50 dark:bg-gray-900/20">
+                  <CardContent className="p-8 text-center">
+                    <p className="text-2xl font-black text-muted-foreground mb-2">June 21, 2026</p>
+                    <p className="text-lg font-bold">Break Day</p>
+                    <p className="text-sm text-muted-foreground mt-2">Schedule a tentative and subject to change</p>
+                  </CardContent>
+                </Card>
+
+                {/* Day 7 - June 22 */}
+                <Card className="border-2 border-green-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">22</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 07 • Monday</p>
+                          <h3 className="text-2xl font-black">Reward Systems & Decision Making</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Ryan T. Philips</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Prof. Alekhya Mandali</span><span className="text-sm text-muted-foreground">3:30-4:30 PM</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Muhammad Parvaz</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Dr. Anantha Ramakrishnan</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 8 - June 23 */}
+                <Card className="border-2 border-yellow-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">23</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 08 • Tuesday</p>
+                          <h3 className="text-2xl font-black">Hippocampus</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Vignyanadam & Dr. Sandeep</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Fabien Wagner</span><span className="text-sm text-muted-foreground">5:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Sachin Deshmukh</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 9 - June 24 */}
+                <Card className="border-2 border-red-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">24</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 09 • Wednesday</p>
+                          <h3 className="text-2xl font-black">Clinical Neuroscience</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="space-y-2">
+                      <p className="font-bold text-sm text-muted-foreground">Sessions</p>
+                      <div className="space-y-1">
+                        <p className="flex justify-between"><span>Dr. Lakshmi Narasimhan - SRMC</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        <p className="flex justify-between"><span>Dr. Syliaja PN - SCTIMST</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        <p className="flex justify-between"><span>Ms. Madhuvanthi Muliya</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Day 10 - June 25 */}
+                <Card className="border-2 border-indigo-500/30 overflow-hidden">
+                  <div className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center">
+                          <span className="text-2xl font-black">25</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase opacity-90">Day 10 • Thursday</p>
+                          <h3 className="text-2xl font-black">BCI & Startups</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Industry Leaders</p>
+                        <div className="space-y-1">
+                          <p>Dr. Gangadhar Garipelli - MindMaze</p>
+                          <p>Mr. Karthik Raghavendran - Neurostellar</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Innovation & Startups</p>
+                        <div className="space-y-1">
+                          <p>Dr. Bankim Chander</p>
+                          <p>Dr. Avinash Singh - UTS</p>
+                          <p>Ms. Roohi Parveen & Mr. Shivam Rajaram Chaudhari</p>
+                          <p>Dr. Harsh Arora</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Hands-on Sessions Section */}
+              <div className="mb-12">
+                <h3 className="text-2xl font-black mb-6">Hands-on Sessions</h3>
+                <p className="text-muted-foreground mb-6">Coding labs • 6 sessions</p>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="border-2 border-blue-500/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">15</div>
+                        <CardTitle className="text-lg">Mr. Adhya S</CardTitle>
+                      </div>
+                      <p className="text-sm text-muted-foreground">SENSORY SYSTEMS</p>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm">11:00 AM-12:30 PM</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-blue-500/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">16</div>
+                        <CardTitle className="text-lg">Ms. Sundari Elango</CardTitle>
+                      </div>
+                      <p className="text-sm text-muted-foreground">MOTOR FUNCTION</p>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm">11:00 AM-12:30 PM</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-blue-500/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">17</div>
+                        <CardTitle className="text-lg">Mr. Anirban</CardTitle>
+                      </div>
+                      <p className="text-sm text-muted-foreground">BRAIN DYNAMICS</p>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm">10:00-11:30 AM</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-blue-500/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">19</div>
+                        <CardTitle className="text-lg">Ms. Sindhuramrutha</CardTitle>
+                      </div>
+                      <p className="text-sm text-muted-foreground">BIOPHYSICS</p>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm">5:00-6:30 PM</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-blue-500/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">20</div>
+                        <CardTitle className="text-lg">Ms. Charitha Palla</CardTitle>
+                      </div>
+                      <p className="text-sm text-muted-foreground">BASAL GANGLIA</p>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm">3:00-4:30 PM</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-blue-500/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">23</div>
+                        <CardTitle className="text-lg">Ms. Madhuvanthi Muliya</CardTitle>
+                      </div>
+                      <p className="text-sm text-muted-foreground">HIPPOCAMPUS</p>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm">10:30 AM-12:00 PM</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Abstract Presentations Section */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-black mb-6">Abstract Presentations</h3>
+                <p className="text-muted-foreground mb-6">Selected posters & oral talks</p>
+
+                <Card className="border-2 border-pink-500/30 bg-pink-500/[0.02]">
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-4 gap-6 text-center">
+                      <div>
+                        <p className="text-sm font-bold text-muted-foreground uppercase mb-1">June 16</p>
+                        <p className="text-2xl font-black">16</p>
+                        <p className="text-sm text-muted-foreground">2:00-3:00 PM</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-muted-foreground uppercase mb-1">June 18</p>
+                        <p className="text-2xl font-black">18</p>
+                        <p className="text-sm text-muted-foreground">2:00-3:00 PM</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-muted-foreground uppercase mb-1">June 20</p>
+                        <p className="text-2xl font-black">20</p>
+                        <p className="text-sm text-muted-foreground">2:00-3:00 PM</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-muted-foreground uppercase mb-1">June 22</p>
+                        <p className="text-2xl font-black">22</p>
+                        <p className="text-sm text-muted-foreground">2:00-3:00 PM</p>
+                      </div>
+                    </div>
+
+                    <div className="text-center mt-6">
+                      <p className="text-lg font-bold mb-2">Present your research</p>
+                      <p className="text-sm text-muted-foreground">Selected abstracts are featured across four dedicated slots, each 3:00-5:00 PM</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Download Schedule Button */}
+              <div className="text-center">
+                <a
+                  href="/Neurogati_SummerSchool_2026_Schedule.pdf"
+                  target="_blank"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold rounded-full hover:scale-105 transition-all"
+                >
+                  <Calendar className="h-5 w-5" />
+                  Download Full Schedule (PDF)
+                </a>
+              </div>
             </section>
 
             {/* CONTACT & CTA */}
