@@ -1271,7 +1271,7 @@ export default function SummerSchool2026Page() {
                     <CardHeader>
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-black">20</div>
-                        <CardTitle className="text-lg">Ms. Charitha Palla</CardTitle>
+                        <CardTitle className="text-lg">Ms. Charitha Palika</CardTitle>
                       </div>
                       <p className="text-sm text-muted-foreground">BASAL GANGLIA</p>
                     </CardHeader>
