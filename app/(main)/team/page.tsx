@@ -87,7 +87,7 @@ const experts = [
     mailto: ""
   },
   {
-    name: "Mr. Madhav",
+    name: "Mr. S.N.V SAI NARASIMHA MADHAV",
     specialties: ["CP Rehabilitation", "Computer Vision"],
     image: "/placeholder.svg?height=250&width=250&text=Madhav",
     color: "violet",
