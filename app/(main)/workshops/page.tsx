@@ -45,6 +45,17 @@ const workshops = [
     registrationLink: "/workshops/summer-school-2026"
   },
   {
+    id: "research-program-phase-1-july",
+    status: "Upcoming",
+    title: "AI + Brain Science Summer Program - July Session",
+    date: "July 7-21, 2026",
+    duration: "2 weeks",
+    participants: "Limited seats",
+    type: "Online (Live + Interactive, US-friendly timings)",
+    description: "For High School Students (Grades 8–12). Explore how AI is used to study the brain, analyze EEG signals, and understand brain disorders. Learn how neurons compute, foundations of neural networks, brain signal analysis, and computational models of neurological disorders. Features live interactive sessions led by IIT faculty, certificate of completion, and pathway to Phase II research programs. Selection-based admission.",
+    registrationLink: "/workshops/research-program-phase-1-july7-21"
+  },
+  {
     id: "comp-neuro-training-3",
     status: "Past",
     title: "Workshop on Brain Modeling",
