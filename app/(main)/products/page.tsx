@@ -10,15 +10,23 @@ const verticals = [
     title: "Diagnostics and Monitoring",
     href: "/neurodiagnostics", // Target page
     description: "Advanced AI-powered tools for early detection and monitoring of neurological disorders.",
-    image: "/quadis-pd-thumb.png", 
+    image: "/quadis-pd-thumb.png",
     color: "blue",
+  },
+  {
+    name: "Akshara Learning",
+    title: "Akshara Learning Platform",
+    href: "/akshara-learning", // Will redirect to Vercel deployment
+    description: "Interactive learning platform for language and literacy development using advanced AI and neuroscience principles.",
+    image: "/placeholder.svg?height=256&width=384&text=Akshara+Learning",
+    color: "violet",
   },
   // {
   //   name: "Gaming & Rehabilitation",
   //   title: "Gaming & Rehabilitation",
   //   href: "/gamingcategories", // Target page
   //   description: "AI-driven gaming solutions for rehabilitation, monitoring and tracking.",
-  //   image: "/games-rehab-thumb-v2.png", 
+  //   image: "/games-rehab-thumb-v2.png",
   //   color: "violet",
   // },
   // {
@@ -26,7 +34,7 @@ const verticals = [
   //   title: "Assistive Technology",
   //   href: "/assistivetech", // Target page
   //   description: "Innovative solutions to help patients with neurological disorders maintain independence and improve quality of life.",
-  //   image: "/assistive-thumb.png", 
+  //   image: "/assistive-thumb.png",
   //   color: "green",
   // },
 
