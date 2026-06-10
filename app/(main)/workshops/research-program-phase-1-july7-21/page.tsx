@@ -304,7 +304,7 @@ export default function ResearchProgramPhase1July7To21Page() {
               Limited Seats · Selection-Based Admission
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
               <a
                 href="https://forms.gle/G4zsZmBPn3ZsoqeQ7"
                 target="_blank"
@@ -315,7 +315,7 @@ export default function ResearchProgramPhase1July7To21Page() {
               </a>
 
               <a
-                href="/workshop brochures/phase1 july.pdf"
+                href="/workshop%20brochures/phase1%20july.pdf"
                 download
                 className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-blue-400 text-blue-400 font-bold rounded-full hover:bg-blue-400/10 transition-all text-lg"
               >
@@ -538,7 +538,7 @@ export default function ResearchProgramPhase1July7To21Page() {
                     </a>
 
                     <a
-                      href="/workshop brochures/phase1 july.pdf"
+                      href="/workshop%20brochures/phase1%20july.pdf"
                       download
                       className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-blue-400 text-blue-400 font-bold rounded-full hover:bg-blue-400/10 transition-all text-base"
                     >
