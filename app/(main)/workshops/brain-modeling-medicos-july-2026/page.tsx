@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef } from "react"
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -15,42 +15,29 @@ import {
   Laptop,
   ArrowRight,
   Mail,
-  ChevronLeft,
-  ChevronRight,
   Stethoscope,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Download
 } from "lucide-react"
 
 export default function BrainModelingMedicosJulyPage() {
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#050814] via-[#0a0f2c] to-[#0b163f] text-white">
 
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/40 border-b border-white/10">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
-
-          <Link href="/" className="flex items-center gap-3 group">
-            <img src="/bg_just_logo.png" className="h-14 w-14" />
-            <span className="text-2xl font-black text-[#38bdf8]">NEUROGATI</span>
-          </Link>
-
-          <nav className="hidden md:flex gap-8">
-            <a href="#overview">Overview</a>
-            <a href="#schedule">Schedule</a>
-            <a href="#why">Why Attend</a>
-            <a href="#register">Register</a>
+      {/* Secondary Navigation */}
+      <div className="sticky top-0 z-40 backdrop-blur-md bg-black/40 border-b border-white/10">
+        <div className="container mx-auto px-6 py-3">
+          <nav className="flex gap-8 text-sm">
+            <a href="#overview" className="hover:text-blue-400 transition-colors">Overview</a>
+            <a href="#schedule" className="hover:text-blue-400 transition-colors">Schedule</a>
+            <a href="#why" className="hover:text-blue-400 transition-colors">Why Attend</a>
           </nav>
-
-          <Badge className="bg-green-600 text-white px-4 py-2">
-            Registrations Open
-          </Badge>
         </div>
-      </header>
+      </div>
 
       {/* HERO */}
-      <section className="pt-40 pb-24 text-center">
+      <section className="pt-24 pb-24 text-center">
         <Badge className="mb-6 bg-green-600">6-Day Intensive Workshop</Badge>
 
         <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
@@ -77,12 +64,19 @@ export default function BrainModelingMedicosJulyPage() {
           </Card>
         </div>
 
-        {/* Registration Button */}
-        <div className="mt-8 flex justify-center">
+        {/* Registration and Download Buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="https://forms.gle/fwyr2agFpUCMgc41A">
             <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 text-lg font-bold shadow-lg">
               Register Now
               <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+
+          <Link href="/workshop brochures/medicos july 2026.pdf" download>
+            <Button variant="outline" className="px-8 py-4 text-lg font-bold border-blue-400 text-blue-400 hover:bg-blue-400/10">
+              Download Brochure
+              <Download className="ml-2 h-5 w-5" />
             </Button>
           </Link>
         </div>
@@ -90,19 +84,30 @@ export default function BrainModelingMedicosJulyPage() {
 
       {/* OVERVIEW */}
       <section id="overview" className="container mx-auto px-6 py-20 grid md:grid-cols-3 gap-8">
-
         {[{
-          icon: <Stethoscope />, title: "Brain & Disease", desc: "Epilepsy, Parkinson's, depression as dynamical disorders"
+          icon: <Stethoscope />,
+          title: "Brain & Disease",
+          desc: "Epilepsy, Parkinson's, depression as dynamical disorders"
         },{
-          icon: <Brain />, title: "Neurons to Equations", desc: "Membrane models, HH framework, action potentials"
+          icon: <Brain />,
+          title: "Neurons to Equations",
+          desc: "Membrane models, HH framework, action potentials"
         },{
-          icon: <Activity />, title: "Math Foundations", desc: "Vectors, optimization, learning systems"
+          icon: <Activity />,
+          title: "Math Foundations",
+          desc: "Vectors, optimization, learning systems"
         },{
-          icon: <Network />, title: "Neural Networks", desc: "CNNs, RNNs and brain computation"
+          icon: <Network />,
+          title: "Neural Networks",
+          desc: "CNNs, RNNs and brain computation"
         },{
-          icon: <Layers />, title: "Brain Dynamics", desc: "Oscillations, rhythms and seizures"
+          icon: <Layers />,
+          title: "Brain Dynamics",
+          desc: "Oscillations, rhythms and seizures"
         },{
-          icon: <Brain />, title: "Disease Models", desc: "Parkinson's, DBS, clinical simulations"
+          icon: <Brain />,
+          title: "Disease Models",
+          desc: "Parkinson's, DBS, clinical simulations"
         }].map((item, i) => (
           <Card key={i} className="p-6">
             <div className="text-blue-400 mb-4">{item.icon}</div>
@@ -250,6 +255,13 @@ export default function BrainModelingMedicosJulyPage() {
             <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 text-lg font-bold">
               Register Now
               <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+
+          <Link href="/workshop brochures/medicos july 2026.pdf" download>
+            <Button variant="outline" className="px-8 py-6 text-lg border-blue-400 text-blue-400 hover:bg-blue-400/10">
+              Download Brochure
+              <Download className="ml-2 h-5 w-5" />
             </Button>
           </Link>
 
