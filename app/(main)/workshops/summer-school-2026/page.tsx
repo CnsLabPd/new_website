@@ -1058,7 +1058,7 @@ export default function SummerSchool2026Page() {
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">12:00-1:00 PM</span></p>
-                          <p className="flex justify-between"><span>Dr. Sandeep</span><span className="text-sm text-muted-foreground">5:00-7:00 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Sandeep Nair</span><span className="text-sm text-muted-foreground">5:00-7:00 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -1129,7 +1129,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Vignyanadam & Dr. Sandeep</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Vignyanadam & Dr. Sandeep Nair</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
                         </div>
                       </div>
