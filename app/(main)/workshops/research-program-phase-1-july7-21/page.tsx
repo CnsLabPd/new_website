@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Calendar, MapPin, Users, ArrowRight, Clock, Mail,
   GraduationCap, Brain, Lightbulb, Award, ChevronRight,
-  Quote, ChevronDown,
+  Quote, ChevronDown, Download,
 } from "lucide-react"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -304,14 +304,24 @@ export default function ResearchProgramPhase1July7To21Page() {
               Limited Seats · Selection-Based Admission
             </p>
 
-            <a
-              href="https://forms.gle/G4zsZmBPn3ZsoqeQ7"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 text-white font-bold rounded-full hover:scale-105 transition-all text-lg shadow-lg shadow-blue-500/20"
-            >
-              Apply Now <ArrowRight className="h-5 w-5" />
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <a
+                href="https://forms.gle/G4zsZmBPn3ZsoqeQ7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 text-white font-bold rounded-full hover:scale-105 transition-all text-lg shadow-lg shadow-blue-500/20"
+              >
+                Apply Now <ArrowRight className="h-5 w-5" />
+              </a>
+
+              <a
+                href="/workshop brochures/phase1 july.pdf"
+                download
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-blue-400 text-blue-400 font-bold rounded-full hover:bg-blue-400/10 transition-all text-lg"
+              >
+                Download Brochure <Download className="h-5 w-5" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -517,14 +527,24 @@ export default function ResearchProgramPhase1July7To21Page() {
                   <p className="text-base text-foreground/70 mb-8 max-w-xl mx-auto">
                     Join a cohort of motivated students exploring the intersection of brain science, AI, and computational modeling.
                   </p>
-                  <a
-                    href="https://forms.gle/G4zsZmBPn3ZsoqeQ7"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition-all hover:scale-105 text-base shadow-lg shadow-blue-500/20"
-                  >
-                    Apply Now <ArrowRight className="h-4 w-4" />
-                  </a>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a
+                      href="https://forms.gle/G4zsZmBPn3ZsoqeQ7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition-all hover:scale-105 text-base shadow-lg shadow-blue-500/20"
+                    >
+                      Apply Now <ArrowRight className="h-4 w-4" />
+                    </a>
+
+                    <a
+                      href="/workshop brochures/phase1 july.pdf"
+                      download
+                      className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-blue-400 text-blue-400 font-bold rounded-full hover:bg-blue-400/10 transition-all text-base"
+                    >
+                      Download Brochure <Download className="h-4 w-4" />
+                    </a>
+                  </div>
                   <div className="mt-8 pt-8 border-t border-border/40">
                     <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-3">Questions?</p>
                     <a href="mailto:workshops@neurogati.com" className="inline-flex items-center gap-2 text-foreground hover:text-blue-400 transition-colors font-bold text-sm">
