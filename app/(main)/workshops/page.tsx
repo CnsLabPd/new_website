@@ -56,6 +56,18 @@ const workshops = [
     registrationLink: "/workshops/brain-modeling-medicos-july-2026"
   },
   {
+    id: "research-program-phase-2",
+    status: "Upcoming",
+    title: "Computational Neuroscience Research Training - Phase 2",
+    date: "July 11 - September 26, 2026",
+    duration: "10 weeks",
+    participants: "Limited seats",
+    type: "Online (2 hrs/week Live)",
+    pricing: "US$ 375",
+    description: "A mentorship-driven research training program in computational neuroscience. Choose from 6 research tracks including PD diagnostics, deep oscillatory networks, spatial decision making, EEG analysis, autism games, and 3D movement analysis. Includes weekly mentorship, supervised research project, and conference-ready abstract. Application deadline: June 30, 2026.",
+    registrationLink: "/workshops/research-program-phase-2-july-sept"
+  },
+  {
     id: "ai-applications-eeg-august",
     status: "Upcoming",
     title: "AI Applications in EEG - August 2026",
