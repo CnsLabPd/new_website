@@ -875,17 +875,17 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Meenakshi Asokan</span><span className="text-sm text-muted-foreground">4:00-5:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">6:00-7:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. V. Srinivasa Chakravarthy</span><span className="text-sm text-muted-foreground">10:45-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Mr. Adithya Shreeram [hands-on]</span><span className="text-sm text-muted-foreground">11:00-12:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Evening Session</p>
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Session</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Santhosh Sethuramanujam</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">6:00-7:30 PM</span></p>                          
                         </div>
                       </div>
                     </div>
@@ -916,12 +916,12 @@ export default function SummerSchool2026Page() {
                           <p className="flex justify-between"><span>Prof. Pratik Mutha</span><span className="text-sm text-muted-foreground">TBA</span></p>
                         </div>
                       </div>
-                      <div className="space-y-2">
+                      {/* <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Additional Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Mohan Raghavan</span><span className="text-sm text-muted-foreground">TBA</span></p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </CardContent>
                 </Card>
@@ -988,7 +988,6 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Dr. Swetha Kumari</span><span className="text-sm text-muted-foreground">TBA</span></p>
                           <p className="flex justify-between"><span>Prof. Fatema Ghasia</span><span className="text-sm text-muted-foreground">TBA</span></p>
                         </div>
                       </div>
@@ -1096,13 +1095,13 @@ export default function SummerSchool2026Page() {
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Ryan T. Philips</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
                           <p className="flex justify-between"><span>Prof. Alekhya Mandali</span><span className="text-sm text-muted-foreground">3:30-4:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Meenakshi Asokan</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Muhammad Parvaz</span><span className="text-sm text-muted-foreground">TBA</span></p>
-                          <p className="flex justify-between"><span>Dr. Anantha Ramakrishnan</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Muhammad Parvaz and Dr. Anantha Ramakrishnan</span><span className="text-sm text-muted-foreground">06:00-07:00 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -1127,17 +1126,17 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Vignyanadam & Dr. Sandeep Nair</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Sachin Deshmukh</span><span className="text-sm text-muted-foreground">TBA</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Vignyanadam</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Fabien Wagner</span><span className="text-sm text-muted-foreground">5:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Sachin Deshmukh</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
                         </div>
                       </div>
                     </div>
