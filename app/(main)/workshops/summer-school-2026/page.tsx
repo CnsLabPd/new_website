@@ -878,7 +878,7 @@ export default function SummerSchool2026Page() {
                         <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Playing of Vande Matram [National Song]</span><span className="text-sm text-muted-foreground">10:45-10:50 AM</span></p>
-                          <p className="flex justify-between"><span>Inaugral Talk by Prof. V. Srinivasa Chakravarthy</span><span className="text-sm text-muted-foreground">10:50-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Inaugural Talk by Prof. V. Srinivasa Chakravarthy</span><span className="text-sm text-muted-foreground">10:50-11:00 AM</span></p>
                           <p className="flex justify-between"><span>Mr. Adithya Shreeram [hands-on]</span><span className="text-sm text-muted-foreground">11:00-12:30 PM</span></p>
                         </div>
                       </div>
