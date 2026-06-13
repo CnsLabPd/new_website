@@ -883,7 +883,7 @@ export default function SummerSchool2026Page() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Afternoon Session</p>
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">6:00-7:30 PM</span></p>                          
