@@ -1198,24 +1198,20 @@ export default function SummerSchool2026Page() {
                     </div>
                   </div>
                   <CardContent className="p-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Industry Leaders</p>
-                        <div className="space-y-1">
-                          <p>Dr. Gangadhar Garipelli - MindMaze</p>
-                          <p>Mr. Karthik Raghavendran - Neurostellar</p>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Innovation & Startups</p>
-                        <div className="space-y-1">
-                          <p>Dr. Bankim Chander</p>
-                          <p>Dr. Avinash Singh - UTS</p>
-                          <p>Ms. Roohi Parveen & Mr. Shivam Rajaram Chaudhari</p>
-                          <p>Dr. Harsh Arora</p>
-                        </div>
+                    <div className="space-y-2">
+                      <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
+                      <div className="space-y-1">
+                        <p className="flex justify-between"><span>Prof. Avinash Singh</span><span className="text-sm text-muted-foreground">12:00 PM - 01:00 PM</span></p>
+                        
                       </div>
                     </div>
+                    <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Dr. Gangadhar Garipelli</span><span className="text-sm text-muted-foreground">02:30 PM - 03:30 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Bankim Chander</span><span className="text-sm text-muted-foreground">04:00 PM - 05:00 PM</span></p>
+                        </div>
+                      </div>
                   </CardContent>
                 </Card>
               </div>
