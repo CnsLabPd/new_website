@@ -911,18 +911,20 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Shyam Diwakar</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
-                          <p className="flex justify-between"><span>Prof. Pratik Mutha</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Shyam Diwakar</span><span className="text-sm text-muted-foreground">10:00 AM - 11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Prof. Santhosh Sethuramanujam</span><span className="text-sm text-muted-foreground">11:00 AM - 12:00 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Sundari Elango</span><span className="text-sm text-muted-foreground">12:00 PM - 01:00 PM</span></p>
                         </div>
                       </div>
-                      {/* <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Additional Sessions</p>
+                      <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Mohan Raghavan</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Pratik Mutha</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Poster Presentaitons - I</span><span className="text-sm text-muted-foreground">03:00 PM - 05:00 PM</span></p>
                         </div>
-                      </div> */}
+                      </div> 
                     </div>
                   </CardContent>
                 </Card>
