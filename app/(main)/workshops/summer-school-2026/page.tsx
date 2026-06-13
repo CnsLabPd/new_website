@@ -1140,9 +1140,9 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Vignyanadam</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Fabien Wagner</span><span className="text-sm text-muted-foreground">5:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Vignyanadam</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">04:30 PM - 05:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Fabien Wagner</span><span className="text-sm text-muted-foreground">05:30 PM - 06:30 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -1166,13 +1166,19 @@ export default function SummerSchool2026Page() {
                   </div>
                   <CardContent className="p-6">
                     <div className="space-y-2">
-                      <p className="font-bold text-sm text-muted-foreground">Sessions</p>
+                      <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                       <div className="space-y-1">
                         <p className="flex justify-between"><span>Dr. Lakshmi Narasimhan - SRMC</span><span className="text-sm text-muted-foreground">TBA</span></p>
                         <p className="flex justify-between"><span>Dr. Syliaja PN - SCTIMST</span><span className="text-sm text-muted-foreground">TBA</span></p>
-                        <p className="flex justify-between"><span>Ms. Madhuvanthi Muliya</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                        <p className="flex justify-between"><span>Dr. Harsh Arora</span><span className="text-sm text-muted-foreground">11:00 AM - 12:00 PM</span></p>
                       </div>
                     </div>
+                    <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span>Dr. Kodeeswaran - GKMC</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                        </div>
+                      </div>
                   </CardContent>
                 </Card>
 
