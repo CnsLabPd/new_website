@@ -949,15 +949,15 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Risto Ilmoniemi</span><span className="text-sm text-muted-foreground">10:30 AM-11:30 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Bapi Raju</span><span className="text-sm text-muted-foreground">11:30 AM-12:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Dipanjan Roy</span><span className="text-sm text-muted-foreground">3:00-4:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">4:00-5:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Risto Ilmoniemi</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Dipanjan Roy</span><span className="text-sm text-muted-foreground">3:00-4:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">4:00-5:00 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -982,16 +982,17 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Aditya Murthy</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Aasef Sheikh</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Poster Presentations - II</span><span className="text-sm text-muted-foreground">11:00 AM - 01:00 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Fatema Ghasia</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Aditya Murthy</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Aasef Sheikh</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Fatema Ghasia</span><span className="text-sm text-muted-foreground">04:00 PM - 05:00 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -1016,16 +1017,16 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Suhita Nadkarni</span><span className="text-sm text-muted-foreground">3:00-4:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Vignyanadam Muddapu</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Ms. Sindhuramrutha [hands-on]</span><span className="text-sm text-muted-foreground">11:00 AM - 12:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Evening Session</p>
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Srikanth Ramaswamy</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Suhita Nadkarni</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Mr. Anirban Bandhyopadhyay [hands-on]</span><span className="text-sm text-muted-foreground">03:00 PM - 04:30 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -1050,17 +1051,19 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. V. S. Chakravarthy</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Prof. V. Srinivasa Chakravarthy</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
                           <p className="flex justify-between"><span>Prof. Vignan Muralidharan</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">12:00-1:00 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">12:00-1:00 PM</span></p>
-                          <p className="flex justify-between"><span>Dr. Sandeep Nair</span><span className="text-sm text-muted-foreground">5:00-7:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">02:00 PM - 03:30 PM</span></p>
+                          <p className="flex justify-between"><span>Ms. Palika Charitha [hands-on]</span><span className="text-sm text-muted-foreground">03:30 PM - 05:00 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Sandeep Nair</span><span className="text-sm text-muted-foreground">06:00 PM - 07:00 PM</span></p>
                         </div>
                       </div>
                     </div>
