@@ -1096,16 +1096,17 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
+                        <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Ryan T. Philips</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
-                          <p className="flex justify-between"><span>Prof. Alekhya Mandali</span><span className="text-sm text-muted-foreground">3:30-4:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Meenakshi Asokan</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Ryan T. Philips</span><span className="text-sm text-muted-foreground">10:00 AM - 11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Poster Presentations - III</span><span className="text-sm text-muted-foreground">11:00 AM - 01:00 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Alekhya Mandali</span><span className="text-sm text-muted-foreground">3:30-4:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Meenakshi Asokan</span><span className="text-sm text-muted-foreground">4:30-5:30 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Muhammad Parvaz and Dr. Anantha Ramakrishnan</span><span className="text-sm text-muted-foreground">06:00-07:00 PM</span></p>
                         </div>
                       </div>
