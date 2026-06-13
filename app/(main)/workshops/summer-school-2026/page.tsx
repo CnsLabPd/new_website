@@ -950,14 +950,14 @@ export default function SummerSchool2026Page() {
                         <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Risto Ilmoniemi</span><span className="text-sm text-muted-foreground">10:30 AM-11:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Bapi Raju</span><span className="text-sm text-muted-foreground">11:30 AM-12:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Bapi Raju</span><span className="text-sm text-muted-foreground">11:30 AM - 12:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Dipanjan Roy</span><span className="text-sm text-muted-foreground">3:00-4:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">4:00-5:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Dipanjan Roy</span><span className="text-sm text-muted-foreground">03:00 PM - 04:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">04:00 PM - 05:00 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -1075,7 +1075,6 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-8 text-center">
                     <p className="text-2xl font-black text-muted-foreground mb-2">June 21, 2026</p>
                     <p className="text-lg font-bold">Break Day</p>
-                    <p className="text-sm text-muted-foreground mt-2">Schedule a tentative and subject to change</p>
                   </CardContent>
                 </Card>
 
