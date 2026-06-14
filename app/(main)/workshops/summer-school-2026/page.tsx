@@ -885,8 +885,8 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">2:00-3:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">6:00-7:30 PM</span></p>                          
+                          <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">04:30 PM - 05:30 PM</span></p>                          
                         </div>
                       </div>
                     </div>
@@ -1061,7 +1061,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">02:00 PM - 03:30 PM</span></p>
+                          <p className="flex justify-between"><span>Poster Presentations - III</span><span className="text-sm text-muted-foreground">02:00 PM - 03:30 PM</span></p>
                           <p className="flex justify-between"><span>Ms. Palika Charitha [hands-on]</span><span className="text-sm text-muted-foreground">03:30 PM - 05:00 PM</span></p>
                           <p className="flex justify-between"><span>Dr. Sandeep Nair</span><span className="text-sm text-muted-foreground">06:00 PM - 07:00 PM</span></p>
                         </div>
@@ -1099,7 +1099,7 @@ export default function SummerSchool2026Page() {
                         <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Ryan T. Philips</span><span className="text-sm text-muted-foreground">10:00 AM - 11:00 AM</span></p>
-                          <p className="flex justify-between"><span>Poster Presentations - III</span><span className="text-sm text-muted-foreground">11:00 AM - 01:00 PM</span></p>
+                          <p className="flex justify-between"><span>Poster Presentations - IV</span><span className="text-sm text-muted-foreground">11:00 AM - 01:00 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -1134,7 +1134,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Forenoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Sachin Deshmukh</span><span className="text-sm text-muted-foreground">TBA</span></p>
+                          <p className="flex justify-between"><span>Prof. Sachin Deshmukh</span><span className="text-sm text-muted-foreground">11:30 AM - 12:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -1176,7 +1176,7 @@ export default function SummerSchool2026Page() {
                     <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Dr. Kodeeswaran - GKMC</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Kodeeswaran - GKMC</span><span className="text-sm text-muted-foreground">03:00 PM - 04:00 PM</span></p>
                         </div>
                       </div>
                   </CardContent>
