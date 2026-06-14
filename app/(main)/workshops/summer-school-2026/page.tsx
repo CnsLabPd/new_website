@@ -1015,11 +1015,16 @@ export default function SummerSchool2026Page() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <div className="space-y-2">
+                        <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
+                        <div className="space-y-1">
+                          <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Ms. Sindhuramrutha - Biophysics</span><span className="text-sm text-muted-foreground">11:00 AM-12:30 PM</span></p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Afternoon Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Suhita Nadkarni</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
                           <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Mr. Anirban Bandhyopadhyay - Biophysical Models</span><span className="text-sm text-muted-foreground">03:00-04:30 PM</span></p>
-                          <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Ms. Sindhuramrutha - Biophysics</span><span className="text-sm text-muted-foreground">05:00-06:30 PM</span></p>
                         </div>
                       </div>
                     </div>
