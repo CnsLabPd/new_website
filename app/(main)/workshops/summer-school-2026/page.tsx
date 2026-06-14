@@ -1142,7 +1142,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Ms. Madhuvanthi Muliya - Hippocampus</span><span className="text-sm text-muted-foreground">10:30 AM-12:00 PM</span></p>
+                          <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Ms. Madhuvanthi Muliya - Hippocampus</span><span className="text-sm text-muted-foreground">10:00-11:30 AM</span></p>
                           <p className="flex justify-between"><span>Prof. Sachin Deshmukh</span><span className="text-sm text-muted-foreground">11:30 AM-12:30 PM</span></p>
                         </div>
                       </div>
