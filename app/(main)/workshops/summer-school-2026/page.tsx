@@ -883,8 +883,8 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. SP Arun</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay</span><span className="text-sm text-muted-foreground">04:30-05:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. SP Arun - "Towards a real conversation between brain and machine vision"</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Sharba Bandyopadhyay - "Surprise at multiple time scales – in coding and plasticity"</span><span className="text-sm text-muted-foreground">04:30-05:30 PM</span></p>
                         </div>
                       </div>
                     </div>
@@ -911,8 +911,8 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Shyam Diwakar</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
-                          <p className="flex justify-between"><span>Prof. Santhosh Sethuramanujam</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Shyam Diwakar - "Motor Learning and the Cerebellum: Computational Neuroscience of Neurons, Circuit reconstructions and Emergent Responses"</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
+                          <p className="flex justify-between"><span>Prof. Santhosh Sethuramanujam - "Dendritic integration mechanisms promote equalization of ON and OFF signal processing in ON-OFF DSGCs"</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
                           <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Ms. Sundari Elango - Motor Function</span><span className="text-sm text-muted-foreground">12:00-01:00 PM</span></p>
                         </div>
                       </div>
