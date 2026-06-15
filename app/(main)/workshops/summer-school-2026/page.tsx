@@ -947,14 +947,14 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Morning Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Risto Ilmoniemi</span><span className="text-sm text-muted-foreground">10:30 AM-11:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Bapi Raju</span><span className="text-sm text-muted-foreground">11:30 AM - 12:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Risto Ilmoniemi - "From single-spot to automated multi-locus transcranial magnetic stimulation"</span><span className="text-sm text-muted-foreground">10:30 AM-11:30 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Bapi Raju - "Bridging Brain Structure and Function through Network Diffusion Models"</span><span className="text-sm text-muted-foreground">11:30 AM - 12:30 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Dipanjan Roy</span><span className="text-sm text-muted-foreground">03:00 PM - 04:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Dipanjan Roy - "Multimodal and multiscale Brain dynamics during rest and task across the lifespan "</span><span className="text-sm text-muted-foreground">03:00 PM - 04:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">04:00 PM - 05:00 PM</span></p>
                         </div>
                       </div>
@@ -988,7 +988,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Afternoon Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Prof. Aditya Murthy</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Aditya Murthy - "Engineering goal-directed movements with artificial neural networks"</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Aasef Sheikh</span><span className="text-sm text-muted-foreground">TBA</span></p>
                           <p className="flex justify-between"><span>Prof. Fatema Ghasia</span><span className="text-sm text-muted-foreground">04:00-05:00 PM</span></p>
                         </div>
