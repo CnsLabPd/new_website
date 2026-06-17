@@ -954,6 +954,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground">Evening Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span>Prof. Srikanth Ramaswamy - "BrAInspiration: What can artificial neural networks learn from neuromodulatory systems?"</span><span className="text-sm text-muted-foreground">02:00 PM - 03:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Dipanjan Roy - "Multimodal and multiscale Brain dynamics during rest and task across the lifespan "</span><span className="text-sm text-muted-foreground">03:00 PM - 04:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Parul Verma</span><span className="text-sm text-muted-foreground">04:00 PM - 05:00 PM</span></p>
                         </div>

@@ -23,7 +23,7 @@ const workshops = [
   },
   {
     id: "summer-research-phase-1",
-    status: "Ongoing",
+    status: "Past",
     title: "AI + BRAIN SCIENCE SUMMER PROGRAM",
     date: "June 1-15, 2026",
     duration: "2 weeks",
@@ -34,7 +34,7 @@ const workshops = [
   },
   {
     id: "summer-school-2026",
-    status: "Upcoming",
+    status: "Ongoing",
     title: "Neurogati Summer School 2026: Your entry portal into Neurotechnology, Brain-AI and the future of neuroscience.",
     date: "June 15-25, 2026",
     duration: "10 days",
@@ -103,7 +103,7 @@ const workshops = [
   },
   {
     id: "comp-neuro-training-1",
-    status: "Ongoing",
+    status: "Past",
     title: "5-Month Research Training Program in Computational Neuroscience",
     date: "January 01st - May 31st, 2026",
     duration: "20 weeks (Phase 01: 10w | Phase 02: 10w)",
@@ -323,14 +323,14 @@ const testimonials = [
 ]
 
 export default function WorkshopsPage() {
-  const [activeSection, setActiveSection] = useState("upcoming")
+  const [activeSection, setActiveSection] = useState("ongoing")
   const upcomingWorkshops = workshops.filter(ws => ws.status === 'Upcoming');
   const ongoingWorkshops = workshops.filter(ws => ws.status === 'Ongoing');
   const pastWorkshops = workshops.filter(ws => ws.status === 'Past');
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['upcoming', 'ongoing', 'past', 'testimonials']
+      const sections = ['ongoing', 'upcoming', 'past', 'testimonials']
       const scrollPosition = window.scrollY + 200
 
       for (const sectionId of sections) {
@@ -382,16 +382,6 @@ export default function WorkshopsPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center gap-2 py-4">
             <button
-              onClick={() => scrollToSection("upcoming")}
-              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
-                activeSection === "upcoming"
-                  ? "bg-blue-600 text-white"
-                  : "bg-muted text-muted-foreground hover:bg-muted/70"
-              }`}
-            >
-              Upcoming
-            </button>
-            <button
               onClick={() => scrollToSection("ongoing")}
               className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
                 activeSection === "ongoing"
@@ -400,6 +390,16 @@ export default function WorkshopsPage() {
               }`}
             >
               Ongoing
+            </button>
+            <button
+              onClick={() => scrollToSection("upcoming")}
+              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
+                activeSection === "upcoming"
+                  ? "bg-blue-600 text-white"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70"
+              }`}
+            >
+              Upcoming
             </button>
             <button
               onClick={() => scrollToSection("past")}
@@ -426,7 +426,36 @@ export default function WorkshopsPage() {
       </nav>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        
+
+        {/* 1. ONGOING WORKSHOPS */}
+        <div id="ongoing" className="mb-24 scroll-mt-24">
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Ongoing Workshops</h2>
+            <div className="h-1.5 w-20 bg-green-600 mt-4"></div>
+          </div>
+
+          {ongoingWorkshops.length > 0 ? (
+            <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+              {ongoingWorkshops.map((ws) => (
+                <WorkshopCard key={ws.id} ws={ws} isUpcoming={true} />
+              ))}
+            </div>
+          ) : (
+            <Card className="relative flex flex-col overflow-hidden border-2 border-green-500/30 bg-green-500/[0.02]">
+              <CardContent className="py-16 text-center">
+                <div className="max-w-2xl mx-auto">
+                  <div className="mb-6">
+                    <Hourglass className="h-16 w-16 mx-auto text-green-500/50" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-4">
+                    No Ongoing Workshops
+                  </h3>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
         {/* 2. UPCOMING WORKSHOPS */}
         <div id="upcoming" className="mb-24 scroll-mt-24">
           <div className="mb-10">
@@ -465,36 +494,7 @@ export default function WorkshopsPage() {
           )}
         </div>
 
-        {/* 3. ONGOING WORKSHOPS */}
-        <div id="ongoing" className="mb-24 scroll-mt-24">
-          <div className="mb-10">
-            <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Ongoing Workshops</h2>
-            <div className="h-1.5 w-20 bg-green-600 mt-4"></div>
-          </div>
-
-          {ongoingWorkshops.length > 0 ? (
-            <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
-              {ongoingWorkshops.map((ws) => (
-                <WorkshopCard key={ws.id} ws={ws} isUpcoming={true} />
-              ))}
-            </div>
-          ) : (
-            <Card className="relative flex flex-col overflow-hidden border-2 border-green-500/30 bg-green-500/[0.02]">
-              <CardContent className="py-16 text-center">
-                <div className="max-w-2xl mx-auto">
-                  <div className="mb-6">
-                    <Hourglass className="h-16 w-16 mx-auto text-green-500/50" />
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-4">
-                    No Ongoing Workshops
-                  </h3>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        {/* 4. PAST WORKSHOPS */}
+        {/* 3. PAST WORKSHOPS */}
         <div id="past" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground/50">Past Workshops</h2>
@@ -507,7 +507,7 @@ export default function WorkshopsPage() {
           </div>
         </div>
 
-        {/* 5. TESTIMONIALS */}
+        {/* 4. TESTIMONIALS */}
         <div id="testimonials" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Testimonials</h2>
