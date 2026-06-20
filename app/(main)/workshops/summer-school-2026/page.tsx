@@ -664,7 +664,7 @@ export default function SummerSchool2026Page() {
                     <div className="flex items-start gap-2">
                       <ChevronRight className="h-5 w-5 text-violet-500 flex-shrink-0 mt-1" />
                       <div>
-                        <p className="font-bold">Dr. Vignan Muddapu</p>
+                        <p className="font-bold">Dr. Vignesh Muddapu</p>
                         <p className="text-sm text-muted-foreground">Azim Premji University</p>
                       </div>
                     </div>
@@ -1053,7 +1053,7 @@ export default function SummerSchool2026Page() {
                         <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. V. Srinivasa Chakravarthy</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
-                          <p className="flex justify-between"><span>Prof. Vignan Muralidharan</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
+                          <p className="flex justify-between"><span>Prof. Vignesh Muralidharan</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Pragathi Balasubramani</span><span className="text-sm text-muted-foreground">12:00-01:00 PM</span></p>
                         </div>
                       </div>
