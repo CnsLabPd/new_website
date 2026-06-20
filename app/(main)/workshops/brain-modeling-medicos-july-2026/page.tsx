@@ -38,7 +38,7 @@ export default function BrainModelingMedicosJulyPage() {
 
       {/* HERO */}
       <section className="pt-24 pb-24 text-center">
-        <Badge className="mb-6 bg-green-600">6-Day Intensive Workshop</Badge>
+        <Badge className="mb-6 bg-green-600">7-Day Intensive Workshop</Badge>
 
         <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
           Brain Modeling for Medicos
@@ -49,7 +49,7 @@ export default function BrainModelingMedicosJulyPage() {
         </p>
 
         <div className="flex justify-center gap-8 mt-10 text-sm text-slate-400">
-          <div className="flex gap-2"><Calendar /> July 8–13, 2026</div>
+          <div className="flex gap-2"><Calendar /> July 8–14, 2026</div>
           <div className="flex gap-2"><Laptop /> Online</div>
           <div className="flex gap-2"><Award /> E-Certificate</div>
         </div>
@@ -128,7 +128,7 @@ export default function BrainModelingMedicosJulyPage() {
             "Hands-on simulations of real brain dynamics",
             "Learn directly from leading neuroscience researchers",
             "No coding background required",
-            "Comprehensive 6-day program with in-depth coverage"
+            "Comprehensive 7-day program with in-depth coverage"
           ].map((t, i) => (
             <Card key={i} className="p-6 text-left">{t}</Card>
           ))}
@@ -137,68 +137,74 @@ export default function BrainModelingMedicosJulyPage() {
 
       {/* SCHEDULE */}
       <section id="schedule" className="container mx-auto px-6 py-20">
-        <h2 className="text-3xl font-black text-center mb-10">6-Day Intensive Schedule</h2>
+        <h2 className="text-3xl font-black text-center mb-10">7-Day Intensive Schedule</h2>
 
         <div className="space-y-6 max-w-4xl mx-auto">
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg mb-2">Day 1 - July 8</h3>
-            <h4 className="font-semibold text-blue-400 mb-1">Introduction & Foundations</h4>
+            <h3 className="font-bold text-lg mb-2">DAY 01</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">Why Brain Modeling Matters in Medicine</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• Why brain modeling matters for medicos</li>
-              <li>• Neuron biology fundamentals</li>
-              <li>• Introduction to computational approaches</li>
+              <li>• Limits of descriptive neuroscience (the "black box" problem)</li>
+              <li>• Brain as a dynamical system</li>
             </ul>
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg mb-2">Day 2 - July 9</h3>
-            <h4 className="font-semibold text-blue-400 mb-1">Neuronal Dynamics</h4>
+            <h3 className="font-bold text-lg mb-2">DAY 02</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">From Biology to Equations</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• Membrane dynamics and ion channels</li>
-              <li>• Hodgkin-Huxley model</li>
-              <li>• Action potential generation and propagation</li>
+              <li>• Neuron structure: dendrites, axon, synapse</li>
+              <li>• Ion channels, neurotransmitters, receptors</li>
+              <li>• Membrane potential, action potential, PSPs</li>
             </ul>
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg mb-2">Day 3 - July 10</h3>
-            <h4 className="font-semibold text-blue-400 mb-1">Mathematical Foundations</h4>
+            <h3 className="font-bold text-lg mb-2">DAY 03</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">Mathematical Foundations for Brain Modeling</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• Mathematical foundations for brain modeling</li>
-              <li>• Neuron abstractions and simplifications</li>
-              <li>• Computational efficiency in modeling</li>
+              <li>• Vectors, matrices (state representation)</li>
+              <li>• Regression & classification</li>
+              <li>• Decision boundaries</li>
+              <li>• Gradient descent (optimization as learning)</li>
             </ul>
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg mb-2">Day 4 - July 11</h3>
-            <h4 className="font-semibold text-blue-400 mb-1">Neural Networks</h4>
+            <h3 className="font-bold text-lg mb-2">DAY 04</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">From Biophysics to Computation</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• Neural networks and visual brain models</li>
-              <li>• CNNs and RNNs in brain computation</li>
-              <li>• Recurrent networks and brain oscillations</li>
+              <li>• Neuron Models - rate-coded, spiking and oscillatory</li>
+              <li>• Neural Networks - Feedforward, Recurrent</li>
             </ul>
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg mb-2">Day 5 - July 12</h3>
-            <h4 className="font-semibold text-blue-400 mb-1">Brain Dynamics & Disorders</h4>
+            <h3 className="font-bold text-lg mb-2">DAY 05</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">Feedforward network and the Visual Brain</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• Brain oscillations and rhythms</li>
-              <li>• Understanding epilepsy through network dynamics</li>
-              <li>• Seizure prediction and modeling</li>
+              <li>• Convolutional Neural Networks (CNNs)</li>
+              <li>• Hands-on Session</li>
+              <li>• Visual Hierarchy and CNN</li>
             </ul>
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg mb-2">Day 6 - July 13</h3>
-            <h4 className="font-semibold text-blue-400 mb-1">Clinical Applications</h4>
+            <h3 className="font-bold text-lg mb-2">DAY 06</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">Recurrent Network and Learning</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• Parkinson's disease models</li>
-              <li>• Deep Brain Stimulation (DBS) simulations</li>
-              <li>• Depression and mood disorder models</li>
-              <li>• Future of computational medicine</li>
+              <li>• Using recurrent networks to model the brain</li>
+              <li>• Learning rules - Supervised, Unsupervised, Reinforcement Learning</li>
+            </ul>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className="font-bold text-lg mb-2">DAY 07</h3>
+            <h4 className="font-semibold text-blue-400 mb-1 italic">Disease Modeling</h4>
+            <ul className="text-sm text-slate-300 space-y-1">
+              <li>• Decision Systems - Basal Ganglia</li>
+              <li>• BG Model; Using DBS for PD</li>
             </ul>
           </Card>
 
@@ -232,7 +238,7 @@ export default function BrainModelingMedicosJulyPage() {
               <Calendar className="text-blue-400 h-5 w-5" />
               <div>
                 <div className="text-lg font-semibold">Workshop Dates</div>
-                <div className="text-sm text-slate-400">July 8-13, 2026</div>
+                <div className="text-sm text-slate-400">July 8-14, 2026</div>
               </div>
             </div>
           </Card>
@@ -246,7 +252,7 @@ export default function BrainModelingMedicosJulyPage() {
         <Badge className="mb-6 bg-green-600 text-white px-6 py-2">Limited Seats Available</Badge>
 
         <p className="mt-6 text-slate-300 max-w-2xl mx-auto">
-          Join us for this comprehensive 6-day workshop and gain cutting-edge insights into computational neuroscience
+          Join us for this comprehensive 7-day workshop and gain cutting-edge insights into computational neuroscience
           that will revolutionize your approach to neurological disorders.
         </p>
 
