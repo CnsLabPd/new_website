@@ -1152,7 +1152,7 @@ export default function SummerSchool2026Page() {
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Prof. Vignyanadam</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
                           <p className="flex justify-between"><span>Prof. Fabien Wagner</span><span className="text-sm text-muted-foreground">04:30-05:30 PM</span></p>
-                          <p className="flex justify-between"><span>Prof. Amelie Aussel</span><span className="text-sm text-muted-foreground">05:30-06:30 PM</span></p>
+                          <p className="flex justify-between"><span>Dr. Amelie Aussel</span><span className="text-sm text-muted-foreground">05:30-06:30 PM</span></p>
                         </div>
                       </div>
                     </div>
