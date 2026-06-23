@@ -1187,6 +1187,7 @@ export default function SummerSchool2026Page() {
                         <p className="font-bold text-sm text-muted-foreground uppercase">Afternoon Sessions</p>
                         <div className="space-y-1">
                           <p className="flex justify-between"><span>Dr. Kodeeswaran - GKMC</span><span className="text-sm text-muted-foreground">03:00-04:00 PM</span></p>
+                          <p className="flex justify-between"><span className="font-bold text-blue-600">🔧 HANDS-ON: Neuron Simulator - Dr. Sandeep Nair & Dr. Vignayanandam Muddapu</span><span className="text-sm text-muted-foreground">04:00-05:30 PM</span></p>
                         </div>
                       </div>
                     </div>
