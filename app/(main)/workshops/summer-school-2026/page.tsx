@@ -1179,6 +1179,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span className="font-bold text-pink-600">📊 POSTER PRESENTATIONS - Session V</span><span className="text-sm text-muted-foreground">10:00-10:30 AM</span></p>
                           <p className="flex justify-between"><span>Dr. Harsh Arora [BCI and Startups]</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
                           <p className="flex justify-between"><span>Dr. Lakshmi Narasimhan - SRMC</span><span className="text-sm text-muted-foreground">12:00-01:00 PM</span></p>
                         </div>
