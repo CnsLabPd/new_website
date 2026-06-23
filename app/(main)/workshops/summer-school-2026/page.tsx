@@ -1179,14 +1179,13 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
                         <div className="space-y-1">
-                          <p className="flex justify-between"><span>Dr. Lakshmi Narasimhan - SRMC</span><span className="text-sm text-muted-foreground">TBA</span></p>
-                          <p className="flex justify-between"><span>Dr. Syliaja PN - SCTIMST</span><span className="text-sm text-muted-foreground">TBA</span></p>
                           <p className="flex justify-between"><span>Dr. Harsh Arora [BCI and Startups]</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Afternoon Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span>Dr. Lakshmi Narasimhan - SRMC</span><span className="text-sm text-muted-foreground">02:00-03:00 PM</span></p>
                           <p className="flex justify-between"><span>Dr. Kodeeswaran - GKMC</span><span className="text-sm text-muted-foreground">03:00-04:00 PM</span></p>
                         </div>
                       </div>
