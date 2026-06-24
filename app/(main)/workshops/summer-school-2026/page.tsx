@@ -1214,6 +1214,7 @@ export default function SummerSchool2026Page() {
                       <div className="space-y-2">
                         <p className="font-bold text-sm text-muted-foreground uppercase">Morning Sessions</p>
                         <div className="space-y-1">
+                          <p className="flex justify-between"><span>Karthik Venkataraman, Neurostellar - "Building a BCI product from 0 -> 1"</span><span className="text-sm text-muted-foreground">10:00-11:00 AM</span></p>
                           <p className="flex justify-between"><span>Dr. Harsh Arora [BCI and Startups]</span><span className="text-sm text-muted-foreground">11:00 AM-12:00 PM</span></p>
                         </div>
                       </div>
