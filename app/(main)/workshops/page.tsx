@@ -449,6 +449,9 @@ export default function WorkshopsPage() {
                   <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-4">
                     No Ongoing Workshops
                   </h3>
+                  <p className="text-base text-muted-foreground mb-6">
+                    Check out our exciting upcoming workshops below - Brain Modeling for Medicos, AI + Brain Science Summer Program, and more!
+                  </p>
                 </div>
               </CardContent>
             </Card>
