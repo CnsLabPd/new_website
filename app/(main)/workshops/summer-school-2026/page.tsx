@@ -65,8 +65,8 @@ export default function SummerSchool2026Page() {
       <section id="overview" className="relative pt-48 pb-24 overflow-hidden bg-gradient-to-br from-blue-600/10 via-violet-600/10 to-background border-b border-border">
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block px-4 py-2 rounded-full bg-red-500 text-white text-sm font-black uppercase tracking-wider mb-6">
-              Registrations Closed
+            <div className="inline-block px-4 py-2 rounded-full bg-green-600 text-white text-sm font-black uppercase tracking-wider mb-6">
+              Workshop Completed
             </div>
             <h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               Neurogati Summer School 2026
@@ -94,15 +94,10 @@ export default function SummerSchool2026Page() {
               </div>
             </div>
 
-            <div className="mt-8">
-              <a
-                href="https://forms.gle/a74fkKYq5wS2FpuY7"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 text-white font-bold rounded-full hover:scale-105 transition-all text-lg"
-              >
-                Registrations Closed
-              </a>
+            <div className="mt-8 p-4 bg-green-500/10 border border-green-500/30 rounded-lg max-w-2xl mx-auto">
+              <p className="text-green-600 font-bold">
+                This workshop was successfully completed in June 2026. Thank you to all participants!
+              </p>
             </div>
           </div>
         </div>
@@ -324,15 +319,10 @@ export default function SummerSchool2026Page() {
 
               <Card className="border-2 border-blue-500/30 bg-blue-500/[0.02]">
                 <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    <a
-                      href="https://forms.gle/a74fkKYq5wS2FpuY7"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-600 transition-all hover:scale-105 text-lg"
-                    >
-                      Registrations Closed
-                    </a>
+                  <div className="text-center mb-8 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <p className="text-green-600 font-bold">
+                      Workshop successfully completed. Registrations are no longer available.
+                    </p>
                   </div>
 
                   <div className="mb-8">
@@ -1242,15 +1232,10 @@ export default function SummerSchool2026Page() {
                     Don't miss this opportunity to learn from world-class experts and advance your knowledge in computational neuroscience and neurotechnology.
                   </p>
 
-                  <div className="mb-8">
-                    <a
-                      href="https://forms.gle/a74fkKYq5wS2FpuY7"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-10 py-3 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-600 transition-all hover:scale-105 text-lg"
-                    >
-                      Registrations Closed
-                    </a>
+                  <div className="mb-8 p-6 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <p className="text-green-600 font-bold text-center">
+                      This workshop was successfully completed in June 2026.
+                    </p>
                   </div>
 
                   <div className="pt-8 border-t border-border/50">
