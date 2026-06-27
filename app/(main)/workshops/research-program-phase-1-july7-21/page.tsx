@@ -34,7 +34,7 @@ const SCHEDULE: DayEntry[] = [
     ],
   },
   {
-    date: "Self-paced (after Jul 7)",
+    date: "Self-paced",
     sessions: [
       { type: "self", topic: "Neurons and Neural Signaling", presenter: "Video Lectures" },
       { type: "self", topic: "Neural Signaling — Molecular and Cellular Basis", presenter: "Video Lectures" },
@@ -50,7 +50,12 @@ const SCHEDULE: DayEntry[] = [
   {
     date: "July 9, 2026",
     sessions: [
-      { type: "live", topic: "Special Talk by Dr. Srinivasa Kota", presenter: "Dr. Srinivasa Kota" },
+      { type: "live", topic: "Guest Lecture", presenter: "TBA" },
+    ],
+  },
+  {
+    date: "Self-paced",
+    sessions: [
       { type: "self", topic: "Video on Vehicles Book", presenter: "Video Lectures" },
       { type: "self", topic: "Lecture 07 from Demystifying the Brain — Networks that Learn (Segment 1)", presenter: "Video Lectures" },
     ],
@@ -59,65 +64,75 @@ const SCHEDULE: DayEntry[] = [
     date: "July 10, 2026",
     sessions: [
       { type: "live", topic: "Neural Networks on Simple Datasets — Spiral, MNIST", presenter: "Charitha" },
-      { type: "assignment", topic: "Group Assignment — Regression & Classification", presenter: "Assignment" },
+      { type: "assignment", topic: "Group Assignment — 1 on Regression; 1 on Classification", presenter: "Assignment" },
+      { type: "live", topic: "Lecture on GloveTalk; Discussion of Assignment", presenter: "Prof. VSC" },
     ],
   },
   {
     date: "July 11, 2026",
     sessions: [
-      { type: "live", topic: "Lecture on GloveTalk; Discussion of Assignment", presenter: "Prof. VSC" },
+      { type: "live", topic: "Recurrent Neural Networks; Demo on Speech Data Classification", presenter: "Sundari" },
     ],
   },
   {
-    date: "July 12, 2026",
+    date: "July 13, 2026",
     sessions: [
-      { type: "live", topic: "Recurrent Neural Networks; Demo on Speech Data Classification", presenter: "Sundari" },
+      { type: "live", topic: "Introduction to CNNs; Demo on Using CNN for MNIST", presenter: "Charitha" },
+    ],
+  },
+  {
+    date: "Self-paced",
+    sessions: [
+      { type: "assignment", topic: "Assignment 2 on CNN — Similar to PathAI — Counting or Classifying Cells Using CNNs", presenter: "Assignment" },
+      { type: "self", topic: "Lecture 08 from Demystifying the Brain [MLP Applications in Psychology]; Video on GloveTalk", presenter: "Video Lectures" },
     ],
   },
   {
     date: "July 14, 2026",
     sessions: [
-      { type: "live", topic: "Introduction to CNNs; Demo on Using CNN for MNIST", presenter: "Charitha" },
-      { type: "assignment", topic: "Assignment 2 on CNN — Counting or Classifying Cells Using CNNs (similar to PathAI)", presenter: "Assignment" },
-      { type: "self", topic: "Lecture 08 from Demystifying the Brain — MLP Applications in Psychology; Video on GloveTalk", presenter: "Video Lectures" },
+      { type: "live", topic: "Introducing Visual System in the Brain", presenter: "Prof. VSC" },
     ],
   },
   {
     date: "July 15, 2026",
     sessions: [
-      { type: "live", topic: "Introducing Visual System in the Brain", presenter: "Prof. VSC" },
+      { type: "live", topic: "Demo on How the Filters of CNN Look Like, and Connecting Them to Representations of Early Visual Layers; Assignment on Train on Different Datasets, but Filters are Similar", presenter: "Aditya" },
     ],
   },
   {
     date: "July 16, 2026",
     sessions: [
-      { type: "live", topic: "Demo: How CNN Filters Connect to Early Visual Layer Representations; Assignment on Training Across Different Datasets", presenter: "Aditya" },
+      { type: "live", topic: "Connecting Motor Function and Stroke to CNN — Creating Lesion in a CNN to Replicate Behaviour of Stroke — Lecture by SE", presenter: "Sundari" },
     ],
   },
   {
     date: "July 17, 2026",
     sessions: [
-      { type: "live", topic: "Connecting Motor Function & Stroke to CNN — Creating Lesions to Replicate Stroke Behaviour (Lecture)", presenter: "Sundari" },
-      { type: "live", topic: "Motor Function & Stroke in CNN — Demo; Assignment on Lesion Size & Therapy Types", presenter: "Sundari" },
+      { type: "live", topic: "Motor Function and Stroke in CNN — Demo; Assignment on Different Lesion Size, Types of Therapy", presenter: "Sundari" },
     ],
   },
   {
     date: "July 18, 2026",
     sessions: [
-      { type: "live", topic: "Hopfield Network — Memory Storage and Retrieval (Demo)", presenter: "Aditya" },
+      { type: "live", topic: "Hopfield Network — Memory Storage and Retrieval — Demo", presenter: "Aditya" },
+    ],
+  },
+  {
+    date: "Self-paced",
+    sessions: [
       { type: "self", topic: "Video on Hopfield Network from Demystifying the Brain", presenter: "Video Lectures" },
     ],
   },
   {
     date: "July 19, 2026",
     sessions: [
-      { type: "live", topic: "Hippocampus and Memory Systems — Live Talk", presenter: "Prof. VSC" },
+      { type: "live", topic: "Hippocampus and Memory Systems — Live Talk by VSC", presenter: "Prof. VSC" },
     ],
   },
   {
-    date: "July 21, 2026",
+    date: "July 20, 2026",
     sessions: [
-      { type: "live", topic: "2-min Student Presentations on a Neuroscience Topic of Choice", presenter: "Students" },
+      { type: "live", topic: "2-min Presentation on One Topic from Neuroscience", presenter: "By Students" },
     ],
   },
 ]
