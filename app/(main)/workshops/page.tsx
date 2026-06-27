@@ -34,14 +34,13 @@ const workshops = [
   },
   {
     id: "summer-school-2026",
-    status: "Ongoing",
+    status: "Past",
     title: "Neurogati Summer School 2026: Your entry portal into Neurotechnology, Brain-AI and the future of neuroscience.",
     date: "June 15-25, 2026",
     duration: "10 days",
-    participants: "Applications Open",
+    participants: "Successfully Completed",
     type: "Online (Live + Interactive)",
-    pricing: "Registrations Open",
-    description: "A 10-day intensive program featuring 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Includes poster presentations and interactive Q&A sessions. Abstract submission deadline: May 25th, 2026.",
+    description: "A 10-day intensive program that featured 30+ expert lectures from international speakers, hands-on sessions in neural modeling and data analysis, AI for EEG and neural signals, brain-computer interfaces, and neurorehabilitation applications. Included poster presentations and interactive Q&A sessions.",
     registrationLink: "/workshops/summer-school-2026"
   },
   {
