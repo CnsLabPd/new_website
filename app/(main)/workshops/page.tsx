@@ -47,11 +47,11 @@ const workshops = [
     id: "brain-modeling-medicos-july",
     status: "Upcoming",
     title: "Brain Modeling for Medicos - July 2026",
-    date: "July 8-13, 2026",
-    duration: "6 days",
+    date: "July 8-14, 2026",
+    duration: "7 days",
     participants: "Limited seats",
     type: "Online (Live + Interactive)",
-    description: "A comprehensive 6-day workshop for medical professionals on brain modeling with a clinical perspective. From neurons to disease models - understand epilepsy, Parkinson's, and depression as dynamical disorders. No coding background required. Registration deadline: June 30, 2026.",
+    description: "A comprehensive 7-day workshop for medical professionals on brain modeling with a clinical perspective. From neurons to disease models - understand epilepsy, Parkinson's, and depression as dynamical disorders. No coding background required. Registration deadline: July 4, 2026.",
     registrationLink: "/workshops/brain-modeling-medicos-july-2026"
   },
   {

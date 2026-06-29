@@ -59,7 +59,7 @@ export default function BrainModelingMedicosJulyPage() {
           <Card className="bg-orange-900/30 border-orange-500/50 p-4">
             <div className="flex items-center gap-3 text-orange-300">
               <AlertCircle className="h-5 w-5" />
-              <span className="font-semibold">Registration Deadline: June 30, 2026</span>
+              <span className="font-semibold">Registration Deadline: July 4, 2026</span>
             </div>
           </Card>
         </div>
@@ -229,7 +229,7 @@ export default function BrainModelingMedicosJulyPage() {
               <AlertCircle className="text-orange-400 h-5 w-5" />
               <div>
                 <div className="text-lg font-semibold">Registration Deadline</div>
-                <div className="text-sm text-slate-400">June 30, 2026</div>
+                <div className="text-sm text-slate-400">July 4, 2026</div>
               </div>
             </div>
           </Card>
