@@ -45,7 +45,7 @@ const workshops = [
   },
   {
     id: "brain-modeling-medicos-july",
-    status: "Upcoming",
+    status: "Ongoing",
     title: "Brain Modeling for Medicos - July 2026",
     date: "July 8-14, 2026",
     duration: "7 days",
@@ -79,7 +79,7 @@ const workshops = [
   },
   {
     id: "research-program-phase-1-july",
-    status: "Upcoming",
+    status: "Ongoing",
     title: "AI + Brain Science Summer Program - July Session",
     date: "July 7-21, 2026",
     duration: "2 weeks",
@@ -265,6 +265,28 @@ const medicosTestimonials = [
 
 const testimonials = [
   {
+    id: "testimonial-bhaskar",
+    name: "Bhaskar Vempati",
+    role: "Ph.D",
+    organization: "Suvidha International, San Francisco",
+    image: "",
+    workshopImage: "",
+    text: "The two-week Summer Research Training Program in Computational Neuroscience and Brain Modeling was an excellent learning experience for my child. Complex concepts were introduced to high school students in a simple, clear, and comprehensive way. The thoughtful balance of theory, hands-on assignments, research discussions, and mentor guidance helped build confidence, technical skills, and a deeper interest in neuroscience and computational modeling. This positive experience encouraged me to enroll my son in the extended research program. I strongly encourage local high school students to consider this program.",
+    linkedinUrl: "",
+    workshop: "Summer Research Training Program"
+  },
+  {
+    id: "testimonial-5",
+    name: "Srinivas Jallepalli",
+    role: "Parent",
+    organization: "Austin, TX (for his daughter Akhila)",
+    image: "",
+    workshopImage: "",
+    text: "My daughter participated in Neurogati's Computational Neuroscience Research Program, Phase 1, and found it to be an excellent introduction to an exciting and opportunity-rich field. She was especially impressed by Dr. Chakravarthy and his PhD students, who taught the material with clarity, patience, and deep expertise. The instructors made sure students understood the concepts, while the homework assignments encouraged genuine curiosity and exploration. My daughter often went beyond the required work to experiment further with the models introduced in class. I am very grateful for the quality of instruction and the thoughtful structure of the program. I would highly recommend Neurogati's program to students who are interested in neuroscience, computation, or research and want to build a strong foundation in computational neuroscience.",
+    linkedinUrl: "",
+    workshop: "Computational Neuroscience Research Program, Phase 1"
+  },
+  {
     id: "testimonial-1",
     name: "Saumya Garg",
     role: "Psychology Student",
@@ -307,17 +329,6 @@ const testimonials = [
     text: "Attended the 3-day workshop on AI Applications in EEG at IIT Madras. The workshop covered fascinating topics including EEG signal processing, brain activity analysis, emotional recognition via neural data, and AI applications in neuro-engineering and healthcare. It was incredible to explore the intersection of AI, Neuroscience, Cognitive Computing, Biomedical Engineering, and Brain-Computer Interfaces with experts from IISc Bangalore, IIT Jodhpur, IIT Madras, IIT BHU, and NIT Trichy.",
     linkedinUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7460052886547521536/",
     workshop: "AI Applications in EEG - IIT Madras"
-  },
-  {
-    id: "testimonial-5",
-    name: "Srinivas Jallepalli",
-    role: "Parent",
-    organization: "Austin, TX (for his daughter Akhila)",
-    image: "",
-    workshopImage: "",
-    text: "My daughter participated in Neurogati's Computational Neuroscience Research Program, Phase 1, and found it to be an excellent introduction to an exciting and opportunity-rich field. She was especially impressed by Dr. Chakravarthy and his PhD students, who taught the material with clarity, patience, and deep expertise. The instructors made sure students understood the concepts, while the homework assignments encouraged genuine curiosity and exploration. My daughter often went beyond the required work to experiment further with the models introduced in class. I am very grateful for the quality of instruction and the thoughtful structure of the program. I would highly recommend Neurogati's program to students who are interested in neuroscience, computation, or research and want to build a strong foundation in computational neuroscience.",
-    linkedinUrl: "",
-    workshop: "Computational Neuroscience Research Program, Phase 1"
   }
 ]
 
