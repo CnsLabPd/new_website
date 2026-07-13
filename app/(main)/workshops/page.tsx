@@ -56,7 +56,7 @@ const workshops = [
   },
   {
     id: "research-program-phase-2",
-    status: "Upcoming",
+    status: "Ongoing",
     title: "Computational Neuroscience Research Training - Phase 2",
     date: "July 11 - September 26, 2026",
     duration: "10 weeks",

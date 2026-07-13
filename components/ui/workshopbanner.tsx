@@ -6,8 +6,8 @@ import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motio
 
 const workshopConfig = {
   active: true,
-  message: "Registrations Open for 'Neurogati Summer School 2026: Your entry portal into Neurotechnology, Brain-AI and the future of neuroscience.' - June 15-25, 2026",
-  link: "/workshops/summer-school-2026",
+  message: "AI Applications in EEG - 3-Day Offline Workshop | Workshop Dates: August 7-9, 2026 | SOP Deadline: July 15, 2026",
+  link: "/workshops/ai-applications-eeg-august-2026",
 };
 
 export default function WorkshopBanner() {
@@ -76,7 +76,7 @@ export default function WorkshopBanner() {
               exit={{ scale: 0, opacity: 0 }}
             >
               <div className="bg-white text-[#1c82c2] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex items-center gap-2 whitespace-nowrap">
-                Register <ArrowUpRight className="h-3 w-3 stroke-[3]" />
+                Apply <ArrowUpRight className="h-3 w-3 stroke-[3]" />
               </div>
             </motion.div>
           )}
