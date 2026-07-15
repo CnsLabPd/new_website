@@ -13,8 +13,6 @@ import {
   Calendar,
   Award,
   Laptop,
-  ArrowRight,
-  Mail,
   Stethoscope,
   Clock,
   AlertCircle,
@@ -38,7 +36,7 @@ export default function BrainModelingMedicosJulyPage() {
 
       {/* HERO */}
       <section className="pt-24 pb-24 text-center">
-        <Badge className="mb-6 bg-green-600">7-Day Intensive Workshop</Badge>
+        <Badge className="mb-6 bg-green-600">Completed 7-Day Online Workshop</Badge>
 
         <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
           Brain Modeling for Medicos
@@ -54,25 +52,18 @@ export default function BrainModelingMedicosJulyPage() {
           <div className="flex gap-2"><Award /> E-Certificate</div>
         </div>
 
-        {/* Registration Deadline Alert */}
+        {/* Workshop Status */}
         <div className="mt-8 max-w-2xl mx-auto">
-          <Card className="bg-orange-900/30 border-orange-500/50 p-4">
-            <div className="flex items-center gap-3 text-orange-300">
-              <AlertCircle className="h-5 w-5" />
-              <span className="font-semibold">Registration Deadline: July 4, 2026</span>
+          <Card className="bg-green-900/30 border-green-500/50 p-4">
+            <div className="flex items-center gap-3 text-green-300">
+              <Award className="h-5 w-5" />
+              <span className="font-semibold">Workshop Completed: July 8-14, 2026</span>
             </div>
           </Card>
         </div>
 
-        {/* Registration and Download Buttons */}
+        {/* Archive Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="https://forms.gle/fwyr2agFpUCMgc41A">
-            <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 text-lg font-bold shadow-lg">
-              Register Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-
           <Link href="/workshop brochures/medicos july 2026.pdf" download>
             <Button variant="outline" className="px-8 py-4 text-lg font-bold border-blue-400 text-blue-400 hover:bg-blue-400/10">
               Download Brochure
@@ -245,25 +236,17 @@ export default function BrainModelingMedicosJulyPage() {
         </div>
       </section>
 
-      {/* REGISTRATION */}
+      {/* ARCHIVE */}
       <section id="register" className="text-center py-20">
-        <h2 className="text-3xl font-black mb-6">Ready to Transform Your Medical Practice?</h2>
+        <h2 className="text-3xl font-black mb-6">Workshop Completed</h2>
 
-        <Badge className="mb-6 bg-green-600 text-white px-6 py-2">Limited Seats Available</Badge>
+        <Badge className="mb-6 bg-green-600 text-white px-6 py-2">Past Workshop</Badge>
 
         <p className="mt-6 text-slate-300 max-w-2xl mx-auto">
-          Join us for this comprehensive 7-day workshop and gain cutting-edge insights into computational neuroscience
-          that will revolutionize your approach to neurological disorders.
+          This July 2026 session has concluded. You can still view the workshop archive and download the brochure.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="https://forms.gle/fwyr2agFpUCMgc41A">
-            <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 text-lg font-bold">
-              Register Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-
           <Link href="/workshop brochures/medicos july 2026.pdf" download>
             <Button variant="outline" className="px-8 py-6 text-lg border-blue-400 text-blue-400 hover:bg-blue-400/10">
               Download Brochure
