@@ -5,9 +5,9 @@ import { X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
 const workshopConfig = {
-  active: true,
-  message: "AI Applications in EEG - 3-Day Offline Workshop | Workshop Dates: August 7-9, 2026 | SOP Deadline: July 15, 2026",
-  link: "/workshops/ai-applications-eeg-august-2026",
+  active: false,
+  message: "",
+  link: "/workshops",
 };
 
 export default function WorkshopBanner() {

@@ -67,17 +67,6 @@ const workshops = [
     registrationLink: "/workshops/research-program-phase-2-july-sept"
   },
   {
-    id: "ai-applications-eeg-august",
-    status: "Upcoming",
-    title: "AI Applications in EEG - August 2026",
-    date: "August 7-9, 2026",
-    duration: "3 days",
-    participants: "50 Max (Selection-based)",
-    type: "Offline Workshop",
-    description: "Explore how EEG signals are collected, processed, and analyzed using AI and machine learning. Hands-on sessions with MNE-Python, motor/visual imagery classification, seizure detection, and neurodegeneration analysis. SOP submission deadline: July 15, 2026.",
-    registrationLink: "/workshops/ai-applications-eeg-august-2026"
-  },
-  {
     id: "research-program-phase-1-july",
     status: "Ongoing",
     title: "AI + Brain Science Summer Program - July Session",
