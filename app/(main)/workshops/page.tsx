@@ -11,6 +11,18 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
+    id: "young-computational-neuroscientist-2026",
+    status: "Upcoming",
+    title: "Young Computational Neuroscientist Program",
+    date: "Classes begin September 21, 2026",
+    duration: "12 weeks | 24 live sessions",
+    participants: "Classes 9-12",
+    type: "Online (Live + Interactive)",
+    description: "Can you solve a mystery of the brain? A 12-week guided computational research mentorship for school students. Learn neuroscience, mathematics and Python, then build a working computational model, run experiments and present your research at the symposium. Participants are divided into 6 teams, each investigating a real brain mystery: Motion Illusion, Face Recognition, Memory Loss, Mood States, Parkinsonian Freezing, or ADHD Exploration. Covers feedforward networks, attractor networks and reinforcement learning. Application deadline: August 31, 2026. Registration deadline: September 15, 2026.",
+    note: "For other details including pricing, please write to workshops@neurogati.com. A selected set of meritorious students will be offered discounts.",
+    registrationLink: "/workshops/young-computational-neuroscientist-2026"
+  },
+  {
     id: "brain_modeling_for_medicos",
     status: "Past",
     title: "Workshop on Brain Modeling for Medicos",
@@ -581,6 +593,15 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
             {ws.description}
           </p>
         </div>
+
+        {/* Pricing / discount note */}
+        {ws.note && (
+          <div className="rounded-lg border border-blue-500/30 bg-blue-500/[0.06] p-4">
+            <p className="text-[15px] text-foreground/85 leading-relaxed font-medium">
+              {ws.note}
+            </p>
+          </div>
+        )}
 
         <div className="pt-6 mt-auto">
           <DynamicMagneticButton>
