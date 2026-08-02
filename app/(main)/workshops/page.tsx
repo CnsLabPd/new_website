@@ -80,7 +80,7 @@ const workshops = [
   },
   {
     id: "research-program-phase-1-july",
-    status: "Ongoing",
+    status: "Past",
     title: "AI + Brain Science Summer Program - July Session",
     date: "July 7-21, 2026",
     duration: "2 weeks",
