@@ -1830,7 +1830,7 @@ export default function YoungComputationalNeuroscientistPage() {
                     ))}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <a
                       href={APPLICATION_FORM}
                       target="_blank"
