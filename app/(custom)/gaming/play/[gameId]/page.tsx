@@ -1,60 +1,22 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { X, Gamepad2, PlayCircle, Headphones, ChevronDown, Lock } from "lucide-react"
-import { createClient } from "@/lib/supabase"
-import { AuthModal } from "@/components/auth/AuthModal"
+import { X, Gamepad2, PlayCircle, Headphones, ChevronDown } from "lucide-react"
+import { ensureDefaultSession } from "@/lib/supabase"
 
 export default function GamePlayerPage({ params }: { params: { gameId: string } }) {
   const router = useRouter();
   const [hasStarted, setHasStarted] = useState(true); // Auto-start game, skip intermediate screen
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(true);
-  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const supabase = createClient();
 
-  // Check authentication
+  // Silently establish the shared session (no sign-in UI) before loading the game.
   useEffect(() => {
-    const checkUser = async () => {
-      console.log('🎮 Game Player Page: Checking user authentication...');
-
-      // Check localStorage first
-      const storageKey = 'sb-yourttiykfslostesqjp-auth-token';
-      const stored = localStorage.getItem(storageKey);
-      console.log('💾 Game Player: localStorage check:', stored ? 'Session FOUND' : 'NO SESSION');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          console.log('💾 Game Player: Session data:', parsed);
-        } catch (e) {
-          console.error('💾 Game Player: Error parsing session:', e);
-        }
-      }
-
-      const { data: { user }, error } = await supabase.auth.getUser();
-      console.log('👤 Game Player: User from Supabase:', user ? user.email : 'No user');
-      if (error) {
-        console.error('❌ Game Player: Error getting user:', error);
-      }
-      setUser(user);
-      setLoading(false);
-    };
-
-    checkUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('🔄 Auth state changed:', _event, session?.user ? 'User logged in' : 'No user');
-      setUser(session?.user ?? null);
-      setLoading(false); // Ensure loading is false after auth change
-      if (session?.user) {
-        setIsAuthModalOpen(false); // Close modal after successful login
-        console.log('✅ User authenticated, game should load now');
-      }
+    let active = true;
+    ensureDefaultSession().finally(() => {
+      if (active) setLoading(false);
     });
-
-    return () => subscription.unsubscribe();
+    return () => { active = false; };
   }, []);
 
   // Auto-minimize header after 3 seconds
@@ -81,50 +43,9 @@ export default function GamePlayerPage({ params }: { params: { gameId: string } 
       <div className="h-screen flex items-center justify-center bg-black text-white">
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-slate-400">Checking authentication...</p>
+          <p className="text-sm text-slate-400">Loading game...</p>
         </div>
       </div>
-    );
-  }
-
-  // Authentication required
-  if (!user) {
-    return (
-      <>
-        <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-        <div className="fixed inset-0 bg-black z-[100] flex items-center justify-center">
-          <div className="max-w-md w-full p-8 text-center space-y-8">
-            <div className="flex justify-center">
-              <Lock className="h-20 w-20 text-blue-500" />
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-4xl font-black text-white tracking-tighter uppercase">
-                Sign In Required
-              </h2>
-              <p className="text-slate-400 font-medium text-lg">
-                You need to be logged in to play games. Please sign in to continue.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <button
-                onClick={() => setIsAuthModalOpen(true)}
-                className="group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-black text-white bg-blue-600 rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-blue-500/20"
-              >
-                <span className="text-xl uppercase tracking-tighter">Sign In</span>
-              </button>
-
-              <button
-                onClick={() => router.back()}
-                className="text-slate-400 hover:text-white font-bold text-sm uppercase transition-colors"
-              >
-                Go Back
-              </button>
-            </div>
-          </div>
-        </div>
-      </>
     );
   }
 

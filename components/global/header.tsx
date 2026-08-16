@@ -2,22 +2,12 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, UserCircle, X, LogOut, ChevronDown } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { AuthModal } from "@/components/auth/AuthModal"
-import { createClient } from "@/lib/supabase"
-import { useToast } from "@/components/ui/use-toast"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { ensureDefaultSession } from "@/lib/supabase"
 
 // ─── Nav structure ────────────────────────────────────────────────────────────
 type NavItem = { href: string; label: string; external?: boolean }
@@ -128,58 +118,12 @@ function NavDropdown({ group, pathname }: { group: NavGroup; pathname: string })
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const [username, setUsername] = useState<string>("")
   const pathname = usePathname()
-  const supabase = createClient()
-  const { toast } = useToast()
 
-  // Check user authentication
+  // Establish the shared default session site-wide (no sign-in UI).
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      if (user) {
-        // Get username from user metadata
-        const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'
-        setUsername(name)
-      }
-    }
-
-    checkUser()
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User'
-        setUsername(name)
-      } else {
-        setUsername("")
-      }
-    })
-
-    return () => subscription.unsubscribe()
+    ensureDefaultSession()
   }, [])
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-      toast({
-        title: "Error signing out",
-        description: error.message,
-        variant: "destructive",
-      })
-    } else {
-      toast({
-        title: "Signed out successfully",
-        description: "You have been logged out.",
-      })
-      setUser(null)
-      setUsername("")
-    }
-  }
 
   return (
     <div className="w-full bg-transparent">
@@ -226,40 +170,10 @@ export default function Header() {
             
             <div className="flex items-center gap-4 pl-4 border-l border-border/50">
               <ThemeToggle />
-              {/* LOGIN/SIGNUP CTA or USER MENU */}
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="rounded-full px-4 font-bold gap-2">
-                      <UserCircle className="h-5 w-5" />
-                      {username}
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Button
-                  onClick={() => setIsAuthModalOpen(true)}
-                  className="bg-[#1c82c2] hover:bg-[#16699d] text-white rounded-full px-6 font-bold transition-all hover:shadow-lg hover:shadow-blue-500/20"
-                >
-                  Sign In
-                </Button>
-              )}
             </div>
           </nav>
 
           <div className="md:hidden flex items-center gap-4">
-             <Button variant="ghost" size="sm" onClick={() => setIsAuthModalOpen(true)}>
-                <UserCircle className="h-6 w-6" />
-             </Button>
             <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -267,9 +181,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-
-      {/* Auth Modal Component */}
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
 
       {/* MOBILE NAV */}
       {isMenuOpen && (
