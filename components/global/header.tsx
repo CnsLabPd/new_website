@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, UserCircle, X, LogOut, ChevronDown } from "lucide-react"
@@ -19,19 +19,112 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const navLinks = [
-  { href: "/products", label: "Apps" },
-  { href: "/gamingcategories", label: "Games" },
-  { href: "/workshops", label: "Workshops" },
-  { href: "/advisory", label: "Advisory" },
-  { href: "/modelling", label: "Modelling" },
-  { href: "/team", label: "Team" },
-  // { href: "/careers", label: "Careers" },
-  { href: "/about", label: "About" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "https://neurokatha.wordpress.com/", label:"Blog" },
-  { href: "/contact", label: "Contact" },
+// ─── Nav structure ────────────────────────────────────────────────────────────
+type NavItem = { href: string; label: string; external?: boolean }
+type NavGroup = { label: string; items: NavItem[] }
+type NavEntry = NavItem | NavGroup
+
+const isGroup = (entry: NavEntry): entry is NavGroup => "items" in entry
+
+const navEntries: NavEntry[] = [
+  {
+    label: "Products",
+    items: [
+      { href: "/products", label: "Apps" },
+      { href: "/gamingcategories", label: "Games" },
+    ],
+  },
+  {
+    label: "Education",
+    items: [
+      { href: "/workshops", label: "Workshops" },
+      { href: "/advisory", label: "Advisory" },
+      { href: "/modelling", label: "Modelling" },
+    ],
+  },
+  { href: "https://neurokatha.wordpress.com/", label: "Blog", external: true },
+  {
+    label: "About",
+    items: [
+      { href: "/about", label: "About" },
+      { href: "/team", label: "Team" },
+      { href: "/gallery", label: "Gallery" },
+      { href: "/contact", label: "Contact" },
+    ],
+  },
 ]
+
+// ─── Desktop hover dropdown ────────────────────────────────────────────────────
+function NavDropdown({ group, pathname }: { group: NavGroup; pathname: string }) {
+  const [open, setOpen] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const groupActive = group.items.some((i) => i.href === pathname)
+
+  const openNow = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setOpen(true)
+  }
+  const closeSoon = () => {
+    closeTimer.current = setTimeout(() => setOpen(false), 120)
+  }
+
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current) }, [])
+
+  return (
+    <div className="relative" onMouseEnter={openNow} onMouseLeave={closeSoon}>
+      <button
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className={cn(
+          "flex items-center gap-1 text-sm lg:text-base font-bold transition-colors",
+          groupActive || open ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground/80 hover:text-[#1c82c2]"
+        )}
+      >
+        {group.label}
+        <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")} />
+      </button>
+
+      {open && (
+        // pt-3 acts as an invisible bridge so the menu doesn't close in the gap
+        <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-[110]">
+          <div className="min-w-[190px] rounded-xl border border-border bg-background/95 backdrop-blur-xl shadow-xl shadow-black/10 p-2">
+            {group.items.map((item) => {
+              const active = pathname === item.href
+              return item.external ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-lg px-4 py-2.5 text-sm font-semibold text-foreground/80 hover:bg-muted hover:text-[#1c82c2] transition-colors"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "block rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
+                    active
+                      ? "bg-[#1c82c2]/10 text-[#1c82c2] dark:text-[#38bdf8]"
+                      : "text-foreground/80 hover:bg-muted hover:text-[#1c82c2]"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -104,21 +197,32 @@ export default function Header() {
 
           {/* DESKTOP NAV */}
           <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
+            {navEntries.map((entry) =>
+              isGroup(entry) ? (
+                <NavDropdown key={entry.label} group={entry} pathname={pathname} />
+              ) : entry.external ? (
+                <a
+                  key={entry.href}
+                  href={entry.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm lg:text-base font-bold text-foreground/80 hover:text-[#1c82c2] transition-colors"
+                >
+                  {entry.label}
+                </a>
+              ) : (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={entry.href}
+                  href={entry.href}
                   className={cn(
                     "text-sm lg:text-base font-bold transition-colors",
-                    isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground/80 hover:text-[#1c82c2]"
+                    pathname === entry.href ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground/80 hover:text-[#1c82c2]"
                   )}
                 >
-                  {link.label}
+                  {entry.label}
                 </Link>
-              );
-            })}
+              )
+            )}
             
             <div className="flex items-center gap-4 pl-4 border-l border-border/50">
               <ThemeToggle />
@@ -169,24 +273,69 @@ export default function Header() {
 
       {/* MOBILE NAV */}
       {isMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border animate-in slide-in-from-top-5 duration-300">
-          <nav className="flex flex-col items-center gap-6 py-10">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link 
-                  key={link.href} 
-                  href={link.href} 
+        <div className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border animate-in slide-in-from-top-5 duration-300 max-h-[80vh] overflow-y-auto">
+          <nav className="flex flex-col gap-6 px-8 py-10">
+            {navEntries.map((entry) =>
+              isGroup(entry) ? (
+                <div key={entry.label} className="flex flex-col gap-3">
+                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
+                    {entry.label}
+                  </p>
+                  <div className="flex flex-col gap-3 pl-3 border-l-2 border-border">
+                    {entry.items.map((item) => {
+                      const isActive = pathname === item.href
+                      return item.external ? (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-lg font-bold text-foreground"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.label}
+                        </a>
+                      ) : (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={cn(
+                            "text-lg font-bold",
+                            isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"
+                          )}
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              ) : entry.external ? (
+                <a
+                  key={entry.href}
+                  href={entry.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xl font-bold text-foreground"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {entry.label}
+                </a>
+              ) : (
+                <Link
+                  key={entry.href}
+                  href={entry.href}
                   className={cn(
                     "text-xl font-bold",
-                    isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"
+                    pathname === entry.href ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"
                   )}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {link.label}
+                  {entry.label}
                 </Link>
-              );
-            })}
+              )
+            )}
           </nav>
         </div>
       )}
