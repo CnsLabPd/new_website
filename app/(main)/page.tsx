@@ -106,8 +106,8 @@ export default function HomePage() {
               modeling, and therapeutic design.
             </p>
 
-            {/* Pillar grid */}
-            <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto text-left">
+            {/* The Neurogati equation — each pillar equals what it delivers */}
+            <div className="mt-14 max-w-3xl mx-auto divide-y divide-border overflow-hidden rounded-2xl border-2 border-border bg-card/60 backdrop-blur-sm text-left">
               {[
                 {
                   icon: Gauge,
@@ -138,27 +138,41 @@ export default function HomePage() {
                   color: "amber",
                 },
               ].map((p) => {
-                const styles: Record<string, { border: string; bg: string; text: string; ring: string }> = {
-                  cyan: { border: "hover:border-cyan-500/50", bg: "bg-cyan-500/10", text: "text-cyan-500", ring: "group-hover:shadow-cyan-500/10" },
-                  violet: { border: "hover:border-violet-500/50", bg: "bg-violet-500/10", text: "text-violet-500", ring: "group-hover:shadow-violet-500/10" },
-                  blue: { border: "hover:border-blue-500/50", bg: "bg-blue-500/10", text: "text-blue-500", ring: "group-hover:shadow-blue-500/10" },
-                  amber: { border: "hover:border-amber-500/50", bg: "bg-amber-500/10", text: "text-amber-500", ring: "group-hover:shadow-amber-500/10" },
+                const styles: Record<string, { bg: string; text: string }> = {
+                  cyan: { bg: "bg-cyan-500/10", text: "text-cyan-500" },
+                  violet: { bg: "bg-violet-500/10", text: "text-violet-500" },
+                  blue: { bg: "bg-blue-500/10", text: "text-blue-500" },
+                  amber: { bg: "bg-amber-500/10", text: "text-amber-500" },
                 }
                 const s = styles[p.color]
                 const Icon = p.icon
                 return (
                   <div
                     key={p.name}
-                    className={`group rounded-2xl border-2 border-border bg-card p-6 transition-all hover:shadow-xl ${s.border} ${s.ring} hover:-translate-y-1`}
+                    className="group flex items-center gap-4 sm:gap-6 p-5 sm:p-6 transition-colors hover:bg-muted/40"
                   >
-                    <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl ${s.bg} ${s.text}`}>
+                    {/* Icon */}
+                    <div className={`flex-shrink-0 inline-flex h-12 w-12 items-center justify-center rounded-xl ${s.bg} ${s.text}`}>
                       <Icon className="h-6 w-6" />
                     </div>
-                    <h4 className="text-xl font-black tracking-tight text-foreground">{p.name}</h4>
-                    <p className={`text-xs font-black uppercase tracking-widest ${s.text} mt-1 mb-3`}>
-                      {p.role}
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+
+                    {/* Equation: Name = Role */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline gap-2.5 sm:gap-4 flex-wrap">
+                        <span className="text-lg sm:text-xl font-black tracking-tight text-foreground">
+                          {p.name}
+                        </span>
+                        <span className={`text-2xl sm:text-3xl font-black leading-none ${s.text}`} aria-hidden="true">
+                          =
+                        </span>
+                        <span className={`text-lg sm:text-xl font-bold ${s.text}`}>
+                          {p.role}
+                        </span>
+                      </div>
+                      <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                        {p.desc}
+                      </p>
+                    </div>
                   </div>
                 )
               })}
