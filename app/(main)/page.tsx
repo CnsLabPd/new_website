@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Mail } from "lucide-react"
+import { ArrowRight, Mail, Gauge, Gamepad2, Brain, GraduationCap } from "lucide-react"
 import { PartnerCardAnimated } from "@/components/ui/PartnerCardAnimated";
 import { ThreeDTestimonialCarousel } from "@/components/ui/ThreeDTestimonialCarousel"; 
 import { DynamicMagneticButton } from "@/utils/DynamicMagneticButton"; 
@@ -75,38 +75,103 @@ export default function HomePage() {
       <div className="space-y-24 md:space-y-32 py-24">
         
         {/* What is Neurogati? */}
-        <section className="bg-muted mx-auto py-24 px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">What is Neurogati?</h2>
+        <section className="relative overflow-hidden border-y border-border bg-muted/30 py-24 px-4 sm:px-6 lg:px-8">
+          {/* Technical dot grid */}
+          <div
+            className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(#1c82c2 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
+          {/* Soft glow */}
+          <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[42rem] rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="text-center">
-              <h3 className="text-2xl font-semibold text-foreground mb-4">
-                Applied Computational Neuroscience in Measurement, Modeling, and Intervention
-              </h3>
-              <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
-                Neurogati develops neurotechnology tools and structured digital interventions guided by computational principles. Our programs span clinical measurement, mechanistic modeling, and therapeutic design.
-              </p>
+          <div className="container mx-auto relative z-10 text-center">
+            <span className="inline-block rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-blue-500 mb-6">
+              What we do
+            </span>
+
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent py-1">
+              What is Neurogati?
+            </h2>
+
+            <h3 className="max-w-3xl mx-auto text-xl md:text-2xl font-bold text-foreground mb-5 leading-snug">
+              Applied Computational Neuroscience in Measurement, Modeling, and Intervention
+            </h3>
+
+            <p className="max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
+              Neurogati develops neurotechnology tools and structured digital interventions guided
+              by computational principles. Our programs span clinical measurement, mechanistic
+              modeling, and therapeutic design.
+            </p>
+
+            {/* Pillar grid */}
+            <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto text-left">
+              {[
+                {
+                  icon: Gauge,
+                  name: "Apps",
+                  role: "Measurement",
+                  desc: "Clinical-grade tools that quantify brain and behaviour.",
+                  color: "cyan",
+                },
+                {
+                  icon: Gamepad2,
+                  name: "Games",
+                  role: "Intervention",
+                  desc: "Therapeutic exergames that turn training into play.",
+                  color: "violet",
+                },
+                {
+                  icon: Brain,
+                  name: "Modelling",
+                  role: "Backbone",
+                  desc: "Computational models that underpin everything we build.",
+                  color: "blue",
+                },
+                {
+                  icon: GraduationCap,
+                  name: "Workshops",
+                  role: "Knowledge Dissemination",
+                  desc: "Programs that share the science with the next generation.",
+                  color: "amber",
+                },
+              ].map((p) => {
+                const styles: Record<string, { border: string; bg: string; text: string; ring: string }> = {
+                  cyan: { border: "hover:border-cyan-500/50", bg: "bg-cyan-500/10", text: "text-cyan-500", ring: "group-hover:shadow-cyan-500/10" },
+                  violet: { border: "hover:border-violet-500/50", bg: "bg-violet-500/10", text: "text-violet-500", ring: "group-hover:shadow-violet-500/10" },
+                  blue: { border: "hover:border-blue-500/50", bg: "bg-blue-500/10", text: "text-blue-500", ring: "group-hover:shadow-blue-500/10" },
+                  amber: { border: "hover:border-amber-500/50", bg: "bg-amber-500/10", text: "text-amber-500", ring: "group-hover:shadow-amber-500/10" },
+                }
+                const s = styles[p.color]
+                const Icon = p.icon
+                return (
+                  <div
+                    key={p.name}
+                    className={`group rounded-2xl border-2 border-border bg-card p-6 transition-all hover:shadow-xl ${s.border} ${s.ring} hover:-translate-y-1`}
+                  >
+                    <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl ${s.bg} ${s.text}`}>
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <h4 className="text-xl font-black tracking-tight text-foreground">{p.name}</h4>
+                    <p className={`text-xs font-black uppercase tracking-widest ${s.text} mt-1 mb-3`}>
+                      {p.role}
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+                  </div>
+                )
+              })}
             </div>
 
-            <div className="mt-8">
-              <p className="text-lg text-white-600 dark:text-white-400 leading-relaxed">
-                Apps = Measurement<br />
-                Games = Intervention<br />
-                Modelling = Backbone<br />
-                Workshops = Knowledge Dissemination
-              </p>
+            <div className="mt-14">
+              <DynamicMagneticButton>
+                <Link href="/about" className={GRADIENT_BUTTON_CLASS}>
+                  Discover Us
+                  <ArrowRight className="h-5 w-5" />
+                </Link>
+              </DynamicMagneticButton>
             </div>
-          </div>
-
-          <div className="mt-12">
-            <DynamicMagneticButton>
-              <Link
-                href="/about"
-                className="bg-[#104581] px-10 text-lg font-semibold text-white py-2 rounded-full inline-flex items-center gap-2 whitespace-nowrap"
-              >
-                Discover Us
-              </Link>
-            </DynamicMagneticButton>
           </div>
         </section>
 
