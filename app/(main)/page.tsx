@@ -132,7 +132,7 @@ export default function HomePage() {
                 },
                 {
                   icon: GraduationCap,
-                  name: "Workshops",
+                  name: "Courses + Workshops",
                   role: "Knowledge Dissemination",
                   desc: "Programs that share the science with the next generation.",
                   color: "amber",
