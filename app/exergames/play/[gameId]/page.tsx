@@ -2,22 +2,11 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { X, Gamepad2, PlayCircle, Headphones, ChevronDown } from "lucide-react"
-import { ensureDefaultSession } from "@/lib/supabase"
 
 export default function ExergamePlayerPage({ params }: { params: { gameId: string } }) {
   const router = useRouter();
   const [hasStarted, setHasStarted] = useState(false);
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(true);
-  const [loading, setLoading] = useState(true);
-
-  // Silently establish the shared session (no sign-in UI) before loading the game.
-  useEffect(() => {
-    let active = true;
-    ensureDefaultSession().finally(() => {
-      if (active) setLoading(false);
-    });
-    return () => { active = false; };
-  }, []);
 
   // Auto-minimize header after 3 seconds
   useEffect(() => {
@@ -35,17 +24,6 @@ export default function ExergamePlayerPage({ params }: { params: { gameId: strin
   const gameUrl = gameRegistry[params.gameId];
 
   // Loading state
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-black text-white">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-slate-400">Loading game...</p>
-        </div>
-      </div>
-    );
-  }
-
   // Game not found
   if (!gameUrl) {
     return (

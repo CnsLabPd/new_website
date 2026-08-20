@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { ensureDefaultSession } from "@/lib/supabase"
 
 // ─── Nav structure ────────────────────────────────────────────────────────────
 type NavItem = { href: string; label: string; external?: boolean }
@@ -119,11 +118,6 @@ function NavDropdown({ group, pathname }: { group: NavGroup; pathname: string })
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
-
-  // Establish the shared default session site-wide (no sign-in UI).
-  useEffect(() => {
-    ensureDefaultSession()
-  }, [])
 
   return (
     <div className="w-full bg-transparent">
