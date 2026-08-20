@@ -5,6 +5,7 @@ import Image from "next/image"
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
+  { href: "/neurovidya", label: "Neurovidya" },
   { href: "/modelling", label: "Modelling" },
   { href: "/team", label: "Team" },
   { href: "/careers", label: "Careers" },
@@ -91,4 +92,4 @@ export default function Footer() {
       </div>
     </footer>
   )
-} 
+}

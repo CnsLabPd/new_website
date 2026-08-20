@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/chat/reindex",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
