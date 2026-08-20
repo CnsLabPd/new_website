@@ -249,21 +249,40 @@ export default function AdvisoryPage() {
         />
         <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[42rem] rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
-        <div className="container mx-auto relative z-10 max-w-5xl text-center">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-teal-400 mb-5">Neurogati · Advisory</p>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[1.05] py-1">
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-              One question.
-            </span>
-            <br />
-            <span className="text-foreground/90 italic font-bold">One structured answer.</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed">
-            Neuroscience sits between biology, engineering and computation, and most people arrive holding one of the
-            three. Advisory is a written response to a specific problem: a learning route, a sharper research question,
-            an internship match, a collaboration, a way to measure something in a clinic. You describe where you are; we
-            add the framing that is missing, hand back the next step, and name the courses or workshops worth your time.
-          </p>
+        <div className="container mx-auto relative z-10 max-w-7xl">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:items-end">
+            <div className="text-left">
+              <p className="mb-5 text-xs font-black uppercase tracking-[0.2em] text-teal-400">Neurogati · Advisory</p>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[1.05] py-1">
+                <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+                  One question.
+                </span>
+                <br />
+                <span className="text-foreground/90 italic font-bold">One structured answer.</span>
+              </h1>
+              <p className="mt-6 max-w-3xl text-base md:text-lg text-muted-foreground leading-relaxed">
+                Neuroscience sits between biology, engineering and computation, and most people arrive holding one of the
+                three. Advisory is a written response to a specific problem: a learning route, a sharper research question,
+                an internship match, a collaboration, a way to measure something in a clinic. You describe where you are; we
+                add the framing that is missing, hand back the next step, and name the courses or workshops worth your time.
+              </p>
+
+              <p className="mt-6 max-w-3xl text-[13.5px] italic text-muted-foreground">
+                What it is not: a course, a syllabus, or ongoing mentorship. One focused exchange on one problem. If the work
+                needs sustained supervision, say so and we will point you somewhere better suited.
+              </p>
+            </div>
+
+            {/* facts */}
+            <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+              {FACTS.map((f) => (
+                <li key={f.label} className="flex items-center gap-2 rounded-xl border border-border bg-card px-3.5 py-2 text-[13px] text-muted-foreground">
+                  <Ic name={f.icon} className="h-4 w-4 text-teal-400" />
+                  <span><b className="font-semibold text-foreground">{f.label}</b> {f.value}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {/* how it works */}
           <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border text-left sm:grid-cols-2 lg:grid-cols-4">
@@ -279,26 +298,12 @@ export default function AdvisoryPage() {
               </li>
             ))}
           </ol>
-
-          {/* facts */}
-          <ul className="mt-6 flex flex-wrap justify-center gap-2">
-            {FACTS.map((f) => (
-              <li key={f.label} className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-[13px] text-muted-foreground">
-                <Ic name={f.icon} className="h-4 w-4 text-teal-400" />
-                <span><b className="font-semibold text-foreground">{f.label}</b> {f.value}</span>
-              </li>
-            ))}
-          </ul>
-
-          <p className="mx-auto mt-6 max-w-2xl text-[13.5px] italic text-muted-foreground">
-            What it is not: a course, a syllabus, or ongoing mentorship. One focused exchange on one problem. If the work
-            needs sustained supervision, say so and we will point you somewhere better suited.
-          </p>
         </div>
       </section>
 
       {/* ============================ WIZARD ============================ */}
-      <section className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+      <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-2xl shadow-black/20">
           {/* wizard header + stepper */}
           <div className="border-b border-border bg-muted/40 px-6 pt-5 pb-4">
@@ -574,6 +579,60 @@ export default function AdvisoryPage() {
             )}
           </div>
         </div>
+        <aside className="rounded-3xl border-2 border-border bg-card p-5 shadow-2xl shadow-black/10 lg:sticky lg:top-28">
+          <div className="flex items-center gap-3">
+            <RouteIcon className="h-5 w-5 text-blue-400" />
+            <div>
+              <h2 className="text-base font-black tracking-tight text-foreground">Advisory route</h2>
+              <p className="text-[12.5px] text-muted-foreground">
+                {track ? TRACKS[track].name : "This narrows as you answer"}
+              </p>
+            </div>
+          </div>
+
+          <ol className="mt-5 space-y-3">
+            {STAGES.map((s, i) => {
+              const on = i <= stageIndex
+              return (
+                <li key={s.label} className={`flex gap-3 rounded-xl border p-3 ${on ? "border-blue-500/40 bg-blue-500/[0.06]" : "border-border bg-background/40 opacity-60"}`}>
+                  <span className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-xs font-black ${on ? "bg-blue-600 text-white" : "bg-muted text-muted-foreground"}`}>
+                    {i + 1}
+                  </span>
+                  <span className="min-w-0">
+                    <strong className="block text-[13.5px] font-bold text-foreground">{s.label}</strong>
+                    <span className="block text-[12px] text-muted-foreground">{s.sub}</span>
+                  </span>
+                </li>
+              )
+            })}
+          </ol>
+
+          {track && (
+            <div className={`mt-5 rounded-2xl border ${t.border} ${t.bg} p-4`}>
+              <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${t.text}`}>{TRACKS[track].code}</p>
+              <h3 className="mt-1 text-[15px] font-black tracking-tight text-foreground">{ROUTES[track].title}</h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{ROUTES[track].tier}</p>
+            </div>
+          )}
+
+          <div className="mt-5 border-t border-border pt-4">
+            <p className="text-[11.5px] font-bold uppercase tracking-[0.1em] text-muted-foreground">Destinations</p>
+            <ul className="mt-3 space-y-2">
+              {DESTINATIONS.slice(0, 5).map((d) => {
+                const dtw = TRACK_TW[TRACKS[d.track as TrackCode].color]
+                const dim = track && track !== d.track
+                const mark = emphasised.has(d.id)
+                return (
+                  <li key={d.id} className={`flex items-start gap-2 text-[12.5px] leading-snug ${dim ? "opacity-40" : "opacity-100"}`}>
+                    <Ic name={d.icon} className={`mt-px h-4 w-4 flex-shrink-0 ${mark ? dtw.text : "text-muted-foreground"}`} />
+                    <span className={mark ? "font-semibold text-foreground" : "text-muted-foreground"}>{d.label}</span>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </aside>
+        </div>
       </section>
 
       {/* ============================ THE MAP ============================ */}
@@ -649,7 +708,7 @@ export default function AdvisoryPage() {
       </section>
 
       {/* ============================ FAQ ============================ */}
-      <section className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 pb-20">
+      <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
         <div className="rounded-3xl border-2 border-border bg-card p-6 sm:p-8">
           <div className="mb-6 flex items-center gap-3">
             <PenLine className="h-5 w-5 text-blue-400" />
