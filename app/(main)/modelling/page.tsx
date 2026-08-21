@@ -232,7 +232,7 @@ export default function ResearchPage() {
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Active Studies</p>
             </div>
             <div>
-              <div className="text-4xl font-black text-emerald-500 mb-2">50+</div>
+              <div className="text-4xl font-black text-emerald-500 mb-2">500+</div>
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Patients Enrolled</p>
             </div>
           </div>
