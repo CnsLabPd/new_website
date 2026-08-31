@@ -113,7 +113,10 @@ export default function AdvisoryAdminPage() {
         localStorage.removeItem(KEY_STORAGE)
         return
       }
-      if (!res.ok) throw new Error("Could not load conversations.")
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}))
+        throw new Error([j.error, j.detail].filter(Boolean).join(" — ") || "Could not load conversations.")
+      }
       const j = await res.json()
       setSubs(j.submissions || [])
     } catch (e: any) {

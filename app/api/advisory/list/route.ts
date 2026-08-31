@@ -11,7 +11,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const supabase = createAdminClient()
+  let supabase
+  try {
+    supabase = createAdminClient()
+  } catch (e: any) {
+    console.error("advisory list: admin client init failed", e)
+    return NextResponse.json(
+      { error: "Server is not configured.", detail: e?.message || String(e) },
+      { status: 500 }
+    )
+  }
+
   const filter = request.nextUrl.searchParams.get("filter")
 
   let query = supabase.from("advisory_submissions").select("*").order("updated_at", { ascending: false })
@@ -21,7 +31,17 @@ export async function GET(request: NextRequest) {
   const { data, error } = await query
   if (error) {
     console.error("advisory list error", error)
-    return NextResponse.json({ error: "Could not load submissions." }, { status: 500 })
+    // The admin key already authenticated this caller, so surfacing the cause
+    // here is safe and makes misconfiguration diagnosable in production.
+    return NextResponse.json(
+      {
+        error: "Could not load submissions.",
+        detail: error.message || String(error),
+        hint: (error as any).hint || undefined,
+        code: (error as any).code || undefined,
+      },
+      { status: 500 }
+    )
   }
 
   const submissions = data || []
