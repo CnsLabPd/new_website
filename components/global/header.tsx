@@ -27,6 +27,7 @@ const navEntries: NavEntry[] = [
     label: "Education",
     items: [
       { href: "/neurovidya", label: "Neurovidya" },
+      { href: "/akshara-learning", label: "Akshara" },
       { href: "/workshops", label: "Workshops" },
       { href: "/advisory", label: "Advisory" },
       { href: "/modelling", label: "Modelling" },

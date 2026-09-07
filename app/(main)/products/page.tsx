@@ -16,9 +16,9 @@ const verticals = [
   {
     name: "Akshara Learning",
     title: "Akshara Learning Platform",
-    href: "/akshara-learning", // Will redirect to Vercel deployment
-    description: "Interactive learning platform for language and literacy development using advanced AI and neuroscience principles.",
-    image: "/images/akshara_title card.png",
+    href: "/akshara-learning",
+    description: "Personalized foundational learning for children aged 3-10 across language, mathematics, puzzles, our world, and life skills.",
+    image: "/images/akshara-title-card-no-qr.png",
     color: "violet",
   },
   // {

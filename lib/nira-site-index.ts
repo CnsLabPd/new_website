@@ -39,6 +39,7 @@ export const NIRA_SITE_PAGES: SitePage[] = [
   { path: "/about", label: "About Neurogati", keywords: ["about", "company", "mission", "neurogati", "services", "work"] },
   { path: "/products", label: "Applications", keywords: ["applications", "products", "platform", "services", "akshara", "diagnostics"] },
   { path: "/neurodiagnostics", label: "Diagnostics and Qumon-PD", keywords: ["qumon", "quamon", "parkinson", "diagnostic", "monitoring", "gait", "tremor", "clinical"] },
+  { path: "/akshara-learning", label: "Akshara foundational learning", keywords: ["akshara", "neuroshiksha", "children", "kids", "language", "tamil", "english", "math", "puzzles", "special education", "life skills", "foundational learning"] },
   { path: "/assistivetech", label: "Assistive technology", keywords: ["assistive", "sparshbharati", "mudhrabharati", "nodtext", "braille", "accessibility", "sign language"] },
   { path: "/games", label: "Gaming and rehabilitation", keywords: ["games", "gaming", "rehabilitation", "exergames", "therapy", "crgs"] },
   { path: "/gamingcategories", label: "Neurogati games", keywords: ["games", "play", "posabets", "frosty", "dunk", "mandala", "sonic", "dart", "shoot froot", "crgs"] },

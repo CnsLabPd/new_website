@@ -6,6 +6,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
   { href: "/neurovidya", label: "Neurovidya" },
+  { href: "/akshara-learning", label: "Akshara" },
   { href: "/modelling", label: "Modelling" },
   { href: "/team", label: "Team" },
   { href: "/careers", label: "Careers" },
