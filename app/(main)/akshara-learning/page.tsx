@@ -63,8 +63,6 @@ const learningAreas = [
   },
 ]
 
-const islands = ["Story Island", "Number Island", "Discovery Island", "Sense Island", "Everyday Island"]
-
 export default function AksharaLearningPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -116,16 +114,6 @@ export default function AksharaLearningPage() {
                   className="object-cover"
                 />
               </div>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
-              {islands.map((island) => (
-                <span
-                  key={island}
-                  className="rounded-lg border border-border bg-card px-3 py-2 text-center text-xs font-bold text-foreground/75"
-                >
-                  {island}
-                </span>
-              ))}
             </div>
           </div>
         </div>
