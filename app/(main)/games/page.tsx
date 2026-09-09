@@ -7,8 +7,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import Image from "next/image";
 
 const gameVertical = {
-  name: "Gaming & Rehabilitation",
-  title: "Gaming & Rehabilitation",
+  name: "Gaming Platform",
+  title: "Gaming Platform",
   href: "/gamingcategories", 
   description: "AI-driven gaming solutions for rehabilitation, monitoring, and tracking. We turn clinical protocols into engaging, interactive experiences.",
   image: "/games-rehab-thumb-v2.png", 
@@ -26,10 +26,10 @@ export default function GamesPage() {
         
         <div className="container mx-auto px-6 relative z-10 text-center">
           <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-blue-400 via-indigo-500 to-violet-500 bg-clip-text text-transparent">
-            Excergames
+            Gaming Platform
           </h1>
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-            Merging computational neuroscience with immersive gaming to accelerate motor recovery and cognitive engagement.
+            Movement, cognition, and rehabilitation-oriented games built from Neurogati's neuroscience and clinical technology work.
           </p>
         </div>
       </section>
@@ -62,7 +62,7 @@ export default function GamesPage() {
                   {gameVertical.description}
                 </p>
                 <div className="flex items-center text-sm font-black uppercase tracking-widest text-violet-500 group-hover:gap-3 gap-2 transition-all">
-                  Explore Gaming Hub <ArrowRight className="h-5 w-5" />
+                  Explore Game Library <ArrowRight className="h-5 w-5" />
                 </div>
               </CardContent>
             </Card>
@@ -71,7 +71,7 @@ export default function GamesPage() {
 
         {/* CTA SECTION */}
         <div className="text-center bg-card border border-border rounded-3xl p-12 shadow-sm max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black text-foreground mb-6">Ready to Gamify Rehabilitation?</h2>
+          <h2 className="text-3xl font-black text-foreground mb-6">Explore the Neurogati Gaming Platform</h2>
           <p className="max-w-2xl mx-auto text-[17px] text-muted-foreground mb-10 leading-relaxed font-medium">
             Discover how our clinical-grade gaming platforms can integrate into your rehabilitation protocol.
           </p>

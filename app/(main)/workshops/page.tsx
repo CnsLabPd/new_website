@@ -11,6 +11,19 @@ const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-b
 
 const workshops = [
   {
+    id: "winter-school-2026",
+    status: "Upcoming",
+    title: "Neurogati Winter School 2026",
+    date: "December 7-11, 2026",
+    duration: "5 days",
+    participants: "Details coming soon",
+    type: "Online | Live & Interactive",
+    description: "Details and call for abstracts coming soon. The Winter School 2026 will be announced with full programme information, participation details, and abstract submission instructions.",
+    registrationLink: "",
+    image: "/workshop brochures/neurogati-winter-school-2026-promo.jpg",
+    ctaLabel: "Coming Soon"
+  },
+  {
     id: "young-computational-neuroscientist-2026",
     status: "Upcoming",
     title: "Young Computational Neuroscientist Program",
@@ -562,6 +575,15 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
     <Card className={`relative flex flex-col overflow-hidden border-2 transition-all hover:shadow-xl ${
       isUpcoming ? 'border-blue-500/50 bg-blue-500/[0.02]' : 'border-border bg-card'
     }`}>
+      {ws.image && (
+        <div className="relative h-80 w-full overflow-hidden bg-muted">
+          <img
+            src={ws.image}
+            alt={`${ws.title} promo`}
+            className="h-full w-full object-cover object-top transition-transform duration-500 hover:scale-105"
+          />
+        </div>
+      )}
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start mb-4">
           <span className={`px-3 py-1 rounded-md text-xs font-black uppercase tracking-widest ${
@@ -604,15 +626,21 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
         )}
 
         <div className="pt-6 mt-auto">
-          <DynamicMagneticButton>
-            <Link
-              href={ws.registrationLink}
-              className={isUpcoming ? GRADIENT_BUTTON_CLASS : "w-full px-8 py-2 border-2 border-border font-bold rounded-full inline-flex items-center justify-center gap-2 text-base"}
-            >
-              {isUpcoming ? 'Learn More' : 'View Archive'}
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </DynamicMagneticButton>
+          {ws.registrationLink ? (
+            <DynamicMagneticButton>
+              <Link
+                href={ws.registrationLink}
+                className={isUpcoming ? GRADIENT_BUTTON_CLASS : "w-full px-8 py-2 border-2 border-border font-bold rounded-full inline-flex items-center justify-center gap-2 text-base"}
+              >
+                {ws.ctaLabel || (isUpcoming ? 'Learn More' : 'View Archive')}
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </DynamicMagneticButton>
+          ) : (
+            <div className="inline-flex w-full items-center justify-center rounded-full border-2 border-blue-500/30 bg-blue-500/[0.06] px-8 py-2 text-base font-bold text-[#1c82c2]">
+              {ws.ctaLabel || "Coming Soon"}
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

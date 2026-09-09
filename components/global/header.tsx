@@ -16,18 +16,12 @@ type NavEntry = NavItem | NavGroup
 const isGroup = (entry: NavEntry): entry is NavGroup => "items" in entry
 
 const navEntries: NavEntry[] = [
-  {
-    label: "Products",
-    items: [
-      { href: "/products", label: "Apps" },
-      { href: "/gamingcategories", label: "Games" },
-    ],
-  },
+  { href: "/movement-and-games", label: "Movement & Games" },
   {
     label: "Education",
     items: [
       { href: "/neurovidya", label: "Neurovidya" },
-      { href: "/akshara-learning", label: "Akshara" },
+      { href: "/neuroshiksha", label: "Neuroshiksha" },
       { href: "/workshops", label: "Workshops" },
       { href: "/advisory", label: "Advisory" },
       { href: "/modelling", label: "Modelling" },

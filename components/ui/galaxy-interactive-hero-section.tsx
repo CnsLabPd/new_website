@@ -18,8 +18,8 @@ function HeroContent({
   title = "Neurogati",
   tagline = "Empowering Brains",
   description = "Revolutionizing neurological care through AI and computational neuroscience.",
-  primaryButtonText = "Explore Our Products",
-  primaryButtonHref = "/products",
+  primaryButtonText = "Explore Movement & Games",
+  primaryButtonHref = "/movement-and-games",
   secondaryButtonText = "Watch Demo",
   secondaryButtonHref = "#demo",
 }: HeroContentProps) {
@@ -116,7 +116,7 @@ export const GalaxyHeroSection = ({
             </p>
             <div className="flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-3 animate-fade-in-delay-3">
               <GradientButton variant={"variant"} asChild>
-                <a href="/products">Explore Our Products</a>
+                <a href="/movement-and-games">Explore Movement & Games</a>
               </GradientButton>
             </div>
           </div>

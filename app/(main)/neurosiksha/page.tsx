@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
-export default function AksharaLearningRedirectPage() {
+export default function NeurosikshaRedirectPage() {
   redirect("/neuroshiksha")
 }

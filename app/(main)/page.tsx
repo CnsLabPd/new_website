@@ -55,15 +55,15 @@ export default function HomePage() {
               Empowering Brains
             </p>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-80 max-w-2xl text-secondary-foreground animate-fade-in-delay-2">
-              An integrated deep-tech company that brings together the many dimensions of neurotechnology – Applications, Gaming and Neurotech Education.
+              An integrated deep-tech company that brings together movement intelligence, clinical monitoring, gaming, modelling, and neurotechnology education.
             </p>
             <div className="flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-3 animate-fade-in-delay-3">
               <DynamicMagneticButton>
                 <Link 
-                  href="/products" 
+                  href="/movement-and-games" 
                   className={GRADIENT_BUTTON_CLASS}
                 >
-                  Explore Our Products 
+                  Explore Movement & Games 
                   <ArrowRight className="h-5 w-5 translate-y-px" />
                 </Link>
               </DynamicMagneticButton>
@@ -111,9 +111,9 @@ export default function HomePage() {
               {[
                 {
                   icon: Gauge,
-                  name: "Apps",
+                  name: "Movement",
                   role: "Measurement",
-                  desc: "Clinical-grade tools that quantify brain and behaviour.",
+                  desc: "Clinical-grade tools that quantify movement and behaviour.",
                   color: "cyan",
                 },
                 {
@@ -189,7 +189,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Products Teaser */}
+        {/* Movement & Games Teaser */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-black dark:text-white mb-12">
             AI-Powered Neurotechnology Innovations
@@ -222,10 +222,10 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <DynamicMagneticButton>
               <Link 
-                href="/products"
+                href="/movement-and-games"
                 className="bg-[#104581] px-10 text-lg font-semibold text-white py-2 rounded-full inline-flex items-center gap-2 whitespace-nowrap"
               >
-                All Products
+                Movement & Games
               </Link>
             </DynamicMagneticButton>
           </div>

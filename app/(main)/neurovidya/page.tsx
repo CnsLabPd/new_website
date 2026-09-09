@@ -268,14 +268,14 @@ export default function NeurovidyaPage() {
         <div className="container mx-auto grid gap-8 px-6 md:grid-cols-[0.8fr_1.2fr] md:items-center lg:px-12">
           <div>
             <p className="mb-3 text-sm font-bold uppercase text-[#1c82c2]">Foundational learning</p>
-            <h2 className="text-3xl font-black leading-tight md:text-4xl">Akshara for young learners</h2>
+            <h2 className="text-3xl font-black leading-tight md:text-4xl">Neuroshiksha for young learners</h2>
             <p className="mt-4 leading-7 text-muted-foreground">
-              Akshara extends Neurogati's education work to children aged 3-10 through language,
-              mathematics, puzzles, world discovery, sensorimotor practice, and life skills.
+              Neuroshiksha extends Neurogati's education work to children aged 3-10 through platforms
+              for language, mathematics, puzzles, world discovery, sensorimotor practice, and life skills.
             </p>
           </div>
           <Link
-            href="/akshara-learning"
+            href="/neuroshiksha"
             className="group rounded-lg border border-border bg-card p-6 transition-colors hover:bg-muted/50"
           >
             <div className="flex items-start gap-5">
@@ -283,12 +283,12 @@ export default function NeurovidyaPage() {
                 <Puzzle className="h-6 w-6" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="text-xl font-bold">Akshara Learning Platform</h3>
+                <h3 className="text-xl font-bold">Neuroshiksha</h3>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  A child-friendly learning adventure for mainstream and special education contexts.
+                  A growing family of child-friendly learning platforms, beginning with Akshara.
                 </p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#116da5] dark:text-sky-400">
-                  Learn about Akshara
+                  Learn about Neuroshiksha
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
                 </span>
               </div>

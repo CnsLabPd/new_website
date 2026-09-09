@@ -2,12 +2,13 @@ export const NIRA_KNOWLEDGE = `
 KNOWLEDGE LAST REVIEWED: 20 August 2026.
 
 ABOUT NEUROGATI
-Neurogati Private Limited is an integrated deep-technology company working across applied computational neuroscience. Its work connects measurement, computational modelling, digital intervention, and neurotechnology education. The public website describes four main pillars: applications for measurement, therapeutic and accessible games for intervention, computational modelling as the scientific backbone, and workshops for knowledge dissemination.
+Neurogati Private Limited is an integrated deep-technology company working across applied computational neuroscience. Its work connects measurement, computational modelling, digital intervention, and neurotechnology education. The public website describes key pillars including Movement & Games, education, computational modelling, advisory, and institutional collaboration.
 
-APPLICATIONS AND PRODUCTS
+MOVEMENT AND GAMES
 - Qumon-PD: Neurogati's clinical monitoring application for Parkinson's disease. It uses AI-assisted analysis of gait, speech, decision-making, and tremor to support quantitative assessment, progression monitoring, treatment-response evaluation, and research. It is a diagnostic-assistance and monitoring tool, not an independent diagnosis or replacement for a clinician. The website says clinical trials are ongoing at JIPMER Pondicherry.
-- Akshara Learning Platform: a personalized foundational learning platform developed by Neurogati for children aged 3-10. It covers English and Tamil alphabet learning, early mathematics, brain puzzles, sensorimotor skills, world discovery, and practical life skills. It is designed for mainstream and special education contexts. Direct visitors to /akshara-learning for the Neurogati overview or https://akshara-neuroshiksha.neurogati.com/ for platform access.
-- cRGS Gaming Platform: a personalized neuro-rehabilitation platform that gamifies therapy and progress tracking with adaptive exercises.
+- Gaming Platform: Neurogati's game-based platform for movement, cognition, engagement, and rehabilitation-oriented activities. It includes games such as cRGS, Posabets, Frosty Flicks, Dunk-it, Mandala Painting, Sonic Drive, Sonic Pop, Dart Knight, and Shoot Froot. Direct visitors to /gamingcategories to browse the current gaming page.
+- CP Clinic Platform: an upcoming research-driven digital gait-analysis and longitudinal motor-monitoring system for children and individuals with cerebral palsy and other movement-related conditions. It is designed for both clinical and home environments using compatible camera or smartphone videos from frontal and sagittal views. The platform applies computer-vision-based human pose estimation and computational gait analysis to extract clinically meaningful movement information including body alignment, trunk movement, pelvic motion, lower-limb kinematics, step characteristics, symmetry, variability, and gait-related trends. It is intended for repeatable assessments, visit-to-visit comparisons, home recording submissions, dashboards, structured reports, rehabilitation progress tracking, and clinician-supported review. It is a human-in-the-loop clinical and research decision-support system, not an autonomous diagnostic system or replacement for qualified healthcare professionals.
+- Movement Platform: an upcoming movement-analysis platform for assessment, progress tracking, and data-driven rehabilitation support.
 - Assistive technology work described on the website includes SparshBharati, a unified tactile system for Indian languages; MudhraBharati, computer-vision-assisted sign-to-text and speech; and NodText, a head and eye movement interface for people with limited limb mobility.
 
 GAMES AND REHABILITATION
@@ -18,7 +19,7 @@ Neurogati works on computational models of brain function and neurological condi
 
 WORKSHOPS AND EDUCATION
 - Neurovidya is Neurogati's dedicated neuroscience education and training platform. It brings together structured courses, practical workshops, books, learning resources, and a community for learners and professionals. The launch catalogue includes AI for EEG, Neural Oscillators, AI for EEG Bootcamp, Human Movement Analysis, Python for Neuroscience, and the book Whole and Its Parts. Course availability, pricing, schedules, and enrolment are maintained on https://neurovidya.neurogati.com/. Direct visitors to /neurovidya for an overview and then to the Neurovidya platform for current details.
-- Akshara sits within Neurogati's education work as a foundational learning service for young children. The Akshara experience frames learning as an adventure through areas such as Story Island, Number Island, Discovery Island, Sense Island, and Everyday Island.
+- Neuroshiksha is Neurogati's umbrella for early learning, special education support, and child-friendly digital learning experiences. Akshara is the first platform inside Neuroshiksha. It is a personalized foundational learning platform for children aged 3-10 covering English and Tamil alphabets, mathematics, puzzles, sensorimotor skills, world discovery, and practical life skills. Direct visitors to /neuroshiksha for the Neurogati overview or https://akshara-neuroshiksha.neurogati.com/ for platform access.
 - Young Computational Neuroscientist Program: upcoming on the website. Classes begin 21 September 2026. It is a 12-week, 24-live-session online research mentorship for students in Classes 9-12. Topics include neuroscience, mathematics, Python, feedforward and attractor networks, reinforcement learning, modelling, experiments, and a symposium presentation. The site lists an application deadline of 31 August 2026 and registration deadline of 15 September 2026. Pricing and merit-discount details are available from workshops@neurogati.com.
 - Computational Neuroscience Research Training, Phase 2: shown as ongoing from 11 July to 26 September 2026. It is a 10-week online mentorship program, two live hours per week, with six tracks: Parkinson's diagnostics, deep oscillatory networks, spatial decision-making, EEG analysis, autism games, and 3D movement analysis. The listed price is US$375; its application deadline has passed.
 - Neurogati Summer School 2026: completed. It ran 15-25 June 2026 with more than 30 expert lectures, hands-on neural modelling and data analysis, AI for EEG and neural signals, BCI, neurorehabilitation, posters, and Q&A.
@@ -46,9 +47,12 @@ IMPORTANT LIMITS
 
 export const NIRA_ALLOWED_LINKS = new Map([
   ["/about", "About Neurogati"],
-  ["/products", "Applications"],
+  ["/movement-and-games", "Movement & Games"],
   ["/neurodiagnostics", "Diagnostics and monitoring"],
-  ["/akshara-learning", "Akshara Learning"],
+  ["/games", "Gaming Platform"],
+  ["/cp-clinic", "CP Clinic"],
+  ["/movement-platform", "Movement Platform"],
+  ["/neuroshiksha", "Neuroshiksha"],
   ["/gamingcategories", "Games"],
   ["/modelling", "Modelling and research"],
   ["/neurovidya", "Neurovidya"],

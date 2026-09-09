@@ -4,9 +4,9 @@ import Image from "next/image"
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
+  { href: "/movement-and-games", label: "Movement & Games" },
   { href: "/neurovidya", label: "Neurovidya" },
-  { href: "/akshara-learning", label: "Akshara" },
+  { href: "/neuroshiksha", label: "Neuroshiksha" },
   { href: "/modelling", label: "Modelling" },
   { href: "/team", label: "Team" },
   { href: "/careers", label: "Careers" },
