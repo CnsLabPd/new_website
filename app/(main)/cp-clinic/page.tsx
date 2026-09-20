@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import {
   Activity,
   ArrowRight,
   BarChart3,
   Camera,
-  ClipboardList,
   Home,
   Hospital,
   LineChart,
@@ -83,6 +83,18 @@ export default function CpClinicPage() {
               <Button asChild variant="outline" size="lg" className="rounded-full border-border px-8 font-black hover:bg-muted">
                 <Link href="/movement-and-games">Back to Movement & Games</Link>
               </Button>
+            </div>
+            <div className="mx-auto mt-14 max-w-6xl overflow-hidden rounded-[32px] border border-border bg-card shadow-2xl">
+              <div className="relative aspect-[1781/883] bg-muted">
+                <Image
+                  src="/images/cp-clinic-platform-title-card.png"
+                  alt="CP Clinic Platform AI-powered gait analysis title card"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 1100px"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>

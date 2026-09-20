@@ -43,7 +43,7 @@ const products = [
     href: "/cp-clinic",
     cta: "View CP Platform",
     icon: HeartPulse,
-    image: null,
+    image: "/images/cp-clinic-platform-title-card.png",
     badge: "Coming soon",
   },
   {
