@@ -19,9 +19,9 @@ const workshops = [
     participants: "Details coming soon",
     type: "Online | Live & Interactive",
     description: "Details and call for abstracts coming soon. The Winter School 2026 will be announced with full programme information, participation details, and abstract submission instructions.",
-    registrationLink: "",
+    registrationLink: "/workshops/winter-school-2026",
     image: "/workshop brochures/neurogati-winter-school-2026-promo.jpg",
-    ctaLabel: "Coming Soon"
+    ctaLabel: "View Programme"
   },
   {
     id: "young-computational-neuroscientist-2026",

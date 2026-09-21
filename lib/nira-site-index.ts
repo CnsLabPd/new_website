@@ -53,6 +53,7 @@ export const NIRA_SITE_PAGES: SitePage[] = [
   { path: "/workshops/young-computational-neuroscientist-2026", label: "Young Computational Neuroscientist Program", keywords: ["young", "school", "class 9", "class 10", "class 11", "class 12", "ycnp", "computational neuroscientist"] },
   { path: "/workshops/research-program-phase-2-july-sept", label: "Computational Neuroscience Research Training Phase 2", keywords: ["phase 2", "research training", "mentorship", "research track", "abstract"] },
   { path: "/workshops/summer-school-2026", label: "Neurogati Summer School 2026", keywords: ["summer school", "2026", "lecture", "poster", "bci", "neurorehabilitation"] },
+  { path: "/workshops/winter-school-2026", label: "Neurogati Winter School 2026", keywords: ["winter school", "2026", "december", "neuroscience", "online", "speakers"] },
   { path: "/workshops/brain-modeling-medicos-july-2026", label: "Brain Modeling for Medicos", keywords: ["medicos", "medical", "brain modeling", "brain modelling", "doctor", "coding background"] },
   { path: "/workshops/ai-applications-eeg-august-2026", label: "AI Applications in EEG", keywords: ["eeg", "brain signals", "signal processing", "ai applications", "seizure"] },
   { path: "/workshops/research-program-phase-1", label: "AI and Brain Science Summer Program", keywords: ["phase 1", "brain science", "high school", "grade 8", "grade 9", "grade 10", "grade 11", "grade 12"] },
