@@ -6,6 +6,9 @@ import {
   Brain,
   CalendarDays,
   Clock3,
+  ExternalLink,
+  FileText,
+  Mail,
   MapPin,
   Sparkles,
   Users,
@@ -107,6 +110,52 @@ export default function WinterSchool2026Page() {
       </section>
 
       <section className="py-20 md:py-28">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-background to-blue-500/10 shadow-xl">
+            <div className="grid gap-0 lg:grid-cols-[0.8fr_1.2fr]">
+              <div className="flex flex-col justify-center bg-slate-950 p-8 text-white sm:p-10">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400 text-slate-950">
+                  <FileText className="h-7 w-7" />
+                </div>
+                <p className="text-sm font-black uppercase tracking-[0.22em] text-amber-300">Call for abstracts</p>
+                <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Abstract submissions are open</h2>
+                <div className="mt-8 rounded-2xl border border-white/15 bg-white/10 p-5">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-300">Submission deadline</p>
+                  <p className="mt-2 text-2xl font-black text-amber-300">October 25, 2026</p>
+                </div>
+              </div>
+
+              <div className="p-8 sm:p-10 lg:p-12">
+                <p className="text-lg leading-relaxed text-muted-foreground">
+                  Submit your abstract for the Neurogati Winter School 2026, a five-day intensive online programme introducing participants to neural modelling, brain dynamics and data-driven neuroscience.
+                </p>
+                <Button asChild size="lg" className="mt-8 rounded-full px-8 font-bold">
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfJ62KpiuAkiDa9GuXvm4MQXKXmfqnbJpW_uZfFr6Lv7kr3wg/viewform"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Submit Your Abstract
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+
+                <div className="mt-8 flex items-start gap-3 border-t border-border pt-6 text-sm text-muted-foreground">
+                  <Mail className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500" />
+                  <p>
+                    For questions about abstract submission or the programme, contact{" "}
+                    <a href="mailto:workshops@neurogati.com" className="font-bold text-foreground hover:text-blue-500">
+                      workshops@neurogati.com
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="pb-20 md:pb-28">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500">

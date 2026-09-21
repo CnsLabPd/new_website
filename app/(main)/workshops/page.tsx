@@ -18,7 +18,7 @@ const workshops = [
     duration: "5 days",
     participants: "Details coming soon",
     type: "Online | Live & Interactive",
-    description: "Details and call for abstracts coming soon. The Winter School 2026 will be announced with full programme information, participation details, and abstract submission instructions.",
+    description: "A five-day online programme featuring expert sessions across neuroscience, computation, cognition, movement and brain health. Abstract submissions are open until October 25, 2026. Additional programme and participation details will be announced soon.",
     registrationLink: "/workshops/winter-school-2026",
     image: "/workshop brochures/neurogati-winter-school-2026-promo.jpg",
     ctaLabel: "View Programme"
