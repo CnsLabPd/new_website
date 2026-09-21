@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 const speakers = [
   {
-    name: 'Prof. Sumantra "Shona" Chattarji',
+    name: "Prof. Sumantra Chattarji",
     affiliation: "Director, CHINTA, TCG CREST",
     focus: "Neural circuits, stress and brain disorders",
   },
@@ -129,10 +129,10 @@ export default function WinterSchool2026Page() {
                 <Users className="h-5 w-5" />
                 Speakers
               </div>
-              <h2 className="text-3xl font-black tracking-tight sm:text-5xl">Confirmed speakers</h2>
+              <h2 className="text-3xl font-black tracking-tight sm:text-5xl">Speakers</h2>
             </div>
             <p className="max-w-xl text-muted-foreground md:text-right">
-              These speakers have agreed to join the Winter School. Session titles and additional programme details will be added as they are confirmed.
+              Session titles and additional programme details will be added soon.
             </p>
           </div>
 
