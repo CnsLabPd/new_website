@@ -10,12 +10,14 @@ import {
   FileText,
   Mail,
   MapPin,
+  Microscope,
   Sparkles,
   Users,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { WinterSchoolSectionNav } from "./section-nav"
 
 export const metadata: Metadata = {
   title: "Neurogati Winter School 2026",
@@ -56,10 +58,22 @@ const speakers = [
   },
 ]
 
+const scientificCommittee = [
+  { name: "Dr. Frédéric Alexandre", affiliation: "Inria, France" },
+  { name: "Dr. Pragathi Balasubramani", affiliation: "IIT Kanpur, India" },
+  { name: "Dr. V. Srinivasa Chakravarthy", affiliation: "IIT Madras, India" },
+  { name: "Dr. Risto Ilmoniemi", affiliation: "Aalto University, Finland" },
+  { name: "Dr. Vignesh Muralidharan", affiliation: "IIT Jodhpur, India" },
+  { name: "Dr. Srikanth Ramaswamy", affiliation: "Newcastle University, UK" },
+  { name: "Dr. Aasif Sheikh", affiliation: "Case Western Reserve University, USA" },
+]
+
 export default function WinterSchool2026Page() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <section className="relative overflow-hidden border-b border-border pt-36 pb-20 md:pt-44 md:pb-28">
+      <WinterSchoolSectionNav />
+
+      <section id="overview" className="relative scroll-mt-28 overflow-hidden border-b border-border pt-36 pb-20 md:pt-44 md:pb-28">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.2),transparent_38%),radial-gradient(circle_at_85%_25%,rgba(245,158,11,0.15),transparent_30%)]" />
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <Link
@@ -109,7 +123,7 @@ export default function WinterSchool2026Page() {
         </div>
       </section>
 
-      <section className="py-20 md:py-28">
+      <section id="abstracts" className="scroll-mt-28 py-20 md:py-28 lg:pl-64">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-background to-blue-500/10 shadow-xl">
             <div className="grid gap-0 lg:grid-cols-[0.8fr_1.2fr]">
@@ -155,7 +169,7 @@ export default function WinterSchool2026Page() {
         </div>
       </section>
 
-      <section className="pb-20 md:pb-28">
+      <section id="programme" className="scroll-mt-28 pb-20 md:pb-28 lg:pl-64">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500">
@@ -170,42 +184,69 @@ export default function WinterSchool2026Page() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-muted/30 py-20 md:py-28">
+      <section className="border-y border-border bg-muted/30 py-20 md:py-28 lg:pl-64">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <div className="mb-4 flex items-center gap-2 text-sm font-black uppercase tracking-[0.22em] text-blue-500">
-                <Users className="h-5 w-5" />
-                Speakers
+          <div id="committee" className="mb-20 scroll-mt-28">
+            <div className="mb-12 text-center">
+              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-500">
+                <Microscope className="h-7 w-7" />
               </div>
-              <h2 className="text-3xl font-black tracking-tight sm:text-5xl">Speakers</h2>
+              <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-500">Academic guidance</p>
+              <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl">Scientific Committee</h2>
             </div>
-            <p className="max-w-xl text-muted-foreground md:text-right">
-              Session titles and additional programme details will be added soon.
-            </p>
+
+            <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {scientificCommittee.map((member) => (
+                <Card
+                  key={member.name}
+                  className="border-border bg-background/80 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/40 hover:shadow-lg"
+                >
+                  <CardContent className="p-6">
+                    <div className="mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                    <h3 className="text-lg font-black tracking-tight">{member.name}</h3>
+                    <p className="mt-2 text-sm font-semibold text-muted-foreground">{member.affiliation}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {speakers.map((speaker, index) => (
-              <Card
-                key={speaker.name}
-                className="group overflow-hidden border-border bg-background/80 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl"
-              >
-                <CardContent className="p-6">
-                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-sm font-black text-white shadow-lg shadow-blue-500/20">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                  <h3 className="text-xl font-black tracking-tight">{speaker.name}</h3>
-                  <p className="mt-2 font-semibold text-blue-600 dark:text-blue-300">{speaker.affiliation}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{speaker.focus}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div id="speakers" className="scroll-mt-28">
+            <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <div>
+                <div className="mb-4 flex items-center gap-2 text-sm font-black uppercase tracking-[0.22em] text-blue-500">
+                  <Users className="h-5 w-5" />
+                  Speakers
+                </div>
+                <h2 className="text-3xl font-black tracking-tight sm:text-5xl">Speakers</h2>
+              </div>
+              <p className="max-w-xl text-muted-foreground md:text-right">
+                Session titles and additional programme details will be added soon.
+              </p>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {speakers.map((speaker, index) => (
+                <Card
+                  key={speaker.name}
+                  className="group overflow-hidden border-border bg-background/80 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl"
+                >
+                  <CardContent className="p-6">
+                    <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-sm font-black text-white shadow-lg shadow-blue-500/20">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+                    <h3 className="text-xl font-black tracking-tight">{speaker.name}</h3>
+                    <p className="mt-2 font-semibold text-blue-600 dark:text-blue-300">{speaker.affiliation}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{speaker.focus}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-20 md:py-28">
+      <section id="more-information" className="scroll-mt-28 py-20 md:py-28 lg:pl-64">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-blue-500/20 bg-gradient-to-br from-blue-600/10 via-cyan-500/5 to-amber-400/10 p-8 text-center sm:p-12">
             <p className="text-sm font-black uppercase tracking-[0.24em] text-blue-500">Coming soon</p>
