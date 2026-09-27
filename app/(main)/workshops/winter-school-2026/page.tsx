@@ -56,6 +56,11 @@ const speakers = [
     affiliation: "National Brain Research Centre",
     focus: "Cell biology of neurons and neuroendocrine systems",
   },
+  {
+    name: "Prof. Dinesh Kumar",
+    affiliation: "RMIT University, Australia",
+    focus: "Biomedical engineering, neuromotor control and biosignal analysis",
+  },
 ]
 
 const scientificCommittee = [
