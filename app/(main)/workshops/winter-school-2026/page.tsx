@@ -61,6 +61,21 @@ const speakers = [
     affiliation: "RMIT University, Australia",
     focus: "Biomedical engineering, neuromotor control and biosignal analysis",
   },
+  {
+    name: "Prof. Sarthak Chandra",
+    affiliation: "ICTS–TIFR, Bengaluru",
+    focus: "Theoretical and computational neuroscience, nonlinear dynamics and complex systems",
+  },
+  {
+    name: "Prof. Rishikesh Narayanan",
+    affiliation: "Molecular Biophysics Unit, IISc Bengaluru",
+    focus: "Cellular neurophysiology and neuronal information processing",
+  },
+  {
+    name: "Dr. Karishma Chhabria",
+    affiliation: "University of California San Diego, USA",
+    focus: "Cerebral blood-flow regulation and neurovascular coupling",
+  },
 ]
 
 const scientificCommittee = [
