@@ -76,6 +76,16 @@ const speakers = [
     affiliation: "University of California San Diego, USA",
     focus: "Cerebral blood-flow regulation and neurovascular coupling",
   },
+  {
+    name: "Dr. Nikhil Prabhu",
+    affiliation: "Amrita Vishwa Vidyapeetham, Amritapuri",
+    focus: "Cognitive neuroscience, sensorimotor control and tactile reaching movements",
+  },
+  {
+    name: "Dr. Ujwal Chaudhary",
+    affiliation: "BrainPortal Technologies GmbH, Germany",
+    focus: "Brain–computer interfaces and communication neurotechnology",
+  },
 ]
 
 const scientificCommittee = [
