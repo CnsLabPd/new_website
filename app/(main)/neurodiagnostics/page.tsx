@@ -34,16 +34,16 @@ const diagnosticProducts = [
 
 export default function NeuroDiagnosticsPage() {
   return (
-    <div className="bg-background text-foreground min-h-screen pb-20">
+    <div className="editorial-page text-foreground min-h-screen pb-20">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-48 pb-20 overflow-hidden bg-muted/30 border-b border-border">
+      <section className="relative pt-20 pb-20 overflow-hidden bg-[var(--site-soft)] border-b border-[var(--site-line)]">
         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none" 
-             style={{ backgroundImage: 'radial-gradient(#1c82c2 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+             style={{ backgroundImage: 'radial-gradient(#0c6673 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl">
-            <Badge className="mb-6 bg-blue-500/10 text-[#1c82c2] border-blue-500/20 font-black uppercase tracking-widest px-4 py-1">
+            <Badge className="mb-6 bg-[#0c6673]/10 text-[#0c6673] border-[#0c6673]/20 font-black uppercase tracking-widest px-4 py-1">
               Diagnostic Assistance and Monitoring
             </Badge>
             <h1 className="text-4xl md:text-7xl font-black tracking-tighter leading-[1.1] mb-8">

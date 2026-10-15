@@ -19,7 +19,7 @@ export default function PrivacyPolicy() {
           <h2 className="text-2xl font-bold mb-4 mt-8">1. Information We Collect</h2>
           <ul className="list-disc list-inside text-muted-foreground leading-relaxed mb-6 space-y-3">
             <li><strong>Personal Information:</strong> Name, email address, phone number, and organization details provided during contact or registration.</li>
-            <li><strong>Clinical/Usage Data:</strong> For users of Quamon-PD™ or cRGS™, we may collect behavioral biomarkers and engagement metrics necessary for diagnostic assistance and rehabilitation tracking.</li>
+            <li><strong>Clinical/Usage Data:</strong> For users of our clinical monitoring or rehabilitation tools, we may collect behavioral biomarkers and engagement metrics necessary for assessment support and rehabilitation tracking.</li>
             <li><strong>Payment Information:</strong> Payment details are collected directly by Razorpay. Neurogati does not store credit card or bank account details.</li>
             <li><strong>AI Assistant Interactions:</strong> Messages you send to Nira, together with limited page context and technical request information needed for security and rate limiting.</li>
           </ul>

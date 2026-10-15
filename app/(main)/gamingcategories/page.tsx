@@ -177,19 +177,19 @@ export default function GamingCategoriesNewPage() {
   }, [groupedGames]);
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="editorial-page text-foreground min-h-screen">
 
       {/* HERO SECTION */}
-      <section className="relative pt-48 pb-20 bg-muted/30 border-b border-border">
+      <section className="relative pt-20 pb-20 bg-[var(--site-soft)] border-b border-[var(--site-line)]">
         <div className="container mx-auto px-6 text-center">
-          <Badge className="mb-6 bg-violet-500/10 text-violet-500 border-violet-500/20 font-black uppercase tracking-widest px-4 py-1">
+          <Badge className="mb-6 bg-[#0c6673]/10 text-[#0c6673] border-[#0c6673]/20 font-black uppercase tracking-widest px-4 py-1">
             Interactive Systems
           </Badge>
-          <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-            Exergames
+          <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl leading-[1.1] py-2 text-[var(--site-ink)]">
+            Kael Gaming Platform
           </h1>
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-            Interactive Systems for Movement, Cognition and Skill
+            Interactive games for movement, cognition and skill
           </p>
         </div>
       </section>

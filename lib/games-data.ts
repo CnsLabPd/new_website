@@ -24,7 +24,7 @@ export interface Game {
     href: string;
     external?: boolean;
   } | null;
-  isPlatform?: boolean; // For cRGS which is a platform, not a game
+  isPlatform?: boolean; // A collection of games presented as one platform
 }
 
 export interface Category {
@@ -81,14 +81,14 @@ export const categories: Category[] = [
 ];
 
 export const games: Game[] = [
-  // cRGS Platform - Motor Execution
+  // Kael Gaming Platform - Motor Execution (legacy id retained for existing links)
   {
-    id: "crgs-platform",
-    name: "cRGS™ Gaming Platform",
-    tagline: "Personalized neuro-rehabilitation",
-    overview: "A clinically-validated rehabilitation platform that gamifies therapy and progress tracking. Using AI-driven feedback, cRGS™ provides targeted exercises that adapt to each patient's unique recovery curve, maximizing motor function improvement and cognitive engagement.",
-    tech: "cRGS™ : Completed clinical trials at Sree Chitra Tirunal Institute (SCTIMST) and NIMHANS",
-    images: ["/images/crgs_games.jpeg"],
+    id: "kaylo",
+    name: "Kael Gaming Platform",
+    tagline: "Movement through play",
+    overview: "Interactive movement games designed to make practice more engaging. Contact Neurogati to discuss suitability for a particular rehabilitation setting.",
+    tech: "Game-based movement activities",
+    images: ["/images/redesign/kaylo-card-illustrated.jpg"],
     features: [
       "Adaptive exercise programs that scale with patient progress",
       "Real-time postural and movement tracking via computer vision",
@@ -328,7 +328,7 @@ export function getCategoryById(categoryId: CategoryId): Category | undefined {
 }
 
 export function getGameById(gameId: string): Game | undefined {
-  return games.find(game => game.id === gameId);
+  return games.find(game => game.id === (gameId === "crgs-platform" ? "kaylo" : gameId));
 }
 
 export function getCategoryBySlug(slug: string): Category | undefined {

@@ -4,10 +4,9 @@ import NiraChatbot from "@/components/global/nira-chatbot"
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className="site-frame relative flex min-h-screen flex-col">
       <NavbarWrapper />
-      {/* Standard padding: 80px header */}
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-[76px]">
         {children}
       </main>
       <Footer />

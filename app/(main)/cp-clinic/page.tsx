@@ -54,11 +54,11 @@ const workflow = [
 
 export default function CpClinicPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <section className="relative overflow-hidden border-b border-border bg-muted/30 pb-24 pt-48">
+    <main className="editorial-page min-h-screen text-foreground">
+      <section className="relative overflow-hidden border-b border-[var(--site-line)] bg-[var(--site-soft)] pb-24 pt-20">
         <div
           className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-          style={{ backgroundImage: "radial-gradient(#1c82c2 1px, transparent 1px)", backgroundSize: "40px 40px" }}
+          style={{ backgroundImage: "radial-gradient(#0c6673 1px, transparent 1px)", backgroundSize: "40px 40px" }}
           aria-hidden="true"
         />
         <div className="container relative z-10 mx-auto px-6">
@@ -74,14 +74,14 @@ export default function CpClinicPage() {
               system for children and individuals with cerebral palsy and other movement-related conditions.
             </p>
             <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 px-8 font-black text-white hover:bg-blue-700">
+              <Button asChild size="lg" className="rounded-full bg-[#0c6673] px-8 font-semibold text-white hover:bg-[#084f5a]">
                 <Link href="/contact">
                   Enquire About CP Platform
                   <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full border-border px-8 font-black hover:bg-muted">
-                <Link href="/movement-and-games">Back to Movement & Games</Link>
+                <Link href="/neuroleela">Back to Neuroleela</Link>
               </Button>
             </div>
             <div className="mx-auto mt-14 max-w-6xl overflow-hidden rounded-[32px] border border-border bg-card shadow-2xl">
@@ -103,7 +103,7 @@ export default function CpClinicPage() {
       <section className="container mx-auto px-6 py-20 md:py-28">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>
-            <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#1c82c2]">What it does</p>
+            <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#0c6673]">What it does</p>
             <h2 className="text-3xl font-black leading-tight md:text-5xl">
               Accessible video-based gait analysis across clinic and home.
             </h2>
@@ -127,15 +127,15 @@ export default function CpClinicPage() {
       <section className="border-y border-border bg-muted/30 py-20 md:py-24">
         <div className="container mx-auto px-6">
           <div className="mb-12 max-w-3xl">
-            <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#1c82c2]">Movement signals</p>
+            <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#0c6673]">Movement signals</p>
             <h2 className="text-3xl font-black md:text-5xl">Parameters the platform is designed to support</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {measurementAreas.map((area) => (
               <Card key={area} className="rounded-2xl border-border bg-card">
                 <CardContent className="flex items-center gap-4 p-6">
-                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/10">
-                    <BarChart3 className="h-5 w-5 text-[#1c82c2]" aria-hidden="true" />
+                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#0c6673]/10">
+                    <BarChart3 className="h-5 w-5 text-[#0c6673]" aria-hidden="true" />
                   </div>
                   <p className="font-bold">{area}</p>
                 </CardContent>
@@ -147,15 +147,15 @@ export default function CpClinicPage() {
 
       <section className="container mx-auto px-6 py-20 md:py-28">
         <div className="mb-12 max-w-3xl">
-          <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#1c82c2]">Workflow</p>
+          <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#0c6673]">Workflow</p>
           <h2 className="text-3xl font-black md:text-5xl">From video capture to longitudinal insight</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {workflow.map(({ icon: Icon, title, description }) => (
             <Card key={title} className="rounded-3xl border-border bg-card">
               <CardHeader>
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1c82c2]/10">
-                  <Icon className="h-7 w-7 text-[#1c82c2]" aria-hidden="true" />
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0c6673]/10">
+                  <Icon className="h-7 w-7 text-[#0c6673]" aria-hidden="true" />
                 </div>
                 <CardTitle className="text-2xl font-black">{title}</CardTitle>
               </CardHeader>
@@ -171,7 +171,7 @@ export default function CpClinicPage() {
         <div className="container mx-auto grid gap-8 px-6 lg:grid-cols-2">
           <Card className="rounded-3xl border-border bg-card">
             <CardHeader>
-              <Hospital className="mb-5 h-10 w-10 text-[#1c82c2]" aria-hidden="true" />
+              <Hospital className="mb-5 h-10 w-10 text-[#0c6673]" aria-hidden="true" />
               <CardTitle className="text-3xl font-black">Clinical environment</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 leading-7 text-muted-foreground">
@@ -189,7 +189,7 @@ export default function CpClinicPage() {
 
           <Card className="rounded-3xl border-border bg-card">
             <CardHeader>
-              <Home className="mb-5 h-10 w-10 text-[#1c82c2]" aria-hidden="true" />
+              <Home className="mb-5 h-10 w-10 text-[#0c6673]" aria-hidden="true" />
               <CardTitle className="text-3xl font-black">Home environment</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 leading-7 text-muted-foreground">
@@ -232,7 +232,7 @@ export default function CpClinicPage() {
         <Card className="rounded-3xl border-border bg-card">
           <CardContent className="grid gap-8 p-8 md:grid-cols-[1fr_auto] md:items-center md:p-12">
             <div>
-              <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#1c82c2]">
+              <p className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#0c6673]">
                 <Users className="h-4 w-4" aria-hidden="true" />
                 Clinical, home, and research pathways
               </p>
@@ -242,7 +242,7 @@ export default function CpClinicPage() {
                 or structured home-monitoring workflows.
               </p>
             </div>
-            <Button asChild size="lg" className="rounded-full bg-blue-600 px-8 font-black text-white hover:bg-blue-700">
+            <Button asChild size="lg" className="rounded-full bg-[#0c6673] px-8 font-semibold text-white hover:bg-[#084f5a]">
               <Link href="/contact">
                 Contact Neurogati
                 <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />

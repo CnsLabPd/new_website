@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils"
 import { useEffect, useRef, useState } from "react"
 import { createNoise3D } from "simplex-noise"
-import { useTheme } from "@/components/theme-provider"
 
 export const WavyBackground = ({
   children,
@@ -29,25 +28,11 @@ export const WavyBackground = ({
   waveOpacity?: number
   [key: string]: any
 }) => {
-  const { theme } = useTheme()
   const noise = createNoise3D()
   let w: number, h: number, nt: number, i: number, x: number, ctx: any, canvas: any
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  // Determine background fill based on theme
-  const getBackgroundFill = () => {
-    if (backgroundFill) return backgroundFill
-
-    if (theme === "light") {
-      return "#fdf8f2"
-    } else if (theme === "dark") {
-      return "#0f172aff" // Dark slate
-    } else {
-      // System theme - check actual applied theme
-      const isDark = document.documentElement.classList.contains("dark")
-      return isDark ? "rgb(15, 23, 42)" : "white"
-    }
-  }
+  const getBackgroundFill = () => backgroundFill || "#fdf8f2"
 
   const getSpeed = () => {
     switch (speed) {
@@ -127,7 +112,7 @@ export const WavyBackground = ({
       }
       if (cleanup) cleanup()
     }
-  }, [theme])
+  }, [backgroundFill])
 
   const [isSafari, setIsSafari] = useState(false)
   useEffect(() => {

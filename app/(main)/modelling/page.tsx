@@ -34,7 +34,7 @@ const journalPublications = [
     authors: "BMJ Open",
     year: "2024",
     link: "https://pubmed.ncbi.nlm.nih.gov/39043599/",
-    description: "A multicenter trial evaluating the effectiveness of VR-cRGS for stroke survivors compared to conventional physiotherapy.",
+    description: "A multicenter trial evaluating virtual-reality rehabilitation for stroke survivors compared with conventional physiotherapy.",
   },
 ];
 
@@ -60,7 +60,7 @@ const books = [
 const ongoingStudies = [
   {
     title: "Rehabilitation for Post-Stroke Recovery",
-    description: "Using cRGS™ to improve motor outcomes in stroke survivors through remote, gamified therapy sessions.",
+    description: "Studying remote, game-based therapy sessions for post-stroke motor recovery.",
     status: "Ongoing",
     participants: "Target: 150 patients",
     duration: "18 months",
@@ -82,15 +82,15 @@ const ongoingStudies = [
 
 export default function ResearchPage() {
   return (
-    <div className="bg-background text-foreground min-h-screen pb-20">
+    <div className="editorial-page text-foreground min-h-screen pb-20">
       
       {/* 1. HERO SECTION - Clean Replacement for WavyBackground */}
-      <section className="relative pt-48 pb-20 overflow-hidden bg-muted/30 border-b border-border">
+      <section className="relative pt-20 pb-20 overflow-hidden bg-[var(--site-soft)] border-b border-[var(--site-line)]">
         {/* Subtle Radial Gradient to match Products page */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/5 via-transparent to-transparent z-0 pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#0c6673]/5 via-transparent to-transparent z-0 pointer-events-none" />
         
         <div className="container mx-auto px-6 relative z-10 text-center">
-          <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+          <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl leading-[1.1] py-2 text-[var(--site-ink)]">
             Research at Neurogati
           </h1>
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">

@@ -1,245 +1,70 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+
+import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
-import Image from "next/image"
+import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// ─── Nav structure ────────────────────────────────────────────────────────────
-type NavItem = { href: string; label: string; external?: boolean }
-type NavGroup = { label: string; items: NavItem[] }
-type NavEntry = NavItem | NavGroup
-
-const isGroup = (entry: NavEntry): entry is NavGroup => "items" in entry
-
-const navEntries: NavEntry[] = [
-  { href: "/movement-and-games", label: "Movement & Games" },
-  {
-    label: "Education",
-    items: [
-      { href: "/neurovidya", label: "Neurovidya" },
-      { href: "/neuroshiksha", label: "Neuroshiksha" },
-      { href: "/workshops", label: "Workshops" },
-      { href: "/advisory", label: "Advisory" },
-      { href: "/modelling", label: "Modelling" },
-    ],
-  },
-  { href: "https://neurokatha.wordpress.com/", label: "Blog", external: true },
-  {
-    label: "About",
-    items: [
-      { href: "/about", label: "About" },
-      { href: "/team", label: "Team" },
-      { href: "/gallery", label: "Gallery" },
-      { href: "/contact", label: "Contact" },
-    ],
-  },
+const navigation = [
+  { href: "/", label: "Home" },
+  { href: "/neurovidya", label: "Neurovidya" },
+  { href: "/neuroshiksha", label: "Neuroshiksha" },
+  { href: "/neuroleela", label: "Neuroleela" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ]
 
-// ─── Desktop hover dropdown ────────────────────────────────────────────────────
-function NavDropdown({ group, pathname }: { group: NavGroup; pathname: string }) {
-  const [open, setOpen] = useState(false)
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const groupActive = group.items.some((i) => i.href === pathname)
-
-  const openNow = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current)
-    setOpen(true)
-  }
-  const closeSoon = () => {
-    closeTimer.current = setTimeout(() => setOpen(false), 120)
-  }
-
-  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current) }, [])
-
-  return (
-    <div className="relative" onMouseEnter={openNow} onMouseLeave={closeSoon}>
-      <button
-        type="button"
-        aria-haspopup="true"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-        className={cn(
-          "flex items-center gap-1 text-sm lg:text-base font-bold transition-colors",
-          groupActive || open ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground/80 hover:text-[#1c82c2]"
-        )}
-      >
-        {group.label}
-        <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")} />
-      </button>
-
-      {open && (
-        // pt-3 acts as an invisible bridge so the menu doesn't close in the gap
-        <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-[110]">
-          <div className="min-w-[190px] rounded-xl border border-border bg-background/95 backdrop-blur-xl shadow-xl shadow-black/10 p-2">
-            {group.items.map((item) => {
-              const active = pathname === item.href
-              return item.external ? (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block rounded-lg px-4 py-2.5 text-sm font-semibold text-foreground/80 hover:bg-muted hover:text-[#1c82c2] transition-colors"
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "block rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
-                    active
-                      ? "bg-[#1c82c2]/10 text-[#1c82c2] dark:text-[#38bdf8]"
-                      : "text-foreground/80 hover:bg-muted hover:text-[#1c82c2]"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
 
   return (
-    <div className="w-full bg-transparent">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="flex items-center justify-between h-20">
-          
-          <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02]">
-            <div className="relative h-10 w-10 overflow-hidden rounded-lg">
-              <Image src="/bg_just_logo.png" alt="Logo" fill className="object-contain" priority />
-            </div>
-            <span className="text-2xl font-extrabold tracking-tight text-[#1c82c2] dark:text-[#38bdf8]">
-              Neurogati
-            </span>
-          </Link>
+    <header className="site-header">
+      <div className="site-shell flex h-[76px] items-center justify-between gap-8">
+        <Link href="/" className="site-wordmark" onClick={() => setMenuOpen(false)} aria-label="Neurogati home">
+          <Image src="/bg_just_logo.png" alt="" width={42} height={42} priority className="site-header-logo" />
+          <span className="site-wordmark-copy">
+            <span>Neurogati</span>
+            <small>Empowering Brains</small>
+          </span>
+        </Link>
 
-          {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navEntries.map((entry) =>
-              isGroup(entry) ? (
-                <NavDropdown key={entry.label} group={entry} pathname={pathname} />
-              ) : entry.external ? (
-                <a
-                  key={entry.href}
-                  href={entry.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm lg:text-base font-bold text-foreground/80 hover:text-[#1c82c2] transition-colors"
-                >
-                  {entry.label}
-                </a>
-              ) : (
-                <Link
-                  key={entry.href}
-                  href={entry.href}
-                  className={cn(
-                    "text-sm lg:text-base font-bold transition-colors",
-                    pathname === entry.href ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground/80 hover:text-[#1c82c2]"
-                  )}
-                >
-                  {entry.label}
-                </Link>
-              )
-            )}
-            
-            <div className="flex items-center gap-4 pl-4 border-l border-border/50">
-              <ThemeToggle />
-            </div>
-          </nav>
+        <nav aria-label="Main navigation" className="hidden items-center gap-6 lg:flex xl:gap-8">
+          {navigation.map((item) => {
+            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
+            return (
+              <Link key={item.href} href={item.href} className={cn("site-nav-link", active && "site-nav-link-active")}>
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
 
-          <div className="md:hidden flex items-center gap-4">
-            <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--site-line)] text-[var(--site-ink)]"
+            onClick={() => setMenuOpen((value) => !value)}
+            aria-expanded={menuOpen}
+            aria-controls="site-mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
 
-      {/* MOBILE NAV */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border animate-in slide-in-from-top-5 duration-300 max-h-[80vh] overflow-y-auto">
-          <nav className="flex flex-col gap-6 px-8 py-10">
-            {navEntries.map((entry) =>
-              isGroup(entry) ? (
-                <div key={entry.label} className="flex flex-col gap-3">
-                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
-                    {entry.label}
-                  </p>
-                  <div className="flex flex-col gap-3 pl-3 border-l-2 border-border">
-                    {entry.items.map((item) => {
-                      const isActive = pathname === item.href
-                      return item.external ? (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-lg font-bold text-foreground"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {item.label}
-                        </a>
-                      ) : (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={cn(
-                            "text-lg font-bold",
-                            isActive ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"
-                          )}
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      )
-                    })}
-                  </div>
-                </div>
-              ) : entry.external ? (
-                <a
-                  key={entry.href}
-                  href={entry.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xl font-bold text-foreground"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {entry.label}
-                </a>
-              ) : (
-                <Link
-                  key={entry.href}
-                  href={entry.href}
-                  className={cn(
-                    "text-xl font-bold",
-                    pathname === entry.href ? "text-[#1c82c2] dark:text-[#38bdf8]" : "text-foreground"
-                  )}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {entry.label}
-                </Link>
-              )
-            )}
-          </nav>
-        </div>
+      {menuOpen && (
+        <nav id="site-mobile-menu" aria-label="Mobile navigation" className="site-mobile-nav lg:hidden">
+          {navigation.map((item) => (
+            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
       )}
-    </div>
+    </header>
   )
 }

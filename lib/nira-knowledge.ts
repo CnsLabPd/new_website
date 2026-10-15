@@ -2,17 +2,16 @@ export const NIRA_KNOWLEDGE = `
 KNOWLEDGE LAST REVIEWED: 20 August 2026.
 
 ABOUT NEUROGATI
-Neurogati Private Limited is an integrated deep-technology company working across applied computational neuroscience. Its work connects measurement, computational modelling, digital intervention, and neurotechnology education. The public website describes key pillars including Movement & Games, education, computational modelling, advisory, and institutional collaboration.
+Neurogati Private Limited is an integrated deep-technology company working across applied computational neuroscience. Its work connects measurement, computational modelling, digital intervention, and neurotechnology education. The public website groups its work under Neurovidya, Neuroshiksha and Neuroleela.
 
-MOVEMENT AND GAMES
+NEUROLEELA — MOVEMENT, MONITORING AND REHABILITATION
 - Qumon-PD: Neurogati's clinical monitoring application for Parkinson's disease. It uses AI-assisted analysis of gait, speech, decision-making, and tremor to support quantitative assessment, progression monitoring, treatment-response evaluation, and research. It is a diagnostic-assistance and monitoring tool, not an independent diagnosis or replacement for a clinician. The website says clinical trials are ongoing at JIPMER Pondicherry.
-- Gaming Platform: Neurogati's game-based platform for movement, cognition, engagement, and rehabilitation-oriented activities. It includes games such as cRGS, Posabets, Frosty Flicks, Dunk-it, Mandala Painting, Sonic Drive, Sonic Pop, Dart Knight, and Shoot Froot. Direct visitors to /gamingcategories to browse the current gaming page.
+- Kael Gaming Platform: Neurogati's game-based platform for movement, cognition, engagement, and rehabilitation-oriented activities. The game library includes Posabets, Frosty Flicks, Dunk-it, Mandala Painting, Sonic Drive, Sonic Pop, Dart Knight, and Shoot Froot. Direct visitors to /gamingcategories to browse the current games.
 - CP Clinic Platform: an upcoming research-driven digital gait-analysis and longitudinal motor-monitoring system for children and individuals with cerebral palsy and other movement-related conditions. It is designed for both clinical and home environments using compatible camera or smartphone videos from frontal and sagittal views. The platform applies computer-vision-based human pose estimation and computational gait analysis to extract clinically meaningful movement information including body alignment, trunk movement, pelvic motion, lower-limb kinematics, step characteristics, symmetry, variability, and gait-related trends. It is intended for repeatable assessments, visit-to-visit comparisons, home recording submissions, dashboards, structured reports, rehabilitation progress tracking, and clinician-supported review. It is a human-in-the-loop clinical and research decision-support system, not an autonomous diagnostic system or replacement for qualified healthcare professionals.
-- Movement Platform: an upcoming movement-analysis platform for assessment, progress tracking, and data-driven rehabilitation support.
 - Assistive technology work described on the website includes SparshBharati, a unified tactile system for Indian languages; MudhraBharati, computer-vision-assisted sign-to-text and speech; and NodText, a head and eye movement interface for people with limited limb mobility.
 
 GAMES AND REHABILITATION
-Neurogati develops movement, cognitive, accessibility, and rehabilitation games. The website groups games by motor execution and coordination, postural control, perception-action integration, spatial cognition, cognitive control, and social synchronization. Listed experiences include cRGS, Posabets, Frosty Flicks, Dunk-it, Mandala Painting, Sonic Drive, Sonic Pop, Dart Knight, and Shoot Froot. Some games can be played from the website. Availability and suitability can vary, and clinical use should be discussed with a qualified professional.
+Neurogati develops movement, cognitive, accessibility, and rehabilitation games. The website groups games by motor execution and coordination, postural control, perception-action integration, spatial cognition, cognitive control, and social synchronization. Listed experiences include Kael Gaming Platform, Posabets, Frosty Flicks, Dunk-it, Mandala Painting, Sonic Drive, Sonic Pop, Dart Knight, and Shoot Froot. Some games can be played from the website. Availability and suitability can vary, and clinical use should be discussed with a qualified professional.
 
 MODELLING AND RESEARCH
 Neurogati works on computational models of brain function and neurological conditions. Website topics include cortico-basal-ganglia models, Parkinson's disease, reinforcement learning models of cognition, computational models of deep brain stimulation, stroke rehabilitation, and quantitative gait assessment. Published educational material includes Computational Neuroscience Models of the Basal Ganglia and Demystifying the Brain.
@@ -47,11 +46,10 @@ IMPORTANT LIMITS
 
 export const NIRA_ALLOWED_LINKS = new Map([
   ["/about", "About Neurogati"],
-  ["/movement-and-games", "Movement & Games"],
+  ["/neuroleela", "Neuroleela"],
   ["/neurodiagnostics", "Diagnostics and monitoring"],
-  ["/games", "Gaming Platform"],
+  ["/games", "Kael Gaming Platform"],
   ["/cp-clinic", "CP Clinic"],
-  ["/movement-platform", "Movement Platform"],
   ["/neuroshiksha", "Neuroshiksha"],
   ["/gamingcategories", "Games"],
   ["/modelling", "Modelling and research"],

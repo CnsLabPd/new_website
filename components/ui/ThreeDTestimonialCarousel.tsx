@@ -78,13 +78,6 @@ const testimonials: TestimonialData[] = [
         companyName: "SRMC Hospital",
     },
     {
-        quote: "With Neurogati's cRGS platform, stroke rehabilitation is engaging and fun. Our patients show better adherence and improved motor outcomes.",
-        name: "Dr. Rithvik",
-        role: "Neurologist, SRMC",
-        companyLogoPath: "/images/srmc-logo.png",
-        companyName: "SRMC Hospital",
-    },
-    {
         quote: "The AI-driven insights from Neurogati have transformed how we approach disease management. It's a much needed game-changer for our protocol at Apollo.",
         name: "Dr. Vijayashankar Paramanandam",
         role: "Neurologist, Apollo Hospitals",

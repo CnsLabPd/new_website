@@ -1,13 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar, MapPin, Users, ArrowRight, Wallet, Hourglass, Quote } from "lucide-react"
-import { DynamicMagneticButton } from "@/utils/DynamicMagneticButton"
 import { useState, useEffect } from "react";
 
-const GRADIENT_BUTTON_CLASS = "bg-gradient-to-br from-blue-600 via-blue-400 to-blue-600 px-10 font-semibold text-white py-2 rounded-full inline-flex items-center justify-center gap-2 whitespace-nowrap text-base"
+const GRADIENT_BUTTON_CLASS = "editorial-button inline-flex w-full justify-center whitespace-nowrap"
 
 const workshops = [
   {
@@ -387,29 +385,30 @@ export default function WorkshopsPage() {
   }
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="editorial-page workshops-redesign min-h-screen">
 
       {/* 1. HERO SECTION */}
-      <section className="relative pt-48 pb-24 overflow-hidden bg-muted/30 border-b border-border">
-        <div className="container mx-auto px-6 relative z-10 text-center">
-          <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-            Professional Workshops
+      <section className="editorial-soft-section">
+        <div className="site-shell py-20 text-center md:py-28">
+          <p className="editorial-eyebrow">Neurovidya · Live learning</p>
+          <h1 className="mx-auto mt-3 max-w-4xl text-5xl leading-[1.05] md:text-7xl">
+            Courses &amp; Workshops
           </h1>
-          <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[var(--site-muted)] md:text-xl">
             Expand your expertise in computational neuroscience and AI diagnostics through our mentorship-driven training programs.
           </p>
         </div>
       </section>
 
       {/* STICKY NAVIGATION */}
-      <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center gap-2 py-4">
+      <nav className="sticky top-[76px] z-40 border-b border-[var(--site-line)] bg-[var(--site-paper)]/95 backdrop-blur-sm">
+        <div className="site-shell">
+          <div className="flex items-center justify-start gap-2 overflow-x-auto py-3 md:justify-center">
             <button
               onClick={() => scrollToSection("ongoing")}
-              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
+              className={`whitespace-nowrap rounded-md px-5 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
                 activeSection === "ongoing"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#0c6673] text-white"
                   : "bg-muted text-muted-foreground hover:bg-muted/70"
               }`}
             >
@@ -417,9 +416,9 @@ export default function WorkshopsPage() {
             </button>
             <button
               onClick={() => scrollToSection("upcoming")}
-              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
+              className={`whitespace-nowrap rounded-md px-5 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
                 activeSection === "upcoming"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#0c6673] text-white"
                   : "bg-muted text-muted-foreground hover:bg-muted/70"
               }`}
             >
@@ -427,9 +426,9 @@ export default function WorkshopsPage() {
             </button>
             <button
               onClick={() => scrollToSection("past")}
-              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
+              className={`whitespace-nowrap rounded-md px-5 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
                 activeSection === "past"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#0c6673] text-white"
                   : "bg-muted text-muted-foreground hover:bg-muted/70"
               }`}
             >
@@ -437,9 +436,9 @@ export default function WorkshopsPage() {
             </button>
             <button
               onClick={() => scrollToSection("testimonials")}
-              className={`px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${
+              className={`whitespace-nowrap rounded-md px-5 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
                 activeSection === "testimonials"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#0c6673] text-white"
                   : "bg-muted text-muted-foreground hover:bg-muted/70"
               }`}
             >
@@ -449,13 +448,13 @@ export default function WorkshopsPage() {
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="site-shell py-16 md:py-20">
 
         {/* 1. ONGOING WORKSHOPS */}
         <div id="ongoing" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Ongoing Workshops</h2>
-            <div className="h-1.5 w-20 bg-green-600 mt-4"></div>
+            <div className="mt-4 h-1 w-20 bg-[#0c6673]"></div>
           </div>
 
           {ongoingWorkshops.length > 0 ? (
@@ -465,11 +464,11 @@ export default function WorkshopsPage() {
               ))}
             </div>
           ) : (
-            <Card className="relative flex flex-col overflow-hidden border-2 border-green-500/30 bg-green-500/[0.02]">
+            <Card className="relative flex flex-col overflow-hidden border border-[var(--site-line)] bg-white">
               <CardContent className="py-16 text-center">
                 <div className="max-w-2xl mx-auto">
                   <div className="mb-6">
-                    <Hourglass className="h-16 w-16 mx-auto text-green-500/50" />
+                    <Hourglass className="h-16 w-16 mx-auto text-[#0c6673]" />
                   </div>
                   <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-4">
                     No Ongoing Workshops
@@ -487,7 +486,7 @@ export default function WorkshopsPage() {
         <div id="upcoming" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Upcoming Workshops</h2>
-            <div className="h-1.5 w-20 bg-blue-600 mt-4"></div>
+            <div className="mt-4 h-1 w-20 bg-[#0c6673]"></div>
           </div>
 
           {upcomingWorkshops.length > 0 ? (
@@ -497,24 +496,18 @@ export default function WorkshopsPage() {
               ))}
             </div>
           ) : (
-            <Card className="relative flex flex-col overflow-hidden border-2 border-blue-500/30 bg-blue-500/[0.02]">
+            <Card className="relative flex flex-col overflow-hidden border border-[var(--site-line)] bg-white">
               <CardContent className="py-16 text-center">
                 <div className="max-w-2xl mx-auto">
                   <div className="mb-6">
-                    <Calendar className="h-16 w-16 mx-auto text-blue-500/50" />
+                    <Calendar className="h-16 w-16 mx-auto text-[#0c6673]" />
                   </div>
                   <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-4">
                     New Workshops Coming Soon
                   </h3>
-                  <DynamicMagneticButton>
-                    <Link
-                      href="/contact"
-                      className={GRADIENT_BUTTON_CLASS}
-                    >
-                      Get Notified
-                      <ArrowRight className="h-5 w-5" />
-                    </Link>
-                  </DynamicMagneticButton>
+                  <Link href="/contact" className={GRADIENT_BUTTON_CLASS}>
+                    Get Notified <ArrowRight className="h-5 w-5" />
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -538,7 +531,7 @@ export default function WorkshopsPage() {
         <div id="testimonials" className="mb-24 scroll-mt-24">
           <div className="mb-10">
             <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Testimonials</h2>
-            <div className="h-1.5 w-20 bg-blue-600 mt-4"></div>
+            <div className="mt-4 h-1 w-20 bg-[#0c6673]"></div>
           </div>
 
           <div className="overflow-x-auto pb-4 -mx-4 px-4">
@@ -553,7 +546,7 @@ export default function WorkshopsPage() {
           <div id="medicos-testimonials" className="mt-16 scroll-mt-24">
             <div className="mb-10">
               <h3 className="text-2xl md:text-4xl font-black tracking-tighter">Brain Modeling for Medicos Testimonials</h3>
-              <div className="h-1 w-16 bg-violet-600 mt-4"></div>
+              <div className="mt-4 h-1 w-16 bg-[#0c6673]"></div>
             </div>
 
             <div className="overflow-x-auto pb-4 -mx-4 px-4">
@@ -572,8 +565,8 @@ export default function WorkshopsPage() {
 
 function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
   return (
-    <Card className={`relative flex flex-col overflow-hidden border-2 transition-all hover:shadow-xl ${
-      isUpcoming ? 'border-blue-500/50 bg-blue-500/[0.02]' : 'border-border bg-card'
+    <Card className={`relative flex flex-col overflow-hidden rounded-2xl border transition-all hover:shadow-xl ${
+      isUpcoming ? 'border-[#9dbab4] bg-white' : 'border-[var(--site-line)] bg-white'
     }`}>
       {ws.image && (
         <div className="relative h-80 w-full overflow-hidden bg-muted">
@@ -587,7 +580,7 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start mb-4">
           <span className={`px-3 py-1 rounded-md text-xs font-black uppercase tracking-widest ${
-            isUpcoming ? 'bg-blue-500 text-white' : 'bg-muted text-muted-foreground'
+            isUpcoming ? 'bg-[#0c6673] text-white' : 'bg-muted text-muted-foreground'
           }`}>
             {ws.status}
           </span>
@@ -603,10 +596,10 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
       <CardContent className="space-y-6 flex-grow flex flex-col">
         {/* Metadata Grid - Scaled to ~13.5px */}
         <div className="grid grid-cols-1 gap-y-3 text-[13.5px] font-bold text-muted-foreground uppercase tracking-tight">
-          <div className="flex items-center gap-2"><MapPin className="h-5 w-5 text-blue-500" /> {ws.type}</div>
-          <div className="flex items-center gap-2"><Users className="h-5 w-5 text-blue-500" /> {ws.participants}</div>
-          {ws.duration && <div className="flex items-center gap-2"><Hourglass className="h-5 w-5 text-blue-500" /> {ws.duration}</div>}
-          {ws.pricing && <div className="flex items-center gap-2"><Wallet className="h-5 w-5 text-blue-500" /> {ws.pricing}</div>}
+          <div className="flex items-center gap-2"><MapPin className="h-5 w-5 text-[#0c6673]" /> {ws.type}</div>
+          <div className="flex items-center gap-2"><Users className="h-5 w-5 text-[#0c6673]" /> {ws.participants}</div>
+          {ws.duration && <div className="flex items-center gap-2"><Hourglass className="h-5 w-5 text-[#0c6673]" /> {ws.duration}</div>}
+          {ws.pricing && <div className="flex items-center gap-2"><Wallet className="h-5 w-5 text-[#0c6673]" /> {ws.pricing}</div>}
         </div>
 
         {/* Description - Scaled to ~17px (text-base + nudge) */}
@@ -618,7 +611,7 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
 
         {/* Pricing / discount note */}
         {ws.note && (
-          <div className="rounded-lg border border-blue-500/30 bg-blue-500/[0.06] p-4">
+          <div className="rounded-lg border border-[#9dbab4] bg-[#f2f7f3] p-4">
             <p className="text-[15px] text-foreground/85 leading-relaxed font-medium">
               {ws.note}
             </p>
@@ -627,17 +620,15 @@ function WorkshopCard({ ws, isUpcoming }: { ws: any, isUpcoming: boolean }) {
 
         <div className="pt-6 mt-auto">
           {ws.registrationLink ? (
-            <DynamicMagneticButton>
-              <Link
-                href={ws.registrationLink}
-                className={isUpcoming ? GRADIENT_BUTTON_CLASS : "w-full px-8 py-2 border-2 border-border font-bold rounded-full inline-flex items-center justify-center gap-2 text-base"}
-              >
-                {ws.ctaLabel || (isUpcoming ? 'Learn More' : 'View Archive')}
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </DynamicMagneticButton>
+            <Link
+              href={ws.registrationLink}
+              className={isUpcoming ? GRADIENT_BUTTON_CLASS : "inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#0c6673] px-8 py-3 text-base font-semibold text-[#0c6673] transition-colors hover:bg-[#edf5f1]"}
+            >
+              {ws.ctaLabel || (isUpcoming ? 'Learn More' : 'View Archive')}
+              <ArrowRight className="h-5 w-5" />
+            </Link>
           ) : (
-            <div className="inline-flex w-full items-center justify-center rounded-full border-2 border-blue-500/30 bg-blue-500/[0.06] px-8 py-2 text-base font-bold text-[#1c82c2]">
+            <div className="inline-flex w-full items-center justify-center rounded-full border border-[#9dbab4] bg-[#f2f7f3] px-8 py-2 text-base font-bold text-[#0c6673]">
               {ws.ctaLabel || "Coming Soon"}
             </div>
           )}
@@ -651,7 +642,7 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
   const initials = testimonial.name.split(' ').map((n: string) => n[0]).join('')
 
   return (
-    <Card className="relative flex flex-col overflow-hidden border-2 border-border bg-card hover:shadow-xl transition-all w-[400px] flex-shrink-0">
+    <Card className="relative flex flex-col overflow-hidden rounded-2xl border border-[var(--site-line)] bg-white hover:shadow-xl transition-all w-[400px] flex-shrink-0">
       {/* Workshop Image */}
       {testimonial.workshopImage && (
         <div className="w-full h-32 overflow-hidden bg-muted">
@@ -671,10 +662,10 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
               <img
                 src={testimonial.image}
                 alt={testimonial.name}
-                className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
+                className="w-12 h-12 rounded-full object-cover border-2 border-[#0c6673]"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center border-2 border-blue-500">
+              <div className="w-12 h-12 rounded-full bg-[#0c6673] flex items-center justify-center border-2 border-[#0c6673]">
                 <span className="text-white font-black text-lg">{initials}</span>
               </div>
             )}
@@ -689,7 +680,7 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
             <p className="text-xs text-muted-foreground">{testimonial.organization}</p>
           </div>
 
-          <Quote className="h-6 w-6 text-blue-500/20 flex-shrink-0" />
+          <Quote className="h-6 w-6 text-[#0c6673]/30 flex-shrink-0" />
         </div>
 
         {/* Testimonial Text */}
@@ -709,7 +700,7 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
               href={testimonial.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-600 transition-colors text-xs font-bold uppercase tracking-wider"
+              className="text-[#0c6673] hover:text-[#084f5a] transition-colors text-xs font-bold uppercase tracking-wider"
             >
               View on LinkedIn →
             </a>

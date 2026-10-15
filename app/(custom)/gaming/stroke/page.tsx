@@ -8,11 +8,11 @@ import Image from "next/image"
 // --- PRODUCT DATA ---
 const rehabProducts = [
   {
-    name: "cRGS™ Gaming Platform",
+    name: "Kael Gaming Platform",
     tagline: "Personalized neuro-rehabilitation",
-    overview: "A clinically-validated rehabilitation platform that gamifies therapy and progress tracking. Using AI-driven feedback, cRGS™ provides targeted exercises that adapt to each patient's unique recovery curve, maximizing motor function improvement and cognitive engagement.",
-    tech: "cRGS™ : Completed clinical trials at Sree Chitra Tirunal Institute (SCTIMST) and NIMHANS",
-    images: ["/images/crgs_games.jpeg"],
+    overview: "Movement-focused games bring engagement to rehabilitation-oriented practice. Contact Neurogati to discuss how Kael Gaming Platform may fit a clinically supervised programme.",
+    tech: "Interactive movement activities",
+    images: ["/images/redesign/kaylo-card-illustrated.jpg"],
     features: [
       "Adaptive exercise programs that scale with patient progress",
       "Real-time postural and movement tracking via computer vision",
@@ -100,7 +100,7 @@ export default function StrokeRehabPage() {
                   </h4>
                   <p className="text-[17px] font-black text-foreground mb-2">{product.tech}</p>
                   <p className="text-muted-foreground text-sm leading-relaxed font-medium">
-                    Validated in partnership with leading neurological institutions for clinical efficacy.
+                    Ask our team about the current evidence and suitability for your setting.
                   </p>
                 </div>
               </div>
