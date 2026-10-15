@@ -74,12 +74,6 @@ export default function CpClinicPage() {
               system for children and individuals with cerebral palsy and other movement-related conditions.
             </p>
             <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" className="rounded-full bg-[#0c6673] px-8 font-semibold text-white hover:bg-[#084f5a]">
-                <Link href="/contact">
-                  Enquire About CP Platform
-                  <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
-                </Link>
-              </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full border-border px-8 font-black hover:bg-muted">
                 <Link href="/neuroleela">Back to Neuroleela</Link>
               </Button>
