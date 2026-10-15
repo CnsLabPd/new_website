@@ -8,9 +8,9 @@ import Image from "next/image"
 // --- PRODUCT DATA ---
 const rehabProducts = [
   {
-    name: "Kael Gaming Platform",
+    name: "Kaylo Gaming Platform",
     tagline: "Personalized neuro-rehabilitation",
-    overview: "Movement-focused games bring engagement to rehabilitation-oriented practice. Contact Neurogati to discuss how Kael Gaming Platform may fit a clinically supervised programme.",
+    overview: "Movement-focused games bring engagement to rehabilitation-oriented practice. Contact Neurogati to discuss how Kaylo Gaming Platform may fit a clinically supervised programme.",
     tech: "Interactive movement activities",
     images: ["/images/redesign/kaylo-card-illustrated.jpg"],
     features: [

@@ -5,7 +5,7 @@ import { ArrowRight, Activity, Gamepad2, HeartPulse } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Neuroleela | Movement, Monitoring & Rehabilitation | Neurogati",
-  description: "Explore Qumon-PD, Kael Gaming Platform and the CP Clinic platform from Neurogati.",
+  description: "Explore Qumon-PD, Kaylo Gaming Platform and the CP Clinic platform from Neurogati.",
 }
 
 const platforms = [
@@ -19,7 +19,7 @@ const platforms = [
     status: "Explore platform",
   },
   {
-    title: "Kael Gaming Platform",
+    title: "Kaylo Gaming Platform",
     category: "Movement through play",
     description: "Interactive games for movement, engagement and rehabilitation-oriented activities.",
     image: "/images/redesign/kaylo-card-illustrated.jpg",

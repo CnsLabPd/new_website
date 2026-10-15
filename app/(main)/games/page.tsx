@@ -7,8 +7,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import Image from "next/image";
 
 const gameVertical = {
-  name: "Kael Gaming Platform",
-  title: "Kael Gaming Platform",
+  name: "Kaylo Gaming Platform",
+  title: "Kaylo Gaming Platform",
   href: "/gamingcategories", 
   description: "AI-driven gaming solutions for rehabilitation, monitoring, and tracking. We turn clinical protocols into engaging, interactive experiences.",
   image: "/images/redesign/kaylo-card-illustrated.jpg",
@@ -26,7 +26,7 @@ export default function GamesPage() {
         
         <div className="container mx-auto px-6 relative z-10 text-center">
           <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 bg-gradient-to-r from-blue-400 via-indigo-500 to-violet-500 bg-clip-text text-transparent">
-            Kael Gaming Platform
+            Kaylo Gaming Platform
           </h1>
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
             Movement, cognition, and rehabilitation-oriented games built from Neurogati's neuroscience and clinical technology work.
@@ -71,7 +71,7 @@ export default function GamesPage() {
 
         {/* CTA SECTION */}
         <div className="text-center bg-card border border-border rounded-3xl p-12 shadow-sm max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black text-foreground mb-6">Explore Kael Gaming Platform</h2>
+          <h2 className="text-3xl font-black text-foreground mb-6">Explore Kaylo Gaming Platform</h2>
           <p className="max-w-2xl mx-auto text-[17px] text-muted-foreground mb-10 leading-relaxed font-medium">
             Discover the game library and talk to our team about appropriate use in your setting.
           </p>

@@ -186,7 +186,7 @@ export default function GamingCategoriesNewPage() {
             Interactive Systems
           </Badge>
           <h1 className="mb-8 text-4xl md:text-7xl lg:text-7xl leading-[1.1] py-2 text-[var(--site-ink)]">
-            Kael Gaming Platform
+            Kaylo Gaming Platform
           </h1>
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
             Interactive games for movement, cognition and skill

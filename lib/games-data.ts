@@ -81,10 +81,10 @@ export const categories: Category[] = [
 ];
 
 export const games: Game[] = [
-  // Kael Gaming Platform - Motor Execution (legacy id retained for existing links)
+  // Kaylo Gaming Platform - Motor Execution
   {
     id: "kaylo",
-    name: "Kael Gaming Platform",
+    name: "Kaylo Gaming Platform",
     tagline: "Movement through play",
     overview: "Interactive movement games designed to make practice more engaging. Contact Neurogati to discuss suitability for a particular rehabilitation setting.",
     tech: "Game-based movement activities",

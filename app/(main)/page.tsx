@@ -22,7 +22,7 @@ const pillars = [
   {
     name: "Neuroleela",
     subtitle: "Movement, Monitoring & Rehabilitation",
-    detail: "Kael Gaming Platform · CP Clinic · Qumon-PD",
+    detail: "Kaylo Gaming Platform · CP Clinic · Qumon-PD",
     href: "/neuroleela",
     image: "/images/redesign/neuroleela.jpg",
     alt: "A rehabilitation professional supporting movement practice",
