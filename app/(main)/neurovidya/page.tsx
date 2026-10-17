@@ -1,25 +1,40 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, BookOpen, FlaskConical, Users } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 const NEUROVIDYA_URL = "https://neurovidya.neurogati.com/"
 
 export const metadata: Metadata = {
-  title: "Neurovidya | Education & Research Training | Neurogati",
-  description: "Explore Neurovidya's neuroscience courses, workshops and research training.",
+  title: "Neurovidya | Courses, Workshops & Books | Neurogati",
+  description: "Explore Neurovidya courses, live workshops and neuroscience books for learners and professionals.",
 }
 
-const approaches = [
-  { icon: BookOpen, title: "Learn the foundations", text: "Build a grounded understanding of brain science, neural dynamics, Python and AI through structured courses." },
-  { icon: FlaskConical, title: "Put ideas into practice", text: "Move from concepts to scientific computing, brain-signal analysis and computational modelling." },
-  { icon: Users, title: "Grow through research", text: "Explore workshops and research programmes that connect learners with applied questions and methods." },
-]
-
-const subjects = [
-  { title: "AI for EEG", text: "An introduction to EEG, brain-signal processing and AI-driven analysis.", image: "/neurovidya-ai-eeg.png" },
-  { title: "Neural Oscillators", text: "Neural dynamics and models from cells to populations.", image: "/neurovidya-neural-oscillators.png" },
-  { title: "Python for Neuroscience", text: "Scientific-computing fundamentals through neuroscience applications.", image: "/neurovidya-python.jpg" },
+const learningOptions = [
+  {
+    title: "Courses",
+    eyebrow: "Learn at your pace",
+    description: "Choose self-paced learning, instructor-led courses or certificate programmes across neuroscience, AI, Python and movement analysis.",
+    image: "/images/redesign/programme-neurovidya.jpg",
+    href: "/neurovidya/courses",
+    link: "Explore course categories",
+  },
+  {
+    title: "Workshops",
+    eyebrow: "Learn together",
+    description: "Join focused, practical learning experiences that bring neuroscience concepts, methods and data to life. Current schedules and enrolment are on the Neurovidya platform.",
+    image: "/images/redesign/neurovidya.jpg",
+    href: NEUROVIDYA_URL,
+    link: "Browse workshops",
+  },
+  {
+    title: "Books",
+    eyebrow: "Go deeper",
+    description: "Explore books and learning resources that make brain science and computational neuroscience accessible to curious learners and practitioners.",
+    image: "/images/redesign/neuron.jpg",
+    href: "/neurovidya/books",
+    link: "Explore books",
+  },
 ]
 
 export default function NeurovidyaPage() {
@@ -27,13 +42,12 @@ export default function NeurovidyaPage() {
     <div className="editorial-page">
       <section className="site-shell editorial-hero">
         <div>
-          <p className="editorial-eyebrow">Education & Research Training</p>
+          <p className="editorial-eyebrow">Education & research training</p>
           <h1>Neurovidya</h1>
           <p className="editorial-lead">Explore the brain. Learn the methods. Build the confidence to investigate.</p>
-          <p className="editorial-copy">Neurovidya brings structured neuroscience education, practical workshops and research-oriented learning together for students and professionals.</p>
+          <p className="editorial-copy">A learning space for neuroscience courses, practical workshops and books—bringing scientific ideas closer to students, researchers and professionals.</p>
           <div className="editorial-actions">
-            <a href={NEUROVIDYA_URL} target="_blank" rel="noopener noreferrer" className="editorial-button">Open Neurovidya <ArrowUpRight size={18} aria-hidden="true" /></a>
-            <Link href="/workshops" className="editorial-outline-button">Explore workshops <ArrowRight size={18} aria-hidden="true" /></Link>
+            <a href={NEUROVIDYA_URL} target="_blank" rel="noopener noreferrer" className="editorial-button">Visit Neurovidya <ArrowUpRight size={18} aria-hidden="true" /></a>
           </div>
         </div>
         <div className="editorial-hero-visual">
@@ -44,43 +58,27 @@ export default function NeurovidyaPage() {
       <section className="editorial-soft-section">
         <div className="site-shell editorial-section">
           <div className="editorial-section-intro">
-            <p className="editorial-eyebrow">A connected learning path</p>
-            <h2>From first questions to scientific practice</h2>
-            <p>Our learning experiences make complex ideas approachable without losing their scientific depth.</p>
+            <p className="editorial-eyebrow">Learn with Neurovidya</p>
+            <h2>Three ways to explore brain science</h2>
+            <p>Find a format that fits what you want to learn, how you want to learn it, and where you are starting from.</p>
           </div>
           <div className="editorial-three-grid">
-            {approaches.map(({ icon: Icon, title, text }, index) => (
-              <article className="editorial-feature" key={title}>
-                <span className="editorial-feature-number">0{index + 1}</span>
-                <Icon size={26} strokeWidth={1.5} aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{text}</p>
+            {learningOptions.map(({ title, eyebrow, description, image, href, link }) => (
+              <article className="editorial-image-card neurovidya-option" key={title}>
+                <Link href={href} className="editorial-image-card-art neurovidya-option-art" aria-label={link}>
+                  <Image src={image} alt="" fill sizes="(max-width: 700px) 100vw, 33vw" className="object-cover" />
+                </Link>
+                <div className="editorial-image-card-body">
+                  <p className="editorial-eyebrow">{eyebrow}</p>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                  <Link href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="editorial-link mt-5">
+                    {link} {href.startsWith("http") ? <ArrowUpRight size={17} aria-hidden="true" /> : <ArrowRight size={17} aria-hidden="true" />}
+                  </Link>
+                </div>
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="site-shell editorial-section">
-        <div className="editorial-section-intro">
-          <p className="editorial-eyebrow">What you can explore</p>
-          <h2>Learn through courses, workshops and projects</h2>
-          <p>Subjects span brain signals and AI, neural dynamics, programming and movement analysis. Availability may change; check Neurovidya for current course details.</p>
-        </div>
-        <div className="editorial-three-grid">
-          {subjects.map((subject) => (
-            <article className="editorial-image-card" key={subject.title}>
-              <div className="editorial-image-card-art"><Image src={subject.image} alt="" fill sizes="(max-width: 700px) 100vw, 33vw" className="object-cover" /></div>
-              <div className="editorial-image-card-body">
-                <h3>{subject.title}</h3>
-                <p>{subject.text}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="editorial-inline-links">
-          <Link href="/workshops" className="editorial-link">Browse live programmes <ArrowRight size={17} aria-hidden="true" /></Link>
-          <a href={NEUROVIDYA_URL} target="_blank" rel="noopener noreferrer" className="editorial-link">Browse self-paced learning <ArrowUpRight size={17} aria-hidden="true" /></a>
         </div>
       </section>
 
@@ -89,9 +87,9 @@ export default function NeurovidyaPage() {
           <div>
             <p className="editorial-eyebrow">Start learning</p>
             <h2>Where will your curiosity take you?</h2>
-            <p>Explore current courses and pathways on the Neurovidya platform.</p>
+            <p>See current course offerings, schedules and enrolment details on the Neurovidya platform.</p>
           </div>
-          <a href={NEUROVIDYA_URL} target="_blank" rel="noopener noreferrer" className="editorial-button">Visit Neurovidya <ArrowUpRight size={18} aria-hidden="true" /></a>
+          <a href={NEUROVIDYA_URL} target="_blank" rel="noopener noreferrer" className="editorial-button">Open Neurovidya <ArrowUpRight size={18} aria-hidden="true" /></a>
         </div>
       </section>
     </div>

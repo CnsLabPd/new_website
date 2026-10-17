@@ -81,31 +81,6 @@ export const categories: Category[] = [
 ];
 
 export const games: Game[] = [
-  // Kaylo Gaming Platform - Motor Execution
-  {
-    id: "kaylo",
-    name: "Kaylo Gaming Platform",
-    tagline: "Movement through play",
-    overview: "Interactive movement games designed to make practice more engaging. Contact Neurogati to discuss suitability for a particular rehabilitation setting.",
-    tech: "Game-based movement activities",
-    images: ["/images/redesign/kaylo-card-illustrated.jpg"],
-    features: [
-      "Adaptive exercise programs that scale with patient progress",
-      "Real-time postural and movement tracking via computer vision",
-      "Remote monitoring portal for clinicians and therapists",
-      "Gamified modules designed for high patient compliance"
-    ],
-    applications: [
-      "Post-stroke upper extremity motor recovery",
-      "Cognitive rehabilitation and neuroplasticity training",
-      "Balance, coordination, and proprioception therapy",
-      "In-clinic and remote home-rehabilitation programs"
-    ],
-    categories: ["motor-execution"],
-    action: null, // No play button, will show contact us
-    isPlatform: true
-  },
-
   // Posabets - Postural Control & ADHD
   {
     id: "posabets",

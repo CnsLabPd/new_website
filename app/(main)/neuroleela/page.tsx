@@ -5,7 +5,7 @@ import { ArrowRight, Activity, Gamepad2, HeartPulse } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Neuroleela | Movement, Monitoring & Rehabilitation | Neurogati",
-  description: "Explore Qumon-PD, Kaylo Gaming Platform and the CP Clinic platform from Neurogati.",
+  description: "Explore Neurogati’s movement monitoring, gait analysis and movement-through-play platforms.",
 }
 
 const platforms = [
@@ -19,15 +19,6 @@ const platforms = [
     status: "Explore platform",
   },
   {
-    title: "Kaylo Gaming Platform",
-    category: "Movement through play",
-    description: "Interactive games for movement, engagement and rehabilitation-oriented activities.",
-    image: "/images/redesign/kaylo-card-illustrated.jpg",
-    href: "/gamingcategories",
-    icon: Gamepad2,
-    status: "Explore games",
-  },
-  {
     title: "CP Clinic",
     category: "Gait analysis",
     description: "Video-based gait analysis and longitudinal motor monitoring for clinical and home settings.",
@@ -35,6 +26,15 @@ const platforms = [
     href: "/cp-clinic",
     icon: HeartPulse,
     status: "Coming soon",
+  },
+  {
+    title: "Kaylo Gaming Platform",
+    category: "Movement through play",
+    description: "Interactive movement games designed to make practice more engaging.",
+    image: "/images/redesign/kaylo-card-illustrated.jpg",
+    href: "/gamingcategories",
+    icon: Gamepad2,
+    status: "Explore games",
   },
 ]
 
@@ -46,10 +46,9 @@ export default function NeuroleelaPage() {
           <p className="editorial-eyebrow">Movement, Monitoring & Rehabilitation</p>
           <h1>Neuroleela</h1>
           <p className="editorial-lead">Exploring movement through science, play and careful observation.</p>
-          <p className="editorial-copy">Neuroleela brings together Neurogati’s movement-focused platforms: quantitative monitoring, interactive games, gait analysis and rehabilitation-support tools.</p>
+          <p className="editorial-copy">Neuroleela brings together Neurogati’s movement-focused work: quantitative monitoring, gait analysis and movement through play.</p>
           <div className="editorial-actions">
             <Link href="#platforms" className="editorial-button">Explore the platforms <ArrowRight size={18} aria-hidden="true" /></Link>
-            <Link href="/contact" className="editorial-outline-button">Talk to us <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
         </div>
         <div className="editorial-hero-visual">

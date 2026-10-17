@@ -6,7 +6,7 @@ const pillars = [
   {
     name: "Neurovidya",
     subtitle: "Education & Research Training",
-    detail: "Courses · Workshops · Research projects",
+    detail: "Courses · Workshops · Books",
     href: "/neurovidya",
     image: "/images/redesign/neurovidya.jpg",
     alt: "Learners exploring neuroscience together",
@@ -40,9 +40,6 @@ export default function HomePage() {
           <p className="home-hero-description">
             Explore our programmes in education, children’s learning and movement.
           </p>
-          <Link href="#discover" className="editorial-button">
-            Explore Neurogati <ArrowRight size={18} aria-hidden="true" />
-          </Link>
         </div>
         <div className="home-hero-art">
           <Image

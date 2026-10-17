@@ -168,14 +168,6 @@ export default function NeuroshikshaPage() {
             <h2>A growing family of learning platforms</h2>
             <p>Neuroshiksha is Neurogati’s home for child-focused learning. Akshara is its first platform, bringing foundational activities into an accessible digital experience.</p>
           </div>
-          <div className="akshara-family-card">
-            <span className="akshara-monogram" aria-hidden="true">அ</span>
-            <div>
-              <h3>Akshara</h3>
-              <p>Foundational learning for ages 3–10</p>
-            </div>
-            <span className="akshara-live-label">Explore now</span>
-          </div>
         </div>
       </section>
 
